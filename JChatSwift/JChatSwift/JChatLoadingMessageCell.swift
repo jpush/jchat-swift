@@ -7,6 +7,7 @@
 //
 
 import UIKit
+@objc(JChatLoadingMessageCell)
 
 class JChatLoadingMessageCell: UITableViewCell {
   var loadIndicator:UIActivityIndicatorView!
@@ -17,7 +18,10 @@ class JChatLoadingMessageCell: UITableViewCell {
       loadIndicator = UIActivityIndicatorView()
       self.contentView.addSubview(self.loadIndicator)
       self.contentView.snp_makeConstraints(closure: { (make) -> Void in
-        make.center.equalTo(self.contentView)
+//        make.center.equalTo(self.contentView)
+        make.top.equalTo(self.contentView).offset(3)
+        make.bottom.equalTo(self.contentView).offset(-3)
+        make.left.equalTo(self.contentView).offset(100)
         make.size.equalTo(CGSize(width: 20, height: 20))
       })
       self.startLoading()

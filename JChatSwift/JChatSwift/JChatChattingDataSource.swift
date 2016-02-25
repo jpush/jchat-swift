@@ -18,6 +18,17 @@ class JChatChattingDataSource: NSObject {
   var showTimeInterval:Double!
   var messageOffset:Int!
   var isNoMoreHistoryMsg:Bool!
+  
+  init(conversation:JMSGConversation, showTimeInterval:Double, fristPageNumber:Int, limit:Int) {
+    super.init()
+    self.conversation = conversation
+    self.showTimeInterval = showTimeInterval
+    self.messagefristPageNumber = fristPageNumber
+    self.messageLimit = limit
+    self.allMessageDic = NSMutableDictionary()
+    self.allMessageIdArr = NSMutableArray()
+  }
+  
   /**
   *  清除所有的消息缓存
   */
@@ -102,10 +113,14 @@ class JChatChattingDataSource: NSObject {
   /**
   *  通过index 获取置顶消息model
   */
-  func getMessageWithIndex(index:Int) -> JChatMessageModel {
+  func getMessageWithIndex(index:Int) -> AnyObject {
     let messageId = self.allMessageIdArr[index]
-    let model:JChatMessageModel = self.allMessageDic.objectForKey(messageId) as! JChatMessageModel
-    return model
+    if messageId.isKindOfClass(JChattimeModel) {
+      return messageId
+    } else {
+      let model:JChatMessageModel = self.allMessageDic.objectForKey(messageId) as! JChatMessageModel
+      return model
+    }
   }
   
   /**
@@ -134,20 +149,26 @@ class JChatChattingDataSource: NSObject {
   }
 
   internal func dataMessageShowtime(timeNumber:NSNumber) {
-    let messageId = self.allMessageIdArr.lastObject!
-    let lastModel = self.allMessageDic.objectForKey(messageId) as! JChatMessageModel
-    let timeInterVal = timeNumber.doubleValue
-    if self.allMessageIdArr.count > 0 && lastModel.isKindOfClass(JChattimeModel) != false {
-      let lastDate:NSDate = NSDate(timeIntervalSince1970: (lastModel.messageTime?.doubleValue)!)
-      let currentDate = NSDate(timeIntervalSince1970: timeInterVal)
-      let timeBetween = currentDate.timeIntervalSinceDate(lastDate)
-      if fabs(timeBetween) > showTimeInterval {
-        let timeModel = JChattimeModel()
-        timeModel.messageTime = timeInterVal
-        self.allMessageIdArr.addObject(timeModel)
+    
+    if self.allMessageIdArr.count > 0 {
+      let messageId = self.allMessageIdArr.lastObject
+      let lastModel = self.allMessageDic.objectForKey(messageId!) as! JChatMessageModel
+      let timeInterVal = timeNumber.doubleValue
+      if lastModel.isKindOfClass(JChatMessageModel) != false {
+        let lastDate:NSDate = NSDate(timeIntervalSince1970: (lastModel.messageTime?.doubleValue)!)
+        let currentDate = NSDate(timeIntervalSince1970: timeInterVal)
+        let timeBetween = currentDate.timeIntervalSinceDate(lastDate)
+        if fabs(timeBetween) > showTimeInterval {
+          let timeModel = JChattimeModel()
+          timeModel.messageTime = timeInterVal
+          self.allMessageIdArr.addObject(timeModel)
+        }
       }
     } else {
-      print("不用显示时间")
+      let timeInterVal = timeNumber.doubleValue
+      let timeModel = JChattimeModel()
+      timeModel.messageTime = timeInterVal
+      self.allMessageIdArr.addObject(timeModel)
     }
   }
 }

@@ -1,0 +1,1 @@
+../../../../JMessage/JMessage/JMessage.framework/Headers/JMSGMessage.h

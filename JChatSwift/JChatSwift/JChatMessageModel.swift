@@ -96,8 +96,7 @@ class JChatMessageModel:NSObject {
   }
   
 }
-
+@objc(JChattimeModel)
 class JChattimeModel:NSObject {
-  var timeId:String!
   var messageTime:NSNumber!
 }

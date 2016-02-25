@@ -8,44 +8,50 @@
 
 import UIKit
 
+internal var identify = ""
+
 class JChatTableCellMaker: NSObject {
-//
-//  + (JMUIMessageTableViewCell *)messageCellInTable:(UITableView *)tableView {
-//  identify = @"JMUIMessageTableViewCell";
-//  JMUIMessageTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
-//  if (!cell) {
-//  
-//  [tableView registerClass:NSClassFromString(identify) forCellReuseIdentifier:identify];
-//  cell = [tableView dequeueReusableCellWithIdentifier:identify];
-//  }
-//  NSLog(@"message tableview cell is %@",cell);
-//  return (JMUIMessageTableViewCell *)cell;
-//  }
-//  
-  func messageCellInTable(tableview:UITableView) {
-    
+
+  class func rightMessageCellInTable(tableview:UITableView) -> JChatRightMessageCell {
+    identify = "JChatRightMessageCell"
+    var cell:JChatRightMessageCell? = tableview.dequeueReusableCellWithIdentifier(identify) as? JChatRightMessageCell
+    if cell == nil {
+      tableview.registerClass(NSClassFromString(identify), forCellReuseIdentifier: identify)
+      cell = tableview.dequeueReusableCellWithIdentifier(identify) as? JChatRightMessageCell
+    }
+    return cell!
   }
-//  + (JMUILoadMessageTableViewCell *)LoadingCellInTable:(UITableView *)tableView {
-//  identify = @"JMUIChattingKit.framework/JMUILoadMessageTableViewCell";
-//  JMUILoadMessageTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
-//  if (!cell) {
-//  
-//  [tableView registerClass:NSClassFromString(identify) forCellReuseIdentifier:identify];
-//  cell = [tableView dequeueReusableCellWithIdentifier:identify];
-//  }
-//  NSLog(@"message tableview load cell is %@",cell);
-//  return (JMUILoadMessageTableViewCell *)cell;
-//  }
-//  
-//  + (JMUIShowTimeCell *)timeCellInTable:(UITableView *)tableView {
-//  identify = @"JMUIChattingKit.framework/JMUIShowTimeCell";
-//  JMUIShowTimeCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
-//  if (!cell) {
-//  [tableView registerNib:[UINib nibWithNibName:identify bundle:nil] forCellReuseIdentifier:identify];
-//  cell = [tableView dequeueReusableCellWithIdentifier:identify];
-//  }
-//  NSLog(@"message tableview show time cell is %@",cell);
-//  return (JMUIShowTimeCell *)cell;
-//  }
-//
+  
+  class func leftMessageCellInTable(tableview:UITableView) -> JChatLeftMessageCell {
+    identify = "JChatLeftMessageCell"
+    var cell:JChatLeftMessageCell? = tableview.dequeueReusableCellWithIdentifier(identify) as? JChatLeftMessageCell
+    if cell == nil {
+      tableview.registerClass(NSClassFromString(identify), forCellReuseIdentifier: identify)
+      cell = tableview.dequeueReusableCellWithIdentifier(identify) as? JChatLeftMessageCell
+      cell = tableview.dequeueReusableCellWithIdentifier(identify) as? JChatLeftMessageCell
+    }
+    return cell!
+  }
+  
+
+  class func LoadingCellInTable(tableView:UITableView) -> JChatLoadingMessageCell {
+    identify = "JChatLoadingMessageCell"
+    var cell:JChatLoadingMessageCell? = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatLoadingMessageCell
+    if cell == nil {
+      tableView.registerClass(NSClassFromString(identify), forCellReuseIdentifier: identify)
+      cell = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatLoadingMessageCell
+      cell?.backgroundColor = UIColor.redColor()
+    }
+    return cell!
+  }
+
+  class func timeCellInTable(tableView:UITableView) -> JChatShowTimeCell {
+    identify = "JChatShowTimeCell"
+    var cell:JChatShowTimeCell? = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatShowTimeCell
+    if cell == nil {
+      tableView.registerClass(NSClassFromString(identify), forCellReuseIdentifier: identify)
+      cell = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatShowTimeCell
+    }
+    return cell!
+  }
 }

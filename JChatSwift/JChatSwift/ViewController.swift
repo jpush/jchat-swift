@@ -36,18 +36,47 @@ class ViewController: UIViewController {
     if NSUserDefaults.standardUserDefaults().objectForKey(loginedUserName) == nil {
       JMSGUser.loginWithUsername("uikit1", password: "111111") { (resultObj, error) -> Void in
         if error == nil {
-          NSUserDefaults.standardUserDefaults().setObject("uikit1", forKey: loginedUserName)
-          let nextVC:JChatChattingViewController = JChatChattingViewController()
-          let nextNC:UINavigationController = UINavigationController(rootViewController: nextVC)
-          self.presentViewController(nextNC, animated: true, completion: nil)
+//          NSUserDefaults.standardUserDefaults().setObject("uikit1", forKey: loginedUserName)
+//          let nextVC:JChatChattingViewController = JChatChattingViewController()
+//          let nextNC:UINavigationController = UINavigationController(rootViewController: nextVC)
+//          self.presentViewController(nextNC, animated: true, completion: nil)
+          self.getSingleConversation()
         } else {
-          let nextVC:JChatChattingViewController = JChatChattingViewController()
-          let nextNC:UINavigationController = UINavigationController(rootViewController: nextVC)
-          self.presentViewController(nextNC, animated: true, completion: nil)
+//          let nextVC:JChatChattingViewController = JChatChattingViewController()
+//          let nextNC:UINavigationController = UINavigationController(rootViewController: nextVC)
+//          self.presentViewController(nextNC, animated: true, completion: nil)
+//          self.getSingleConversation()
         }
       }
+    } else {
+      self.getSingleConversation()
     }
+//              let nextVC:JChatChattingViewController = JChatChattingViewController()
+//              let nextNC:UINavigationController = UINavigationController(rootViewController: nextVC)
+//              self.presentViewController(nextNC, animated: true, completion: nil)
 
+  }
+  
+  func getSingleConversation() {
+    let conversation:JMSGConversation? = JMSGConversation.singleConversationWithUsername("5558")
+    print("\(conversation)")
+    if conversation == nil {
+      JMSGConversation.createSingleConversationWithUsername("5558", completionHandler: { (resultObj, error) -> Void in
+        if error != nil {
+          print("创建 conversatiion 失败")
+          return
+        }
+        let conversation:JMSGConversation = resultObj as! JMSGConversation
+        let ChatController = JChatChattingViewController()
+        ChatController.conversation = conversation
+        self.navigationController?.pushViewController(ChatController, animated: true)
+      })
+    } else {
+      let ChatController = JChatChattingViewController()
+      ChatController.conversation = conversation
+      self.presentViewController(ChatController, animated: true, completion: nil)
+      
+    }
   }
   
   override func didReceiveMemoryWarning() {
