@@ -16,11 +16,12 @@ protocol JChatInputViewDelegate:NSObjectProtocol {
   
   // recordVoice
   func startRecordingVoice()
-  func finishRecordingVoice(filePath:String)
+  func finishRecordingVoice(filePath:String,  durationTime:Double)
   func cancelRecordingVoice()
 
   //
   func showMoreView()
+  func photoClick()
 }
 
 class JChatInputView: UIView {
@@ -29,8 +30,10 @@ class JChatInputView: UIView {
   var inputTextView:UITextView!
   var recordVoiceBtn:UIButton!
   var showMoreBtn:UIButton!
-  var moreView:UIView!
   var isTextInput:Bool!
+  
+  var moreView:UIView!
+  var showPhotoBtn:UIButton!
   
   var recordingHub:JChatRecordingView!
   var recordHelper:JChatRecordVoiceHelper!
@@ -62,6 +65,16 @@ class JChatInputView: UIView {
       make.bottom.equalTo(self.snp_bottom)
       make.top.equalTo(self.inputWrapView.snp_bottom)
     })
+    
+    self.showPhotoBtn = UIButton()
+    self.moreView.addSubview(self.showPhotoBtn)
+    self.showPhotoBtn.setBackgroundImage(UIImage(named: "photo_24"), forState: .Normal)
+    self.showPhotoBtn.addTarget(self, action: Selector("clickShowPhotoBtn"), forControlEvents: .TouchUpInside)
+    self.showPhotoBtn.snp_makeConstraints { (make) -> Void in
+      make.top.equalTo(self.moreView).offset(10)
+      make.left.equalTo(self.moreView).offset(10)
+      make.size.equalTo(CGSize(width: 50, height: 50))
+    }
     
     // 输入框的view
     self.inputWrapView.snp_makeConstraints { (make) -> Void in
@@ -136,6 +149,10 @@ class JChatInputView: UIView {
     
   }
   
+  func clickShowPhotoBtn() {
+    self.inputDelegate.photoClick()
+  }
+  
   func holdDownButtonTouchDown() {
     self.inputDelegate.startRecordingVoice()
     if self.recordingHub == nil {
@@ -152,23 +169,13 @@ class JChatInputView: UIView {
   }
   
   func holdDownButtonTouchUpInside() {
-    self.recordHelper.finishRecordingCompletion { () -> Void in
-      
-    }
-    self.recordingHub.stopRecordCompleted { (finish) -> Void in
-      
-    }
-    
+    self.recordHelper.finishRecordingCompletion()
+    self.inputDelegate.finishRecordingVoice(self.recordHelper.recordPath!, durationTime: Double(self.recordHelper.recordDuration!)!)
     self.recordingHub.removeFromSuperview()
   }
   
   func holdDownButtonTouchUpOutside() {
-    self.recordHelper.cancelledDeleteWithCompletion { () -> Void in
-      
-    }
-    self.recordingHub.cancelRecordCompleted { (finish) -> Void in
-      
-    }
+    self.recordHelper.cancelledDeleteWithCompletion()
     self.recordingHub.removeFromSuperview()
 
   }

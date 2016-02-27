@@ -65,7 +65,8 @@ class JChatChattingViewController: UIViewController {
     }
     //init messageTable
     self.messageTable = UITableView(frame: CGRectZero)
-    self.messageTable.backgroundColor = UIColor.yellowColor()
+    self.messageTable.separatorStyle = .None
+    self.messageTable.backgroundColor = UIColor(netHex: 0xececec)
     self.messageTable.delegate = self
     self.messageTable.dataSource = self
     self.messageTable.keyboardDismissMode = .Interactive
@@ -168,6 +169,7 @@ extension JChatChattingViewController:UIGestureRecognizerDelegate {
 
 
 extension JChatChattingViewController:JChatInputViewDelegate {
+  
   func showMoreView() {
     hideKeyBoardAnimation()
     UIView.animateWithDuration(0.25) { () -> Void in
@@ -196,6 +198,28 @@ extension JChatChattingViewController:JChatInputViewDelegate {
     self.appendMessage(textModel)
   }
   
+  func SendMessageWithVoice(voicePath:String, durationTime:Double) {
+    print("SendMessageWithVoice")
+    let voiceContent:JMSGVoiceContent = JMSGVoiceContent(voiceData: NSData(contentsOfFile: voicePath)!, voiceDuration: Int(durationTime))
+    let voiceMessage:JMSGMessage? = self.conversation.createMessageWithContent(voiceContent)
+    self.conversation.sendMessage(voiceMessage!)
+    let voicemodel:JChatMessageModel = JChatMessageModel()
+    voicemodel.setChatModel(voiceMessage, conversation: self.conversation)
+    self.appendMessage(voicemodel)
+  }
+  
+  func prepareSendImageMessage(image:UIImage) {
+    var message:JMSGMessage? = nil
+    let imageContent = JMSGImageContent(imageData: UIImagePNGRepresentation(image)!)
+    if imageContent != nil {
+      message = self.conversation.createMessageWithContent(imageContent!)
+      JChatSendImageManager.sharedInstance.addMessage(message!, withConversation: self.conversation)
+      let model:JChatMessageModel = JChatMessageModel()
+      model.setChatModel(message, conversation: self.conversation)
+      self.appendMessage(model)
+    }
+  }
+  
   func relayoutTableCellWithMsgId(messageId:String) {
     if messageId == "" { return }
     
@@ -204,26 +228,62 @@ extension JChatChattingViewController:JChatInputViewDelegate {
     messageCell.layoutAllViews()
   }
   
+// TODO:
   func startRecordingVoice() {
     
   }
-  
-  func finishRecordingVoice(filePath:String) {
-    
+
+  func finishRecordingVoice(filePath:String, durationTime:Double) {
+    self.SendMessageWithVoice(filePath, durationTime: durationTime)
   }
   
   func cancelRecordingVoice() {
     
   }
+  
+  func photoClick() {
+    let lib:ALAssetsLibrary = ALAssetsLibrary()
+    lib.enumerateGroupsWithTypes(ALAssetsGroupSavedPhotos, usingBlock: { (group, stop) -> Void in
+      let photoPickerVC = JMUIMultiSelectPhotosViewController()
+      photoPickerVC.photoDelegate = self
+      self.presentViewController(photoPickerVC, animated: true, completion: nil)
+      
+      }) { (error) -> Void in
+        let alertView = UIAlertView(title: "没有相册权限", message: "请到设置页面获取相册权限", delegate: nil, cancelButtonTitle: "确定")
+        alertView.show()
+    }
+  }
 }
 
+extension JChatChattingViewController : JMUIMultiSelectPhotosDelegate {
 
+  func JMUIMultiSelectedPhotoArray(selected_photo_array: [AnyObject]!) {
+    for image in selected_photo_array {
+     self.prepareSendImageMessage(image as! UIImage)
+    }
+
+  }
+}
+
+// TODO:
 extension JChatChattingViewController : JChatMessageCellDelegate {
+
+  
+  func selectHeadView(model:JChatMessageModel) {
+  
+  }
+  
+  //  picture
   func tapPicture(index:Int, tapView:UIImageView, tableViewCell:UITableViewCell) {
   
   }
   
-  func selectHeadView(model:JChatMessageModel) {
+  //  voice
+  func getContinuePlay(cell:UITableViewCell) {
+  
+  }
+  
+  func successionalPlayVoice(cell:UITableViewCell) {
     
   }
 }

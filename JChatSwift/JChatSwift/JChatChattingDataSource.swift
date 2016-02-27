@@ -27,6 +27,7 @@ class JChatChattingDataSource: NSObject {
     self.messageLimit = limit
     self.allMessageDic = NSMutableDictionary()
     self.allMessageIdArr = NSMutableArray()
+    self.isNoMoreHistoryMsg = true
   }
   
   /**
@@ -151,17 +152,19 @@ class JChatChattingDataSource: NSObject {
   internal func dataMessageShowtime(timeNumber:NSNumber) {
     
     if self.allMessageIdArr.count > 0 {
-      let messageId = self.allMessageIdArr.lastObject
-      let lastModel = self.allMessageDic.objectForKey(messageId!) as! JChatMessageModel
-      let timeInterVal = timeNumber.doubleValue
-      if lastModel.isKindOfClass(JChatMessageModel) != false {
-        let lastDate:NSDate = NSDate(timeIntervalSince1970: (lastModel.messageTime?.doubleValue)!)
-        let currentDate = NSDate(timeIntervalSince1970: timeInterVal)
-        let timeBetween = currentDate.timeIntervalSinceDate(lastDate)
-        if fabs(timeBetween) > showTimeInterval {
-          let timeModel = JChattimeModel()
-          timeModel.messageTime = timeInterVal
-          self.allMessageIdArr.addObject(timeModel)
+      if self.allMessageIdArr.lastObject!.isKindOfClass(NSString) {
+        let messageId = self.allMessageIdArr.lastObject
+        let lastModel = self.allMessageDic.objectForKey(messageId!) as! JChatMessageModel
+        let timeInterVal = timeNumber.doubleValue
+        if lastModel.isKindOfClass(JChatMessageModel) != false {
+          let lastDate:NSDate = NSDate(timeIntervalSince1970: (lastModel.messageTime?.doubleValue)!)
+          let currentDate = NSDate(timeIntervalSince1970: timeInterVal)
+          let timeBetween = currentDate.timeIntervalSinceDate(lastDate)
+          if fabs(timeBetween) > showTimeInterval {
+            let timeModel = JChattimeModel()
+            timeModel.messageTime = timeInterVal
+            self.allMessageIdArr.addObject(timeModel)
+          }
         }
       }
     } else {

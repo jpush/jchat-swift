@@ -49,6 +49,7 @@ class JChatRecordVoiceHelper: NSObject {
   func getVoiceDuration(recordPath:String) {
     do {
       let player:AVAudioPlayer = try AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: recordPath))
+      player.play()
       self.recordDuration = "\(player.duration)"
     } catch let error as NSError {
       print("get AVAudioPlayer is fail \(error)")
@@ -128,16 +129,17 @@ class JChatRecordVoiceHelper: NSObject {
     }
   }
   
-  func finishRecordingCompletion(completed:CompletionCallBack) {
-    self.getVoiceDuration(self.recordPath!)
+  func finishRecordingCompletion() {
     self.stopRecord()
+    self.getVoiceDuration(self.recordPath!)
+
     
     if self.stopRecordCompletion != nil {
       dispatch_async(dispatch_get_main_queue(), self.stopRecordCompletion!)
     }
   }
   
-  func cancelledDeleteWithCompletion(completed:CompletionCallBack) {
+  func cancelledDeleteWithCompletion() {
     self.stopRecord()
     if self.recordPath != nil {
       let fileManager:NSFileManager = NSFileManager.defaultManager()
@@ -177,6 +179,7 @@ class JChatRecordVoiceHelper: NSObject {
 extension JChatRecordVoiceHelper : AVAudioPlayerDelegate {
   func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
     print("finished playing \(flag)")
+    
   }
   
   func audioPlayerDecodeErrorDidOccur(player: AVAudioPlayer, error: NSError?) {

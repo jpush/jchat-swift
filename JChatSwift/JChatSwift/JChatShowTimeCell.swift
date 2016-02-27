@@ -14,14 +14,20 @@ class JChatShowTimeCell: UITableViewCell {
 
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
-  // Initialization code
+    self.selectionStyle = .None
+    self.backgroundColor = UIColor.clearColor()
+    
     self.timeLable = UILabel()
     self.contentView.addSubview(self.timeLable)
     self.timeLable.layer.cornerRadius = 2
     self.timeLable.backgroundColor = UIColor.grayColor()
+    self.textLabel?.font = UIFont.systemFontOfSize(14)
+
     self.timeLable.snp_makeConstraints { (make) -> Void in
       make.center.equalTo(self.contentView)
-      make.size.equalTo(CGSize(width: 60, height: 30))
+      make.size.equalTo(CGSize(width: 60, height: 15))
+      make.top.equalTo(self.contentView).offset(2)
+      make.bottom.equalTo(self.contentView).offset(-2)
     }
   }
 

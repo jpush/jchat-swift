@@ -88,4 +88,16 @@ extension NSString {
     }
     return output
   }
+  
+  class func conversationIdWithConversation(conversation:JMSGConversation) -> String {
+    var conversationId = ""
+    if conversation.conversationType == .Single {
+      let user = conversation.target as! JMSGUser
+      conversationId = "\(user.username)_0"
+    } else {
+      let group = conversation.target as! JMSGGroup
+      conversationId = "\(group.gid)_1"
+    }
+    return conversationId
+  }
 }
