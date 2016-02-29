@@ -147,7 +147,7 @@ class JChatMessageCell: UITableViewCell {
     self.messageModel = model
     self.delegate = delegate
     
-    self.layoutAllViews()
+
     model.message.fromUser.thumbAvatarData { (data, ObjectId, error) -> Void in
       if error == nil {
         let user:JMSGUser = self.messageModel.message.fromUser 
@@ -200,7 +200,7 @@ class JChatMessageCell: UITableViewCell {
         self.unreadStatusView.hidden = false
       }
       
-
+    self.layoutAllViews()
       
     }
   }

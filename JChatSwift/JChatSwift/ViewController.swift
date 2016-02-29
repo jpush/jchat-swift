@@ -32,28 +32,24 @@ class ViewController: UIViewController {
   }
 
   @objc func clickLogin() {
+//test
+    let nextVC = JChatMainTabViewController.sharedInstance
+    let nextNV = UINavigationController(rootViewController: nextVC)
+    self.presentViewController(nextNV, animated: true, completion: nil)
+    return
     
+    //
     if NSUserDefaults.standardUserDefaults().objectForKey(loginedUserName) == nil {
       JMSGUser.loginWithUsername("uikit1", password: "111111") { (resultObj, error) -> Void in
         if error == nil {
-//          NSUserDefaults.standardUserDefaults().setObject("uikit1", forKey: loginedUserName)
-//          let nextVC:JChatChattingViewController = JChatChattingViewController()
-//          let nextNC:UINavigationController = UINavigationController(rootViewController: nextVC)
-//          self.presentViewController(nextNC, animated: true, completion: nil)
           self.getSingleConversation()
         } else {
-//          let nextVC:JChatChattingViewController = JChatChattingViewController()
-//          let nextNC:UINavigationController = UINavigationController(rootViewController: nextVC)
-//          self.presentViewController(nextNC, animated: true, completion: nil)
-//          self.getSingleConversation()
+          
         }
       }
     } else {
       self.getSingleConversation()
     }
-//              let nextVC:JChatChattingViewController = JChatChattingViewController()
-//              let nextNC:UINavigationController = UINavigationController(rootViewController: nextVC)
-//              self.presentViewController(nextNC, animated: true, completion: nil)
 
   }
   
