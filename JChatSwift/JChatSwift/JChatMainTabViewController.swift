@@ -28,11 +28,12 @@ class JChatMainTabViewController: UITabBarController {
   }
   
   
-    override func viewDidLoad() {
-      super.viewDidLoad()
-      self.setupItemVC()
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    self.hidesBottomBarWhenPushed = false
+    self.setupItemVC()
 
-    }
+  }
 
   func setupItemVC() {
     let tabControllerArr = NSMutableArray()
@@ -45,8 +46,8 @@ class JChatMainTabViewController: UITabBarController {
       
       let vc = theClass.init() as! UIViewController
       vc.hidesBottomBarWhenPushed = false
+
       let nv:UINavigationController = UINavigationController(rootViewController: vc)
-      nv.delegate = self
       nv.tabBarItem = UITabBarItem(title: tittle, image: UIImage(named: imageName), selectedImage: UIImage(named: selectedImageName))
       
       tabControllerArr.addObject(nv)
@@ -69,7 +70,7 @@ class JChatMainTabViewController: UITabBarController {
         TabbarItemSelectedImage: "menu_16"
       ],
       [
-        TabbarItemVC: "JChatUserInfoViewController",
+        TabbarItemVC: "JChatAboutMeViewController",
         TabbarItemTittle: "我",
         TabbarItemImage: "menu_13",
         TabbarItemSelectedImage: "menu_12"

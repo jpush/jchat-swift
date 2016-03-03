@@ -7,22 +7,111 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class JCHATRegisterViewController: UIViewController {
 
   @IBOutlet weak var usernameTF: UITextField!
   @IBOutlet weak var passwordTF: UITextField!
+  @IBOutlet weak var registerBtn: UIButton!
   
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-    }
-
-  @IBAction func clickToRegister(sender: AnyObject) {
-
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    self.setupNavigationBar()
+    self.layoutAllViews()
   }
   
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+  func setupNavigationBar() {
+    self.title = "极光IM"
+    let backBtn = UIButton(type: .Custom)
+    backBtn.frame = kNavigationLeftButtonRect
+    backBtn.setBackgroundImage(UIImage(named: "goBack"), forState: .Normal)
+    backBtn.contentMode = .Center
+    backBtn.imageEdgeInsets = kGoBackBtnImageOffset
+    backBtn .addTarget(self, action: Selector("doBack:"), forControlEvents: .TouchUpInside)
+    
+    let backItem = UIBarButtonItem(customView: backBtn)
+    self.navigationItem.leftBarButtonItem = backItem
+    self.navigationController?.navigationBar.translucent = false
+  }
+  
+  func layoutAllViews(){
+
+    self.registerBtn.layer.cornerRadius = 4
+    self.registerBtn.layer.masksToBounds = true
+    self.registerBtn.setBackgroundColor(UIColor(netHex: 0x3f80de), forState: .Normal)
+    self.registerBtn.setBackgroundColor(UIColor(netHex: 0x2840b0), forState: .Highlighted)
+    self.usernameTF.becomeFirstResponder()
+    self.passwordTF.secureTextEntry = true
+    self.passwordTF.returnKeyType = .Default
+  }
+
+  @objc func doBack(sender: AnyObject) {
+    self.navigationController?.popViewControllerAnimated(true)
+  }
+  
+  func checkValidUsername(username: String, password:String) -> Bool{
+    if password != "" && username != "" {
+      return true
     }
+    
+    var alertString = ""
+    if username == "" {
+      alertString = "用户名不能为空"
+    } else {
+      alertString = "密码不能为空"
+    }
+    
+    MBProgressHUD.showMessage(alertString, view: self.view)
+    return false
+  }
+  
+  @IBAction func clickToRegister(sender: AnyObject) {
+    print("Action - clickToRegister")
+    UIApplication.sharedApplication().sendAction(Selector("resignFirstResponder"), to: nil, from: nil, forEvent: nil)
+    if self.checkValidUsername(usernameTF.text!, password: passwordTF.text!) {
+      MBProgressHUD.showMessage("正在注册", view: self.view)
+      JMSGUser.registerWithUsername(usernameTF.text!, password: passwordTF.text!, completionHandler: { (resultObject, error) -> Void in
+        if error == nil {
+          MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+          MBProgressHUD.showMessage("注册成功,正在自动登陆", view: self.view)
+          JMSGUser.loginWithUsername(self.usernameTF.text!, password: self.passwordTF.text!, completionHandler: { (resultObject, error) -> Void in
+              MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+            if error == nil {
+              
+              self.userLoginSave()
+
+              let detailVC = JCHATSetDetailViewController()
+              self.navigationController?.pushViewController(detailVC, animated: true)
+              
+            } else {
+              print("login fail error \(NSString.errorAlert(error))")
+              MBProgressHUD.showMessage(NSString.errorAlert(error), view: self.view)
+            }
+          })
+        }
+      })
+    }
+  }
+  
+  func userLoginSave() {
+    NSUserDefaults.standardUserDefaults().setObject(self.usernameTF.text, forKey: kuserName)
+    NSUserDefaults.standardUserDefaults().setObject(self.usernameTF.text, forKey: klastLoginUserName)
+    NSUserDefaults.standardUserDefaults().synchronize()
+  }
+
+  override func didReceiveMemoryWarning() {
+    super.didReceiveMemoryWarning()
+  }
 }
+
+
+
+
+
+
+
+
+
+
+

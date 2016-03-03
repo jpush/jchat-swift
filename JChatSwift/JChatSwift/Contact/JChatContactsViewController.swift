@@ -11,12 +11,13 @@ import UIKit
 @objc(JChatContactsViewController)
 class JChatContactsViewController: UITabBarController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-      
-    }
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    self.view.backgroundColor = UIColor.whiteColor()
+    
+  }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
+  override func didReceiveMemoryWarning() {
+    super.didReceiveMemoryWarning()
+  }
 }

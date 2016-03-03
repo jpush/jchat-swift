@@ -20,7 +20,6 @@ class JChatChattingViewController: UIViewController {
   var messageInputView:JChatInputView!
   var messageDataSource:JChatChattingDataSource!
   var chatLayout:JChatChattingLayout!
-  
   var messageOffset = 0
   
   override func viewDidLoad() {
@@ -28,7 +27,6 @@ class JChatChattingViewController: UIViewController {
     print("Action - viewDidLoad")
     self.setupAllViews()
     self.setupDataSource()
-    
     self.chatLayout = JChatChattingLayout(messageTable: self.messageTable, inputView: self.messageInputView)
     
     

@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JCHATRegisterViewController" customModule="JChatSwift" customModuleProvider="target">
             <connections>
                 <outlet property="passwordTF" destination="JWu-Hu-DDA" id="Vp9-pX-giK"/>
+                <outlet property="registerBtn" destination="h5b-Zt-QQD" id="oIH-Zv-t0L"/>
                 <outlet property="usernameTF" destination="ZMn-Ms-XPt" id="h5b-bw-fx8"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
