@@ -19,7 +19,7 @@ protocol JChatInputViewDelegate:NSObjectProtocol {
   func finishRecordingVoice(filePath:String,  durationTime:Double)
   func cancelRecordingVoice()
 
-  //
+  // photo
   func showMoreView()
   func photoClick()
 }

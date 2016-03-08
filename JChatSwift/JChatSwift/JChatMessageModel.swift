@@ -8,8 +8,8 @@
 
 import UIKit
 
-let st_receiveUnknowMessageDes = "收到新消息类型无法解析的数据，请升级查看"
-let st_receiveErrorMessageDes = "接收消息错误"
+internal let st_receiveUnknowMessageDes = "收到新消息类型无法解析的数据，请升级查看"
+internal let st_receiveErrorMessageDes = "接收消息错误"
 
 class JChatMessageModel:NSObject {
 
@@ -20,9 +20,6 @@ class JChatMessageModel:NSObject {
   var messageError:NSError?
   var imageSize:CGSize?
   var voiceBubbleWidth:Double?
-
-//  var timeId:String?
-//  var isTime:Bool!
 
   func setChatModel(message:JMSGMessage!, conversation:JMSGConversation!) {
     self.message = message
@@ -35,7 +32,6 @@ class JChatMessageModel:NSObject {
 
       break
     case .Image:
-      // TODO:循环引用
       (message.content as! JMSGImageContent).thumbImageData({ (data, objectId, error) -> Void in
         if error == nil {
           let img:UIImage? = UIImage(data: data)
@@ -65,7 +61,6 @@ class JChatMessageModel:NSObject {
     case .EventNotification:
       break
     }
-    
   }
   
   internal func setVoiceLength(timeDuration:NSNumber) {
@@ -96,6 +91,7 @@ class JChatMessageModel:NSObject {
   }
   
 }
+
 @objc(JChattimeModel)
 class JChattimeModel:NSObject {
   var messageTime:NSNumber!

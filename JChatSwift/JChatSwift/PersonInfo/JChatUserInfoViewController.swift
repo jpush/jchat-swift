@@ -7,7 +7,7 @@
 //
 
 import UIKit
-//JChatUserInfoViewController
+
 class JChatUserInfoViewController: UIViewController {
 
   var personTable:UITableView!
@@ -29,8 +29,8 @@ class JChatUserInfoViewController: UIViewController {
     self.setupDataSource()
     self.layoutAllViews()
   }
+  
   func layoutAllViews() {
-
     self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     self.navigationController?.navigationBar.translucent = false
     self.title = "个人信息"

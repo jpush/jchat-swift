@@ -7,20 +7,11 @@
 //
 
 import UIKit
+
 @objc(JChatMessageBubble)
 class JChatMessageBubble: UIImageView {
   var maskBackgroupImage:UIImage?
   var maskBackgroupView:UIImageView?
-//    {
-//    set(newImage) {
-//      maskBackgroupImage = newImage
-//      maskBackgroupImage = self.maskBackgroupImage?.resizableImageWithCapInsets(UIEdgeInsetsMake(28, 20, 28, 20))
-//    }f
-//    
-//    get {
-//      return self.maskBackgroupImage
-//    }
-//  }
   
   override init(frame: CGRect) {
     super.init(frame: frame)

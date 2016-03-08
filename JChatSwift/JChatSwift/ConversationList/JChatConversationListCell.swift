@@ -35,6 +35,7 @@ class JChatConversationListCell: UITableViewCell {
     self.timeLable = UILabel()
     self.contentView.addSubview(self.timeLable)
     self.timeLable.textAlignment = .Right
+    self.timeLable.textColor = UIColor.grayColor()
     self.timeLable.font = UIFont.systemFontOfSize(16)
     self.timeLable.snp_makeConstraints { (make) -> Void in
       make.top.equalTo(self.contentView).offset(7)
@@ -56,6 +57,7 @@ class JChatConversationListCell: UITableViewCell {
     
     self.lastMessage = UILabel()
     self.contentView.addSubview(self.lastMessage)
+    self.lastMessage.textColor = UIColor(netHex: 0x808080)
     self.lastMessage.snp_makeConstraints { (make) -> Void in
       make.height.equalTo(21)
       make.bottom.equalTo(self.contentView).offset(-5)

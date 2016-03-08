@@ -36,7 +36,6 @@ class JCHATRegisterViewController: UIViewController {
   }
   
   func layoutAllViews(){
-
     self.registerBtn.layer.cornerRadius = 4
     self.registerBtn.layer.masksToBounds = true
     self.registerBtn.setBackgroundColor(UIColor(netHex: 0x3f80de), forState: .Normal)

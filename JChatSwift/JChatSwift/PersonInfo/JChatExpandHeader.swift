@@ -8,7 +8,7 @@
 
 import UIKit
 
-let ContentOffsetkeyPath = "contentOffset"
+internal let ContentOffsetkeyPath = "contentOffset"
 class JChatExpandHeader: NSObject {
 
   weak var scrollView:UIScrollView?

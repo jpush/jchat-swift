@@ -92,7 +92,6 @@ extension JCHATSetDetailViewController : UIActionSheetDelegate {
       picker.delegate = self
       self.presentViewController(picker, animated: true, completion: nil)  
     }
-    
   }
   
   func photoClick() {
@@ -115,7 +114,7 @@ extension JCHATSetDetailViewController : UIImagePickerControllerDelegate, UINavi
     let pickedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
     JMSGUser.updateMyInfoWithParameter(UIImageJPEGRepresentation(pickedImage, 1)!, userFieldType: .FieldsAvatar) { (resultObject, error) -> Void in
       dispatch_async(dispatch_get_main_queue(), { () -> Void in
-        MBProgressHUD.hideHUDForView(self.view, animated: true)
+        MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
         if error == nil {
           MBProgressHUD.showMessage("上传成功", toView: self.view)
           let image = info[UIImagePickerControllerOriginalImage] as! UIImage

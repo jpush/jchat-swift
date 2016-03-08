@@ -9,8 +9,6 @@
 import UIKit
 import MobileCoreServices
 import MBProgressHUD
-let kupdateUserInfo = "updateUserInfo"
-internal let kApplicationWidth = CGRectGetWidth((UIScreen.mainScreen().bounds))
 
 @objc(JChatAboutMeViewController)
 class JChatAboutMeViewController: UIViewController {
@@ -53,7 +51,7 @@ class JChatAboutMeViewController: UIViewController {
   
   @objc func setAvatar() {
     self.bgView = JChatAvatarView(frame: CGRectMake(0, 0, kApplicationWidth, 0.54 * kApplicationWidth))
-    self.bgView.backgroundColor = UIColor.redColor()
+    self.bgView.backgroundColor = UIColor(netHex: 0xdddddd)
     let gesture = UITapGestureRecognizer(target: self, action: Selector("tapPicture:"))
     self.bgView.addGestureRecognizer(gesture)
     self.headerView = JChatExpandHeader.expandWithScrollView(self.table, expandView: self.bgView)
@@ -106,112 +104,10 @@ class JChatAboutMeViewController: UIViewController {
       self.presentViewController(picker, animated: true, completion: nil)
     }
   }
-//  #pragma mark - UIImagePickerController Delegate
-//  
-//  //相机,相册Finish的代理
-
-
-//  - (void)viewWillAppear:(BOOL)animated {
-//  [super viewWillAppear:YES];
-//  [self.settingTableView reloadData];
-//  
-//  self.title = @"我";
-//  
-//  [_bgView updataNameLable];
-//  
-//  self.view.backgroundColor = [UIColor whiteColor];
-//  self.settingTableView.backgroundColor = [UIColor whiteColor];
-//  [self updateUserInfo];
-//  }
-//  
-//  - (void)viewDidDisappear:(BOOL)animated {
-//  [super viewDidDisappear:YES];
-//  [self.navigationController setNavigationBarHidden:NO];
-//  }
-//  
-//  // FIXME 这里应该是想要重新拉取一次整个的 MyInfo。但实际上只是重新取了 avatar
-//  - (void)updateUserInfo {
-//  DDLogDebug(@"Action - updateUserInfo");
-//  JMSGUser *user = [JMSGUser myInfo];
-//  [self updateAvatar];
-//  if (user.username) {
-//  self.titleArr = @[user.username, @"设置", @"退出登录"];
-//  } else {
-//  self.titleArr = @[@"", @"设置", @"退出登录"];
-//  }
-//  
-//  [self.settingTableView reloadData];
-//  }
-//  
-//  - (void)viewWillDisappear:(BOOL)animated {
-//  [super viewWillDisappear:YES];
-//  }
-//  
-//  - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//  static NSString *cellIdentifier = @"headCell";
-//  JCHATSettingCell *cell = (JCHATSettingCell *) [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-//  if (cell == nil) {
-//  cell = [[[NSBundle mainBundle] loadNibNamed:@"JCHATSettingCell" owner:self options:nil] lastObject];
-//  cell.selectionStyle = UITableViewCellSelectionStyleGray;
-//  UILabel *line = [[UILabel alloc] initWithFrame:separateLineFrame];
-//  [line setBackgroundColor:separateLineColor];
-//  }
-//  
-//  cell.nickNameBtn.text = self.titleArr[indexPath.row];
-//  cell.headImgView.image = [UIImage imageNamed:self.imgArr[indexPath.row]];
-//  return cell;
-//  }
-//  
-//  - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//  return 57;
-//  }
-//  
-//  - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//  UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-//  cell.selected = NO;
-//  
-//  switch (indexPath.row) {
-//  case 0:
-//  {
-//  JCHATPersonViewController *personCtl = [[JCHATPersonViewController alloc] init];
-//  personCtl.hidesBottomBarWhenPushed = YES;
-//  [self.navigationController pushViewController:personCtl animated:YES];
-//  }
-//  break;
-//  case 1:
-//  {
-//  JCHATSettingViewController *settingCtl = [[JCHATSettingViewController alloc] init];
-//  settingCtl.hidesBottomBarWhenPushed = YES;
-//  [self.navigationController pushViewController:settingCtl animated:YES];
-//  }
-//  break;
-//  case 2:
-//  {
-//  UIAlertView *alerView = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-//  message:@"退出登录!"
-//  delegate:self
-//  cancelButtonTitle:@"取消"
-//  otherButtonTitles:@"确定", nil];
-//  [alerView show];
-//  }
-//  break;
-//  default:
-//  break;
-//  }
-//  }
-//  
-//
-//  - (void)didReceiveMemoryWarning {
-//  [super didReceiveMemoryWarning];
-//  }
-//  
-//  @end
-
   
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
   }
-
 }
 
 extension JChatAboutMeViewController: UITableViewDelegate, UITableViewDataSource {
@@ -249,12 +145,8 @@ extension JChatAboutMeViewController: UITableViewDelegate, UITableViewDataSource
       self.navigationController?.pushViewController(settingVC, animated: true)
       break
     default:
-      //  UIAlertView *alerView = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-      //  message:@"退出登录!"
-      //  delegate:self
-      //  cancelButtonTitle:@"取消"
-      //  otherButtonTitles:@"确定", nil];
-      //  [alerView show];
+      let alertView = UIAlertView(title: "温馨提示", message: "退出登录!", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "确定")
+      alertView.show()
 
       break
     }

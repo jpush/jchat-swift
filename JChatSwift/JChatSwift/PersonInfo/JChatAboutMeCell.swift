@@ -26,7 +26,6 @@ class JChatAboutMeCell: UITableViewCell {
     self.contentView.addSubview(self.iconImg)
     self.iconImg.snp_makeConstraints { (make) -> Void in
       make.left.equalTo(self.contentView).offset(9)
-//      make.top.equalTo(self.contentView).offset(10)
       make.size.equalTo(CGSize(width: 22, height: 22))
       make.bottom.equalTo(self.contentView).offset(-10)
     }
@@ -70,7 +69,7 @@ class JChatAboutMeCell: UITableViewCell {
       make.height.equalTo(0.5)
       make.bottom.equalTo(self.contentView)
     }
-    self.baseLine.backgroundColor = UIColor(netHex: 0xd0d0d0)
+    self.baseLine.backgroundColor = kSeparatorColor
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -89,6 +88,13 @@ class JChatAboutMeCell: UITableViewCell {
     self.infoLabel.text = info
   }
   
+  func setFriendCellData(tittle: String, icon: String, info: String) {
+    self.iconImg.image = UIImage(named: icon)
+    self.tittleLable.text = tittle
+    self.infoLabel.text = info
+    self.arrowImg.hidden = true
+  }
+
   override func setSelected(selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
     

@@ -7,7 +7,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JChatAlreadyLoginViewController" customModule="JChatSwift" customModuleProvider="target">
             <connections>
-                <outlet property="clickToRegister" destination="rjJ-ca-9yy" id="EVm-Tp-57X"/>
                 <outlet property="passwordTF" destination="sC6-9X-bi4" id="WKK-bD-uws"/>
                 <outlet property="userNameLabel" destination="kdx-GK-fX7" id="t9F-Jq-Ezb"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -72,6 +71,9 @@
                         <color key="titleColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="switchToLogin:" destination="-1" eventType="touchUpInside" id="sm3-cF-S0v"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rjJ-ca-9yy">
                     <rect key="frame" x="182" y="517" width="236" height="75"/>

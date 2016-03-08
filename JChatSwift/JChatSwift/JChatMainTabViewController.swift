@@ -13,7 +13,6 @@ internal let TabbarItemTittle = "TabbarItemTittle"
 internal let TabbarItemImage = "TabbarItemImage"
 internal let TabbarItemSelectedImage = "TabbarItemSelectedImage"
 
-
 class JChatMainTabViewController: UITabBarController {
 
   class var sharedInstance: JChatMainTabViewController {

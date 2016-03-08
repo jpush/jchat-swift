@@ -50,9 +50,10 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lWA-YK-aUy">
-                    <rect key="frame" x="30" y="99" width="540" height="33"/>
+                    <rect key="frame" x="30" y="99" width="540" height="43"/>
                     <color key="backgroundColor" red="0.088620855421305378" green="0.42667576070542762" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
+                        <constraint firstAttribute="height" constant="43" id="QtZ-H3-UIg"/>
                         <constraint firstAttribute="height" constant="30" id="RbQ-53-nlC"/>
                         <constraint firstAttribute="width" constant="46" id="jwy-zQ-7oe"/>
                     </constraints>

@@ -7,22 +7,48 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class JChatAlreadyLoginViewController: UIViewController {
-
   @IBOutlet weak var userNameLabel: UIButton!
   @IBOutlet weak var passwordTF: UITextField!
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+    self.title = "极光IM"
+    let username = NSUserDefaults.standardUserDefaults().objectForKey(klastLoginUserName) as! String
+    userNameLabel.setTitle(username, forState: .Normal)
   }
 
   @IBAction func clickToLogin(sender: AnyObject) {
-  }
 
+    let username = NSUserDefaults.standardUserDefaults().objectForKey(klastLoginUserName) as! String
+    let password = passwordTF.text
+    MBProgressHUD.showMessage("正在登录", toView: self.view)
+    JMSGUser.loginWithUsername(username, password: password!) { (resultObject, error) -> Void in
+      MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+      if error == nil {
+        MBProgressHUD.showMessage("登录成功", view: self.view)
+        NSNotificationCenter.defaultCenter().postNotificationName(kupdateUserInfo, object: nil)
+        let appDelegate = UIApplication.sharedApplication().delegate
+        appDelegate!.window!!.rootViewController = JChatMainTabViewController.sharedInstance
+        
+        NSUserDefaults.standardUserDefaults().setObject(username, forKey: kuserName)
+      } else {
+        MBProgressHUD.showMessage("\(NSString.errorAlert(error))", view: self.view)
+      }
+    }
+  }
   
   @IBAction func clickToRegister(sender: AnyObject) {
+    let registerCtl = JCHATRegisterViewController()
+    self.navigationController?.pushViewController(registerCtl, animated: true)
+  }
+  
+
+  @IBAction func switchToLogin(sender: AnyObject) {
+    let loginVC = JChatLoginViewController()
+    self.navigationController?.pushViewController(loginVC, animated: true)
   }
   
   override func didReceiveMemoryWarning() {

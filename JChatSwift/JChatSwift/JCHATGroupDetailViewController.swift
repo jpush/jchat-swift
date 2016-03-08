@@ -9,8 +9,6 @@
 import UIKit
 import MBProgressHUD
 
-let kDeleteAllMessage = "deleteAllMessage"
-
 internal var CellIdentifier = ""
 internal let kAlertViewTagClearChatRecord = 100
 internal let kAlertViewTagRenameGroup = 200
@@ -18,10 +16,8 @@ internal let kAlertViewTagAddMember = 300
 internal let kAlertViewTagQuitGroup = 400
 
 class JCHATGroupDetailViewController: UIViewController {
-
-  
-
-  var conversation:JMSGConversation?
+  weak var chattingVC:JChatChattingViewController!
+  var conversation:JMSGConversation!
   var memberArr:NSMutableArray!
   var groupMemberGrip:UICollectionView!
   var isEditing:Bool!
@@ -135,7 +131,15 @@ class JCHATGroupDetailViewController: UIViewController {
   }
   
   func getAllMember() {
-    self.memberArr = NSMutableArray(array: (self.conversation?.target as! JMSGGroup).memberArray())
+    switch self.conversation.conversationType {
+    case .Single:
+      self.memberArr = [(self.conversation.target as! JMSGUser)]
+      break
+    case .Group:
+      self.memberArr = NSMutableArray(array: (self.conversation?.target as! JMSGGroup).memberArray())
+      break
+    }
+
   }
   
   override func didReceiveMemoryWarning() {
@@ -147,13 +151,18 @@ class JCHATGroupDetailViewController: UIViewController {
 extension JCHATGroupDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
   func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    if section != 0 { return 0 }
-    
-    let group = (self.conversation?.target) as! JMSGGroup // TODO: user group
-    if group.owner == JMSGUser.myInfo().username {
-      return self.memberArr.count + 2
-    } else {
+    switch self.conversation.conversationType {
+    case .Single:
       return self.memberArr.count + 1
+    case .Group:
+      if section != 0 { return 0 }
+      
+      let group = (self.conversation?.target) as! JMSGGroup // TODO: user group
+      if group.owner == JMSGUser.myInfo().username {
+        return self.memberArr.count + 2
+      } else {
+        return self.memberArr.count + 1
+      }
     }
   }
   
@@ -182,14 +191,22 @@ extension JCHATGroupDetailViewController: UICollectionViewDelegate, UICollection
         cell.setAddMember()
         break
       default:
-        let group = self.conversation?.target as! JMSGGroup
         let user = self.memberArr.objectAtIndex(indexPath.item) as! JMSGUser
-        
-        if group.owner == user.username {
+        switch self.conversation.conversationType {
+        case .Single:
           cell.setCellData(user, isDeleting: false)
-        } else {
-          cell.setCellData(user, isDeleting: self.isEditing)
+          break
+        case .Group:
+          let group = self.conversation?.target as! JMSGGroup
+          
+          if group.owner == user.username {
+            cell.setCellData(user, isDeleting: false)
+          } else {
+            cell.setCellData(user, isDeleting: self.isEditing)
+          }
+          break
         }
+
         break
       }
       return cell
@@ -288,7 +305,13 @@ extension JCHATGroupDetailViewController: UITableViewDelegate, UITableViewDataSo
   }
 
   func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 3
+    switch self.conversation.conversationType {
+    case .Single:
+      return 1
+    case .Group:
+      return 3
+    }
+
   }
   
   func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -307,6 +330,7 @@ extension JCHATGroupDetailViewController: UITableViewDelegate, UITableViewDataSo
         break
       }
     } else {
+      self.tapToClearChatRecord()
       print("clear record")
     }
   }
@@ -330,17 +354,25 @@ extension JCHATGroupDetailViewController: UIAlertViewDelegate {
     case kAlertViewTagAddMember:
       let userName = alertView.textFieldAtIndex(0)?.text
       if userName == "" { return }
-      MBProgressHUD.showMessage("正在添加 \(userName!)", toView: self.view)
-      (self.conversation?.target as! JMSGGroup).addMembersWithUsernameArray([userName!], completionHandler: {[weak weakSelf = self] (resultObject, error) -> Void in
-        MBProgressHUD.hideAllHUDsForView(self.view, animated: false)
-        if error == nil {
-          MBProgressHUD.showMessage("添加成功", view: self.view)
-          weakSelf!.refreshMemberGrid()
-        } else {
-          MBProgressHUD.showMessage("添加失败", view: self.view)
-          print("addMembersFromUsernameArray fail")
-        }
-      })
+      switch self.conversation.conversationType {
+      case .Single:
+        self.createGroup((alertView.textFieldAtIndex(0)?.text)!)
+        break
+      case .Group:
+        MBProgressHUD.showMessage("正在添加 \(userName!)", toView: self.view)
+        (self.conversation?.target as! JMSGGroup).addMembersWithUsernameArray([userName!], completionHandler: {[weak weakSelf = self] (resultObject, error) -> Void in
+          MBProgressHUD.hideAllHUDsForView(self.view, animated: false)
+          if error == nil {
+            MBProgressHUD.showMessage("添加成功", view: self.view)
+            weakSelf!.refreshMemberGrid()
+          } else {
+            MBProgressHUD.showMessage("添加失败", view: self.view)
+            print("addMembersFromUsernameArray fail")
+          }
+          })
+        break
+      }
+
       break
     case kAlertViewTagQuitGroup:
       MBProgressHUD.showMessage("正在推出群组！", toView: self.view)
@@ -375,6 +407,35 @@ extension JCHATGroupDetailViewController: UIAlertViewDelegate {
       break
     }
   }
+  
+  func createGroup(otherUserName:String) {
+    MBProgressHUD.showMessage("加好友进群组", toView: self.view)
+    JMSGGroup.createGroupWithName(otherUserName, desc: "", memberArray: [otherUserName, (self.conversation.target as! JMSGUser).username]) { (group, error) -> Void in
+      MBProgressHUD.hideAllHUDsForView(self.view, animated: false)
+      if error == nil {
+        MBProgressHUD.showMessage("正在创建 group converation ", toView: self.view)
+        JMSGConversation.createGroupConversationWithGroupId((group as! JMSGGroup).gid, completionHandler: { (conversation, error) -> Void in
+          MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+          if error == nil {
+            MBProgressHUD.showMessage("创建group conversation 成功", toView: self.view)
+            let groupconveration = conversation as! JMSGConversation
+            JMessage.removeDelegate(self.chattingVC, withConversation: self.conversation)
+            self.chattingVC.conversation = groupconveration
+            JMessage.addDelegate(self.chattingVC, withConversation: groupconveration)
+            self.chattingVC.title = group.displayName()
+            self.navigationController?.popViewControllerAnimated(true)
+          } else {
+            print("创建group conversation 成功\(NSString.errorAlert(error))")
+            MBProgressHUD.showMessage("创建group conversation 成功", view: self.view)
+          }
+        })
+      } else {
+        print("创建group 失败  with group \(NSString.errorAlert(error))")
+        MBProgressHUD.showMessage("创建group 失败", view: self.view)
+      }
+    }
+  }
+
 }
 
 

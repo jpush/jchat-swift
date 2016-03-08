@@ -50,7 +50,5 @@ class JChatVersionViewController: UIViewController {
 
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
-
   }
-
 }

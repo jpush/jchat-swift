@@ -11,8 +11,6 @@ import UIKit
 let JMSSAGE_APPKEY = "4f7aef34fb361292c566a1cd"
 let CHANNEL = ""
 
-let kuserName = "userName"
-let klastLoginUserName = "lastLoginedUserName"
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -20,10 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-
-//    NSUserDefaults.standardUserDefaults().setObject(nil, forKey: kuserName)
-//    NSUserDefaults.standardUserDefaults().setObject(nil, forKey: klastLoginUserName)
-//    return true
     
     JMessage.setupJMessage(launchOptions, appKey: JMSSAGE_APPKEY, channel: CHANNEL, apsForProduction: false, category: nil)
     if #available(iOS 8, *) {

@@ -9,7 +9,6 @@
 import UIKit
 import AVFoundation
 
-
 protocol JChatMessageCellDelegate {
   func selectHeadView(model:JChatMessageModel)
   

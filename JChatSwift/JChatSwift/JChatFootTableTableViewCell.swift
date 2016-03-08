@@ -27,10 +27,10 @@ class JChatFootTableTableViewCell: UITableViewCell {
     self.quitBtn.layer.masksToBounds = true
     self.quitBtn.setBackgroundColor(UIColor.redColor(), forState: .Normal)
     self.quitBtn.setBackgroundColor(UIColor(netHex: 0xc0303b), forState: .Highlighted)
-    let baseLine = UIView()
-    baseLine.backgroundColor = UIColor.grayColor()
-    self.contentView.addSubview(baseLine)
-    baseLine.snp_makeConstraints { (make) -> Void in
+    let topLine = UIView()
+    topLine.backgroundColor = kSeparatorColor
+    self.contentView.addSubview(topLine)
+    topLine.snp_makeConstraints { (make) -> Void in
       make.top.left.right.equalTo(self.contentView)
       make.height.equalTo(0.5)
     }

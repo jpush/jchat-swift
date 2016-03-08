@@ -7,6 +7,7 @@
 //
 
 import UIKit
+
 @objc(JChatBubbleAlertViewDelegate)
 protocol JChatBubbleAlertViewDelegate {
   func clickBubbleFristBtn()

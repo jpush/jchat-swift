@@ -84,6 +84,7 @@ class JChatChattingViewController: UIViewController {
   @objc func clickRightBtn() {
     let detailCtl = JCHATGroupDetailViewController()
     detailCtl.conversation = self.conversation
+    detailCtl.chattingVC = self
     self.navigationController?.pushViewController(detailCtl, animated: true)
   }
 
@@ -115,7 +116,7 @@ class JChatChattingViewController: UIViewController {
     //init messageTable
     self.messageTable = JChatMessageTable(frame: CGRectZero)
     self.messageTable.separatorStyle = .None
-    self.messageTable.backgroundColor = UIColor(netHex: 0xececec)
+    self.messageTable.backgroundColor = kTableViewBackgroupColor
     self.messageTable.delegate = self
     self.messageTable.dataSource = self
     self.messageTable.keyboardDismissMode = .Interactive
@@ -227,7 +228,6 @@ extension JChatChattingViewController:JChatInputViewDelegate {
   func appendMessage(model:JChatMessageModel) {
     self.messageDataSource.appendMessage(model)
     self.chatLayout.appendTableViewCellAtLastIndex(self.messageDataSource.messageCount())
-//    self.chatLayout.messageTableScrollToBottom(true)
   }
 
   func appendTimeDate(timeInterVal:NSTimeInterval) {
@@ -311,6 +311,7 @@ extension JChatChattingViewController : JMUIMultiSelectPhotosDelegate {
 
   }
 }
+
 
 // TODO:
 extension JChatChattingViewController : JChatMessageCellDelegate {

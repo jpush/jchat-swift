@@ -32,7 +32,7 @@ extension NSString {
   class func getFriendlyDateString(timeInterval:NSTimeInterval, forConversation isShort:Bool) -> String {
     let theDate:NSDate = NSDate(timeIntervalSince1970: timeInterval)
     var output = ""
-    let theDiff = theDate.timeIntervalSinceNow
+    let theDiff = -theDate.timeIntervalSinceNow
     switch theDiff {
     case theDiff where theDiff < 60.0:
       output = "刚刚"

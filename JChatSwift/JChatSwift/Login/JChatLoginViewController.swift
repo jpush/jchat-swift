@@ -9,11 +9,6 @@
 import UIKit
 import MBProgressHUD
 
-//let kuserName = "userName"
-
-
-let kNavigationLeftButtonRect = CGRectMake(0, 0, 30, 30)
-let kGoBackBtnImageOffset = UIEdgeInsetsMake(0, 0, 0, 15)
 class JChatLoginViewController: UIViewController {
 
   @IBOutlet weak var userNameTF: UITextField!
@@ -80,7 +75,9 @@ class JChatLoginViewController: UIViewController {
       JMSGUser.loginWithUsername(self.userNameTF.text!, password: self.passwordTF.text! , completionHandler: { (resultObject, error) -> Void in
         if error == nil {
           NSNotificationCenter.defaultCenter().postNotificationName(kupdateUserInfo, object: nil)
+          let appDelegate = UIApplication.sharedApplication().delegate
           self.userLoginSave()
+          appDelegate!.window!!.rootViewController = JChatMainTabViewController.sharedInstance
         } else {
           dispatch_async(dispatch_get_main_queue(), { () -> Void in
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
@@ -103,8 +100,7 @@ class JChatLoginViewController: UIViewController {
   }
   
   @IBAction func clickToRegister(sender: AnyObject) {
-//    JCHATRegisterViewController *registerCtl = [[JCHATRegisterViewController alloc] initWithNibName:@"JCHATRegisterViewController" bundle:nil];
-//    [self.navigationController pushViewController:registerCtl animated:YES];
+
     let registerCtl = JCHATRegisterViewController()
     self.navigationController?.pushViewController(registerCtl, animated: true)
   }

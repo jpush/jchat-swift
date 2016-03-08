@@ -9,10 +9,6 @@
 import UIKit
 import MBProgressHUD
 
-let kDBMigrateStartNotification = "DBMigrateStartNotification"
-let kDBMigrateFinishNotification = "DBMigrateFinishNotification"
-let kLogin_NotifiCation = "loginNotification"
-let kCreatGroupState = "creatGroupState"
 
 @objc(JChatConversationListViewController)
 class JChatConversationListViewController: UIViewController {
@@ -209,7 +205,9 @@ extension JChatConversationListViewController: UIAlertViewDelegate {
     } else {
       MBProgressHUD.showMessage("正在创建单聊", toView: self.view)
       JMSGConversation.createSingleConversationWithUsername((alertView.textFieldAtIndex(0)?.text)!, completionHandler: { (singleConversation, error) -> Void in
-        MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+          MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+        })
         
         if error == nil {
           let chattingVC = JChatChattingViewController()

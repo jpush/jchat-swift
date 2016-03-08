@@ -65,7 +65,7 @@ class JChatEditUserInfoViewController: UIViewController {
     self.view.backgroundColor = UIColor.whiteColor()
     
     self.baseLine = UIView()
-    self.baseLine.backgroundColor = UIColor(netHex: 0x3f80de)
+    self.baseLine.backgroundColor = kSeparatorColor
     self.view.addSubview(self.baseLine)
     
     self.infoTextField = UITextField()
@@ -79,13 +79,13 @@ class JChatEditUserInfoViewController: UIViewController {
     
     self.textNumberLable = UILabel()
     self.textNumberLable.font = UIFont.systemFontOfSize(16)
-    self.textNumberLable.textColor = UIColor(netHex: 0xbbbbbb)
+    self.textNumberLable.textColor = kPlaceHoldTextColor
     self.textNumberLable.textAlignment = .Center
     self.view.addSubview(self.textNumberLable)
     
     self.descriptLable = UILabel()
     self.descriptLable.font = UIFont.systemFontOfSize(12)
-    self.descriptLable.textColor = UIColor(netHex: 0xbbbbbb)
+    self.descriptLable.textColor = kPlaceHoldTextColor
     self.view.addSubview(self.descriptLable)
     
     self.infoTextField.snp_makeConstraints { (make) -> Void in
