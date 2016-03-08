@@ -27,7 +27,6 @@ class JChatConversationListCell: UITableViewCell {
     self.conversationAvatar.snp_makeConstraints { (make) -> Void in
       make.top.equalTo(self.contentView).offset(5)
       make.bottom.equalTo(self.contentView).offset(-5)
-//      make.size.equalTo(CGSize(width: 45, height: 45))
       make.width.equalTo(45)
       make.height.equalTo(145)
       make.left.equalTo(self.contentView).offset(7)
@@ -36,7 +35,7 @@ class JChatConversationListCell: UITableViewCell {
     self.timeLable = UILabel()
     self.contentView.addSubview(self.timeLable)
     self.timeLable.textAlignment = .Right
-    self.timeLable.font = UIFont.systemFontOfSize(11)
+    self.timeLable.font = UIFont.systemFontOfSize(16)
     self.timeLable.snp_makeConstraints { (make) -> Void in
       make.top.equalTo(self.contentView).offset(7)
       make.width.equalTo(100)
@@ -71,7 +70,9 @@ class JChatConversationListCell: UITableViewCell {
     self.unReadCount.layer.borderWidth = 1
     self.unReadCount.layer.borderColor = UIColor.whiteColor().CGColor
     self.unReadCount.layer.cornerRadius = 11
-    self.unReadCount.font = UIFont.systemFontOfSize(16)
+    self.unReadCount.layer.masksToBounds = true
+    self.unReadCount.textAlignment = .Center
+    self.unReadCount.font = UIFont.systemFontOfSize(11)
     self.unReadCount.snp_makeConstraints { (make) -> Void in
       make.size.equalTo(CGSize(width: 22, height: 22))
       make.right.equalTo(self.conversationAvatar).offset(3)
@@ -102,7 +103,7 @@ class JChatConversationListCell: UITableViewCell {
 
     if conversation.unreadCount?.integerValue > 0 {
       self.unReadCount.hidden = false
-      self.unReadCount.text = "\(conversation.unreadCount)"
+      self.unReadCount.text = "\(conversation.unreadCount!)"
     } else {
       self.unReadCount.hidden = true
     }
@@ -140,6 +141,14 @@ class JChatConversationListCell: UITableViewCell {
   override func setSelected(selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
     if selected {
+      self.unReadCount.backgroundColor = UIColor(netHex: 0xfa3e32)
+    }
+  }
+  
+  override func setHighlighted(highlighted: Bool, animated: Bool) {
+    super.setHighlighted(highlighted, animated: animated)
+
+    if highlighted {
       self.unReadCount.backgroundColor = UIColor(netHex: 0xfa3e32)
     }
   }

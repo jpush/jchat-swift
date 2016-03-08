@@ -23,7 +23,7 @@ class JChatConversationListViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.conversationArr = NSMutableArray()
-    
+    JMessage.addDelegate(self, withConversation: nil)
     self.setupNavigation()
     self.layoutAllViews()
   }
@@ -70,9 +70,10 @@ class JChatConversationListViewController: UIViewController {
 
   func getConversationList() {
     JMSGConversation.allConversations { (resultObject, error) -> Void in
+      print("huangmin 888 \(resultObject)")
       if error == nil {
         self.conversationArr.removeAllObjects()
-        self.conversationArr.addObjectsFromArray(resultObject as! [AnyObject])
+        self.conversationArr.addObjectsFromArray((resultObject as! [AnyObject]).reverse())
       } else {
         self.conversationArr.removeAllObjects()
       }
@@ -221,8 +222,26 @@ extension JChatConversationListViewController: UIAlertViewDelegate {
         }
       })
     }
-    
+  }
+}
 
+
+extension JChatConversationListViewController: JMessageDelegate {
+
+  func onReceiveMessage(message: JMSGMessage!, error: NSError!) {
+    print("Action -- onReceivemessage \(message)")
+    self.getConversationList()
     
   }
+  func onConversationChanged(conversation: JMSGConversation!) {
+    print("Action -- onConversationChanged")
+    self.getConversationList()
+  }
+
+  func onGroupInfoChanged(group: JMSGGroup!) {
+    print("Action -- onGroupInfoChanged")
+    self.getConversationList()
+  }
+
+
 }

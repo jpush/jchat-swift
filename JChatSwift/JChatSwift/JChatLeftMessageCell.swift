@@ -14,7 +14,8 @@ class JChatLeftMessageCell:JChatMessageCell {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     
     self.messageBubble?.maskBackgroupImage = UIImage(named: "otherChatBg")!.resizableImageWithCapInsets(UIEdgeInsetsMake(28, 20, 28, 20))
-    self.messageBubble?.contentMode = .ScaleAspectFit
+    self.messageBubble?.contentMode = .ScaleToFill
+    self.messageBubble?.layer.masksToBounds = true
     
     self.messageBubble?.snp_makeConstraints(closure: { (make) -> Void in
       make.right.equalTo(self.textMessageContent.snp_right).offset(5)

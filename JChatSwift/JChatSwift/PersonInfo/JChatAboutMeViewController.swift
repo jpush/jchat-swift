@@ -244,10 +244,9 @@ extension JChatAboutMeViewController: UITableViewDelegate, UITableViewDataSource
       self.navigationController?.pushViewController(userInfoVC, animated: true)
       break
     case 1:
-      //  JCHATSettingViewController *settingCtl = [[JCHATSettingViewController alloc] init];
-      //  settingCtl.hidesBottomBarWhenPushed = YES;
-      //  [self.navigationController pushViewController:settingCtl animated:YES];
-      
+      let settingVC = JChatSettingTableViewController()
+      settingVC.hidesBottomBarWhenPushed = true
+      self.navigationController?.pushViewController(settingVC, animated: true)
       break
     default:
       //  UIAlertView *alerView = [[UIAlertView alloc] initWithTitle:@"温馨提示"

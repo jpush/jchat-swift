@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 internal let interval = 60
 internal let messagePageNumber = 25
@@ -16,7 +17,7 @@ internal let messageFristPageNumber = 20
 class JChatChattingViewController: UIViewController {
   var conversation:JMSGConversation!
   
-  var messageTable:UITableView!
+  var messageTable:JChatMessageTable!
   var messageInputView:JChatInputView!
   var messageDataSource:JChatChattingDataSource!
   var chatLayout:JChatChattingLayout!
@@ -25,15 +26,65 @@ class JChatChattingViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     print("Action - viewDidLoad")
+    self.setupNavigation()
     self.setupAllViews()
     self.setupDataSource()
-    self.chatLayout = JChatChattingLayout(messageTable: self.messageTable, inputView: self.messageInputView)
+    self.addAllNotification()
     
+    self.chatLayout = JChatChattingLayout(messageTable: self.messageTable, inputView: self.messageInputView)
     
     let gesture = UITapGestureRecognizer(target: self, action:Selector("handleTap:"))
     gesture.delegate = self
     self.messageTable.addGestureRecognizer(gesture)
 
+  }
+  
+  override func viewDidLayoutSubviews() {
+    self.chatLayout.messageTableScrollToBottom(false)
+  }
+  deinit {
+    NSNotificationCenter.defaultCenter().removeObserver(self)
+    JMessage.removeDelegate(self, withConversation: self.conversation)
+  }
+  
+  func setupNavigation() {
+    self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+    self.navigationController?.navigationBar.translucent = false
+    self.title = "会话"
+    let leftBtn = UIButton(type: .Custom)
+    leftBtn.frame = kNavigationLeftButtonRect
+    leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
+    leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
+    leftBtn.addTarget(self, action: Selector("backClick"), forControlEvents: .TouchUpInside)
+    self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
+
+    let rightBtn = UIButton(type: .Custom)
+    rightBtn.frame = CGRect(x: 0, y: 0, width: 50, height: 30)
+    rightBtn.addTarget(self, action: Selector("clickRightBtn"), forControlEvents: .TouchUpInside)
+    rightBtn.setImage(UIImage(named: "createConversation"), forState: .Normal)
+    rightBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -15 * UIScreen.mainScreen().scale)
+    self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
+  }
+  
+  func addAllNotification() {
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("cleanMessageCache"), name: kDeleteAllMessage, object: nil)
+    
+    JMessage.addDelegate(self, withConversation: self.conversation)
+  }
+  
+  @objc func cleanMessageCache() {
+    self.messageDataSource.cleanCache()
+    self.messageTable.reloadData()
+  }
+  
+  @objc func backClick() {
+    self.navigationController?.popViewControllerAnimated(true)
+  }
+  
+  @objc func clickRightBtn() {
+    let detailCtl = JCHATGroupDetailViewController()
+    detailCtl.conversation = self.conversation
+    self.navigationController?.pushViewController(detailCtl, animated: true)
   }
 
   override func didReceiveMemoryWarning() {
@@ -62,7 +113,7 @@ class JChatChattingViewController: UIViewController {
       make.bottom.equalTo(self.view.snp_bottom)
     }
     //init messageTable
-    self.messageTable = UITableView(frame: CGRectZero)
+    self.messageTable = JChatMessageTable(frame: CGRectZero)
     self.messageTable.separatorStyle = .None
     self.messageTable.backgroundColor = UIColor(netHex: 0xececec)
     self.messageTable.delegate = self
@@ -81,9 +132,14 @@ class JChatChattingViewController: UIViewController {
     self.messageDataSource = JChatChattingDataSource(conversation: self.conversation, showTimeInterval: 60 * 5, fristPageNumber: 20, limit: 11)
     self.messageDataSource.getPageMessage()
   }
+
+  func flashToLoadMessage() {
+    self.messageDataSource.getMoreMessage()
+//    self.messageTable.loadMoreMessage()
+    self.chatLayout.loadMoreMessage()
+  }
   
   @objc func keyboardFrameChanged(notification: NSNotification) {
-    
     let dic = NSDictionary(dictionary: notification.userInfo!)
     let keyboardValue = dic.objectForKey(UIKeyboardFrameEndUserInfoKey) as! NSValue
     let bottomDistance = UIScreen.mainScreen().bounds.size.height - keyboardValue.CGRectValue().origin.y
@@ -99,16 +155,6 @@ class JChatChattingViewController: UIViewController {
     })
 
   }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 extension JChatChattingViewController:UITableViewDelegate,UITableViewDataSource {
@@ -119,10 +165,11 @@ extension JChatChattingViewController:UITableViewDelegate,UITableViewDataSource 
   func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 
     print("Action - cellForRowAtIndexPath")
-    if self.messageDataSource.noMoreHistoryMessage() != false {
+    if self.messageDataSource.noMoreHistoryMessage() != true {
       if indexPath.row == 0 {
         let cell:JChatLoadingMessageCell = JChatTableCellMaker.LoadingCellInTable(tableView)
         cell.startLoading()
+        self.flashToLoadMessage()
         return cell
       }
     }
@@ -180,6 +227,7 @@ extension JChatChattingViewController:JChatInputViewDelegate {
   func appendMessage(model:JChatMessageModel) {
     self.messageDataSource.appendMessage(model)
     self.chatLayout.appendTableViewCellAtLastIndex(self.messageDataSource.messageCount())
+//    self.chatLayout.messageTableScrollToBottom(true)
   }
 
   func appendTimeDate(timeInterVal:NSTimeInterval) {
@@ -222,8 +270,9 @@ extension JChatChattingViewController:JChatInputViewDelegate {
     if messageId == "" { return }
     
     let indexPath = self.messageDataSource.tableIndexPathWithMessageId(messageId)
-    let messageCell:JChatMessageCell = self.messageTable.cellForRowAtIndexPath(indexPath) as! JChatMessageCell
-    messageCell.layoutAllViews()
+
+    let messageCell = self.messageTable.cellForRowAtIndexPath(indexPath) as? JChatMessageCell
+    messageCell?.layoutAllViews()
   }
   
 // TODO:
@@ -283,6 +332,63 @@ extension JChatChattingViewController : JChatMessageCellDelegate {
   
   func successionalPlayVoice(cell:UITableViewCell) {
     
+  }
+}
+
+
+extension JChatChattingViewController: JMessageDelegate {
+
+  func onSendMessageResponse(message: JMSGMessage!, error: NSError!) {
+    print("Event - sendMessageResponse")
+    self.relayoutTableCellWithMsgId(message.msgId)
+    
+    if message != nil { print("发送的消息为 msgId 为 \(message.msgId)") }
+    
+    if error != nil {
+      print("Send response error \(NSString.errorAlert(error))")
+      self.conversation.clearUnreadCount()
+      MBProgressHUD.showMessage(NSString.errorAlert(error), view: self.view)
+    }
+  }
+
+  func onReceiveMessage(message: JMSGMessage!, error: NSError!) {
+    if message != nil {
+      print("收到 message msgID 为 \(message.msgId)")
+    } else {
+      print("收到message 为 nil")
+    }
+    
+    if error != nil {
+      return
+    }
+    
+    if !self.conversation.isMessageForThisConversation(message) {
+      return
+    }
+    
+    if message.contentType == .Custom { return }
+
+    if messageDataSource.isContaintMessage(message.msgId) { print("该条消息已加载") }
+
+    if message.contentType == .EventNotification {}
+    
+    let model = JChatMessageModel()
+    model.setChatModel(message, conversation: self.conversation)
+    self.appendMessage(model)
+  }
+
+  func onReceiveMessageDownloadFailed(message: JMSGMessage!) {
+    print("Event - receiveMessageNotification")
+    
+    if self.conversation.isMessageForThisConversation(message) == false { return }
+    
+    if message == nil { print("get nil message") }
+    
+    if self.conversation.isMessageForThisConversation(message) {
+      let model = JChatMessageModel()
+      model.setChatModel(message, conversation: self.conversation)
+      self.appendMessage(model)
+    }
   }
 }
 

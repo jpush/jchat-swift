@@ -12,6 +12,7 @@ class JChatSettingTableViewController: UITableViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.title = "设置"
     self.tableView.separatorStyle = .None
   }
 
@@ -44,25 +45,17 @@ class JChatSettingTableViewController: UITableViewController {
     let cell = tableView.cellForRowAtIndexPath(indexPath)
     cell?.selected = false
     
-//    if (indexPath.row==0) {
-//      JCHATUpdatePasswordCtl *updateWordCtl =[[JCHATUpdatePasswordCtl alloc] init];
-//      [self.navigationController pushViewController:updateWordCtl animated:YES];
-//    }
-//    
-//    if (indexPath.row == 1) {
-//      JCHATAboutViewController *about = [[JCHATAboutViewController alloc]initWithNibName:@"JCHATAboutViewController" bundle:nil];
-//      [self.navigationController pushViewController:about animated:YES];
-//      
-//    }
-    
     if indexPath.row == 0 {
-      
+      let updatepasswordVC = JChatUpdatePasswordViewController()
+      self.navigationController?.pushViewController(updatepasswordVC, animated: true)
     } else {
-      
+      let versionVC = JChatVersionViewController()
+      self.navigationController?.pushViewController(versionVC, animated: true)
     }
   }
 }
 
+@objc(JChatSettingCell)
 class JChatSettingCell: UITableViewCell {
   var titleLable:UILabel!
   var arrowImg:UIImageView!
@@ -85,13 +78,13 @@ class JChatSettingCell: UITableViewCell {
     self.contentView.addSubview(self.arrowImg)
     self.arrowImg.snp_makeConstraints { (make) -> Void in
       make.size.equalTo(CGSize(width: 8, height: 15))
-      make.right.equalTo(self.contentView).offset(8)
+      make.right.equalTo(self.contentView).offset(-8)
       make.centerY.equalTo(self.contentView)
     }
     
     let baseLine = UIView()
     self.contentView.addSubview(baseLine)
-    self.contentView.backgroundColor = UIColor(netHex: 0xcccccc)
+    baseLine.backgroundColor = UIColor(netHex: 0xcccccc)
     baseLine.snp_makeConstraints { (make) -> Void in
       make.left.right.equalTo(self.contentView)
       make.height.equalTo(0.5)

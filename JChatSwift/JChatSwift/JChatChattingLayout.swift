@@ -9,10 +9,10 @@
 import UIKit
 
 class JChatChattingLayout: NSObject {
-  internal var messageListTable:UITableView? = nil
+  internal var messageListTable:JChatMessageTable? = nil
   internal var inputView:JChatInputView? = nil
   
-  init(messageTable:UITableView, inputView:JChatInputView) {
+  init(messageTable:JChatMessageTable, inputView:JChatInputView) {
     super.init()
     self.messageListTable = messageTable
     self.inputView = inputView
@@ -29,12 +29,6 @@ class JChatChattingLayout: NSObject {
     self.messageListTable?.beginUpdates()
     self.messageListTable?.insertRowsAtIndexPaths(addIndexPaths, withRowAnimation: .None)
     self.messageListTable?.endUpdates()
-    //  NSTimeInterval scrollDelay = .01f;
-    //  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(scrollDelay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-    //  [_messageListTable scrollToRowAtIndexPath:[addIndexPathes lastObject] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    //  });
-    //}
-    
   }
 
   func appendTableViewCellAtLastIndex(index:NSInteger) {
@@ -42,8 +36,12 @@ class JChatChattingLayout: NSObject {
     self.messageListTable?.beginUpdates()
     self.messageListTable?.insertRowsAtIndexPaths([path], withRowAnimation: .None)
     self.messageListTable?.endUpdates()
+    UIView.animateWithDuration(0.25) { () -> Void in
+      self.messageListTable?.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: false)      
+    }
+
+    
     dispatch_async(dispatch_get_main_queue()) { () -> Void in
-      //      self.messageListTabl
     }
   }
   
@@ -62,6 +60,13 @@ class JChatChattingLayout: NSObject {
       }
     }
 
+  func loadMoreMessage() {
+    var offset = self.messageListTable?.contentOffset
+    offset!.y = offset!.y + 200
+    self.messageListTable?.contentOffset = offset!
+    self.messageListTable?.loadMoreMessage()
+  }
+  
   func messageTableScrollToIndexCell(index:Int) {
     self.messageListTable?.scrollToRowAtIndexPath(NSIndexPath(forRow: index - 1, inSection: 0), atScrollPosition: .Bottom, animated: true)
   }

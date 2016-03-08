@@ -105,6 +105,7 @@ extension NSString {
 extension NSString {
   class func errorAlert(error :NSError) -> String {
     var errorAlert:String = ""
+    return errorAlert
     
     switch error.code as! JMSGSDKErrorCode {
     case .JMSGErrorSDKNetworkDownloadFailed:

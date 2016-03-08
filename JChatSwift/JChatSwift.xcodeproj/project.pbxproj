@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		622A48B51C8974F50040E659 /* JCHATMemberCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622A48B31C8974F50040E659 /* JCHATMemberCollectionCell.swift */; };
+		622A48B61C8974F50040E659 /* JCHATMemberCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 622A48B41C8974F50040E659 /* JCHATMemberCollectionCell.xib */; };
+		622A48BD1C897A290040E659 /* JCHATCollectionFootTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622A48BB1C897A290040E659 /* JCHATCollectionFootTableView.swift */; };
+		622A48BE1C897A290040E659 /* JCHATCollectionFootTableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 622A48BC1C897A290040E659 /* JCHATCollectionFootTableView.xib */; };
+		622A48C11C897C0A0040E659 /* JChatFootTableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622A48BF1C897C0A0040E659 /* JChatFootTableTableViewCell.swift */; };
+		622A48C21C897C0A0040E659 /* JChatFootTableTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 622A48C01C897C0A0040E659 /* JChatFootTableTableViewCell.xib */; };
 		622DFD491C87D6BA0018BEF6 /* JChatConversationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622DFD481C87D6BA0018BEF6 /* JChatConversationListCell.swift */; };
 		623B07221C731806000914DB /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 623B07211C731806000914DB /* Photos.framework */; };
 		623B07241C73180C000914DB /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 623B07231C73180C000914DB /* Accelerate.framework */; };
@@ -78,12 +84,17 @@
 		624ED9FB1C759523000F421D /* JChatTableCellMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624ED9FA1C759523000F421D /* JChatTableCellMaker.swift */; };
 		624ED9FD1C759674000F421D /* JChatLoadingMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624ED9FC1C759674000F421D /* JChatLoadingMessageCell.swift */; };
 		624ED9FF1C75969B000F421D /* JChatShowTimeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624ED9FE1C75969B000F421D /* JChatShowTimeCell.swift */; };
+		626AE6121C8D5044008C9E0D /* JChatMessageTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626AE6111C8D5044008C9E0D /* JChatMessageTable.swift */; };
 		62827FA21C88044500B66007 /* JChatCreateGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62827FA11C88044500B66007 /* JChatCreateGroupViewController.swift */; };
 		62827FA51C880B2300B66007 /* talking_icon_group@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 62827FA31C880B2300B66007 /* talking_icon_group@2x.png */; };
 		62827FA61C880B2300B66007 /* talking_icon_group@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 62827FA41C880B2300B66007 /* talking_icon_group@3x.png */; };
 		62827FA91C882D1100B66007 /* JChatSettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62827FA81C882D1100B66007 /* JChatSettingTableViewController.swift */; };
 		62827FAC1C8836AD00B66007 /* JChatUpdatePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62827FAA1C8836AD00B66007 /* JChatUpdatePasswordViewController.swift */; };
 		62827FAD1C8836AD00B66007 /* JChatUpdatePasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62827FAB1C8836AD00B66007 /* JChatUpdatePasswordViewController.xib */; };
+		62827FB01C88420100B66007 /* JChatVersionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62827FAE1C88420100B66007 /* JChatVersionViewController.swift */; };
+		62827FB11C88420100B66007 /* JChatVersionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62827FAF1C88420100B66007 /* JChatVersionViewController.xib */; };
+		62827FB31C895B2700B66007 /* JCHATGroupDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62827FB21C895B2700B66007 /* JCHATGroupDetailViewController.swift */; };
+		6296C84D1C8E791E00FA965C /* JChatConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6296C84C1C8E791E00FA965C /* JChatConstants.swift */; };
 		62B26E311C86CEFE0062EA48 /* String+Utilites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B26E301C86CEFE0062EA48 /* String+Utilites.swift */; };
 		62B26E371C873FDD0062EA48 /* JChatAlertViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B26E361C873FDD0062EA48 /* JChatAlertViewManager.swift */; };
 		62B26E391C874BC60062EA48 /* frame@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B26E381C874BC60062EA48 /* frame@2x.png */; };
@@ -225,6 +236,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		622A48B31C8974F50040E659 /* JCHATMemberCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCHATMemberCollectionCell.swift; sourceTree = "<group>"; };
+		622A48B41C8974F50040E659 /* JCHATMemberCollectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JCHATMemberCollectionCell.xib; sourceTree = "<group>"; };
+		622A48BB1C897A290040E659 /* JCHATCollectionFootTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCHATCollectionFootTableView.swift; sourceTree = "<group>"; };
+		622A48BC1C897A290040E659 /* JCHATCollectionFootTableView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JCHATCollectionFootTableView.xib; sourceTree = "<group>"; };
+		622A48BF1C897C0A0040E659 /* JChatFootTableTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatFootTableTableViewCell.swift; sourceTree = "<group>"; };
+		622A48C01C897C0A0040E659 /* JChatFootTableTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JChatFootTableTableViewCell.xib; sourceTree = "<group>"; };
 		622DFD481C87D6BA0018BEF6 /* JChatConversationListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatConversationListCell.swift; sourceTree = "<group>"; };
 		623B07211C731806000914DB /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		623B07231C73180C000914DB /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -297,12 +314,17 @@
 		624ED9FA1C759523000F421D /* JChatTableCellMaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatTableCellMaker.swift; sourceTree = "<group>"; };
 		624ED9FC1C759674000F421D /* JChatLoadingMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatLoadingMessageCell.swift; sourceTree = "<group>"; };
 		624ED9FE1C75969B000F421D /* JChatShowTimeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatShowTimeCell.swift; sourceTree = "<group>"; };
+		626AE6111C8D5044008C9E0D /* JChatMessageTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatMessageTable.swift; sourceTree = "<group>"; };
 		62827FA11C88044500B66007 /* JChatCreateGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatCreateGroupViewController.swift; sourceTree = "<group>"; };
 		62827FA31C880B2300B66007 /* talking_icon_group@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "talking_icon_group@2x.png"; sourceTree = "<group>"; };
 		62827FA41C880B2300B66007 /* talking_icon_group@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "talking_icon_group@3x.png"; sourceTree = "<group>"; };
 		62827FA81C882D1100B66007 /* JChatSettingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatSettingTableViewController.swift; sourceTree = "<group>"; };
 		62827FAA1C8836AD00B66007 /* JChatUpdatePasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatUpdatePasswordViewController.swift; sourceTree = "<group>"; };
 		62827FAB1C8836AD00B66007 /* JChatUpdatePasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JChatUpdatePasswordViewController.xib; sourceTree = "<group>"; };
+		62827FAE1C88420100B66007 /* JChatVersionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatVersionViewController.swift; sourceTree = "<group>"; };
+		62827FAF1C88420100B66007 /* JChatVersionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JChatVersionViewController.xib; sourceTree = "<group>"; };
+		62827FB21C895B2700B66007 /* JCHATGroupDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCHATGroupDetailViewController.swift; sourceTree = "<group>"; };
+		6296C84C1C8E791E00FA965C /* JChatConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatConstants.swift; sourceTree = "<group>"; };
 		62B26E301C86CEFE0062EA48 /* String+Utilites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Utilites.swift"; sourceTree = "<group>"; };
 		62B26E361C873FDD0062EA48 /* JChatAlertViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatAlertViewManager.swift; sourceTree = "<group>"; };
 		62B26E381C874BC60062EA48 /* frame@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame@2x.png"; sourceTree = "<group>"; };
@@ -482,6 +504,28 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		622A48AF1C896DEB0040E659 /* DetailVC */ = {
+			isa = PBXGroup;
+			children = (
+				622A48B01C8970780040E659 /* View */,
+				62827FB21C895B2700B66007 /* JCHATGroupDetailViewController.swift */,
+			);
+			name = DetailVC;
+			sourceTree = "<group>";
+		};
+		622A48B01C8970780040E659 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				622A48B31C8974F50040E659 /* JCHATMemberCollectionCell.swift */,
+				622A48B41C8974F50040E659 /* JCHATMemberCollectionCell.xib */,
+				622A48BB1C897A290040E659 /* JCHATCollectionFootTableView.swift */,
+				622A48BC1C897A290040E659 /* JCHATCollectionFootTableView.xib */,
+				622A48BF1C897C0A0040E659 /* JChatFootTableTableViewCell.swift */,
+				622A48C01C897C0A0040E659 /* JChatFootTableTableViewCell.xib */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		623B07201C7317C7000914DB /* Framework */ = {
 			isa = PBXGroup;
 			children = (
@@ -563,6 +607,7 @@
 				624ED9FE1C75969B000F421D /* JChatShowTimeCell.swift */,
 				624ED9961C7458BD000F421D /* JChatInputView.swift */,
 				624ED9FA1C759523000F421D /* JChatTableCellMaker.swift */,
+				626AE6111C8D5044008C9E0D /* JChatMessageTable.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -635,6 +680,8 @@
 				62827FA81C882D1100B66007 /* JChatSettingTableViewController.swift */,
 				62827FAA1C8836AD00B66007 /* JChatUpdatePasswordViewController.swift */,
 				62827FAB1C8836AD00B66007 /* JChatUpdatePasswordViewController.xib */,
+				62827FAE1C88420100B66007 /* JChatVersionViewController.swift */,
+				62827FAF1C88420100B66007 /* JChatVersionViewController.xib */,
 			);
 			name = Setting;
 			sourceTree = "<group>";
@@ -672,6 +719,7 @@
 		62DE36AA1C719B2D009FB693 /* JChatSwift */ = {
 			isa = PBXGroup;
 			children = (
+				622A48AF1C896DEB0040E659 /* DetailVC */,
 				62B26E351C873EAC0062EA48 /* AlertView */,
 				62F6AC741C7DFE8D00BDBA30 /* Utilites */,
 				6242BC711C7739B100AA9814 /* Extension */,
@@ -685,6 +733,7 @@
 				62DE36AB1C719B2D009FB693 /* AppDelegate.swift */,
 				62DE36AD1C719B2D009FB693 /* ViewController.swift */,
 				62F572ED1C82DA24005F57D0 /* JChatMainTabViewController.swift */,
+				6296C84C1C8E791E00FA965C /* JChatConstants.swift */,
 				624ED9991C7461E2000F421D /* Recources */,
 				62DE36B21C719B2D009FB693 /* Assets.xcassets */,
 				62DE36B41C719B2D009FB693 /* LaunchScreen.storyboard */,
@@ -1081,6 +1130,7 @@
 				624ED9E91C7461FB000F421D /* RecordingSignal005@2x.png in Resources */,
 				62F573671C836223005F57D0 /* login_16@2x.png in Resources */,
 				62F573D81C86B972005F57D0 /* set_btn_del_pre_@2x.png in Resources */,
+				622A48C21C897C0A0040E659 /* JChatFootTableTableViewCell.xib in Resources */,
 				62F573B71C85D90C005F57D0 /* location_21@2x.png in Resources */,
 				62B26E391C874BC60062EA48 /* frame@2x.png in Resources */,
 				624ED9CB1C7461FB000F421D /* add01@3x.png in Resources */,
@@ -1108,11 +1158,13 @@
 				62F573571C836223005F57D0 /* login_02@2x.png in Resources */,
 				624ED9EB1C7461FB000F421D /* RecordingSignal007@2x.png in Resources */,
 				624ED9EF1C7461FB000F421D /* SenderVoiceNodePlaying002@2x.png in Resources */,
+				62827FB11C88420100B66007 /* JChatVersionViewController.xib in Resources */,
 				62F573651C836223005F57D0 /* login_14@2x.png in Resources */,
 				62F573681C836223005F57D0 /* login_16@3x.png in Resources */,
 				62F573721C836223005F57D0 /* login_20_pre@3x.png in Resources */,
 				62827FA61C880B2300B66007 /* talking_icon_group@3x.png in Resources */,
 				62F573581C836223005F57D0 /* login_02@3x.png in Resources */,
+				622A48B61C8974F50040E659 /* JCHATMemberCollectionCell.xib in Resources */,
 				62F573591C836223005F57D0 /* login_03@2x.png in Resources */,
 				62F573551C836223005F57D0 /* login_01@2x.png in Resources */,
 				624ED9E21C7461FB000F421D /* RecordingBkg@2x.png in Resources */,
@@ -1148,6 +1200,7 @@
 				62827FAD1C8836AD00B66007 /* JChatUpdatePasswordViewController.xib in Resources */,
 				624ED9D11C7461FB000F421D /* deleteMan@2x.png in Resources */,
 				62F5737B1C836223005F57D0 /* menu_16@3x.png in Resources */,
+				622A48BE1C897A290040E659 /* JCHATCollectionFootTableView.xib in Resources */,
 				624ED9DF1C7461FB000F421D /* ReceiverVoiceNodePlaying002@2x.png in Resources */,
 				62F572931C81656C005F57D0 /* SenderVoiceNodePlaying000@2x.png in Resources */,
 				62B26E3B1C874D360062EA48 /* createConversation@2x.png in Resources */,
@@ -1227,16 +1280,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				622A48BD1C897A290040E659 /* JCHATCollectionFootTableView.swift in Sources */,
 				62F572EE1C82DA24005F57D0 /* JChatMainTabViewController.swift in Sources */,
+				62827FB31C895B2700B66007 /* JCHATGroupDetailViewController.swift in Sources */,
 				624ED9FF1C75969B000F421D /* JChatShowTimeCell.swift in Sources */,
 				6242BC701C7700D700AA9814 /* JChatRecordingView.swift in Sources */,
+				626AE6121C8D5044008C9E0D /* JChatMessageTable.swift in Sources */,
 				6242BC781C7AE83D00AA9814 /* JChatRecordVoiceHelper.swift in Sources */,
 				62F572F41C835315005F57D0 /* JChatContactsViewController.swift in Sources */,
 				624ED9F71C747332000F421D /* JChatChattingDataSource.swift in Sources */,
 				62F5738A1C83E984005F57D0 /* UIView+Utilites.swift in Sources */,
 				62F573871C836721005F57D0 /* JCHATRegisterViewController.swift in Sources */,
 				62F5728F1C7F69EC005F57D0 /* JChatAudioPlayerHelper.swift in Sources */,
+				622A48C11C897C0A0040E659 /* JChatFootTableTableViewCell.swift in Sources */,
 				624ED9FD1C759674000F421D /* JChatLoadingMessageCell.swift in Sources */,
+				6296C84D1C8E791E00FA965C /* JChatConstants.swift in Sources */,
 				62F572F71C835411005F57D0 /* JChatAboutMeViewController.swift in Sources */,
 				622DFD491C87D6BA0018BEF6 /* JChatConversationListCell.swift in Sources */,
 				62F5728B1C7F61AF005F57D0 /* JChatLeftMessageCell.swift in Sources */,
@@ -1259,6 +1317,8 @@
 				62F6AC761C7DFEDB00BDBA30 /* NSDate+Utilites.swift in Sources */,
 				624ED9FB1C759523000F421D /* JChatTableCellMaker.swift in Sources */,
 				62827FAC1C8836AD00B66007 /* JChatUpdatePasswordViewController.swift in Sources */,
+				62827FB01C88420100B66007 /* JChatVersionViewController.swift in Sources */,
+				622A48B51C8974F50040E659 /* JCHATMemberCollectionCell.swift in Sources */,
 				62F5739A1C843010005F57D0 /* JCHATSetDetailViewController.swift in Sources */,
 				624ED9911C7391B8000F421D /* JChatMessageModel.swift in Sources */,
 				62B26E311C86CEFE0062EA48 /* String+Utilites.swift in Sources */,

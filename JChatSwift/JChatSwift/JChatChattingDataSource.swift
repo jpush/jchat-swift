@@ -16,7 +16,7 @@ class JChatChattingDataSource: NSObject {
   var messageLimit:Int!
   var messagefristPageNumber:Int!
   var showTimeInterval:Double!
-  var messageOffset:Int!
+  var messageOffset:Int!          // 当前message 的位置，，用于纪录获取更多的历史消息
   var isNoMoreHistoryMsg:Bool!
   
   init(conversation:JMSGConversation, showTimeInterval:Double, fristPageNumber:Int, limit:Int) {
@@ -27,14 +27,16 @@ class JChatChattingDataSource: NSObject {
     self.messageLimit = limit
     self.allMessageDic = NSMutableDictionary()
     self.allMessageIdArr = NSMutableArray()
-    self.isNoMoreHistoryMsg = true
+    self.isNoMoreHistoryMsg = false
+    self.messageOffset = 0
   }
   
   /**
   *  清除所有的消息缓存
   */
   func cleanCache() {
-  
+    self.allMessageIdArr.removeAllObjects()
+    self.allMessageDic.removeAllObjects()
   }
   
   /**
@@ -80,8 +82,8 @@ class JChatChattingDataSource: NSObject {
     let arrList = NSMutableArray()
     self.allMessageIdArr.addObject(NSObject())
     
-    self.messageOffset = self.messagefristPageNumber
-    arrList.addObjectsFromArray((self.conversation.messageArrayFromNewestWithOffset(0, limit: self.messageOffset) as NSArray).reverseObjectEnumerator().allObjects)
+    arrList.addObjectsFromArray((self.conversation.messageArrayFromNewestWithOffset(self.messageOffset, limit: self.messagefristPageNumber) as NSArray).reverseObjectEnumerator().allObjects)
+    self.messageOffset = self.messageOffset + self.messagefristPageNumber
     if arrList.count < self.messagefristPageNumber {
       self.isNoMoreHistoryMsg = true
       self.allMessageIdArr.removeObjectAtIndex(0)
@@ -94,6 +96,35 @@ class JChatChattingDataSource: NSObject {
       self.dataMessageShowtime(message.timestamp)
       self.allMessageDic.setObject(model, forKey: model.message.msgId)
       self.allMessageIdArr.addObject(model.message.msgId)
+    }
+  }
+  
+  /**
+   *  分页获取跟多的历史消息
+   */
+  func getMoreMessage() {
+    
+    let arrList = NSMutableArray()
+    arrList.addObjectsFromArray((self.conversation.messageArrayFromNewestWithOffset(self.messageOffset, limit: self.messageLimit) as NSArray).reverseObjectEnumerator().allObjects)
+    self.messageOffset = self.messageOffset + self.messageLimit
+    if arrList.count < self.messageLimit {
+      self.isNoMoreHistoryMsg = true
+      self.allMessageIdArr.removeObjectAtIndex(0)
+    }
+    
+    for (_, value) in arrList.enumerate() {
+      let message:JMSGMessage = value as! JMSGMessage
+      let model:JChatMessageModel = JChatMessageModel()
+      model.setChatModel(message, conversation: self.conversation)
+      if self.isNoMoreHistoryMsg == true {
+        self.allMessageIdArr.insertObject(model.message.msgId, atIndex: 0)
+      } else {
+        self.allMessageIdArr.insertObject(model.message.msgId, atIndex: 1)
+      }
+      self.allMessageDic.setObject(model, forKey: model.message.msgId)
+
+      self.dataMessageShowtime(message.timestamp)
+
     }
   }
   
@@ -119,6 +150,7 @@ class JChatChattingDataSource: NSObject {
     if messageId.isKindOfClass(JChattimeModel) {
       return messageId
     } else {
+    
       let model:JChatMessageModel = self.allMessageDic.objectForKey(messageId) as! JChatMessageModel
       return model
     }
@@ -149,8 +181,18 @@ class JChatChattingDataSource: NSObject {
     return indexPath
   }
 
+  /**
+  *
+  */
+  func isContaintMessage(msgId:String) -> Bool {
+    if self.allMessageDic[msgId] == nil {
+      return false
+    } else {
+      return true
+    }
+  }
+  
   internal func dataMessageShowtime(timeNumber:NSNumber) {
-    
     if self.allMessageIdArr.count > 0 {
       if self.allMessageIdArr.lastObject!.isKindOfClass(NSString) {
         let messageId = self.allMessageIdArr.lastObject
