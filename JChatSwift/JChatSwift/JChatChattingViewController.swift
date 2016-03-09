@@ -15,6 +15,7 @@ internal let messageFristPageNumber = 20
 
 
 class JChatChattingViewController: UIViewController {
+  
   var conversation:JMSGConversation!
   
   var messageTable:JChatMessageTable!
@@ -25,6 +26,7 @@ class JChatChattingViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
     print("Action - viewDidLoad")
     self.setupNavigation()
     self.setupAllViews()
@@ -120,7 +122,7 @@ class JChatChattingViewController: UIViewController {
     self.messageTable.delegate = self
     self.messageTable.dataSource = self
     self.messageTable.keyboardDismissMode = .Interactive
-    self.messageTable.estimatedRowHeight = 60
+//    self.messageTable.estimatedRowHeight = 60  //!!
     self.messageTable.rowHeight = UITableViewAutomaticDimension
     self.view.addSubview(messageTable)
     self.messageTable.snp_makeConstraints { (make) -> Void in
@@ -159,8 +161,39 @@ class JChatChattingViewController: UIViewController {
 }
 
 extension JChatChattingViewController:UITableViewDelegate,UITableViewDataSource {
+
   func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return self.messageDataSource.allMessageIdArr.count
+  }
+  
+//  - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+//  {
+//  NSLog(@"Estimating height (row %d)", indexPath.row);
+//  return _estimationBlock(indexPath.row);
+//  }
+
+//  func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+//    let cell = tableView.cellForRowAtIndexPath(indexPath)
+//    return (cell?.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height)!
+//
+//
+//    
+//  }
+  func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    if self.messageDataSource.noMoreHistoryMessage() != true {
+      if indexPath.row == 0 {
+        return 25
+      }
+    }
+
+    let model = self.messageDataSource.getMessageWithIndex(indexPath.row)
+    
+    if model.isKindOfClass(JChattimeModel) {
+      return 25
+    } else {
+      return (model as! JChatMessageModel).messageCellHeight
+    }
+    
   }
   
   func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -316,9 +349,15 @@ extension JChatChattingViewController : JMUIMultiSelectPhotosDelegate {
 // TODO:
 extension JChatChattingViewController : JChatMessageCellDelegate {
 
-  
   func selectHeadView(model:JChatMessageModel) {
-  
+    if model.message.fromUser.isEqualToUser(JMSGUser.myInfo()) {
+      let myInfoVC = JChatUserInfoViewController()
+      self.navigationController?.pushViewController(myInfoVC, animated: true)
+    } else {
+      let friendInfoVC = JChatFriendDetailViewController()
+      friendInfoVC.user = model.message.fromUser
+      self.navigationController?.pushViewController(friendInfoVC, animated: true)
+    }
   }
   
   //  picture
@@ -353,6 +392,7 @@ extension JChatChattingViewController: JMessageDelegate {
   }
 
   func onReceiveMessage(message: JMSGMessage!, error: NSError!) {
+    self.conversation.clearUnreadCount()
     if message != nil {
       print("收到 message msgID 为 \(message.msgId)")
     } else {

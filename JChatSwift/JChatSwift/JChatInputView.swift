@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 let keyboardAnimationDuration = 0.25
 
@@ -170,8 +171,12 @@ class JChatInputView: UIView {
   
   func holdDownButtonTouchUpInside() {
     self.recordHelper.finishRecordingCompletion()
-    self.inputDelegate.finishRecordingVoice(self.recordHelper.recordPath!, durationTime: Double(self.recordHelper.recordDuration!)!)
     self.recordingHub.removeFromSuperview()
+    if (self.recordHelper.recordDuration as! NSString).floatValue < 1 {
+      MBProgressHUD.showMessage("录音时长小于 1s", view: UIApplication.sharedApplication().keyWindow!)
+      return
+    }
+    self.inputDelegate.finishRecordingVoice(self.recordHelper.recordPath!, durationTime: Double(self.recordHelper.recordDuration!)!)
   }
   
   func holdDownButtonTouchUpOutside() {

@@ -21,6 +21,8 @@ class JChatMessageModel:NSObject {
   var imageSize:CGSize?
   var voiceBubbleWidth:Double?
 
+  var messageCellHeight:CGFloat!
+
   func setChatModel(message:JMSGMessage!, conversation:JMSGConversation!) {
     self.message = message
     self.messageTime = message.timestamp

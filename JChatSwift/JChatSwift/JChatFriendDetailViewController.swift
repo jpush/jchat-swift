@@ -21,15 +21,15 @@ class JChatFriendDetailViewController: UIViewController {
   var infoArr:NSMutableArray!
   override func viewDidLoad() {
     super.viewDidLoad()
+
     self.setupNavigationBar()
     self.layoutAllViews()
     self.loadUserInfoData()
   }
   
   func setupNavigationBar() {
-    func setupNavigation() {
       self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-      self.navigationController?.navigationBar.translucent = false
+//      self.navigationController?.navigationBar.translucent = false
       self.title = "详情资料"
       let leftBtn = UIButton(type: .Custom)
       leftBtn.frame = kNavigationLeftButtonRect
@@ -37,7 +37,6 @@ class JChatFriendDetailViewController: UIViewController {
       leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
       leftBtn.addTarget(self, action: Selector("backClick"), forControlEvents: .TouchUpInside)
       self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
-    }
   }
   
   @objc func backClick() {
@@ -45,16 +44,21 @@ class JChatFriendDetailViewController: UIViewController {
   }
   
   func layoutAllViews() {
-    self.infoTable = UITableView()
+
+    self.view.backgroundColor = UIColor.whiteColor()
+    
+    self.infoTable = UITableView(frame: CGRectZero)
     self.view.addSubview(self.infoTable)
     self.infoTable.delegate = self
     self.infoTable.dataSource = self
     self.infoTable.separatorStyle = .None
+
     self.infoTable.snp_makeConstraints { (make) -> Void in
-      make.left.bottom.right.left.equalTo(self.view)
+      make.left.bottom.right.top.equalTo(self.view)
     }
     
     let tableHeadView = UIView(frame: CGRect(x: 0, y: 0, width: kApplicationWidth, height: 150))
+    tableHeadView.backgroundColor = UIColor(netHex: 0xdddddd)
     self.headView = UIImageView()
     tableHeadView.addSubview(self.headView)
     self.headView.layer.cornerRadius = 35
@@ -64,11 +68,11 @@ class JChatFriendDetailViewController: UIViewController {
       make.size.equalTo(CGSize(width: 70, height: 70))
     }
     
-    
     self.nameLabel = UILabel()
     self.nameLabel.text = user.displayName()
     self.nameLabel.font = UIFont.boldSystemFontOfSize(18)
     self.nameLabel.textAlignment = .Center
+
     tableHeadView.addSubview(nameLabel)
     self.nameLabel.snp_makeConstraints { (make) -> Void in
       make.top.equalTo(self.headView.snp_bottom).offset(10)
@@ -81,10 +85,37 @@ class JChatFriendDetailViewController: UIViewController {
   func loadUserInfoData() {
     self.titleArr = ["性别", "地区", "个性签名"]
     self.imgArr = ["gender", "location_21", "signature"]
+
     self.infoArr = NSMutableArray()
+    switch self.user.gender {
+    case .Unknown:
+      self.infoArr.addObject("未知")
+      break
+    case .Male:
+      self.infoArr.addObject("男")
+      break
+    case .Female:
+      self.infoArr.addObject("女")
+      break
+      
+    }
+    
+    if self.user.region == nil {
+      self.infoArr.addObject("")
+    } else {
+      self.infoArr.addObject(self.user.region!)
+    }
+    
+    if self.user.signature == nil {
+      self.infoArr.addObject("")
+    } else {
+      self.infoArr.addObject(self.user.signature!)
+    }
+    
     
     MBProgressHUD.showMessage("正在加载", toView: self.view)
     JMSGUser.userInfoArrayWithUsernameArray([self.user.username]) { (resultObject, error) -> Void in
+      MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
       if error == nil {
         let user = ((resultObject as! Array)[0] as! JMSGUser)
         user.thumbAvatarData({ (data, objId, error) -> Void in
@@ -104,40 +135,13 @@ class JChatFriendDetailViewController: UIViewController {
         self.headView.image = UIImage(named: "headDefalt")
         MBProgressHUD.showMessage("获取数据失败", view: self.view)
       }
-
-      switch self.user.gender {
-      case .Unknown:
-        self.infoArr.addObject("未知")
-        break
-      case .Male:
-        self.infoArr.addObject("男")
-        break
-      case .Female:
-        self.infoArr.addObject("女")
-        break
-        
-      }
-
-      if self.user.region == nil {
-        self.infoArr.addObject("")
-      } else {
-        self.infoArr.addObject(self.user.region!)
-      }
-
-      if self.user.signature == nil {
-        self.infoArr.addObject("")
-      } else {
-        self.infoArr.addObject(self.user.signature!)
-      }
       self.infoTable.reloadData()
     }
     
   }
 
-  
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
-
   }
 }
 

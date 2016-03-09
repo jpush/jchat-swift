@@ -139,19 +139,17 @@ class JChatMessageCell: UITableViewCell {
   }
   
   @objc func tapHeadView() {
-    print("tap headview")
+    self.delegate.selectHeadView(self.messageModel)
   }
   
-  func setCellData(model:JChatMessageModel, delegate:JChatMessageCellDelegate) {
+  func setCellData(model:JChatMessageModel) {
     self.messageModel = model
-    self.delegate = delegate
     
-
     model.message.fromUser.thumbAvatarData { (data, ObjectId, error) -> Void in
       if error == nil {
-        let user:JMSGUser = self.messageModel.message.fromUser 
+        let user:JMSGUser = self.messageModel.message.fromUser
         if ObjectId == user.username {
-
+          
           if data != nil {
             self.headImageView.image = UIImage(data: data)
           } else {
@@ -179,7 +177,7 @@ class JChatMessageCell: UITableViewCell {
         break
       case .Image:
         let imageContent = self.messageModel.message.content as! JMSGImageContent
-
+        
         imageContent.thumbImageData({[weak weakSelf = self] (data, objectId, error) -> Void in
           if error == nil {
             if data != nil {
@@ -188,7 +186,7 @@ class JChatMessageCell: UITableViewCell {
             }
           }
           weakSelf?.messageBubble?.image = UIImage(named: "receiveFail")
-        })
+          })
         break
       default:
         break
@@ -199,9 +197,14 @@ class JChatMessageCell: UITableViewCell {
         self.unreadStatusView.hidden = false
       }
       
-    self.layoutAllViews()
+      self.layoutAllViews()
       
     }
+  }
+  
+  func setCellData(model:JChatMessageModel, delegate:JChatMessageCellDelegate) {
+    self.delegate = delegate
+    self.setCellData(model)
   }
   
   func layoutAllViews() {

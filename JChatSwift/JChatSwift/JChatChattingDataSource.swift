@@ -19,6 +19,7 @@ class JChatChattingDataSource: NSObject {
   var messageOffset:Int!          // 当前message 的位置，，用于纪录获取更多的历史消息
   var isNoMoreHistoryMsg:Bool!
   
+  var messageCell:JChatRightMessageCell!
   init(conversation:JMSGConversation, showTimeInterval:Double, fristPageNumber:Int, limit:Int) {
     super.init()
     self.conversation = conversation
@@ -29,6 +30,7 @@ class JChatChattingDataSource: NSObject {
     self.allMessageIdArr = NSMutableArray()
     self.isNoMoreHistoryMsg = false
     self.messageOffset = 0
+    self.messageCell = JChatRightMessageCell.init(style: .Default, reuseIdentifier: "MessageCellToGetRowHeight")
   }
   
   /**
@@ -46,6 +48,7 @@ class JChatChattingDataSource: NSObject {
     if model.isKindOfClass(JChattimeModel) {
       self.allMessageIdArr.addObject(model)
     } else {
+      self.getMessageCellHeight(model as! JChatMessageModel)
       self.allMessageDic.setObject(model, forKey: (model as! JChatMessageModel).message.msgId)
       self.allMessageIdArr.addObject((model as! JChatMessageModel).message.msgId)
     }
@@ -67,6 +70,7 @@ class JChatChattingDataSource: NSObject {
     if model.isKindOfClass(JChattimeModel) {
       self.allMessageIdArr.insertObject(model, atIndex: index)
     } else {
+      self.getMessageCellHeight(model as! JChatMessageModel)
       self.allMessageIdArr.insertObject(model, atIndex: index)
       self.allMessageDic.setObject(model, forKey: (model as! JChatMessageModel).message.msgId)
     }
@@ -93,6 +97,7 @@ class JChatChattingDataSource: NSObject {
       let message:JMSGMessage = value as! JMSGMessage
       let model:JChatMessageModel = JChatMessageModel()
       model.setChatModel(message, conversation: self.conversation)
+      self.getMessageCellHeight(model)
       self.dataMessageShowtime(message.timestamp)
       self.allMessageDic.setObject(model, forKey: model.message.msgId)
       self.allMessageIdArr.addObject(model.message.msgId)
@@ -116,6 +121,7 @@ class JChatChattingDataSource: NSObject {
       let message:JMSGMessage = value as! JMSGMessage
       let model:JChatMessageModel = JChatMessageModel()
       model.setChatModel(message, conversation: self.conversation)
+      self.getMessageCellHeight(model)
       if self.isNoMoreHistoryMsg == true {
         self.allMessageIdArr.insertObject(model.message.msgId, atIndex: 0)
       } else {
@@ -190,6 +196,13 @@ class JChatChattingDataSource: NSObject {
     } else {
       return true
     }
+  }
+  
+  internal func getMessageCellHeight(model: JChatMessageModel) -> CGFloat {
+    messageCell.setCellData(model)
+    let height = messageCell.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
+    model.messageCellHeight = height
+    return height
   }
   
   internal func dataMessageShowtime(timeNumber:NSNumber) {

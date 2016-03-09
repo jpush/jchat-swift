@@ -132,7 +132,6 @@ class JChatRecordVoiceHelper: NSObject {
   func finishRecordingCompletion() {
     self.stopRecord()
     self.getVoiceDuration(self.recordPath!)
-
     
     if self.stopRecordCompletion != nil {
       dispatch_async(dispatch_get_main_queue(), self.stopRecordCompletion!)

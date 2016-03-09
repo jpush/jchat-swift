@@ -61,9 +61,6 @@ class JChatChattingLayout: NSObject {
     }
 
   func loadMoreMessage() {
-    var offset = self.messageListTable?.contentOffset
-    offset!.y = offset!.y + 200
-    self.messageListTable?.contentOffset = offset!
     self.messageListTable?.loadMoreMessage()
   }
   
