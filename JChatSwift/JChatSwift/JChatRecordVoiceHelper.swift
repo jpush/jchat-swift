@@ -22,10 +22,11 @@ class JChatRecordVoiceHelper: NSObject {
   var recorder:AVAudioRecorder?
   var recordPath:String?
   var recordDuration:String?
-  var recordProgress:CGFloat?
+  var recordProgress:Float?
   var theTimer:NSTimer?
   var currentTimeInterval:NSTimeInterval?
 
+  weak var updateMeterDelegate:JChatRecordingView?
   override init() {
     super.init()
   }
@@ -38,10 +39,15 @@ class JChatRecordVoiceHelper: NSObject {
   func updateMeters() {
     if self.recorder == nil { return }
     self.currentTimeInterval = self.recorder?.currentTime
+
+    self.recordProgress = self.recorder?.peakPowerForChannel(0)
+    self.updateMeterDelegate?.setPeakPower(self.recordProgress!)
+    
     if self.currentTimeInterval > maxRecordTime {
       self.stopRecord()
       if self.stopRecordCompletion != nil {
         dispatch_async(dispatch_get_main_queue(), self.stopRecordCompletion!)
+        self.recorder?.updateMeters()
       }
     }
   }

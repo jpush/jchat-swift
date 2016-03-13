@@ -30,7 +30,7 @@ class JChatMessageCell: UITableViewCell {
   internal var sendfailImg:UIImageView!
 
 //  text
-  internal var textMessageContent:JChatTextMessageLabel!
+  internal var textMessageContent:UILabel!
   
 //  voice
   internal var isPlaying:Bool!
@@ -57,7 +57,7 @@ class JChatMessageCell: UITableViewCell {
     self.headImageView.layer.masksToBounds = true
     self.contentView.addSubview(self.headImageView)
     
-    self.textMessageContent = JChatTextMessageLabel()
+    self.textMessageContent = UILabel()
     self.textMessageContent.numberOfLines = 0
     self.textMessageContent.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
     self.contentView.addSubview(textMessageContent)
@@ -96,15 +96,6 @@ class JChatMessageCell: UITableViewCell {
     self.addGestureForAllViews()
     
   }
-
-//  override func layoutSubviews() {
-//    super.layoutSubviews()
-//    if messageModel.message.contentType == .Image {
-//      let messageBubbleFrame = self.messageBubble?.frame
-//      self.messageBubble?.frame = CGRect(x: (messageBubbleFrame?.origin.x)!, y: (messageBubbleFrame?.origin.y)!, width: self.messageModel.imageSize!.width, height: self.messageModel.imageSize!.height)
-//    }
-//
-//  }
   
   func addGestureForAllViews() {
     let gesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("tapContent"))
@@ -269,6 +260,7 @@ class JChatMessageCell: UITableViewCell {
       self.voiceBtn.hidden = true
       break
     case .Voice:
+      self.textMessageContent.hidden = true
       self.textLabel?.hidden = true
       self.percentLable.hidden = true
       self.voiceTimeLable.hidden = false

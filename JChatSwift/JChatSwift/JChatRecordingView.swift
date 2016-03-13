@@ -17,7 +17,7 @@ class JChatRecordingView: UIView {
   var microPhoneImageView:UIImageView!
   var cancelRecordImageView:UIImageView!
   var recordingHUDImageView:UIImageView!
-  var peakPower:CGFloat!
+  var peakPower:Float!
   
   func dismissCompled(completed: (finish:Bool) -> Void) {
   
@@ -73,7 +73,7 @@ class JChatRecordingView: UIView {
       self.recordingHUDImageView.image = UIImage(named: "RecordingSignal")
       self.recordingHUDImageView.autoresizingMask = [.FlexibleRightMargin, .FlexibleBottomMargin]
       self.addSubview(self.recordingHUDImageView)
-      self.microPhoneImageView.snp_makeConstraints(closure: { (make) -> Void in
+      self.recordingHUDImageView.snp_makeConstraints(closure: { (make) -> Void in
         make.left.equalTo(self).offset(82.0)
         make.top.equalTo(self).offset(34.0)
         make.size.equalTo(CGSize(width: 18.0, height: 61.0))
@@ -86,7 +86,7 @@ class JChatRecordingView: UIView {
       self.cancelRecordImageView.autoresizingMask = [.FlexibleRightMargin, .FlexibleBottomMargin]
       self.cancelRecordImageView.contentMode = .ScaleToFill
       self.addSubview(self.cancelRecordImageView)
-      self.microPhoneImageView.snp_makeConstraints(closure: { (make) -> Void in
+      self.cancelRecordImageView.snp_makeConstraints(closure: { (make) -> Void in
         make.left.equalTo(self).offset(19.0)
         make.top.equalTo(self).offset(7.0)
         make.size.equalTo(CGSize(width: 100.0, height: 100.0))
@@ -100,6 +100,7 @@ class JChatRecordingView: UIView {
       make.center.equalTo(view)
     }
     self.configRecoding(true)
+    self.backgroundColor = UIColor(netHex: 0x3f80dd)
   }
 
   func pauseRecord() {
@@ -138,7 +139,7 @@ class JChatRecordingView: UIView {
     self.cancelRecordImageView.hidden = recording
   }
   
-  func configRecordingHUDImageWithPeakPower(peakPower:CGFloat) {
+  func configRecordingHUDImageWithPeakPower(peakPower:Float) {
     var imageName = "RecordingSignal00"
     switch peakPower {
     case peakPower where peakPower > 0 && peakPower <= 0.1:
@@ -170,7 +171,7 @@ class JChatRecordingView: UIView {
     self.recordingHUDImageView.image = UIImage(named: imageName)
   }
 
-  func setPeakPower(peakPower:CGFloat) {
+  func setPeakPower(peakPower:Float) {
     self.peakPower = peakPower
     self.configRecordingHUDImageWithPeakPower(peakPower)
   }

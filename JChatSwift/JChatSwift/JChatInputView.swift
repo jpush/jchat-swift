@@ -158,8 +158,10 @@ class JChatInputView: UIView {
     self.inputDelegate.startRecordingVoice()
     if self.recordingHub == nil {
       self.recordingHub = JChatRecordingView(frame: CGRectZero)
+      self.recordHelper.updateMeterDelegate = self.recordingHub
     }
-    self.superview?.addSubview(self.recordingHub)
+//    self.superview?.addSubview(self.recordingHub)
+    self.recordingHub.startRecordingHUDAtView(self.superview!)
     self.recordingHub.snp_makeConstraints { (make) -> Void in
       make.center.equalTo(self.superview!)
       make.size.equalTo(CGSize(width: 140, height: 140))
@@ -201,10 +203,11 @@ class JChatInputView: UIView {
       self.recordVoiceBtn.hidden = true
       self.inputTextView.hidden = false
       self.updateInputTextViewHeight(self.inputTextView)
+      self.inputTextView.becomeFirstResponder()
     } else {
       self.recordVoiceBtn.hidden = false
       self.inputTextView.hidden = true
-
+      self.inputTextView.resignFirstResponder()
       self.inputTextView.snp_updateConstraints(closure: { (make) -> Void in
         make.height.equalTo(35)
       })
