@@ -37,6 +37,7 @@ class JChatSendImageManager: NSObject {
     } else {
       key = (conversation.target as! JMSGGroup).gid
     }
+    
     if self.sendMsgListDic.objectForKey(key) == nil {
       let sendMsgCtl:JChatSendImageController = JChatSendImageController()
       sendMsgCtl.msgConversation = conversation

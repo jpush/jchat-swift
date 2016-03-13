@@ -30,11 +30,12 @@ class JChatLeftMessageCell:JChatMessageCell {
       make.top.equalTo(self.contentView).offset(5)
     }
     
+    self.textMessageContent.preferredMaxLayoutWidth = self.contentView.bounds.width * 0.6
     self.textMessageContent.snp_makeConstraints { (make) -> Void in
       make.left.equalTo(self.headImageView.snp_right).offset(20)
       make.width.lessThanOrEqualTo(self.contentView).multipliedBy(0.6)
       make.top.equalTo(headImageView).offset(10)
-      make.bottom.equalTo(self.contentView).offset(-20).priorityLow()
+      make.bottom.equalTo(self.contentView).offset(-20)//.priorityLow()
     }
     
     self.voiceBtn.snp_makeConstraints { (make) -> Void in
@@ -72,6 +73,9 @@ class JChatLeftMessageCell:JChatMessageCell {
         make.left.equalTo(self.textMessageContent.snp_left).offset(-13)
         make.size.equalTo(CGSize(width: self.messageModel.imageSize!.width, height: self.messageModel.imageSize!.height))
       })
+//      self.textMessageContent.snp_updateConstraints(closure: { (make) -> Void in
+//        make.size.equalTo(CGSize(width: self.messageModel.imageSize!.width, height: self.messageModel.imageSize!.height))
+//      })
     } else {
       self.messageBubble?.snp_remakeConstraints(closure: { (make) -> Void in
         make.right.equalTo(self.textMessageContent.snp_right).offset(5)
@@ -79,6 +83,9 @@ class JChatLeftMessageCell:JChatMessageCell {
         make.bottom.equalTo(self.textMessageContent.snp_bottom).offset(5)
         make.left.equalTo(self.textMessageContent.snp_left).offset(-13)
       })
+//      self.textMessageContent.snp_updateConstraints(closure: { (make) -> Void in
+//        make.size.equalTo(CGSize(width: self.messageModel.imageSize!.width, height: self.messageModel.imageSize!.height))
+//      })
     }
   }
   

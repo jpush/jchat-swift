@@ -200,8 +200,11 @@ class JChatChattingDataSource: NSObject {
   
   internal func getMessageCellHeight(model: JChatMessageModel) -> CGFloat {
     messageCell.setCellData(model)
-    let height = messageCell.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
-    model.messageCellHeight = height
+    messageCell.layoutIfNeeded()
+//    let height = messageCell.systemLayoutSizeFittingSize(UILayoutFittingExpandedSize).height
+    let height = messageCell.systemLayoutSizeFittingSize(CGSizeZero).height
+    print("huangmin cell height = \(height)")
+    model.messageCellHeight = height + 1
     return height
   }
   

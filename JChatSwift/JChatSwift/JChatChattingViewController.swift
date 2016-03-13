@@ -122,8 +122,6 @@ class JChatChattingViewController: UIViewController {
     self.messageTable.delegate = self
     self.messageTable.dataSource = self
     self.messageTable.keyboardDismissMode = .Interactive
-//    self.messageTable.estimatedRowHeight = 60  //!!
-    self.messageTable.rowHeight = UITableViewAutomaticDimension
     self.view.addSubview(messageTable)
     self.messageTable.snp_makeConstraints { (make) -> Void in
       make.top.left.right.equalTo(self.view)
@@ -138,7 +136,6 @@ class JChatChattingViewController: UIViewController {
 
   func flashToLoadMessage() {
     self.messageDataSource.getMoreMessage()
-//    self.messageTable.loadMoreMessage()
     self.chatLayout.loadMoreMessage()
   }
   

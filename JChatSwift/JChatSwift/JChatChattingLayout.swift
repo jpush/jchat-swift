@@ -40,7 +40,6 @@ class JChatChattingLayout: NSObject {
       self.messageListTable?.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: false)      
     }
 
-    
     dispatch_async(dispatch_get_main_queue()) { () -> Void in
     }
   }

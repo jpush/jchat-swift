@@ -23,11 +23,12 @@ class JChatRightMessageCell : JChatMessageCell {
       make.top.equalTo(self.contentView).offset(5)
     }
     
+    self.textMessageContent.preferredMaxLayoutWidth = self.contentView.bounds.width * 0.6
     self.textMessageContent.snp_makeConstraints { (make) -> Void in
       make.right.equalTo(self.headImageView.snp_left).offset(-20)
       make.width.lessThanOrEqualTo(self.contentView).multipliedBy(0.6)
       make.top.equalTo(headImageView).offset(10)
-      make.bottom.equalTo(-20).priorityLow()
+      make.bottom.equalTo(self.contentView).offset(-20)
     }
     
     self.messageBubble!.snp_makeConstraints { (make) -> Void in

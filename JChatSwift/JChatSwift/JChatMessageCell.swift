@@ -30,7 +30,7 @@ class JChatMessageCell: UITableViewCell {
   internal var sendfailImg:UIImageView!
 
 //  text
-  internal var textMessageContent:UILabel!
+  internal var textMessageContent:JChatTextMessageLabel!
   
 //  voice
   internal var isPlaying:Bool!
@@ -57,7 +57,7 @@ class JChatMessageCell: UITableViewCell {
     self.headImageView.layer.masksToBounds = true
     self.contentView.addSubview(self.headImageView)
     
-    self.textMessageContent = UILabel()
+    self.textMessageContent = JChatTextMessageLabel()
     self.textMessageContent.numberOfLines = 0
     self.textMessageContent.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
     self.contentView.addSubview(textMessageContent)

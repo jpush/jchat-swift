@@ -87,7 +87,7 @@ class JChatRecordVoiceHelper: NSObject {
     
     let audioSession:AVAudioSession = AVAudioSession.sharedInstance()
     do {
-      try audioSession.setCategory(AVAudioSessionCategoryPlayback)
+      try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
     } catch let error as NSError {
       print("could not set session category")
       print(error.localizedDescription)
