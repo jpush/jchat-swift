@@ -18,8 +18,19 @@ class JChatAlreadyLoginViewController: UIViewController {
     self.title = "极光IM"
     let username = NSUserDefaults.standardUserDefaults().objectForKey(klastLoginUserName) as! String
     userNameLabel.setTitle(username, forState: .Normal)
+    self.addGesture()
   }
 
+  func addGesture() {
+    let gesture = UITapGestureRecognizer(target: self, action:#selector(JChatAlreadyLoginViewController.handleTap))
+    gesture.delegate = self
+    self.view.addGestureRecognizer(gesture)
+  }
+  
+  @objc func handleTap() {
+    UIApplication.sharedApplication().sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, forEvent: nil)
+  }
+  
   @IBAction func clickToLogin(sender: AnyObject) {
 
     let username = NSUserDefaults.standardUserDefaults().objectForKey(klastLoginUserName) as! String
@@ -55,5 +66,10 @@ class JChatAlreadyLoginViewController: UIViewController {
     super.didReceiveMemoryWarning()
 
   }
+
+}
+
+
+extension JChatAlreadyLoginViewController: UIGestureRecognizerDelegate {
 
 }

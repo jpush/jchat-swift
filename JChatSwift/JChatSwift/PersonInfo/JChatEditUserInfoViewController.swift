@@ -32,7 +32,7 @@ class JChatEditUserInfoViewController: UIViewController {
     self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     self.navigationController?.navigationBar.translucent = false
 
-    let rightBtn = UIBarButtonItem(title: "保存", style: .Plain, target: self, action: Selector("clickToSave"))
+    let rightBtn = UIBarButtonItem(title: "保存", style: .Plain, target: self, action: #selector(JChatEditUserInfoViewController.clickToSave))
     rightBtn.tintColor = UIColor.whiteColor()
     self.navigationItem.rightBarButtonItem = rightBtn
     
@@ -40,7 +40,7 @@ class JChatEditUserInfoViewController: UIViewController {
     leftBtn.frame = kNavigationLeftButtonRect
     leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
     leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    leftBtn.addTarget(self, action: Selector("backClick"), forControlEvents: .TouchUpInside)
+    leftBtn.addTarget(self, action: #selector(JChatEditUserInfoViewController.backClick), forControlEvents: .TouchUpInside)
     self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
     
   }
@@ -131,12 +131,12 @@ class JChatEditUserInfoViewController: UIViewController {
         } else {
           self.infoTextField.placeholder = user.nickname
         }
-        self.infoTextField.addTarget(self, action: Selector("textFieldDidChangeName"), forControlEvents: .EditingChanged)
+        self.infoTextField.addTarget(self, action: #selector(JChatEditUserInfoViewController.textFieldDidChangeName), forControlEvents: .EditingChanged)
         self.title = "修改昵称"
       break
       case .FieldsSignature:
         self.descriptLable.hidden = true
-        self.infoTextField.addTarget(self, action: Selector("textFieldDidChangeName"), forControlEvents: .EditingChanged)
+        self.infoTextField.addTarget(self, action: #selector(JChatEditUserInfoViewController.textFieldDidChangeName), forControlEvents: .EditingChanged)
         if user.signature == nil {
           self.infoTextField.placeholder = "请输入你的签名"
         } else {

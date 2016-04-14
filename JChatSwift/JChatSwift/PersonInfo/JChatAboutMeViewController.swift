@@ -41,7 +41,7 @@ class JChatAboutMeViewController: UIViewController {
     }
     self.cellImgArr = ["wo_20", "setting_22", "loginOut_17"]
     
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("setAvatar"), name: kupdateUserInfo, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatAboutMeViewController.setAvatar), name: kupdateUserInfo, object: nil)
   }
 
   override func viewDidLayoutSubviews() {
@@ -52,7 +52,7 @@ class JChatAboutMeViewController: UIViewController {
   @objc func setAvatar() {
     self.bgView = JChatAvatarView(frame: CGRectMake(0, 0, kApplicationWidth, 0.54 * kApplicationWidth))
     self.bgView.backgroundColor = UIColor(netHex: 0xdddddd)
-    let gesture = UITapGestureRecognizer(target: self, action: Selector("tapPicture:"))
+    let gesture = UITapGestureRecognizer(target: self, action: #selector(JChatAboutMeViewController.tapPicture(_:)))
     self.bgView.addGestureRecognizer(gesture)
     self.headerView = JChatExpandHeader.expandWithScrollView(self.table, expandView: self.bgView)
   }

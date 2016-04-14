@@ -19,7 +19,7 @@ class JChatLoginViewController: UIViewController {
     super.viewDidLoad()
     self.layoutAllViews()
     
-    let gesture = UITapGestureRecognizer(target: self, action:Selector("handleTap"))
+    let gesture = UITapGestureRecognizer(target: self, action:#selector(JChatLoginViewController.handleTap))
     gesture.delegate = self
     self.view.addGestureRecognizer(gesture)
   }
@@ -33,7 +33,7 @@ class JChatLoginViewController: UIViewController {
       leftBtn.frame = kNavigationLeftButtonRect
       leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
       leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-      leftBtn.addTarget(self, action: Selector("backClick"), forControlEvents: .TouchUpInside)
+      leftBtn.addTarget(self, action: #selector(JChatLoginViewController.backClick), forControlEvents: .TouchUpInside)
       self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
     }
     
@@ -68,7 +68,7 @@ class JChatLoginViewController: UIViewController {
   
   @IBAction func clickToLogin(sender: AnyObject) {
     print("Action - Login")
-    UIApplication.sharedApplication().sendAction(Selector("resignFirstResponder"), to: nil, from: nil, forEvent: nil)
+    UIApplication.sharedApplication().sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, forEvent: nil)
     
     if self.checkValidUsername(self.userNameTF.text!, password: self.passwordTF.text!) {
       MBProgressHUD.showMessage("正在登陆", toView: self.view)
@@ -96,7 +96,7 @@ class JChatLoginViewController: UIViewController {
   }
   
   @objc func handleTap() {
-    UIApplication.sharedApplication().sendAction(Selector("resignFirstResponder"), to: nil, from: nil, forEvent: nil)
+    UIApplication.sharedApplication().sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, forEvent: nil)
   }
   
   @IBAction func clickToRegister(sender: AnyObject) {

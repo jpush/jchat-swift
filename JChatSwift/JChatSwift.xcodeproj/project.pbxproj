@@ -1034,6 +1034,7 @@
 				TargetAttributes = {
 					62DE36A71C719B2D009FB693 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = 8X2A38Q9VD;
 					};
 					62DE36BB1C719B2D009FB693 = {
 						CreatedOnToolsVersion = 7.2;
@@ -1469,6 +1470,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1486,7 +1489,7 @@
 					"\"SnapKit\"",
 					"-lz",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = HXHG.JChatSwift;
+				PRODUCT_BUNDLE_IDENTIFIER = io.jchat.JChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "JChatSwift/JChatSwift-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1499,6 +1502,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1516,7 +1521,7 @@
 					"\"SnapKit\"",
 					"-lz",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = HXHG.JChatSwift;
+				PRODUCT_BUNDLE_IDENTIFIER = io.jchat.JChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "JChatSwift/JChatSwift-Bridging-Header.h";
 			};

@@ -24,17 +24,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       // 可以自定义 categories
       JPUSHService.registerForRemoteNotificationTypes(
         UIUserNotificationType.Badge.rawValue |
-        UIUserNotificationType.Badge.rawValue |
+        UIUserNotificationType.Sound.rawValue |
         UIUserNotificationType.Alert.rawValue,
         categories: nil)
     } else {
       JPUSHService.registerForRemoteNotificationTypes(
         UIUserNotificationType.Badge.rawValue |
-        UIUserNotificationType.Badge.rawValue |
+        UIUserNotificationType.Sound.rawValue |
         UIUserNotificationType.Alert.rawValue,
         categories: nil)
     }
-
+    self.registerJPushStatusNotification()
     self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
     self.setupRootView()
     self.window?.makeKeyAndVisible()
@@ -69,43 +69,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ]
   }
   
-//  - (void)registerJPushStatusNotification {
-//  NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-//  [defaultCenter addObserver:self
-//  selector:@selector(networkDidSetup:)
-//  name:kJPFNetworkDidSetupNotification
-//  object:nil];
-//  [defaultCenter addObserver:self
-//  selector:@selector(networkIsConnecting:)
-//  name:kJPFNetworkIsConnectingNotification
-//  object:nil];
-//  [defaultCenter addObserver:self
-//  selector:@selector(networkDidClose:)
-//  name:kJPFNetworkDidCloseNotification
-//  object:nil];
-//  [defaultCenter addObserver:self
-//  selector:@selector(networkDidRegister:)
-//  name:kJPFNetworkDidRegisterNotification
-//  object:nil];
-//  [defaultCenter addObserver:self
-//  selector:@selector(networkDidLogin:)
-//  name:kJPFNetworkDidLoginNotification
-//  object:nil];
-//  
-//  [defaultCenter addObserver:self
-//  selector:@selector(receivePushMessage:)
-//  name:kJPFNetworkDidReceiveMessageNotification
-//  object:nil];
-//  
-//  }
   func registerJPushStatusNotification() {
     let defaultCenter = NSNotificationCenter.defaultCenter()
-    defaultCenter.addObserver(self, selector: Selector(""), name: kJPFNetworkDidSetupNotification, object: nil)
-    defaultCenter.addObserver(self, selector: Selector(""), name: kJPFNetworkIsConnectingNotification, object: nil)
-    defaultCenter.addObserver(self, selector: Selector(""), name: kJPFNetworkDidCloseNotification, object: nil)
-    defaultCenter.addObserver(self, selector: Selector(""), name: kJPFNetworkDidRegisterNotification, object: nil)
-    defaultCenter.addObserver(self, selector: Selector(""), name: kJPFNetworkDidLoginNotification, object: nil)
-    defaultCenter.addObserver(self, selector: Selector(""), name: kJPFNetworkDidReceiveMessageNotification, object: nil)
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidSetup(_:)), name: kJPFNetworkDidSetupNotification, object: nil)
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkIsConnecting(_:)), name: kJPFNetworkIsConnectingNotification, object: nil)
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidClose(_:)), name: kJPFNetworkDidCloseNotification, object: nil)
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidRegister(_:)), name: kJPFNetworkDidRegisterNotification, object: nil)
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidLogin(_:)), name: kJPFNetworkDidLoginNotification, object: nil)
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.receivePushMessage(_:)), name: kJPFNetworkDidReceiveMessageNotification, object: nil)
   }
   
   // notification from JPush

@@ -60,7 +60,7 @@ class JChatAlertViewManager: NSObject {
       make.height.equalTo(30)
       make.top.equalTo(self.alertView).offset(20)
     }
-    fristBtn.addTarget(self, action: Selector("clickFristBtn"), forControlEvents: .TouchUpInside)
+    fristBtn.addTarget(self, action: #selector(JChatAlertViewManager.clickFristBtn), forControlEvents: .TouchUpInside)
     
     
     let secondBtn = UIButton()
@@ -73,7 +73,7 @@ class JChatAlertViewManager: NSObject {
       make.height.equalTo(30)
       make.top.equalTo(fristBtn.snp_bottom).offset(10)
     }
-    secondBtn.addTarget(self, action: Selector("clickSecondBtn"), forControlEvents: .TouchUpInside)
+    secondBtn.addTarget(self, action: #selector(JChatAlertViewManager.clickSecondBtn), forControlEvents: .TouchUpInside)
     view.addSubview(self.alertView)
     self.alertView.snp_makeConstraints { (make) -> Void in
       make.size.equalTo(CGSize(width: 100, height: 100))

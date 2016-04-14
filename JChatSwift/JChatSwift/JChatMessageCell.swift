@@ -98,11 +98,11 @@ class JChatMessageCell: UITableViewCell {
   }
   
   func addGestureForAllViews() {
-    let gesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("tapContent"))
+    let gesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(JChatMessageCell.tapContent))
     self.messageBubble?.addGestureRecognizer(gesture)
     self.messageBubble?.userInteractionEnabled = true
 
-    let tapHeadGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("tapHeadView"))
+    let tapHeadGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(JChatMessageCell.tapHeadView))
     self.headImageView.addGestureRecognizer(tapHeadGesture)
     self.headImageView.userInteractionEnabled = true
     
@@ -351,7 +351,7 @@ class JChatMessageCell: UITableViewCell {
     self.setVoiceBtmImage()
     if self.isPlaying == true{
       self.voiceImgIndex?++
-      self.performSelector(Selector("changeVoiceBtmImage"), withObject: nil, afterDelay: 0.25)
+      self.performSelector(#selector(JChatMessageCell.changeVoiceBtmImage), withObject: nil, afterDelay: 0.25)
     }
   }
   
@@ -396,7 +396,7 @@ extension JChatMessageCell:JChatAudioPlayerHelperDelegate {
     
     if self.continuePlayer == true {
       self.continuePlayer = false
-      self.performSelector(Selector("prepareToPlayVoice"), withObject: nil, afterDelay: 0.5)
+      self.performSelector(#selector(JChatMessageCell.prepareToPlayVoice), withObject: nil, afterDelay: 0.5)
     }
   }
   

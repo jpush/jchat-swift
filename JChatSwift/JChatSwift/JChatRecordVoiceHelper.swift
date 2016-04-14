@@ -125,7 +125,7 @@ class JChatRecordVoiceHelper: NSObject {
     
     if ((self.recorder?.record()) != false) {
       self.resetTimer()
-      self.theTimer = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: Selector("updateMeters"), userInfo: nil, repeats: true)
+      self.theTimer = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(JChatRecordVoiceHelper.updateMeters), userInfo: nil, repeats: true)
     } else {
       print("fail record")
     }

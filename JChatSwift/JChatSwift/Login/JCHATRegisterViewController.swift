@@ -28,7 +28,7 @@ class JCHATRegisterViewController: UIViewController {
     backBtn.setBackgroundImage(UIImage(named: "goBack"), forState: .Normal)
     backBtn.contentMode = .Center
     backBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    backBtn .addTarget(self, action: Selector("doBack:"), forControlEvents: .TouchUpInside)
+    backBtn .addTarget(self, action: #selector(JCHATRegisterViewController.doBack(_:)), forControlEvents: .TouchUpInside)
     
     let backItem = UIBarButtonItem(customView: backBtn)
     self.navigationItem.leftBarButtonItem = backItem
@@ -67,7 +67,7 @@ class JCHATRegisterViewController: UIViewController {
   
   @IBAction func clickToRegister(sender: AnyObject) {
     print("Action - clickToRegister")
-    UIApplication.sharedApplication().sendAction(Selector("resignFirstResponder"), to: nil, from: nil, forEvent: nil)
+    UIApplication.sharedApplication().sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, forEvent: nil)
     if self.checkValidUsername(usernameTF.text!, password: passwordTF.text!) {
       MBProgressHUD.showMessage("正在注册", view: self.view)
       JMSGUser.registerWithUsername(usernameTF.text!, password: passwordTF.text!, completionHandler: { (resultObject, error) -> Void in

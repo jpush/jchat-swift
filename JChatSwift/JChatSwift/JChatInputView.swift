@@ -57,7 +57,7 @@ class JChatInputView: UIView {
     self.moreView.backgroundColor = UIColor.lightGrayColor()
     
     self.inputWrapView = UIView()
-    self.inputWrapView.backgroundColor = UIColor.grayColor()
+    self.inputWrapView.backgroundColor = UIColor(netHex: 0xdfdfdf)
     self.addSubview(inputWrapView)
     
     moreView?.snp_makeConstraints(closure: { (make) -> Void in
@@ -69,8 +69,8 @@ class JChatInputView: UIView {
     
     self.showPhotoBtn = UIButton()
     self.moreView.addSubview(self.showPhotoBtn)
-    self.showPhotoBtn.setBackgroundImage(UIImage(named: "photo_24"), forState: .Normal)
-    self.showPhotoBtn.addTarget(self, action: Selector("clickShowPhotoBtn"), forControlEvents: .TouchUpInside)
+    self.showPhotoBtn.setImage(UIImage(named: "photo_24"), forState: .Normal)
+    self.showPhotoBtn.addTarget(self, action: #selector(JChatInputView.clickShowPhotoBtn), forControlEvents: .TouchUpInside)
     self.showPhotoBtn.snp_makeConstraints { (make) -> Void in
       make.top.equalTo(self.moreView).offset(10)
       make.left.equalTo(self.moreView).offset(10)
@@ -86,10 +86,10 @@ class JChatInputView: UIView {
     
     // 切换  录音 和 文本输入
     self.switchBtn = UIButton()
-    self.switchBtn.setBackgroundImage(UIImage(named: "voice_toolbar"), forState: .Normal)
-    self.switchBtn.setBackgroundImage(UIImage(named: "keyboard_toolbar"), forState: .Selected)
-    self.switchBtn.contentMode = .ScaleAspectFit
-    self.switchBtn.addTarget(self, action: Selector("changeInputMode"), forControlEvents: .TouchUpInside)
+    self.switchBtn.setImage(UIImage(named: "voice_toolbar"), forState: .Normal)
+    self.switchBtn.setImage(UIImage(named: "keyboard_toolbar"), forState: .Selected)
+    
+    self.switchBtn.addTarget(self, action: #selector(JChatInputView.changeInputMode), forControlEvents: .TouchUpInside)
     self.addSubview(self.switchBtn!)
     switchBtn?.snp_makeConstraints(closure: { (make) -> Void in
       make.left.equalTo(inputWrapView).offset(4)
@@ -101,7 +101,7 @@ class JChatInputView: UIView {
     self.showMoreBtn = UIButton()
     self.showMoreBtn.setBackgroundImage(UIImage(named: "add01"), forState: .Normal)
     self.showMoreBtn.setBackgroundImage(UIImage(named: "add01_pre"), forState: .Highlighted)
-    self.showMoreBtn.addTarget(self, action: Selector("changeMoreViewStatus"), forControlEvents: .TouchUpInside)
+    self.showMoreBtn.addTarget(self, action: #selector(JChatInputView.changeMoreViewStatus), forControlEvents: .TouchUpInside)
     self.addSubview(self.showMoreBtn)
     showMoreBtn?.snp_makeConstraints(closure: { (make) -> Void in
       make.right.equalTo(inputWrapView).offset(-4)
@@ -131,15 +131,15 @@ class JChatInputView: UIView {
     self.recordVoiceBtn = UIButton()
     self.addSubview(self.recordVoiceBtn)
     
-    self.recordVoiceBtn.backgroundColor = UIColor.blueColor()
+    self.recordVoiceBtn.backgroundColor = UIColor(netHex: 0x3f80dc)
     self.recordVoiceBtn.hidden = true
     self.recordVoiceBtn.setTitle("按住 说话", forState: .Normal)
     self.recordVoiceBtn.setTitle("松开 结束", forState: .Highlighted)
-    self.recordVoiceBtn.addTarget(self, action: Selector("holdDownButtonTouchDown"), forControlEvents: .TouchDown)
-    self.recordVoiceBtn.addTarget(self, action: Selector("holdDownButtonTouchUpInside"), forControlEvents: .TouchUpInside)
-    self.recordVoiceBtn.addTarget(self, action: Selector("holdDownButtonTouchUpOutside"), forControlEvents: .TouchUpOutside)
-    self.recordVoiceBtn.addTarget(self, action: Selector("holdDownDragOutside"), forControlEvents: .TouchDragExit)
-    self.recordVoiceBtn.addTarget(self, action: Selector("holdDownDragInside"), forControlEvents: .TouchDragEnter)
+    self.recordVoiceBtn.addTarget(self, action: #selector(JChatInputView.holdDownButtonTouchDown), forControlEvents: .TouchDown)
+    self.recordVoiceBtn.addTarget(self, action: #selector(JChatInputView.holdDownButtonTouchUpInside), forControlEvents: .TouchUpInside)
+    self.recordVoiceBtn.addTarget(self, action: #selector(JChatInputView.holdDownButtonTouchUpOutside), forControlEvents: .TouchUpOutside)
+    self.recordVoiceBtn.addTarget(self, action: #selector(JChatInputView.holdDownDragOutside), forControlEvents: .TouchDragExit)
+    self.recordVoiceBtn.addTarget(self, action: #selector(JChatInputView.holdDownDragInside), forControlEvents: .TouchDragEnter)
     self.recordVoiceBtn.snp_makeConstraints { (make) -> Void in
       make.right.equalTo(self.showMoreBtn.snp_left).offset(-5)
       make.left.equalTo(self.switchBtn.snp_right).offset(5)
@@ -160,7 +160,7 @@ class JChatInputView: UIView {
       self.recordingHub = JChatRecordingView(frame: CGRectZero)
       self.recordHelper.updateMeterDelegate = self.recordingHub
     }
-//    self.superview?.addSubview(self.recordingHub)
+
     self.recordingHub.startRecordingHUDAtView(self.superview!)
     self.recordingHub.snp_makeConstraints { (make) -> Void in
       make.center.equalTo(self.superview!)
@@ -212,6 +212,7 @@ class JChatInputView: UIView {
         make.height.equalTo(35)
       })
     }
+    self.switchBtn.selected = !self.switchBtn.selected;
   }
   
   func changeMoreViewStatus() {

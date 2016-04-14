@@ -35,7 +35,7 @@ class JChatChattingViewController: UIViewController {
     
     self.chatLayout = JChatChattingLayout(messageTable: self.messageTable, inputView: self.messageInputView)
     
-    let gesture = UITapGestureRecognizer(target: self, action:Selector("handleTap:"))
+    let gesture = UITapGestureRecognizer(target: self, action:#selector(JChatChattingViewController.handleTap(_:)))
     gesture.delegate = self
     self.messageTable.addGestureRecognizer(gesture)
 
@@ -44,6 +44,7 @@ class JChatChattingViewController: UIViewController {
   override func viewDidLayoutSubviews() {
     self.chatLayout.messageTableScrollToBottom(false)
   }
+  
   deinit {
     NSNotificationCenter.defaultCenter().removeObserver(self)
     JMessage.removeDelegate(self, withConversation: self.conversation)
@@ -57,19 +58,19 @@ class JChatChattingViewController: UIViewController {
     leftBtn.frame = kNavigationLeftButtonRect
     leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
     leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    leftBtn.addTarget(self, action: Selector("backClick"), forControlEvents: .TouchUpInside)
+    leftBtn.addTarget(self, action: #selector(JChatChattingViewController.backClick), forControlEvents: .TouchUpInside)
     self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
 
     let rightBtn = UIButton(type: .Custom)
     rightBtn.frame = CGRect(x: 0, y: 0, width: 50, height: 30)
-    rightBtn.addTarget(self, action: Selector("clickRightBtn"), forControlEvents: .TouchUpInside)
+    rightBtn.addTarget(self, action: #selector(JChatChattingViewController.clickRightBtn), forControlEvents: .TouchUpInside)
     rightBtn.setImage(UIImage(named: "createConversation"), forState: .Normal)
     rightBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -15 * UIScreen.mainScreen().scale)
     self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
   }
   
   func addAllNotification() {
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("cleanMessageCache"), name: kDeleteAllMessage, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatChattingViewController.cleanMessageCache), name: kDeleteAllMessage, object: nil)
     
     JMessage.addDelegate(self, withConversation: self.conversation)
   }
@@ -98,7 +99,7 @@ class JChatChattingViewController: UIViewController {
   override func viewWillAppear(animated: Bool) {
     print("Action - viewWillAppear")
     super.viewWillAppear(animated)
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardFrameChanged:"), name: UIKeyboardWillChangeFrameNotification, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatChattingViewController.keyboardFrameChanged(_:)), name: UIKeyboardWillChangeFrameNotification, object: nil)
     self.messageTable.reloadData()
   }
 
@@ -163,19 +164,6 @@ extension JChatChattingViewController:UITableViewDelegate,UITableViewDataSource 
     return self.messageDataSource.allMessageIdArr.count
   }
   
-//  - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-//  {
-//  NSLog(@"Estimating height (row %d)", indexPath.row);
-//  return _estimationBlock(indexPath.row);
-//  }
-
-//  func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-//    let cell = tableView.cellForRowAtIndexPath(indexPath)
-//    return (cell?.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height)!
-//
-//
-//    
-//  }
   func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
     if self.messageDataSource.noMoreHistoryMessage() != true {
       if indexPath.row == 0 {
@@ -257,9 +245,13 @@ extension JChatChattingViewController:JChatInputViewDelegate {
   
   func appendMessage(model:JChatMessageModel) {
     self.messageDataSource.appendMessage(model)
+    self.performSelector(#selector(JChatChattingViewController.appendMessageCell), withObject: nil, afterDelay: 0.01);
+  }
+  
+  func appendMessageCell() {
     self.chatLayout.appendTableViewCellAtLastIndex(self.messageDataSource.messageCount())
   }
-
+  
   func appendTimeDate(timeInterVal:NSTimeInterval) {
     self.appendTimeDate(timeInterVal)
     self.chatLayout.appendTableViewCellAtLastIndex(self.messageDataSource.messageCount())
@@ -372,7 +364,6 @@ extension JChatChattingViewController : JChatMessageCellDelegate {
   }
 }
 
-
 extension JChatChattingViewController: JMessageDelegate {
 
   func onSendMessageResponse(message: JMSGMessage!, error: NSError!) {
@@ -431,5 +422,5 @@ extension JChatChattingViewController: JMessageDelegate {
 }
 
 func hideKeyBoardAnimation() {
-  UIApplication.sharedApplication().sendAction(Selector("resignFirstResponder"), to: nil, from: nil, forEvent: nil)
+  UIApplication.sharedApplication().sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, forEvent: nil)
 }

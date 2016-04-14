@@ -35,7 +35,7 @@ class JChatFriendDetailViewController: UIViewController {
       leftBtn.frame = kNavigationLeftButtonRect
       leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
       leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-      leftBtn.addTarget(self, action: Selector("backClick"), forControlEvents: .TouchUpInside)
+      leftBtn.addTarget(self, action: #selector(JChatFriendDetailViewController.backClick), forControlEvents: .TouchUpInside)
       self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
   }
   

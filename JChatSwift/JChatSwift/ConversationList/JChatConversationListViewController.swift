@@ -36,7 +36,7 @@ class JChatConversationListViewController: UIViewController {
     self.title = "会话"
     let rightBtn = UIButton(type: .Custom)
     rightBtn.frame = CGRect(x: 0, y: 0, width: 50, height: 30)
-    rightBtn.addTarget(self, action: Selector("showBubbleView"), forControlEvents: .TouchUpInside)
+    rightBtn.addTarget(self, action: #selector(JChatConversationListViewController.showBubbleView), forControlEvents: .TouchUpInside)
     rightBtn.setImage(UIImage(named: "createConversation"), forState: .Normal)
     rightBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -15 * UIScreen.mainScreen().scale)
     self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
@@ -79,19 +79,19 @@ class JChatConversationListViewController: UIViewController {
   
   func addNotifications() {
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("netWorkConnectClose"), name: kJPFNetworkDidCloseNotification, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatConversationListViewController.netWorkConnectClose), name: kJPFNetworkDidCloseNotification, object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("netWorkConnectSetup"), name: kJPFNetworkDidSetupNotification, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatConversationListViewController.netWorkConnectSetup), name: kJPFNetworkDidSetupNotification, object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("connectSucceed"), name: kJPFNetworkDidCloseNotification, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatConversationListViewController.connectSucceed), name: kJPFNetworkDidCloseNotification, object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("isConnecting"), name: kJPFNetworkIsConnectingNotification, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatConversationListViewController.isConnecting), name: kJPFNetworkIsConnectingNotification, object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("dBMigrateFinish"), name: kDBMigrateFinishNotification, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatConversationListViewController.dBMigrateFinish), name: kDBMigrateFinishNotification, object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("alreadyLoginClick"), name: kLogin_NotifiCation, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatConversationListViewController.alreadyLoginClick), name: kLogin_NotifiCation, object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("creatGroupSuccessToPushView:"), name: kCreatGroupState, object: nil)
+//    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("creatGroupSuccessToPushView:"), name: kCreatGroupState, object: nil)
   }
   
   @objc func netWorkConnectClose() {

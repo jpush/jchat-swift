@@ -63,7 +63,7 @@ class JCHATGroupDetailViewController: UIViewController {
       withReuseIdentifier: "JCHATCollectionFootTableView")
     
     self.groupMemberGrip.backgroundView = UIView()
-    let tapGesture = UITapGestureRecognizer(target: self, action: Selector("tapBackgroup"))
+    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(JCHATGroupDetailViewController.tapBackgroup))
     self.groupMemberGrip.backgroundView?.addGestureRecognizer(tapGesture)
     
   }
