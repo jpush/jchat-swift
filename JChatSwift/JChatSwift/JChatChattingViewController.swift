@@ -284,7 +284,9 @@ extension JChatChattingViewController:JChatInputViewDelegate {
       JChatSendImageManager.sharedInstance.addMessage(message!, withConversation: self.conversation)
       let model:JChatMessageModel = JChatMessageModel()
       model.setChatModel(message, conversation: self.conversation)
-      self.appendMessage(model)
+      self.messageDataSource.appendMessage(model)
+      self.messageTable.reloadData()
+      self.chatLayout.messageTableScrollToBottom(false)
     }
   }
   

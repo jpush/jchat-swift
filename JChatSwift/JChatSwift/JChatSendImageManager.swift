@@ -43,7 +43,7 @@ class JChatSendImageManager: NSObject {
       sendMsgCtl.msgConversation = conversation
       sendMsgCtl.addDelegateForConversation(conversation)
       sendMsgCtl.prepareImageMessage(imgMsg)
-      self.sendMsgListDic.setObject(imgMsg, forKey: key)
+      self.sendMsgListDic.setObject(sendMsgCtl, forKey: key)
     } else {
       let sendMsgCtl = self.sendMsgListDic.objectForKey(key)
       sendMsgCtl!.prepareImageMessage(imgMsg)
