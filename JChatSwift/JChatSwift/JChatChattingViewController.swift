@@ -332,7 +332,6 @@ extension JChatChattingViewController : JMUIMultiSelectPhotosDelegate {
     for image in selected_photo_array {
      self.prepareSendImageMessage(image as! UIImage)
     }
-
   }
 }
 

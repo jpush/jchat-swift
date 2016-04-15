@@ -6,7 +6,7 @@
 //  Copyright © 2015年 HuminiOS. All rights reserved.
 //
 
-#define FrameworkNibResourcesWithName(resourceName) [NSString stringWithFormat:@"JMUIMultiSelectPhotosKit.framework/%@",resourceName]
+#define FrameworkNibResourcesWithName(resourceName) [NSString stringWithFormat:@"JMUIMultiSelectPhotosKitResource.bundle/%@",resourceName]
 
 #define screenWidth self.view.frame.size.width
 #define screenHeight self.view.frame.size.height

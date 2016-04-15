@@ -1,1 +1,0 @@
-../../../../JMessage/JMessage/JMessage.framework/Headers/JMessageDelegate.h

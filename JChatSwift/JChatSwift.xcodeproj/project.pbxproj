@@ -100,6 +100,11 @@
 		62B26E371C873FDD0062EA48 /* JChatAlertViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B26E361C873FDD0062EA48 /* JChatAlertViewManager.swift */; };
 		62B26E391C874BC60062EA48 /* frame@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B26E381C874BC60062EA48 /* frame@2x.png */; };
 		62B26E3B1C874D360062EA48 /* createConversation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B26E3A1C874D360062EA48 /* createConversation@2x.png */; };
+		62DA5C431CC0D5B500160750 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 62DA5C421CC0D5B500160750 /* libz.tbd */; };
+		62DA5CAE1CC0DE9F00160750 /* JMessage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62DA5CAA1CC0DE9F00160750 /* JMessage.framework */; };
+		62DA5CB01CC0DE9F00160750 /* JMUIMultiSelectPhotosKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62DA5CAC1CC0DE9F00160750 /* JMUIMultiSelectPhotosKit.framework */; };
+		62DA5CB11CC0DE9F00160750 /* JMUIMultiSelectPhotosKitResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 62DA5CAD1CC0DE9F00160750 /* JMUIMultiSelectPhotosKitResource.bundle */; };
+		62DA5CB31CC0E44F00160750 /* JMUICommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62DA5CB21CC0E44F00160750 /* JMUICommon.framework */; };
 		62DE36AC1C719B2D009FB693 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DE36AB1C719B2D009FB693 /* AppDelegate.swift */; };
 		62DE36AE1C719B2D009FB693 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DE36AD1C719B2D009FB693 /* ViewController.swift */; };
 		62DE36B31C719B2D009FB693 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62DE36B21C719B2D009FB693 /* Assets.xcassets */; };
@@ -113,8 +118,6 @@
 		62F572911C816561005F57D0 /* ReceiverVoiceNodePlaying000@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 62F572901C816561005F57D0 /* ReceiverVoiceNodePlaying000@2x.png */; };
 		62F572931C81656C005F57D0 /* SenderVoiceNodePlaying000@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 62F572921C81656C005F57D0 /* SenderVoiceNodePlaying000@2x.png */; };
 		62F572971C817340005F57D0 /* JChatSendImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F572961C817340005F57D0 /* JChatSendImageManager.swift */; };
-		62F572A01C81991B005F57D0 /* JMUIMultiSelectPhotosKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62F5729F1C81991B005F57D0 /* JMUIMultiSelectPhotosKit.framework */; };
-		62F572A11C819C3E005F57D0 /* JMUIMultiSelectPhotosKit.framework in Resources */ = {isa = PBXBuildFile; fileRef = 62F5729F1C81991B005F57D0 /* JMUIMultiSelectPhotosKit.framework */; };
 		62F572A51C82D160005F57D0 /* JChatLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F572A31C82D160005F57D0 /* JChatLoginViewController.swift */; };
 		62F572A61C82D160005F57D0 /* JChatLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62F572A41C82D160005F57D0 /* JChatLoginViewController.xib */; };
 		62F572EA1C82D457005F57D0 /* JChatAlreadyLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F572E81C82D457005F57D0 /* JChatAlreadyLoginViewController.swift */; };
@@ -331,6 +334,11 @@
 		62B26E361C873FDD0062EA48 /* JChatAlertViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatAlertViewManager.swift; sourceTree = "<group>"; };
 		62B26E381C874BC60062EA48 /* frame@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame@2x.png"; sourceTree = "<group>"; };
 		62B26E3A1C874D360062EA48 /* createConversation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "createConversation@2x.png"; path = "../../../../../../Downloads/jchat-ios-source-1.1-6.0b1460/JChat/Resources/createConversation@2x.png"; sourceTree = "<group>"; };
+		62DA5C421CC0D5B500160750 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		62DA5CAA1CC0DE9F00160750 /* JMessage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JMessage.framework; sourceTree = "<group>"; };
+		62DA5CAC1CC0DE9F00160750 /* JMUIMultiSelectPhotosKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JMUIMultiSelectPhotosKit.framework; sourceTree = "<group>"; };
+		62DA5CAD1CC0DE9F00160750 /* JMUIMultiSelectPhotosKitResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = JMUIMultiSelectPhotosKitResource.bundle; sourceTree = "<group>"; };
+		62DA5CB21CC0E44F00160750 /* JMUICommon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JMUICommon.framework; sourceTree = "<group>"; };
 		62DE36A81C719B2D009FB693 /* JChatSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JChatSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62DE36AB1C719B2D009FB693 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		62DE36AD1C719B2D009FB693 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -350,7 +358,6 @@
 		62F572901C816561005F57D0 /* ReceiverVoiceNodePlaying000@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ReceiverVoiceNodePlaying000@2x.png"; sourceTree = "<group>"; };
 		62F572921C81656C005F57D0 /* SenderVoiceNodePlaying000@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SenderVoiceNodePlaying000@2x.png"; sourceTree = "<group>"; };
 		62F572961C817340005F57D0 /* JChatSendImageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatSendImageManager.swift; sourceTree = "<group>"; };
-		62F5729F1C81991B005F57D0 /* JMUIMultiSelectPhotosKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JMUIMultiSelectPhotosKit.framework; sourceTree = "<group>"; };
 		62F572A31C82D160005F57D0 /* JChatLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatLoginViewController.swift; sourceTree = "<group>"; };
 		62F572A41C82D160005F57D0 /* JChatLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JChatLoginViewController.xib; sourceTree = "<group>"; };
 		62F572E81C82D457005F57D0 /* JChatAlreadyLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatAlreadyLoginViewController.swift; sourceTree = "<group>"; };
@@ -462,6 +469,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				62DA5C431CC0D5B500160750 /* libz.tbd in Frameworks */,
 				623B073C1C731880000914DB /* Foundation.framework in Frameworks */,
 				623B073A1C731877000914DB /* Security.framework in Frameworks */,
 				623B07381C73186D000914DB /* libsqlite3.0.tbd in Frameworks */,
@@ -470,6 +478,7 @@
 				623B07321C731851000914DB /* CFNetwork.framework in Frameworks */,
 				623B07301C731848000914DB /* CoreGraphics.framework in Frameworks */,
 				623B072E1C73183D000914DB /* CoreFoundation.framework in Frameworks */,
+				62DA5CAE1CC0DE9F00160750 /* JMessage.framework in Frameworks */,
 				623B072C1C731835000914DB /* CoreLocation.framework in Frameworks */,
 				623B072A1C73182E000914DB /* SystemConfiguration.framework in Frameworks */,
 				623B07281C731818000914DB /* AudioToolbox.framework in Frameworks */,
@@ -477,7 +486,8 @@
 				623B07241C73180C000914DB /* Accelerate.framework in Frameworks */,
 				623B07221C731806000914DB /* Photos.framework in Frameworks */,
 				F2B87ADE498E214BF2065005 /* Pods.framework in Frameworks */,
-				62F572A01C81991B005F57D0 /* JMUIMultiSelectPhotosKit.framework in Frameworks */,
+				62DA5CB01CC0DE9F00160750 /* JMUIMultiSelectPhotosKit.framework in Frameworks */,
+				62DA5CB31CC0E44F00160750 /* JMUICommon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,6 +511,7 @@
 		42AC2886612228B83CC83C6D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				62DA5C421CC0D5B500160750 /* libz.tbd */,
 				AEA10E530D335545A01032C5 /* Pods.framework */,
 			);
 			name = Frameworks;
@@ -532,7 +543,10 @@
 		623B07201C7317C7000914DB /* Framework */ = {
 			isa = PBXGroup;
 			children = (
-				62F5729F1C81991B005F57D0 /* JMUIMultiSelectPhotosKit.framework */,
+				62DA5CB21CC0E44F00160750 /* JMUICommon.framework */,
+				62DA5CAA1CC0DE9F00160750 /* JMessage.framework */,
+				62DA5CAC1CC0DE9F00160750 /* JMUIMultiSelectPhotosKit.framework */,
+				62DA5CAD1CC0DE9F00160750 /* JMUIMultiSelectPhotosKitResource.bundle */,
 				623B073B1C731880000914DB /* Foundation.framework */,
 				623B07391C731877000914DB /* Security.framework */,
 				623B07371C73186D000914DB /* libsqlite3.0.tbd */,
@@ -1072,7 +1086,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				62F573BA1C85D90C005F57D0 /* loginOut_17@3x.png in Resources */,
-				62F572A11C819C3E005F57D0 /* JMUIMultiSelectPhotosKit.framework in Resources */,
 				62F573DB1C86B972005F57D0 /* set_btn_off_@3x in Resources */,
 				62F572911C816561005F57D0 /* ReceiverVoiceNodePlaying000@2x.png in Resources */,
 				62F573C11C85D90C005F57D0 /* wo_05@2x.png in Resources */,
@@ -1191,6 +1204,7 @@
 				62F5736F1C836223005F57D0 /* login_20@2x.png in Resources */,
 				624ED9F21C7461FB000F421D /* voice_toolbar_pre@2x.png in Resources */,
 				624ED9F11C7461FB000F421D /* voice_delete@2x.png in Resources */,
+				62DA5CB11CC0DE9F00160750 /* JMUIMultiSelectPhotosKitResource.bundle in Resources */,
 				624ED9F51C7461FB000F421D /* voice_toolbar@3x.png in Resources */,
 				62F5735D1C836223005F57D0 /* login_09@2x.png in Resources */,
 				62F5735F1C836223005F57D0 /* login_10@2x.png in Resources */,
@@ -1482,12 +1496,10 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-all_load",
 					"-ObjC",
+					"-all_load",
 					"-framework",
 					"\"SnapKit\"",
-					"-lz",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.jchat.JChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1514,12 +1526,10 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-all_load",
 					"-ObjC",
+					"-all_load",
 					"-framework",
 					"\"SnapKit\"",
-					"-lz",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.jchat.JChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
