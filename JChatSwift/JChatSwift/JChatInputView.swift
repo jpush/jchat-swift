@@ -54,7 +54,7 @@ class JChatInputView: UIView {
     // 更多功能展示
     self.moreView = UIView()
     self.addSubview(self.moreView!)
-    self.moreView.backgroundColor = UIColor.lightGrayColor()
+    self.moreView.backgroundColor = UIColor(netHex: 0xececec)
     
     self.inputWrapView = UIView()
     self.inputWrapView.backgroundColor = UIColor(netHex: 0xdfdfdf)
