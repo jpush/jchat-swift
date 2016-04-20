@@ -97,10 +97,10 @@
 		62827FB31C895B2700B66007 /* JCHATGroupDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62827FB21C895B2700B66007 /* JCHATGroupDetailViewController.swift */; };
 		6296C84D1C8E791E00FA965C /* JChatConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6296C84C1C8E791E00FA965C /* JChatConstants.swift */; };
 		6296C84F1C8EA32A00FA965C /* JChatFriendDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6296C84E1C8EA32A00FA965C /* JChatFriendDetailViewController.swift */; };
+		629C38721CC72D170033B66A /* createConversation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 629C38711CC72D170033B66A /* createConversation@2x.png */; };
 		62B26E311C86CEFE0062EA48 /* String+Utilites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B26E301C86CEFE0062EA48 /* String+Utilites.swift */; };
 		62B26E371C873FDD0062EA48 /* JChatAlertViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B26E361C873FDD0062EA48 /* JChatAlertViewManager.swift */; };
 		62B26E391C874BC60062EA48 /* frame@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B26E381C874BC60062EA48 /* frame@2x.png */; };
-		62B26E3B1C874D360062EA48 /* createConversation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B26E3A1C874D360062EA48 /* createConversation@2x.png */; };
 		62DA5C431CC0D5B500160750 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 62DA5C421CC0D5B500160750 /* libz.tbd */; };
 		62DA5CAE1CC0DE9F00160750 /* JMessage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62DA5CAA1CC0DE9F00160750 /* JMessage.framework */; };
 		62DA5CB01CC0DE9F00160750 /* JMUIMultiSelectPhotosKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62DA5CAC1CC0DE9F00160750 /* JMUIMultiSelectPhotosKit.framework */; };
@@ -331,10 +331,10 @@
 		62827FB21C895B2700B66007 /* JCHATGroupDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCHATGroupDetailViewController.swift; sourceTree = "<group>"; };
 		6296C84C1C8E791E00FA965C /* JChatConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatConstants.swift; sourceTree = "<group>"; };
 		6296C84E1C8EA32A00FA965C /* JChatFriendDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatFriendDetailViewController.swift; sourceTree = "<group>"; };
+		629C38711CC72D170033B66A /* createConversation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "createConversation@2x.png"; sourceTree = "<group>"; };
 		62B26E301C86CEFE0062EA48 /* String+Utilites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Utilites.swift"; sourceTree = "<group>"; };
 		62B26E361C873FDD0062EA48 /* JChatAlertViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatAlertViewManager.swift; sourceTree = "<group>"; };
 		62B26E381C874BC60062EA48 /* frame@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame@2x.png"; sourceTree = "<group>"; };
-		62B26E3A1C874D360062EA48 /* createConversation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "createConversation@2x.png"; path = "../../../../../../Downloads/jchat-ios-source-1.1-6.0b1460/JChat/Resources/createConversation@2x.png"; sourceTree = "<group>"; };
 		62DA5C421CC0D5B500160750 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		62DA5CAA1CC0DE9F00160750 /* JMessage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JMessage.framework; sourceTree = "<group>"; };
 		62DA5CAC1CC0DE9F00160750 /* JMUIMultiSelectPhotosKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JMUIMultiSelectPhotosKit.framework; sourceTree = "<group>"; };
@@ -641,8 +641,8 @@
 				62F573CD1C86B972005F57D0 /* setting */,
 				624ED99A1C7461FB000F421D /* add01_pre@2x.png */,
 				62827FA31C880B2300B66007 /* talking_icon_group@2x.png */,
+				629C38711CC72D170033B66A /* createConversation@2x.png */,
 				62827FA41C880B2300B66007 /* talking_icon_group@3x.png */,
-				62B26E3A1C874D360062EA48 /* createConversation@2x.png */,
 				624ED99B1C7461FB000F421D /* add01_pre@3x.png */,
 				62F573C51C85DC55005F57D0 /* jiantou@2x.png */,
 				624ED99C1C7461FB000F421D /* add01@2x.png */,
@@ -1123,6 +1123,7 @@
 				62F573961C8414D2005F57D0 /* success.png in Resources */,
 				62F5735E1C836223005F57D0 /* login_09@3x.png in Resources */,
 				62F573881C836721005F57D0 /* JCHATRegisterViewController.xib in Resources */,
+				629C38721CC72D170033B66A /* createConversation@2x.png in Resources */,
 				624ED9D01C7461FB000F421D /* chat_voice@2x.png in Resources */,
 				62F573601C836223005F57D0 /* login_10@3x.png in Resources */,
 				624ED9CE1C7461FB000F421D /* camera_35@2x.png in Resources */,
@@ -1223,7 +1224,6 @@
 				622A48BE1C897A290040E659 /* JCHATCollectionFootTableView.xib in Resources */,
 				624ED9DF1C7461FB000F421D /* ReceiverVoiceNodePlaying002@2x.png in Resources */,
 				62F572931C81656C005F57D0 /* SenderVoiceNodePlaying000@2x.png in Resources */,
-				62B26E3B1C874D360062EA48 /* createConversation@2x.png in Resources */,
 				624ED9DB1C7461FB000F421D /* photo_24@2x.png in Resources */,
 				62F573D91C86B972005F57D0 /* set_btn_del_pre_@3x.png in Resources */,
 				62F572A61C82D160005F57D0 /* JChatLoginViewController.xib in Resources */,
