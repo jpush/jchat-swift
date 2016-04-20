@@ -110,7 +110,7 @@ extension NSString {
     if error.code > 860000 {
     
     
-      switch error.code as! JMSGSDKErrorCode {
+      switch Int(error.code) as! JMSGSDKErrorCode {
         
       case .JMSGErrorSDKNetworkDownloadFailed:
         errorAlert = "下载失败"

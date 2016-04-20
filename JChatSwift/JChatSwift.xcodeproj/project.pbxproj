@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B9AF0B9B2DFFEEDA8D5D639 /* Pods_JChatSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D376F40FB4DAD6D34305615D /* Pods_JChatSwift.framework */; };
 		622A48B51C8974F50040E659 /* JCHATMemberCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622A48B31C8974F50040E659 /* JCHATMemberCollectionCell.swift */; };
 		622A48B61C8974F50040E659 /* JCHATMemberCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 622A48B41C8974F50040E659 /* JCHATMemberCollectionCell.xib */; };
 		622A48BD1C897A290040E659 /* JCHATCollectionFootTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622A48BB1C897A290040E659 /* JCHATCollectionFootTableView.swift */; };
@@ -219,7 +220,6 @@
 		62F573DD1C86B972005F57D0 /* set_btn_on_@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 62F573D51C86B972005F57D0 /* set_btn_on_@3x.png */; };
 		62F6AC761C7DFEDB00BDBA30 /* NSDate+Utilites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F6AC751C7DFEDB00BDBA30 /* NSDate+Utilites.swift */; };
 		62F6AC781C7E155F00BDBA30 /* NSString+Utilites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F6AC771C7E155F00BDBA30 /* NSString+Utilites.swift */; };
-		F2B87ADE498E214BF2065005 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEA10E530D335545A01032C5 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -240,6 +240,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		31611FFD8CD0E03C1485E0BF /* Pods-JChatSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JChatSwift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JChatSwift/Pods-JChatSwift.debug.xcconfig"; sourceTree = "<group>"; };
 		622A48B31C8974F50040E659 /* JCHATMemberCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCHATMemberCollectionCell.swift; sourceTree = "<group>"; };
 		622A48B41C8974F50040E659 /* JCHATMemberCollectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JCHATMemberCollectionCell.xib; sourceTree = "<group>"; };
 		622A48BB1C897A290040E659 /* JCHATCollectionFootTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCHATCollectionFootTableView.swift; sourceTree = "<group>"; };
@@ -459,9 +460,9 @@
 		62F573D51C86B972005F57D0 /* set_btn_on_@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "set_btn_on_@3x.png"; sourceTree = "<group>"; };
 		62F6AC751C7DFEDB00BDBA30 /* NSDate+Utilites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+Utilites.swift"; sourceTree = "<group>"; };
 		62F6AC771C7E155F00BDBA30 /* NSString+Utilites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSString+Utilites.swift"; sourceTree = "<group>"; };
-		98E7EB762E96DE9BA0048145 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		AEA10E530D335545A01032C5 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E1E2F5A87497E1BB7420C36B /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		B0051428F455F86A90295BB7 /* Pods-JChatSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JChatSwift.release.xcconfig"; path = "Pods/Target Support Files/Pods-JChatSwift/Pods-JChatSwift.release.xcconfig"; sourceTree = "<group>"; };
+		D376F40FB4DAD6D34305615D /* Pods_JChatSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JChatSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -485,9 +486,9 @@
 				623B07261C731812000914DB /* CoreTelephony.framework in Frameworks */,
 				623B07241C73180C000914DB /* Accelerate.framework in Frameworks */,
 				623B07221C731806000914DB /* Photos.framework in Frameworks */,
-				F2B87ADE498E214BF2065005 /* Pods.framework in Frameworks */,
 				62DA5CB01CC0DE9F00160750 /* JMUIMultiSelectPhotosKit.framework in Frameworks */,
 				62DA5CB31CC0E44F00160750 /* JMUICommon.framework in Frameworks */,
+				0B9AF0B9B2DFFEEDA8D5D639 /* Pods_JChatSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -513,6 +514,7 @@
 			children = (
 				62DA5C421CC0D5B500160750 /* libz.tbd */,
 				AEA10E530D335545A01032C5 /* Pods.framework */,
+				D376F40FB4DAD6D34305615D /* Pods_JChatSwift.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -718,8 +720,8 @@
 				62DE36BF1C719B2D009FB693 /* JChatSwiftTests */,
 				62DE36CA1C719B2D009FB693 /* JChatSwiftUITests */,
 				62DE36A91C719B2D009FB693 /* Products */,
-				75DD5350F52EF524E4D3306C /* Pods */,
 				42AC2886612228B83CC83C6D /* Frameworks */,
+				F4A8E31BDA188CC13E6CA9B5 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -967,11 +969,11 @@
 			path = Utilites;
 			sourceTree = "<group>";
 		};
-		75DD5350F52EF524E4D3306C /* Pods */ = {
+		F4A8E31BDA188CC13E6CA9B5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				E1E2F5A87497E1BB7420C36B /* Pods.debug.xcconfig */,
-				98E7EB762E96DE9BA0048145 /* Pods.release.xcconfig */,
+				31611FFD8CD0E03C1485E0BF /* Pods-JChatSwift.debug.xcconfig */,
+				B0051428F455F86A90295BB7 /* Pods-JChatSwift.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -983,12 +985,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 62DE36D01C719B2D009FB693 /* Build configuration list for PBXNativeTarget "JChatSwift" */;
 			buildPhases = (
-				33BF529E2A1296D126C5FD0F /* Check Pods Manifest.lock */,
+				74EBCFD15A71F1306DA9CE2E /* 📦 Check Pods Manifest.lock */,
 				62DE36A41C719B2D009FB693 /* Sources */,
 				62DE36A51C719B2D009FB693 /* Frameworks */,
 				62DE36A61C719B2D009FB693 /* Resources */,
-				70A601C1C37717F97192A60E /* Embed Pods Frameworks */,
-				A29AABF596D7A591932838CB /* Copy Pods Resources */,
+				6A15272CDCE67C58E68A358A /* 📦 Embed Pods Frameworks */,
+				4E9A7543C1AB5736805FB21D /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1246,49 +1248,49 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		33BF529E2A1296D126C5FD0F /* Check Pods Manifest.lock */ = {
+		4E9A7543C1AB5736805FB21D /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-JChatSwift/Pods-JChatSwift-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6A15272CDCE67C58E68A358A /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-JChatSwift/Pods-JChatSwift-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		74EBCFD15A71F1306DA9CE2E /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		70A601C1C37717F97192A60E /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A29AABF596D7A591932838CB /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1480,7 +1482,7 @@
 		};
 		62DE36D11C719B2D009FB693 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E1E2F5A87497E1BB7420C36B /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 31611FFD8CD0E03C1485E0BF /* Pods-JChatSwift.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1510,7 +1512,7 @@
 		};
 		62DE36D21C719B2D009FB693 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 98E7EB762E96DE9BA0048145 /* Pods.release.xcconfig */;
+			baseConfigurationReference = B0051428F455F86A90295BB7 /* Pods-JChatSwift.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
