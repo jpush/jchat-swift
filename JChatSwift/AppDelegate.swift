@@ -69,6 +69,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ]
   }
   
+  func application(application: UIApplication,
+                   didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+    JPUSHService.registerDeviceToken(deviceToken)
+  }
+  
   func registerJPushStatusNotification() {
     let defaultCenter = NSNotificationCenter.defaultCenter()
     defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidSetup(_:)), name: kJPFNetworkDidSetupNotification, object: nil)
@@ -126,7 +131,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func applicationWillTerminate(application: UIApplication) {
   }
-
 
 }
 
