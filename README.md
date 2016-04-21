@@ -38,6 +38,7 @@ JChat 当前提供 Android 与 iOS 版本。稍后也将提供 Web 版本。
 - [JMessage iOS 集成指南](http://docs.jpush.io/guideline/jmessage_ios_guide/)
 - [JMessage iOS 说明](http://docs.jpush.io/client/im_sdk_ios/)
 - [JMessage iOS API Docs](http://docs.jpush.io/client/jmessage_ios_appledoc_html/)
+- [Swift 中调用 JMessage接口教程](http://dev.eltima.com/post/90770164170/using-third-party-objective-c-frameworks-in-swift) 添加 #import <JMessage/JMessage.h>  xxx-Bridging-Header.h 文件中
 
 ### JMessage 升级
 
