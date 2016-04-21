@@ -40,7 +40,6 @@ class JChatTableCellMaker: NSObject {
     if cell == nil {
       tableView.registerClass(NSClassFromString(identify), forCellReuseIdentifier: identify)
       cell = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatLoadingMessageCell
-      cell?.backgroundColor = UIColor.redColor()
     }
     return cell!
   }

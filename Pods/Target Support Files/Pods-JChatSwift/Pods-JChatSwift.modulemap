@@ -1,6 +1,0 @@
-framework module Pods_JChatSwift {
-  umbrella header "Pods-JChatSwift-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -85,6 +85,7 @@ class JChatChattingDataSource: NSObject {
     self.allMessageIdArr.removeAllObjects()
     let arrList = NSMutableArray()
     self.allMessageIdArr.addObject(NSObject())
+    let thearr = self.conversation.messageArrayFromNewestWithOffset(self.messageOffset, limit: self.messagefristPageNumber) as NSArray
     
     arrList.addObjectsFromArray((self.conversation.messageArrayFromNewestWithOffset(self.messageOffset, limit: self.messagefristPageNumber) as NSArray).reverseObjectEnumerator().allObjects)
     self.messageOffset = self.messageOffset + self.messagefristPageNumber

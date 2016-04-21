@@ -49,7 +49,7 @@
  * 参考 JMessageDelegate 里的说明.
  *
  */
-@interface JMSGMessage : NSObject <NSCopying, NSCoding>
+@interface JMSGMessage : NSObject <NSCopying>
 
 JMSG_ASSUME_NONNULL_BEGIN
 
@@ -67,7 +67,6 @@ JMSG_ASSUME_NONNULL_BEGIN
  */
 + (JMSGMessage *)createSingleMessageWithContent:(JMSGAbstractContent *)content
                                        username:(NSString *)username;
-
 /*!
  * @abstract 创建群聊消息
  *
@@ -188,6 +187,29 @@ JMSG_ASSUME_NONNULL_BEGIN
  *      群聊是聊天群组, 也与当前会话的目标一致 [JMSGConversation target]
  */
 @property(nonatomic, strong, readonly) id<JMSGTargetProtocol> target;
+
+/*!
+ * @abstract 消息发送目标应用
+ *
+ * @discussion 这是为了支持跨应用聊天, 而新增的字段.
+ *
+ * 单聊时目标是 username. 当该用户为默认 appKey 时, 则不填此字段.
+ * 群聊时目标是 groupId, 不填写此字段.
+ *
+ * @since 2.1.0
+ */
+@property(nonatomic, strong, readonly) NSString *targetAppKey;
+
+/*!
+ * @abstract 消息来源用户 Appkey
+ *
+ * @discussion 这是为了支持跨应用聊天, 而新增的字段.
+ *
+ * 不管群聊还是单聊, from_id 都是发送消息的 username. 当该用户是默认 appKey 时, 则不填写此字段.
+ *
+ * @since 2.1.0
+ */
+@property(nonatomic, strong, readonly) NSString *fromAppKey;
 
 /*!
  * @abstract 消息来源用户

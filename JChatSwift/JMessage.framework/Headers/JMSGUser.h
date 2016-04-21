@@ -99,6 +99,12 @@ JMSG_ASSUME_NONNULL_BEGIN
 + (void)userInfoArrayWithUsernameArray:(NSArray JMSG_GENERIC(__kindof NSString *)*)usernameArray
                      completionHandler:(JMSGCompletionHandler)handler;
 
+/*!
+ * @abstract 批量获取跨应用的用户信息
+ */
++ (void)userInfoArrayWithUsernameArray:(NSArray JMSG_GENERIC(__kindof NSString *)*)usernameArray
+                                appKey:( NSString *JMSG_NULLABLE)userAppKey
+                     completionHandler:(JMSGCompletionHandler)handler;
 
 /*!
  * @abstract 获取用户本身个人信息接口
@@ -172,6 +178,11 @@ JMSG_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, copy, readonly) NSString * JMSG_NULLABLE signature;
 
+/*!
+ * @abstract 此用户所在的 appKey
+ * @discussion 为主应用时, 此字段为空
+ */
+@property(nonatomic, copy, readonly) NSString * JMSG_NULLABLE appKey;
 
 /*!
  * @abstract 获取头像缩略图文件数据

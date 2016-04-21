@@ -38,6 +38,7 @@ class JChatChattingViewController: UIViewController {
     let gesture = UITapGestureRecognizer(target: self, action:#selector(JChatChattingViewController.handleTap(_:)))
     gesture.delegate = self
     self.messageTable.addGestureRecognizer(gesture)
+    messageTable.rowHeight = UITableViewAutomaticDimension
 
   }
   
@@ -131,6 +132,7 @@ class JChatChattingViewController: UIViewController {
   }
   
   func setupDataSource() {
+    self.conversation.clearUnreadCount()
     self.messageDataSource = JChatChattingDataSource(conversation: self.conversation, showTimeInterval: 60 * 5, fristPageNumber: 20, limit: 11)
     self.messageDataSource.getPageMessage()
   }
@@ -188,7 +190,7 @@ extension JChatChattingViewController:UITableViewDelegate,UITableViewDataSource 
       if indexPath.row == 0 {
         let cell:JChatLoadingMessageCell = JChatTableCellMaker.LoadingCellInTable(tableView)
         cell.startLoading()
-        self.flashToLoadMessage()
+        self.performSelector(#selector(self.flashToLoadMessage), withObject: nil, afterDelay: 1)
         return cell
       }
     }

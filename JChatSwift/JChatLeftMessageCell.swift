@@ -58,7 +58,7 @@ class JChatLeftMessageCell:JChatMessageCell {
     
     self.voiceTimeLable.snp_makeConstraints { (make) -> Void in
       make.centerY.equalTo(self.messageBubble!)
-      make.leading.equalTo(self.messageBubble!).offset(5)
+      make.left.equalTo(self.messageBubble!.snp_right).offset(5)
       make.size.equalTo(CGSize(width: 40, height: 20))
     }
   }

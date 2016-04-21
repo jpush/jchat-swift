@@ -200,7 +200,7 @@ extension NSString {
     }
     
     if error.code > 800000 && error.code < 820000  {
-      switch error.code as! JMSGTcpErrorCode {
+      switch Int(error.code) as! JMSGTcpErrorCode {
       case .ErrorTcpUserNotRegistered:
         errorAlert = "用户名还没有被注册过"
         break

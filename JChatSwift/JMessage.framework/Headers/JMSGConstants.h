@@ -178,6 +178,8 @@ typedef NS_ENUM(NSInteger, JMSGEventNotificationType) {
   kJMSGEventNotificationAddGroupMembers = 10,
   /// 事件类型: 成员被踢出
   kJMSGEventNotificationRemoveGroupMembers = 11,
+  /// 事件类型: 群信息更新
+  kJMSGEventNotificationUpdateGroupInfo = 12,
 };
 
 ///----------------------------------------------------
@@ -241,6 +243,8 @@ typedef NS_ENUM(NSInteger, JMSGSDKErrorCode) {
   kJMSGErrorSDKParamPasswordInvalid = 863002,
   /// 用户未登录
   kJMSGErrorSDKUserNotLogin = 863004,
+  // 请求用户数量超出限制（目前单次最大请求500个）
+  kJMSGErrorSDKUserNumberOverflow = 863005,
   
   // ------------------------ Media Resource (864xxx)
 

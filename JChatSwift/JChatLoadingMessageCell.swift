@@ -16,13 +16,17 @@ class JChatLoadingMessageCell: UITableViewCell {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     self.selectionStyle = UITableViewCellSelectionStyle.None
     loadIndicator = UIActivityIndicatorView()
+    loadIndicator.color = UIColor.redColor()
     self.contentView.addSubview(self.loadIndicator)
-
+    
     self.contentView.snp_makeConstraints(closure: { (make) -> Void in
-      make.top.equalTo(self.contentView).offset(3)
-      make.bottom.equalTo(self.contentView).offset(-3)
-      make.left.equalTo(self.contentView).offset(100)
+      make.center.equalTo(self.snp_center)
+
+      make.top.equalTo(self.snp_top).offset(13)
+      make.bottom.equalTo(self.contentView.snp_bottom).offset(-3)
       make.size.equalTo(CGSize(width: 20, height: 20))
+      
+      
     })
     self.startLoading()
     self.backgroundColor = UIColor.clearColor()

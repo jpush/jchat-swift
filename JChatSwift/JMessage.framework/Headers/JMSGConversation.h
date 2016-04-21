@@ -55,6 +55,12 @@ JMSG_ASSUME_NONNULL_BEGIN
 + (JMSGConversation * JMSG_NULLABLE)singleConversationWithUsername:(NSString *)username;
 
 /*!
+ * @abstract 获取跨应用单聊会话
+ */
++ (JMSGConversation * JMSG_NULLABLE)singleConversationWithUsername:(NSString *)username
+                                                            appKey:(NSString *)userAppKey;
+
+/*!
  * @abstract 获取群聊会话
  *
  * @param groupId 群聊群组ID。此 ID 由创建群组时返回的。
@@ -74,6 +80,13 @@ JMSG_ASSUME_NONNULL_BEGIN
  * 服务器端如果找不到该 username，或者某种原因查找失败，则创建会话失败。
  */
 + (void)createSingleConversationWithUsername:(NSString *)username
+                           completionHandler:(JMSGCompletionHandler JMSG_NULLABLE)handler;
+
+/*!
+ * @abstract 创建跨应用单聊会话
+ */
++ (void)createSingleConversationWithUsername:(NSString *)username
+                                      appKey:(NSString *)userAppKey
                            completionHandler:(JMSGCompletionHandler JMSG_NULLABLE)handler;
 
 /*!
@@ -97,6 +110,12 @@ JMSG_ASSUME_NONNULL_BEGIN
  * @discussion 除了删除会话本身，还会删除该会话下所有的聊天消息。
  */
 + (BOOL)deleteSingleConversationWithUsername:(NSString *)username;
+
+/*!
+ * @abstract 删除跨应用单聊会话
+ */
++ (BOOL)deleteSingleConversationWithUsername:(NSString *)username
+                                      appKey:(NSString *)userAppKey;
 
 /*!
  * @abstract 删除群聊会话
@@ -164,6 +183,16 @@ JMSG_ASSUME_NONNULL_BEGIN
  */
 @property(nonatomic, strong, readonly) id target;
 
+/*!
+ * @abstract 会话目标用户所在的 appKey
+ *
+ * @discussion 这是为了跨应用聊天而新增的一个字段.
+ * 如果此字段为空, 则表示为默认的主应用.
+ *
+ * 单聊会话时, 如果单聊对象用户不属于主应用, 则此字段会有值.
+ *
+ */
+@property(nonatomic, strong, readonly) NSString *targetAppKey;
 
 
 ///----------------------------------------------------
@@ -309,7 +338,8 @@ JMSG_ASSUME_NONNULL_BEGIN
  *
  * - data 头像数据;
  * - objectId 为 targetId_conversationType 的组合, 用下划线隔开.
- *    其中 targetId 单聊时为 username, 群聊时为 groupId
+ *   其中 targetId 单聊时为 username_targetAppKey,
+ *                 群聊时为 groupId
  * - error 不为nil表示出错;
  *
  * 如果 error 为 ni, data 也为 nil, 表示没有数据.
