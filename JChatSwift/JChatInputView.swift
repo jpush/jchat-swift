@@ -123,7 +123,8 @@ class JChatInputView: UIView {
       make.left.equalTo(self.switchBtn.snp_right).offset(5)
       make.top.equalTo(inputWrapView).offset(5)
       make.bottom.equalTo(inputWrapView).offset(-5)
-      make.height.greaterThanOrEqualTo(20)
+      make.height.greaterThanOrEqualTo(30)
+      make.height.lessThanOrEqualTo(100)
     })
     self.updateInputTextViewHeight(self.inputTextView)
     
