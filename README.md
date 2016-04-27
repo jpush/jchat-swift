@@ -52,7 +52,7 @@ JMessage 当前版本为 2.0.x。与之前 1.0.x 版本有比较大的变更。
 ## JChat 介绍
 
 ## JChat 工程结构
-![如图](https://github.com/jpush/jchat-ios/blob/master/READMERecource/JChat流程图.png)
+![如图](https://github.com/jpush/jchat-swift/blob/master/READMEREC/JChat流程图副本.png)
 
 ## JChat 代码结构
 主要分为五个功能模块：用户详情 (UserInfo)，会话列表 (Conversation List)，会话 (Conversation) 登录 (Login) 和 设置 (Setting)。每个功能模块按照 MVC 模式划分，部分模块还有一些 Util 类。
