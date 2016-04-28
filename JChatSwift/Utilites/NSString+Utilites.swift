@@ -105,12 +105,10 @@ extension NSString {
 extension NSString {
   class func errorAlert(error :NSError) -> String {
     var errorAlert:String = ""
-//    return errorAlert
     
     if error.code > 860000 {
-    
-    
-      switch Int(error.code) as! JMSGSDKErrorCode {
+      let  errorcode = JMSGSDKErrorCode(rawValue: Int(error.code))
+      switch errorcode! as JMSGSDKErrorCode{
         
       case .JMSGErrorSDKNetworkDownloadFailed:
         errorAlert = "下载失败"
@@ -200,7 +198,8 @@ extension NSString {
     }
     
     if error.code > 800000 && error.code < 820000  {
-      switch Int(error.code) as! JMSGTcpErrorCode {
+      let errorcode = JMSGTcpErrorCode(rawValue: UInt(error.code))
+      switch errorcode! {
       case .ErrorTcpUserNotRegistered:
         errorAlert = "用户名还没有被注册过"
         break
@@ -213,43 +212,44 @@ extension NSString {
     }
     
     if error.code < 600 {
-      switch error.code as! JMSGHttpErrorCode {
-      case .ErrorHttpServerInternal:
-        errorAlert = "服务器端内部错误"
-        break
-      case .ErrorHttpUserExist:
-        errorAlert = "用户已经存在"
-        break
-      case .ErrorHttpUserNotExist:
-        errorAlert = "用户不存在"
-        break
-      case .ErrorHttpPrameterInvalid:
-        errorAlert = "参数无效"
-        break
-      case .ErrorHttpPasswordError:
-        errorAlert = "密码错误"
-        break
-      case .ErrorHttpUidInvalid:
-        errorAlert = "内部UID 无效"
-        break
-      case .ErrorHttpMissingAuthenInfo:
-        errorAlert = "Http 请求没有验证信息"
-        break
-      case .ErrorHttpAuthenticationFailed:
-        errorAlert = "Http 请求验证失败"
-        break
-      case .ErrorHttpAppkeyNotExist:
-        errorAlert = "Appkey 不存在"
-        break
-      case .ErrorHttpTokenExpired:
-        errorAlert = "Http 请求 token 过期"
-        break
-      case .ErrorHttpServerResponseTimeout:
-        errorAlert = "服务器端响应超时"
-        break
-      default:
-        break
-      }
+      let errorcode = JMSGHttpErrorCode(rawValue: UInt(error.code))
+      switch errorcode! {
+        case .ErrorHttpServerInternal:
+          errorAlert = "服务器端内部错误"
+          break
+        case .ErrorHttpUserExist:
+          errorAlert = "用户已经存在"
+          break
+        case .ErrorHttpUserNotExist:
+          errorAlert = "用户不存在"
+          break
+        case .ErrorHttpPrameterInvalid:
+          errorAlert = "参数无效"
+          break
+        case .ErrorHttpPasswordError:
+          errorAlert = "密码错误"
+          break
+        case .ErrorHttpUidInvalid:
+          errorAlert = "内部UID 无效"
+          break
+        case .ErrorHttpMissingAuthenInfo:
+          errorAlert = "Http 请求没有验证信息"
+          break
+        case .ErrorHttpAuthenticationFailed:
+          errorAlert = "Http 请求验证失败"
+          break
+        case .ErrorHttpAppkeyNotExist:
+          errorAlert = "Appkey 不存在"
+          break
+        case .ErrorHttpTokenExpired:
+          errorAlert = "Http 请求 token 过期"
+          break
+        case .ErrorHttpServerResponseTimeout:
+          errorAlert = "服务器端响应超时"
+          break
+        default:
+          break
+        }
     }
     
     if errorAlert == "" {

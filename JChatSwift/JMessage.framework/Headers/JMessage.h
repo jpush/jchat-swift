@@ -38,10 +38,10 @@
 @interface JMessage : NSObject
 
 /*! JMessage SDK 版本号。用于展示 SDK 的版本信息 */
-#define JMESSAGE_VERSION @"2.1.0"
+#define JMESSAGE_VERSION @"2.0.1"
 
 /*! JMessage SDK 构建ID. 每次构建都会增加 */
-#define JMESSAGE_BUILD 1098
+#define JMESSAGE_BUILD 1082
 
 /*! API Version - int for program logic. SDK API 有变更时会增加 */
 extern NSInteger const JMESSAGE_API_VERSION;
@@ -129,7 +129,7 @@ extern NSInteger const JMESSAGE_API_VERSION;
  *
  * 建议在发布的版本里, 调用此接口, 关闭掉日志打印.
  *
- * 本接口与 [JPUSHService setLogOFF] 效果是相同的, 只需要调用一个即可.
+ * 本接口与 [JPUSHService setLogOff] 效果是相同的, 只需要调用一个即可.
  */
 + (void)setLogOFF;
 
@@ -152,15 +152,6 @@ extern NSInteger const JMESSAGE_API_VERSION;
  * 本接口内部并不会真实地发起数据库升级操作, 而仅用于发出开始与完成的通知, 以方便 App 来测试处理流程. 
  */
 + (void)testDBMigrating;
-
-/**
- *  @abstract 验证此 appKey 是否为当前应用 appKey
- *
- *  @param appKey
- *
- *  @return 是否为当前应用 appKey
- */
-+ (BOOL)isMainAppKey:(NSString *)appKey;
 
 @end
 

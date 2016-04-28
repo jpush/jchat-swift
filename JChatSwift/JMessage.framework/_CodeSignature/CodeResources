@@ -10,11 +10,11 @@
 		</data>
 		<key>Headers/JMSGConstants.h</key>
 		<data>
-		VRf1E7mKVG1vMlDvT9febW7KOf4=
+		oX95rwtXbZ3/GiznMlpQ249hH/g=
 		</data>
 		<key>Headers/JMSGConversation.h</key>
 		<data>
-		n+v7ObnwaBeJmmtAZXGF9AfESyA=
+		LdRyTgGP+tS+bi4SnzUtALGc5ZU=
 		</data>
 		<key>Headers/JMSGConversationDelegate.h</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>Headers/JMSGMessage.h</key>
 		<data>
-		ie3fWwiPIQ0V45wvur8kjNgpQc0=
+		jKUQCtTtJmCtrBnI0wdBc9/GLHM=
 		</data>
 		<key>Headers/JMSGMessageDelegate.h</key>
 		<data>
@@ -62,7 +62,7 @@
 		</data>
 		<key>Headers/JMSGUser.h</key>
 		<data>
-		Ba9oCEY7aXPtQgwOVZjz3xJ5DOA=
+		IlbudmSbHGREpBNS1lF5baDZbe4=
 		</data>
 		<key>Headers/JMSGUserDelegate.h</key>
 		<data>
@@ -74,7 +74,7 @@
 		</data>
 		<key>Headers/JMessage.h</key>
 		<data>
-		2nHhihSlKcUlpbnoqSkDpSiMkZk=
+		JDRhHKXsvJsHP1RZUfGaUu/dfkU=
 		</data>
 		<key>Headers/JMessageDelegate.h</key>
 		<data>
@@ -82,7 +82,7 @@
 		</data>
 		<key>Headers/JPUSHService.h</key>
 		<data>
-		EgIU0RBM3bU1qpmNWBdaAQD8yek=
+		6mhp7EUbrmlHqzlZ1Aiie+uj3hQ=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -101,11 +101,11 @@
 		</data>
 		<key>Headers/JMSGConstants.h</key>
 		<data>
-		VRf1E7mKVG1vMlDvT9febW7KOf4=
+		oX95rwtXbZ3/GiznMlpQ249hH/g=
 		</data>
 		<key>Headers/JMSGConversation.h</key>
 		<data>
-		n+v7ObnwaBeJmmtAZXGF9AfESyA=
+		LdRyTgGP+tS+bi4SnzUtALGc5ZU=
 		</data>
 		<key>Headers/JMSGConversationDelegate.h</key>
 		<data>
@@ -141,7 +141,7 @@
 		</data>
 		<key>Headers/JMSGMessage.h</key>
 		<data>
-		ie3fWwiPIQ0V45wvur8kjNgpQc0=
+		jKUQCtTtJmCtrBnI0wdBc9/GLHM=
 		</data>
 		<key>Headers/JMSGMessageDelegate.h</key>
 		<data>
@@ -153,7 +153,7 @@
 		</data>
 		<key>Headers/JMSGUser.h</key>
 		<data>
-		Ba9oCEY7aXPtQgwOVZjz3xJ5DOA=
+		IlbudmSbHGREpBNS1lF5baDZbe4=
 		</data>
 		<key>Headers/JMSGUserDelegate.h</key>
 		<data>
@@ -165,7 +165,7 @@
 		</data>
 		<key>Headers/JMessage.h</key>
 		<data>
-		2nHhihSlKcUlpbnoqSkDpSiMkZk=
+		JDRhHKXsvJsHP1RZUfGaUu/dfkU=
 		</data>
 		<key>Headers/JMessageDelegate.h</key>
 		<data>
@@ -173,7 +173,7 @@
 		</data>
 		<key>Headers/JPUSHService.h</key>
 		<data>
-		EgIU0RBM3bU1qpmNWBdaAQD8yek=
+		6mhp7EUbrmlHqzlZ1Aiie+uj3hQ=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
