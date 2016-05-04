@@ -34,19 +34,27 @@ class JChatAboutMeViewController: UIViewController {
       make.left.top.right.bottom.equalTo(self.view)
     }
     
+    self.getData()
+    
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatAboutMeViewController.setAvatar), name: kupdateUserInfo, object: nil)
+  }
+
+  func getData() {
     if JMSGUser.myInfo().nickname == nil {
       self.cellDataArr = [JMSGUser.myInfo().username, "设置", "退出登陆"]
     } else {
       self.cellDataArr = [JMSGUser.myInfo().nickname!, "设置", "退出登陆"]
     }
     self.cellImgArr = ["wo_20", "setting_22", "loginOut_17"]
-    
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatAboutMeViewController.setAvatar), name: kupdateUserInfo, object: nil)
   }
-
+  
   override func viewDidLayoutSubviews() {
     self.setAvatar()
-    
+  }
+  
+  override func viewWillAppear(animated: Bool) {
+    self.getData()
+    self.table.reloadData()
   }
   
   @objc func setAvatar() {

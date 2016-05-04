@@ -16,6 +16,7 @@ class JChatAlreadyLoginViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.title = "极光IM"
+    self.navigationController?.navigationBar.translucent = false
     let username = NSUserDefaults.standardUserDefaults().objectForKey(klastLoginUserName) as! String
     userNameLabel.setTitle(username, forState: .Normal)
     self.addGesture()
