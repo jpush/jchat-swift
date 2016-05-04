@@ -82,7 +82,7 @@ class JChatLoginViewController: UIViewController {
           dispatch_async(dispatch_get_main_queue(), { () -> Void in
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
           })
-          MBProgressHUD.showMessage(NSString.errorAlert(error), toView: self.view)
+          MBProgressHUD.showMessage(NSString.errorAlert(error), view: self.view)
         }
       })
       

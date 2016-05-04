@@ -417,7 +417,7 @@ extension JCHATGroupDetailViewController: UIAlertViewDelegate {
         JMSGConversation.createGroupConversationWithGroupId((group as! JMSGGroup).gid, completionHandler: { (conversation, error) -> Void in
           MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
           if error == nil {
-            MBProgressHUD.showMessage("创建group conversation 成功", toView: self.view)
+            MBProgressHUD.showMessage("创建group conversation 成功", view: self.view)
             let groupconveration = conversation as! JMSGConversation
             JMessage.removeDelegate(self.chattingVC, withConversation: self.conversation)
             self.chattingVC.conversation = groupconveration

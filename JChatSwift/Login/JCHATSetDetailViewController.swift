@@ -116,11 +116,13 @@ extension JCHATSetDetailViewController : UIImagePickerControllerDelegate, UINavi
       dispatch_async(dispatch_get_main_queue(), { () -> Void in
         MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
         if error == nil {
-          MBProgressHUD.showMessage("上传成功", toView: self.view)
+          MBProgressHUD.showMessage("上传成功", view: self.view)
           let image = info[UIImagePickerControllerOriginalImage] as! UIImage
           self.avatarBtn.setBackgroundImage(image, forState: .Normal)
+          let appDelegate = UIApplication.sharedApplication().delegate
+          appDelegate!.window!!.rootViewController = JChatMainTabViewController.sharedInstance
         } else {
-          MBProgressHUD.showMessage("上传失败", toView: self.view)
+          MBProgressHUD.showMessage("上传失败", view: self.view)
         }
       })
     }

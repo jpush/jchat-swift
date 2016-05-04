@@ -207,7 +207,7 @@ extension JChatAboutMeViewController: UIImagePickerControllerDelegate, UINavigat
       dispatch_async(dispatch_get_main_queue(), { () -> Void in
         MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
         if error == nil {
-          MBProgressHUD.showMessage("上传成功", toView: self.view)
+          MBProgressHUD.showMessage("上传成功", view: self.view)
           let user = JMSGUser.myInfo()
           user.thumbAvatarData({ (data, ObjectId, error) -> Void in
             if error == nil {
@@ -218,7 +218,7 @@ extension JChatAboutMeViewController: UIImagePickerControllerDelegate, UINavigat
           })
           
         } else {
-          MBProgressHUD.showMessage("上传失败", toView: self.view)
+          MBProgressHUD.showMessage("上传失败", view: self.view)
         }
       })
     }
