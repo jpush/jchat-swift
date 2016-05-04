@@ -66,7 +66,6 @@ class JChatConversationListViewController: UIViewController {
 
   func getConversationList() {
     JMSGConversation.allConversations { (resultObject, error) -> Void in
-      print("huangmin 888 \(resultObject)")
       if error == nil {
         self.conversationArr.removeAllObjects()
         self.conversationArr.addObjectsFromArray((resultObject as! [AnyObject]).reverse())

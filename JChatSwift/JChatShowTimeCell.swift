@@ -41,6 +41,13 @@ class JChatShowTimeCell: UITableViewCell {
     print("did layoutModel")
   }
   
+  func layoutWithNotifcation(model:JChatMessageModel) {
+    if model.message.contentType == .EventNotification {
+      let eventContent = model.message.content as! JMSGEventContent
+      self.timeLable.text = eventContent.showEventNotification()
+    }
+  }
+  
   override func setSelected(selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
   }

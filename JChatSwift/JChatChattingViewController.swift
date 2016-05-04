@@ -196,14 +196,21 @@ extension JChatChattingViewController:UITableViewDelegate,UITableViewDataSource 
     }
   
     let model = self.messageDataSource.getMessageWithIndex(indexPath.row)
-
+    
     if model.isKindOfClass(JChattimeModel) {
       let cell:JChatShowTimeCell = JChatTableCellMaker.timeCellInTable(tableView)
       cell.layoutModel(model as! JChattimeModel)
       return cell
     } else {
-
+      
       let message = (model as! JChatMessageModel).message
+      
+      if message.contentType == .EventNotification {
+        let cell:JChatShowTimeCell = JChatTableCellMaker.timeCellInTable(tableView)
+        cell.layoutWithNotifcation(model as! JChatMessageModel)
+        return cell
+      }
+      
       if message.isReceived {
         let cell:JChatLeftMessageCell = JChatTableCellMaker.leftMessageCellInTable(tableView)
         cell.setCellData((model as! JChatMessageModel), delegate: self)

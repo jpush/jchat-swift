@@ -34,14 +34,12 @@ class JChatMessageBubble: UIImageView {
 ////    let maskBackgroupView = UIImageView()
 //    self.maskBackgroupView!.image = self.maskBackgroupImage
 //    self.maskBackgroupView!.frame = CGRectMake(0, 0, self.frame.width, self.frame.height)
-//    print("huangmin  update mask frame  \(frame.width)   \(frame.height)")
 //    self.layer.mask = self.maskBackgroupView!.layer
 //  }
   override func layoutSubviews() {
     super.layoutSubviews()
     self.maskBackgroupView!.image = self.maskBackgroupImage
     self.maskBackgroupView!.frame = CGRectMake(0, 0, self.frame.width, self.frame.height)
-    print("huangmin  update mask frame  \(frame.width)   \(frame.height)")
     self.layer.mask = self.maskBackgroupView!.layer
   }
 }

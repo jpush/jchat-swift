@@ -362,7 +362,6 @@ class JChatMessageCell: UITableViewCell {
     } else {
       voiceImagePreStr = "SenderVoiceNodePlaying00"
     }
-    print("huangmin 12345")
     print(voiceImagePreStr.stringByAppendingString("\(self.voiceImgIndex % 4)"))
     self.voiceBtn.image = UIImage(named: voiceImagePreStr.stringByAppendingString("\(self.voiceImgIndex % 4)"))
 
