@@ -23,16 +23,17 @@ class JCHATRegisterViewController: UIViewController {
   
   func setupNavigationBar() {
     self.title = "极光IM"
-    let backBtn = UIButton(type: .Custom)
-    backBtn.frame = kNavigationLeftButtonRect
-    backBtn.setBackgroundImage(UIImage(named: "goBack"), forState: .Normal)
-    backBtn.contentMode = .Center
-    backBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    backBtn .addTarget(self, action: #selector(JCHATRegisterViewController.doBack(_:)), forControlEvents: .TouchUpInside)
-    
-    let backItem = UIBarButtonItem(customView: backBtn)
-    self.navigationItem.leftBarButtonItem = backItem
+    let leftBtn = UIButton(type: .Custom)
+    leftBtn.frame = kNavigationLeftButtonRect
+    leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
+    leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
+    leftBtn.addTarget(self, action: #selector(self.backClick), forControlEvents: .TouchUpInside)
+    self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
     self.navigationController?.navigationBar.translucent = false
+  }
+  
+  func backClick() {
+    self.navigationController?.popViewControllerAnimated(true)
   }
   
   func layoutAllViews(){

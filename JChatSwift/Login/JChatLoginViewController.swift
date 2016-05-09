@@ -34,6 +34,7 @@ class JChatLoginViewController: UIViewController {
       leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
       leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
       leftBtn.addTarget(self, action: #selector(JChatLoginViewController.backClick), forControlEvents: .TouchUpInside)
+      self.title = "登录"
       self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
     }
     

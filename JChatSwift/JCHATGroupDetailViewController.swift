@@ -34,6 +34,17 @@ class JCHATGroupDetailViewController: UIViewController {
   func setupNavigationBar() {
     self.title = "群详情"
     self.navigationController?.navigationBar.translucent = false
+    
+    let leftBtn = UIButton(type: .Custom)
+    leftBtn.frame = kNavigationLeftButtonRect
+    leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
+    leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
+    leftBtn.addTarget(self, action: #selector(self.backClick), forControlEvents: .TouchUpInside)
+    self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
+  }
+  
+  func backClick() {
+    self.navigationController?.popViewControllerAnimated(true)
   }
   
   func refreshMemberGrid() {
