@@ -14,7 +14,7 @@ import MBProgressHUD
 class JChatConversationListViewController: UIViewController {
 
   var conversationArr:NSMutableArray!
-  var conversationListTable:UITableView!
+  var conversationListTable:JChatConversationTable!
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -27,7 +27,6 @@ class JChatConversationListViewController: UIViewController {
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
     self.getConversationList()
-
   }
   
   func setupNavigation() {
@@ -36,14 +35,14 @@ class JChatConversationListViewController: UIViewController {
     self.title = "会话"
     let rightBtn = UIButton(type: .Custom)
     rightBtn.frame = CGRect(x: 0, y: 0, width: 50, height: 30)
-    rightBtn.addTarget(self, action: #selector(JChatConversationListViewController.showBubbleView), forControlEvents: .TouchUpInside)
+    rightBtn.addTarget(self, action: #selector(self.showBubbleView), forControlEvents: .TouchUpInside)
     rightBtn.setImage(UIImage(named: "createConversation"), forState: .Normal)
     rightBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -15 * UIScreen.mainScreen().scale)
     self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
     
   }
 
-  @objc func showBubbleView() {
+  func showBubbleView() {
     if (JChatAlertViewManager.sharedInstance.isShowing == true) {
       JChatAlertViewManager.sharedInstance.hidenAll()
     } else {
@@ -51,8 +50,13 @@ class JChatConversationListViewController: UIViewController {
     }
   }
   
+  func hiddenBubbleView() {
+    JChatAlertViewManager.sharedInstance.hidenAll()
+  }
+  
   func layoutAllViews() {
-    self.conversationListTable = UITableView()
+    self.conversationListTable = JChatConversationTable()
+    self.conversationListTable.touchDelegate = self
     self.conversationListTable.tableFooterView = UIView()
     self.conversationListTable.delegate = self
     self.conversationListTable.dataSource = self
@@ -120,6 +124,12 @@ class JChatConversationListViewController: UIViewController {
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
 
+  }
+}
+
+extension JChatConversationListViewController: TouchTableViewDelegate {
+  func TableViewTouchBegin() {
+    self.hiddenBubbleView()
   }
 }
 

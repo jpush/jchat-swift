@@ -28,10 +28,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIUserNotificationType.Alert.rawValue,
         categories: nil)
     } else {
+      // ios 8 以前 categories 必须为nil
       JPUSHService.registerForRemoteNotificationTypes(
-        UIUserNotificationType.Badge.rawValue |
-        UIUserNotificationType.Sound.rawValue |
-        UIUserNotificationType.Alert.rawValue,
+        UIRemoteNotificationType.Badge.rawValue |
+        UIRemoteNotificationType.Sound.rawValue |
+        UIRemoteNotificationType.Alert.rawValue,
         categories: nil)
     }
     self.registerJPushStatusNotification()

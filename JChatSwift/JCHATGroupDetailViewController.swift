@@ -237,12 +237,12 @@ extension JCHATGroupDetailViewController: UICollectionViewDelegate, UICollection
   func collectionView(collectionView: UICollectionView,
     didSelectItemAtIndexPath indexPath: NSIndexPath) {
       switch indexPath.item {
-      case self.memberArr.count: // 添加群成员
+      case self.memberArr.count: // 添加成员
         self.isEditing = false
         self.groupMemberGrip.reloadData()
         self.tapToAddMember()
         break
-      case self.memberArr.count + 1:  // 删除群成员
+      case self.memberArr.count + 1:  // 删除成员
         self.isEditing = !self.isEditing
         self.groupMemberGrip.reloadData()
         break
