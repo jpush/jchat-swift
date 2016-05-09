@@ -247,21 +247,28 @@ extension JCHATGroupDetailViewController: UICollectionViewDelegate, UICollection
         self.groupMemberGrip.reloadData()
         break
       default:  // 点击群成员头像
-        let user = self.memberArr[indexPath.item] as! JMSGUser
-        let group = self.conversation?.target as! JMSGGroup
-        
-        if self.isEditing == true {
-          if user.username == group.owner { return }
+
+        if self.conversation.conversationType == .Single {
+          // TODO: add push to my JChatPersonViewController
           
-          let beDeletedUser = self.memberArr[indexPath.item] as! JMSGUser
-          self.deleteMemberWithUserName(beDeletedUser.username)
         } else {
-          if user.username == JMSGUser.myInfo().username {
-          // TODO: push to JCHATPersonViewController
+          let user = self.memberArr[indexPath.item] as! JMSGUser
+          let group = self.conversation?.target as! JMSGGroup
+          
+          if self.isEditing == true {
+            if user.username == group.owner { return }
+            
+            let beDeletedUser = self.memberArr[indexPath.item] as! JMSGUser
+            self.deleteMemberWithUserName(beDeletedUser.username)
           } else {
-          // TODO: push to JCHATFriendDetailViewController
+            if user.username == JMSGUser.myInfo().username {
+              // TODO: push to JCHATPersonViewController
+            } else {
+              // TODO: push to JCHATFriendDetailViewController
+            }
           }
         }
+
         break
       }
       
