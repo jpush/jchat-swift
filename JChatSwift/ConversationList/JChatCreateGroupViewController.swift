@@ -20,7 +20,7 @@ class JChatCreateGroupViewController: UIViewController {
     self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     self.navigationController?.navigationBar.translucent = false
     
-    let rightBtn = UIBarButtonItem(title: "确定", style: .Plain, target: self, action: #selector(JChatCreateGroupViewController.clickToFinish))
+    let rightBtn = UIBarButtonItem(title: "确定", style: .Plain, target: self, action: #selector(self.clickToFinish))
     rightBtn.tintColor = UIColor.whiteColor()
     self.navigationItem.rightBarButtonItem = rightBtn
     
@@ -28,15 +28,15 @@ class JChatCreateGroupViewController: UIViewController {
     leftBtn.frame = kNavigationLeftButtonRect
     leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
     leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    leftBtn.addTarget(self, action: #selector(JChatCreateGroupViewController.backClick), forControlEvents: .TouchUpInside)
+    leftBtn.addTarget(self, action: #selector(self.backClick), forControlEvents: .TouchUpInside)
     self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
   }
   
-  @objc func clickToFinish() {
+  func clickToFinish() {
     
   }
   
-  @objc func backClick() {
+  func backClick() {
     self.navigationController?.popViewControllerAnimated(true)
   }
   

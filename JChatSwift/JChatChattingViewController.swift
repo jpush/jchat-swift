@@ -59,33 +59,33 @@ class JChatChattingViewController: UIViewController {
     leftBtn.frame = kNavigationLeftButtonRect
     leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
     leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    leftBtn.addTarget(self, action: #selector(JChatChattingViewController.backClick), forControlEvents: .TouchUpInside)
+    leftBtn.addTarget(self, action: #selector(self.backClick), forControlEvents: .TouchUpInside)
     self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
 
     let rightBtn = UIButton(type: .Custom)
     rightBtn.frame = CGRect(x: 0, y: 0, width: 50, height: 30)
-    rightBtn.addTarget(self, action: #selector(JChatChattingViewController.clickRightBtn), forControlEvents: .TouchUpInside)
+    rightBtn.addTarget(self, action: #selector(self.clickRightBtn), forControlEvents: .TouchUpInside)
     rightBtn.setImage(UIImage(named: "createConversation"), forState: .Normal)
     rightBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -15 * UIScreen.mainScreen().scale)
     self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
   }
   
   func addAllNotification() {
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatChattingViewController.cleanMessageCache), name: kDeleteAllMessage, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.cleanMessageCache), name: kDeleteAllMessage, object: nil)
     
     JMessage.addDelegate(self, withConversation: self.conversation)
   }
   
-  @objc func cleanMessageCache() {
+  func cleanMessageCache() {
     self.messageDataSource.cleanCache()
     self.messageTable.reloadData()
   }
   
-  @objc func backClick() {
+  func backClick() {
     self.navigationController?.popViewControllerAnimated(true)
   }
   
-  @objc func clickRightBtn() {
+  func clickRightBtn() {
     let detailCtl = JCHATGroupDetailViewController()
     detailCtl.conversation = self.conversation
     detailCtl.chattingVC = self
@@ -100,7 +100,7 @@ class JChatChattingViewController: UIViewController {
   override func viewWillAppear(animated: Bool) {
     print("Action - viewWillAppear")
     super.viewWillAppear(animated)
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatChattingViewController.keyboardFrameChanged(_:)), name: UIKeyboardWillChangeFrameNotification, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardFrameChanged(_:)), name: UIKeyboardWillChangeFrameNotification, object: nil)
     self.messageTable.reloadData()
   }
 
@@ -142,7 +142,7 @@ class JChatChattingViewController: UIViewController {
     self.chatLayout.loadMoreMessage()
   }
   
-  @objc func keyboardFrameChanged(notification: NSNotification) {
+  func keyboardFrameChanged(notification: NSNotification) {
     let dic = NSDictionary(dictionary: notification.userInfo!)
     let keyboardValue = dic.objectForKey(UIKeyboardFrameEndUserInfoKey) as! NSValue
     let bottomDistance = UIScreen.mainScreen().bounds.size.height - keyboardValue.CGRectValue().origin.y

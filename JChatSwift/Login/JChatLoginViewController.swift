@@ -19,7 +19,7 @@ class JChatLoginViewController: UIViewController {
     super.viewDidLoad()
     self.layoutAllViews()
     
-    let gesture = UITapGestureRecognizer(target: self, action:#selector(JChatLoginViewController.handleTap))
+    let gesture = UITapGestureRecognizer(target: self, action:#selector(self.handleTap))
     gesture.delegate = self
     self.view.addGestureRecognizer(gesture)
   }
@@ -33,7 +33,7 @@ class JChatLoginViewController: UIViewController {
       leftBtn.frame = kNavigationLeftButtonRect
       leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
       leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-      leftBtn.addTarget(self, action: #selector(JChatLoginViewController.backClick), forControlEvents: .TouchUpInside)
+      leftBtn.addTarget(self, action: #selector(self.backClick), forControlEvents: .TouchUpInside)
       self.title = "登录"
       self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
     }
@@ -46,7 +46,7 @@ class JChatLoginViewController: UIViewController {
     self.userNameTF.becomeFirstResponder()
   }
 
-  @objc func backClick() {
+  func backClick() {
     self.navigationController?.popViewControllerAnimated(true)
   }
   
@@ -96,7 +96,7 @@ class JChatLoginViewController: UIViewController {
     NSUserDefaults.standardUserDefaults().synchronize()
   }
   
-  @objc func handleTap() {
+  func handleTap() {
     UIApplication.sharedApplication().sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, forEvent: nil)
   }
   

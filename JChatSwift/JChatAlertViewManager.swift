@@ -82,11 +82,11 @@ class JChatAlertViewManager: NSObject {
     }
   }
   
-  @objc func clickFristBtn() {
+  func clickFristBtn() {
     self.delegate?.clickBubbleFristBtn()
   }
   
-  @objc func clickSecondBtn() {
+  func clickSecondBtn() {
     self.delegate?.clickBubbleSecondBtn()
   }
   

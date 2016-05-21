@@ -98,17 +98,17 @@ class JChatMessageCell: UITableViewCell {
   }
   
   func addGestureForAllViews() {
-    let gesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(JChatMessageCell.tapContent))
+    let gesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tapContent))
     self.messageBubble?.addGestureRecognizer(gesture)
     self.messageBubble?.userInteractionEnabled = true
 
-    let tapHeadGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(JChatMessageCell.tapHeadView))
+    let tapHeadGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tapHeadView))
     self.headImageView.addGestureRecognizer(tapHeadGesture)
     self.headImageView.userInteractionEnabled = true
     
   }
   
-  @objc func tapContent() {
+  func tapContent() {
     print("tap message")
     switch messageModel.message.contentType {
     case .Voice:
@@ -129,7 +129,7 @@ class JChatMessageCell: UITableViewCell {
     }
   }
   
-  @objc func tapHeadView() {
+  func tapHeadView() {
     self.delegate.selectHeadView(self.messageModel)
   }
   
@@ -344,14 +344,14 @@ class JChatMessageCell: UITableViewCell {
     
   }
   
-  @objc func changeVoiceBtmImage() {
+  func changeVoiceBtmImage() {
     if self.isPlaying == false {
       return
     }
     self.setVoiceBtmImage()
     if self.isPlaying == true{
       self.voiceImgIndex?++
-      self.performSelector(#selector(JChatMessageCell.changeVoiceBtmImage), withObject: nil, afterDelay: 0.25)
+      self.performSelector(#selector(self.changeVoiceBtmImage), withObject: nil, afterDelay: 0.25)
     }
   }
   

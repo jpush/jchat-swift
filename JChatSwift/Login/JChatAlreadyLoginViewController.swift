@@ -28,7 +28,7 @@ class JChatAlreadyLoginViewController: UIViewController {
     self.view.addGestureRecognizer(gesture)
   }
   
-  @objc func handleTap() {
+  func handleTap() {
     UIApplication.sharedApplication().sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, forEvent: nil)
   }
   

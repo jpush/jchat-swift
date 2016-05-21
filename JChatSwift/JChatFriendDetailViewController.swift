@@ -35,11 +35,11 @@ class JChatFriendDetailViewController: UIViewController {
       leftBtn.frame = kNavigationLeftButtonRect
       leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
       leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-      leftBtn.addTarget(self, action: #selector(JChatFriendDetailViewController.backClick), forControlEvents: .TouchUpInside)
+      leftBtn.addTarget(self, action: #selector(self.backClick), forControlEvents: .TouchUpInside)
       self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
   }
   
-  @objc func backClick() {
+  func backClick() {
     self.navigationController?.popViewControllerAnimated(true)
   }
   

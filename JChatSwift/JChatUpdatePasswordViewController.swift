@@ -38,7 +38,7 @@ class JChatUpdatePasswordViewController: UIViewController {
     self.navigationController?.navigationBar.translucent = false
   }
   
-  @objc func doBack() {
+  func doBack() {
     self.navigationController?.popViewControllerAnimated(true)
   }
   

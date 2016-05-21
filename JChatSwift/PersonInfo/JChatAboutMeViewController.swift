@@ -36,7 +36,7 @@ class JChatAboutMeViewController: UIViewController {
     
     self.getData()
     
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatAboutMeViewController.setAvatar), name: kupdateUserInfo, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.setAvatar), name: kupdateUserInfo, object: nil)
   }
 
   func getData() {
@@ -57,10 +57,10 @@ class JChatAboutMeViewController: UIViewController {
     self.table.reloadData()
   }
   
-  @objc func setAvatar() {
+  func setAvatar() {
     self.bgView = JChatAvatarView(frame: CGRectMake(0, 0, kApplicationWidth, 0.54 * kApplicationWidth))
     self.bgView.backgroundColor = UIColor(netHex: 0xdddddd)
-    let gesture = UITapGestureRecognizer(target: self, action: #selector(JChatAboutMeViewController.tapPicture(_:)))
+    let gesture = UITapGestureRecognizer(target: self, action: #selector(self.tapPicture(_:)))
     self.bgView.addGestureRecognizer(gesture)
     self.headerView = JChatExpandHeader.expandWithScrollView(self.table, expandView: self.bgView)
   }
@@ -82,7 +82,7 @@ class JChatAboutMeViewController: UIViewController {
     
   }
 
-  @objc func tapPicture(gesture:UIGestureRecognizer) {
+  func tapPicture(gesture:UIGestureRecognizer) {
     let actionSheet = UIActionSheet(title: "更换头像", delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "拍照", "相册")
     actionSheet.showInView(UIApplication.sharedApplication().keyWindow!)
     

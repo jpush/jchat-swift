@@ -22,7 +22,7 @@ class ViewController: UIViewController {
     loginBtn.layer.cornerRadius = 5
     loginBtn.layer.borderWidth = 2
     loginBtn.layer.borderColor = UIColor.purpleColor().CGColor
-    loginBtn.addTarget(self, action: #selector(ViewController.clickLogin), forControlEvents: .TouchUpInside)
+    loginBtn.addTarget(self, action: #selector(self.clickLogin), forControlEvents: .TouchUpInside)
     self.view.addSubview(loginBtn)
     loginBtn.snp_makeConstraints { (make) -> Void in
       make.center.equalTo(self.view)
@@ -31,7 +31,7 @@ class ViewController: UIViewController {
 
   }
 
-  @objc func clickLogin() {
+  func clickLogin() {
 //test
     let nextVC = JChatMainTabViewController.sharedInstance
     let nextNV = UINavigationController(rootViewController: nextVC)

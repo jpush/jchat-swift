@@ -82,42 +82,41 @@ class JChatConversationListViewController: UIViewController {
   
   func addNotifications() {
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatConversationListViewController.netWorkConnectClose), name: kJPFNetworkDidCloseNotification, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.netWorkConnectClose), name: kJPFNetworkDidCloseNotification, object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatConversationListViewController.netWorkConnectSetup), name: kJPFNetworkDidSetupNotification, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.netWorkConnectSetup), name: kJPFNetworkDidSetupNotification, object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatConversationListViewController.connectSucceed), name: kJPFNetworkDidCloseNotification, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.connectSucceed), name: kJPFNetworkDidCloseNotification, object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatConversationListViewController.isConnecting), name: kJPFNetworkIsConnectingNotification, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.isConnecting), name: kJPFNetworkIsConnectingNotification, object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatConversationListViewController.dBMigrateFinish), name: kDBMigrateFinishNotification, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.dBMigrateFinish), name: kDBMigrateFinishNotification, object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JChatConversationListViewController.alreadyLoginClick), name: kLogin_NotifiCation, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.alreadyLoginClick), name: kLogin_NotifiCation, object: nil)
 
-//    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("creatGroupSuccessToPushView:"), name: kCreatGroupState, object: nil)
   }
   
-  @objc func netWorkConnectClose() {
+  func netWorkConnectClose() {
     self.title = "未连接"
   }
 
-  @objc func netWorkConnectSetup() {
+  func netWorkConnectSetup() {
     self.title = "收取中.."
   }
   
-  @objc func connectSucceed() {
+  func connectSucceed() {
      self.title = "会话"
   }
   
-  @objc func isConnecting() {
+  func isConnecting() {
     self.title = "链接中.."
   }
   
-  @objc func dBMigrateFinish() {
+  func dBMigrateFinish() {
 
   }
   
-  @objc func alreadyLoginClick() {
+  func alreadyLoginClick() {
 
   }
   

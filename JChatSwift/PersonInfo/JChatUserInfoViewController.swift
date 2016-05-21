@@ -38,7 +38,7 @@ class JChatUserInfoViewController: UIViewController {
     leftBtn.frame = kNavigationLeftButtonRect
     leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
     leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    leftBtn.addTarget(self, action: #selector(JChatUserInfoViewController.backClick), forControlEvents: .TouchUpInside)
+    leftBtn.addTarget(self, action: #selector(self.backClick), forControlEvents: .TouchUpInside)
     self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
 
     self.personTable = UITableView()
@@ -48,7 +48,7 @@ class JChatUserInfoViewController: UIViewController {
     self.personTable.dataSource = self
     self.personTable.scrollEnabled = false
     self.view.addSubview(self.personTable)
-    let gesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(JChatUserInfoViewController.clickTable))
+    let gesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.clickTable))
     self.personTable.backgroundView = UIView()
     self.personTable.backgroundView!.addGestureRecognizer(gesture)
     
@@ -67,11 +67,11 @@ class JChatUserInfoViewController: UIViewController {
     }
   }
   
-  @objc func backClick() {
+  func backClick() {
     self.navigationController?.popViewControllerAnimated(true)
   }
 
-  @objc func clickTable() {
+  func clickTable() {
 
     if selectFlagGender! {
       JMSGUser.updateMyInfoWithParameter(self.genderNumber, userFieldType: .FieldsGender, completionHandler: { (resultObject, error) -> Void in

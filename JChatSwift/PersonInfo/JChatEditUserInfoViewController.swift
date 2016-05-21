@@ -32,7 +32,7 @@ class JChatEditUserInfoViewController: UIViewController {
     self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     self.navigationController?.navigationBar.translucent = false
 
-    let rightBtn = UIBarButtonItem(title: "保存", style: .Plain, target: self, action: #selector(JChatEditUserInfoViewController.clickToSave))
+    let rightBtn = UIBarButtonItem(title: "保存", style: .Plain, target: self, action: #selector(self.clickToSave))
     rightBtn.tintColor = UIColor.whiteColor()
     self.navigationItem.rightBarButtonItem = rightBtn
     
@@ -40,16 +40,16 @@ class JChatEditUserInfoViewController: UIViewController {
     leftBtn.frame = kNavigationLeftButtonRect
     leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
     leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    leftBtn.addTarget(self, action: #selector(JChatEditUserInfoViewController.backClick), forControlEvents: .TouchUpInside)
+    leftBtn.addTarget(self, action: #selector(self.backClick), forControlEvents: .TouchUpInside)
     self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
     
   }
   
-  @objc func backClick() {
+  func backClick() {
     self.navigationController?.popViewControllerAnimated(true)
   }
   
-  @objc func clickToSave() {
+  func clickToSave() {
     JMSGUser.updateMyInfoWithParameter(self.infoTextField.text!, userFieldType: self.updateType) { (resultObject, error) -> Void in
       MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
       if error == nil {
@@ -131,12 +131,12 @@ class JChatEditUserInfoViewController: UIViewController {
         } else {
           self.infoTextField.placeholder = user.nickname
         }
-        self.infoTextField.addTarget(self, action: #selector(JChatEditUserInfoViewController.textFieldDidChangeName), forControlEvents: .EditingChanged)
+        self.infoTextField.addTarget(self, action: #selector(self.textFieldDidChangeName), forControlEvents: .EditingChanged)
         self.title = "修改昵称"
       break
       case .FieldsSignature:
         self.descriptLable.hidden = true
-        self.infoTextField.addTarget(self, action: #selector(JChatEditUserInfoViewController.textFieldDidChangeName), forControlEvents: .EditingChanged)
+        self.infoTextField.addTarget(self, action: #selector(self.textFieldDidChangeName), forControlEvents: .EditingChanged)
         if user.signature == nil {
           self.infoTextField.placeholder = "请输入你的签名"
         } else {
@@ -161,11 +161,11 @@ class JChatEditUserInfoViewController: UIViewController {
 
   }
   
-  @objc func textFieldDidChange() {
+  func textFieldDidChange() {
     self.textNumberLable.text = "\(self.infoTextField.text?.characters.count)"
   }
   
-  @objc func textFieldDidChangeName() {
+  func textFieldDidChangeName() {
     if self.infoTextField.text?.characters.count > textNumberLimit {
       self.infoTextField.text = self.infoTextField.text![0...textNumberLimit]
       MBProgressHUD.showMessage("最多输入 \(textNumberLimit) 个字符", view: self.view)

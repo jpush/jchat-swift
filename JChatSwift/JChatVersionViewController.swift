@@ -37,14 +37,14 @@ class JChatVersionViewController: UIViewController {
     backBtn.setBackgroundImage(UIImage(named: "goBack"), forState: .Normal)
     backBtn.contentMode = .Center
     backBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    backBtn .addTarget(self, action: #selector(JChatVersionViewController.doBack), forControlEvents: .TouchUpInside)
+    backBtn .addTarget(self, action: #selector(self.doBack), forControlEvents: .TouchUpInside)
     
     let backItem = UIBarButtonItem(customView: backBtn)
     self.navigationItem.leftBarButtonItem = backItem
     self.navigationController?.navigationBar.translucent = false
   }
   
-  @objc func doBack() {
+  func doBack() {
     self.navigationController?.popViewControllerAnimated(true)
   }
 
