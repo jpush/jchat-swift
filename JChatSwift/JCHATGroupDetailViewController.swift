@@ -9,7 +9,7 @@
 import UIKit
 import MBProgressHUD
 
-internal var CellIdentifier = ""
+private var CellIdentifier = ""
 internal let kAlertViewTagClearChatRecord = 100
 internal let kAlertViewTagRenameGroup = 200
 internal let kAlertViewTagAddMember = 300

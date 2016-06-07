@@ -13,6 +13,8 @@ class JChatChattingDataSource: NSObject {
   var allMessageIdArr:NSMutableArray!
   var allMessageDic:NSMutableDictionary!
   
+  var imageMessageArr:NSMutableArray!  //用于存储图片的arrary
+  
   var messageLimit:Int!
   var messagefristPageNumber:Int!
   var showTimeInterval:Double!
@@ -28,6 +30,7 @@ class JChatChattingDataSource: NSObject {
     self.messageLimit = limit
     self.allMessageDic = NSMutableDictionary()
     self.allMessageIdArr = NSMutableArray()
+    self.imageMessageArr = NSMutableArray()
     self.isNoMoreHistoryMsg = false
     self.messageOffset = 0
     self.messageCell = JChatRightMessageCell.init(style: .Default, reuseIdentifier: "MessageCellToGetRowHeight")
@@ -102,6 +105,9 @@ class JChatChattingDataSource: NSObject {
       self.dataMessageShowtime(message.timestamp)
       self.allMessageDic.setObject(model, forKey: model.message.msgId)
       self.allMessageIdArr.addObject(model.message.msgId)
+      if message.contentType == .Image {
+        imageMessageArr.addObject(model)
+      }
     }
   }
   
@@ -128,10 +134,15 @@ class JChatChattingDataSource: NSObject {
       } else {
         self.allMessageIdArr.insertObject(model.message.msgId, atIndex: 1)
       }
+      
+      if message.contentType == .Image {
+        imageMessageArr.insertObject(model, atIndex: 0)
+      }
+      
       self.allMessageDic.setObject(model, forKey: model.message.msgId)
 
-      self.dataMessageShowtime(message.timestamp)
-
+      self.dataMessageShowtime(message.timestamp) //TODO: fix time append to end
+      
     }
   }
   

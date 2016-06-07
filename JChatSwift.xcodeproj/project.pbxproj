@@ -99,6 +99,9 @@
 		6296C84D1C8E791E00FA965C /* JChatConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6296C84C1C8E791E00FA965C /* JChatConstants.swift */; };
 		6296C84F1C8EA32A00FA965C /* JChatFriendDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6296C84E1C8EA32A00FA965C /* JChatFriendDetailViewController.swift */; };
 		629C38721CC72D170033B66A /* createConversation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 629C38711CC72D170033B66A /* createConversation@2x.png */; };
+		62AAD8C31D06C1050098071A /* JChatImageBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AAD8C21D06C1050098071A /* JChatImageBrowserViewController.swift */; };
+		62AAD8C71D06C1930098071A /* JChatMessageImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AAD8C51D06C1930098071A /* JChatMessageImageCollectionViewCell.swift */; };
+		62AAD8C81D06C1930098071A /* JChatMessageImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62AAD8C61D06C1930098071A /* JChatMessageImageCollectionViewCell.xib */; };
 		62B26E311C86CEFE0062EA48 /* String+Utilites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B26E301C86CEFE0062EA48 /* String+Utilites.swift */; };
 		62B26E371C873FDD0062EA48 /* JChatAlertViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B26E361C873FDD0062EA48 /* JChatAlertViewManager.swift */; };
 		62B26E391C874BC60062EA48 /* frame@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B26E381C874BC60062EA48 /* frame@2x.png */; };
@@ -335,6 +338,9 @@
 		6296C84C1C8E791E00FA965C /* JChatConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatConstants.swift; sourceTree = "<group>"; };
 		6296C84E1C8EA32A00FA965C /* JChatFriendDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatFriendDetailViewController.swift; sourceTree = "<group>"; };
 		629C38711CC72D170033B66A /* createConversation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "createConversation@2x.png"; sourceTree = "<group>"; };
+		62AAD8C21D06C1050098071A /* JChatImageBrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatImageBrowserViewController.swift; sourceTree = "<group>"; };
+		62AAD8C51D06C1930098071A /* JChatMessageImageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatMessageImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		62AAD8C61D06C1930098071A /* JChatMessageImageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JChatMessageImageCollectionViewCell.xib; sourceTree = "<group>"; };
 		62B26E301C86CEFE0062EA48 /* String+Utilites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Utilites.swift"; sourceTree = "<group>"; };
 		62B26E361C873FDD0062EA48 /* JChatAlertViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatAlertViewManager.swift; sourceTree = "<group>"; };
 		62B26E381C874BC60062EA48 /* frame@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame@2x.png"; sourceTree = "<group>"; };
@@ -713,6 +719,24 @@
 			name = Setting;
 			sourceTree = "<group>";
 		};
+		62AAD8C11D06C0E10098071A /* ImageBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				62AAD8C41D06C10F0098071A /* View */,
+				62AAD8C21D06C1050098071A /* JChatImageBrowserViewController.swift */,
+			);
+			name = ImageBrowser;
+			sourceTree = "<group>";
+		};
+		62AAD8C41D06C10F0098071A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				62AAD8C51D06C1930098071A /* JChatMessageImageCollectionViewCell.swift */,
+				62AAD8C61D06C1930098071A /* JChatMessageImageCollectionViewCell.xib */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		62B26E351C873EAC0062EA48 /* AlertView */ = {
 			isa = PBXGroup;
 			children = (
@@ -746,6 +770,7 @@
 		62DE36AA1C719B2D009FB693 /* JChatSwift */ = {
 			isa = PBXGroup;
 			children = (
+				62AAD8C11D06C0E10098071A /* ImageBrowser */,
 				622A48AF1C896DEB0040E659 /* DetailVC */,
 				62B26E351C873EAC0062EA48 /* AlertView */,
 				62F6AC741C7DFE8D00BDBA30 /* Utilites */,
@@ -1209,6 +1234,7 @@
 				624ED9F01C7461FB000F421D /* SenderVoiceNodePlaying003@2x.png in Resources */,
 				624ED9DE1C7461FB000F421D /* ReceiverVoiceNodePlaying001@2x.png in Resources */,
 				62F573DC1C86B972005F57D0 /* set_btn_on_@2x.png in Resources */,
+				62AAD8C81D06C1930098071A /* JChatMessageImageCollectionViewCell.xib in Resources */,
 				624ED9E11C7461FB000F421D /* RecordCancel@2x.png in Resources */,
 				624ED9CF1C7461FB000F421D /* camera_35@3x.png in Resources */,
 				62F5739B1C843010005F57D0 /* JCHATSetDetailViewController.xib in Resources */,
@@ -1341,6 +1367,7 @@
 				62F6AC781C7E155F00BDBA30 /* NSString+Utilites.swift in Sources */,
 				62F572891C7F2C96005F57D0 /* JChatMessageBubble.swift in Sources */,
 				62F572EA1C82D457005F57D0 /* JChatAlreadyLoginViewController.swift in Sources */,
+				62AAD8C31D06C1050098071A /* JChatImageBrowserViewController.swift in Sources */,
 				62827FA21C88044500B66007 /* JChatCreateGroupViewController.swift in Sources */,
 				62827FA91C882D1100B66007 /* JChatSettingTableViewController.swift in Sources */,
 				62B26E371C873FDD0062EA48 /* JChatAlertViewManager.swift in Sources */,
@@ -1353,6 +1380,7 @@
 				62F5739A1C843010005F57D0 /* JCHATSetDetailViewController.swift in Sources */,
 				624ED9911C7391B8000F421D /* JChatMessageModel.swift in Sources */,
 				62B26E311C86CEFE0062EA48 /* String+Utilites.swift in Sources */,
+				62AAD8C71D06C1930098071A /* JChatMessageImageCollectionViewCell.swift in Sources */,
 				62DE36AE1C719B2D009FB693 /* ViewController.swift in Sources */,
 				6242BC731C7739CE00AA9814 /* JChatColorExtenson.swift in Sources */,
 				624ED9F91C747369000F421D /* JChatChattingLayout.swift in Sources */,

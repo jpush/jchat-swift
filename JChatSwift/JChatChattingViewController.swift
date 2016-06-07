@@ -360,8 +360,12 @@ extension JChatChattingViewController : JChatMessageCellDelegate {
   }
   
   //  picture
-  func tapPicture(index:Int, tapView:UIImageView, tableViewCell:UITableViewCell) {
-  
+  func tapPicture(messageModel: JChatMessageModel, tableViewCell: UITableViewCell) {
+    let browserImageVC = JChatImageBrowserViewController()
+    browserImageVC.imageArr = self.messageDataSource.imageMessageArr
+    self.presentViewController(browserImageVC, animated: true) {
+    
+    }
   }
   
   //  voice

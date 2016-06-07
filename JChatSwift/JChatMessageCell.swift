@@ -13,7 +13,7 @@ protocol JChatMessageCellDelegate {
   func selectHeadView(model:JChatMessageModel)
   
   //  picture
-  func tapPicture(index:Int, tapView:UIImageView, tableViewCell:UITableViewCell)
+  func tapPicture(messageModel:JChatMessageModel, tableViewCell:UITableViewCell)
 
   //  voice
   func getContinuePlay(cell:UITableViewCell)
@@ -119,9 +119,7 @@ class JChatMessageCell: UITableViewCell {
         print("正在下载缩略图")
         self.circleView.startAnimating()
       } else {
-        // TODO:  tapPicture callback
-        //        if (self.delegate && [(id<PictureDelegate>)self.delegate respondsToSelector:@selector(tapPicture:tapView:tableViewCell:)]) {
-        //          [(id<PictureDelegate>)self.delegate tapPicture:_indexPath tapView:(UIImageView *)gesture.view tableViewCell:self];
+        self.delegate.tapPicture(self.messageModel, tableViewCell: self)
       }
       break
     default:
