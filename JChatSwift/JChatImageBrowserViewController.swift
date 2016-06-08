@@ -14,12 +14,18 @@ class JChatImageBrowserViewController: UIViewController {
   
   private var imageBrowser:UICollectionView!
   var imageArr:NSArray!
+  var imgCurrentIndex:Int = 0
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     self.view.backgroundColor = UIColor.blackColor()
     self.setupImageBrowser()
   }
 
+  override func viewDidLayoutSubviews() {
+    self.imageBrowser.scrollToItemAtIndexPath(NSIndexPath(forItem: imgCurrentIndex, inSection: 0), atScrollPosition: .Left, animated: false)
+  }
+  
   func setupImageBrowser() {
     let flowLayout = UICollectionViewFlowLayout()
     flowLayout.scrollDirection = .Horizontal

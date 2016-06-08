@@ -24,6 +24,8 @@ class JChatChattingViewController: UIViewController {
   var chatLayout:JChatChattingLayout!
   var messageOffset = 0
   
+  var isAllowToScrollMessageTable:Bool = true
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -43,7 +45,10 @@ class JChatChattingViewController: UIViewController {
   }
   
   override func viewDidLayoutSubviews() {
-    self.chatLayout.messageTableScrollToBottom(false)
+    if isAllowToScrollMessageTable {
+      self.chatLayout.messageTableScrollToBottom(false)
+      isAllowToScrollMessageTable = false
+    }
   }
   
   deinit {
@@ -103,7 +108,7 @@ class JChatChattingViewController: UIViewController {
     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardFrameChanged(_:)), name: UIKeyboardWillChangeFrameNotification, object: nil)
     self.messageTable.reloadData()
   }
-
+  
   func setupAllViews() {
     self.view.backgroundColor = UIColor.whiteColor()
     
@@ -362,7 +367,10 @@ extension JChatChattingViewController : JChatMessageCellDelegate {
   //  picture
   func tapPicture(messageModel: JChatMessageModel, tableViewCell: UITableViewCell) {
     let browserImageVC = JChatImageBrowserViewController()
-    browserImageVC.imageArr = self.messageDataSource.imageMessageArr
+    let tmpImageArr = self.messageDataSource.imageMessageArr
+    browserImageVC.imageArr = tmpImageArr
+    browserImageVC.imgCurrentIndex = tmpImageArr.indexOfObject(messageModel)
+    
     self.presentViewController(browserImageVC, animated: true) {
     
     }

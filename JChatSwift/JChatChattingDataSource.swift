@@ -117,7 +117,8 @@ class JChatChattingDataSource: NSObject {
   func getMoreMessage() {
     
     let arrList = NSMutableArray()
-    arrList.addObjectsFromArray((self.conversation.messageArrayFromNewestWithOffset(self.messageOffset, limit: self.messageLimit) as NSArray).reverseObjectEnumerator().allObjects)
+//    arrList.addObjectsFromArray((self.conversation.messageArrayFromNewestWithOffset(self.messageOffset, limit: self.messageLimit) as NSArray).reverseObjectEnumerator().allObjects)
+    arrList.addObjectsFromArray(self.conversation.messageArrayFromNewestWithOffset(self.messageOffset, limit: self.messageLimit) as NSArray as [AnyObject])
     self.messageOffset = self.messageOffset + self.messageLimit
     if arrList.count < self.messageLimit {
       self.isNoMoreHistoryMsg = true
