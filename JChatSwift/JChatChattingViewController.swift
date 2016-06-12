@@ -78,7 +78,23 @@ class JChatChattingViewController: UIViewController {
   func addAllNotification() {
     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.cleanMessageCache), name: kDeleteAllMessage, object: nil)
     
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.alertToSendImage(_:)), name: kAlertToSendImage, object: nil)
+    
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.deleteMessage(_:)), name: kDeleteMessage, object: nil)
+    
     JMessage.addDelegate(self, withConversation: self.conversation)
+  }
+  
+  func deleteMessage(notifacation: NSNotification) {
+    let message = notifacation.object as! JMSGMessage
+    self.conversation.deleteMessageWithMessageId(message.msgId)
+    self.messageDataSource.deleteMessage(message)
+    self.chatLayout.loadMoreMessage()
+  }
+  
+  func alertToSendImage(notification:NSNotification) {
+    let image = notification.object as! UIImage
+    self.prepareSendImageMessage(image)
   }
   
   func cleanMessageCache() {

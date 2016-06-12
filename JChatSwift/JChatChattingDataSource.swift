@@ -200,6 +200,15 @@ class JChatChattingDataSource: NSObject {
     return indexPath
   }
 
+  
+  /**
+   * 删除message
+   */
+  func deleteMessage(message:JMSGMessage) {
+    self.allMessageIdArr.removeObject(message.msgId)
+    self.allMessageDic.removeObjectForKey(message.msgId)
+  }
+  
   /**
   *
   */

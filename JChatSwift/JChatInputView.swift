@@ -28,7 +28,7 @@ protocol JChatInputViewDelegate:NSObjectProtocol {
 class JChatInputView: UIView {
   var inputWrapView:UIView!
   var switchBtn:UIButton!
-  var inputTextView:UITextView!
+  var inputTextView:JChatMessageInputView!
   var recordVoiceBtn:UIButton!
   var showMoreBtn:UIButton!
   var isTextInput:Bool!
@@ -110,7 +110,7 @@ class JChatInputView: UIView {
     })
     
     // 输入宽的大小
-    self.inputTextView = UITextView()
+    self.inputTextView = JChatMessageInputView()
     self.inputTextView.layer.borderWidth = 0.5
     self.inputTextView.layer.borderColor = UIColor.lightGrayColor().CGColor
     self.inputTextView.layer.cornerRadius = 2

@@ -120,6 +120,7 @@
 		62DE36B61C719B2D009FB693 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62DE36B41C719B2D009FB693 /* LaunchScreen.storyboard */; };
 		62DE36C11C719B2D009FB693 /* JChatSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DE36C01C719B2D009FB693 /* JChatSwiftTests.swift */; };
 		62DE36CC1C719B2D009FB693 /* JChatSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DE36CB1C719B2D009FB693 /* JChatSwiftUITests.swift */; };
+		62EA7F0B1D0D86AA00175A12 /* JChatMessageInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62EA7F0A1D0D86AA00175A12 /* JChatMessageInputView.swift */; };
 		62F572891C7F2C96005F57D0 /* JChatMessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F572881C7F2C96005F57D0 /* JChatMessageBubble.swift */; };
 		62F5728B1C7F61AF005F57D0 /* JChatLeftMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F5728A1C7F61AF005F57D0 /* JChatLeftMessageCell.swift */; };
 		62F5728D1C7F61FB005F57D0 /* JChatRightMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F5728C1C7F61FB005F57D0 /* JChatRightMessageCell.swift */; };
@@ -369,6 +370,7 @@
 		62DE36C71C719B2D009FB693 /* JChatSwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JChatSwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		62DE36CB1C719B2D009FB693 /* JChatSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JChatSwiftUITests.swift; sourceTree = "<group>"; };
 		62DE36CD1C719B2D009FB693 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		62EA7F0A1D0D86AA00175A12 /* JChatMessageInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatMessageInputView.swift; sourceTree = "<group>"; };
 		62F572881C7F2C96005F57D0 /* JChatMessageBubble.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatMessageBubble.swift; sourceTree = "<group>"; };
 		62F5728A1C7F61AF005F57D0 /* JChatLeftMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatLeftMessageCell.swift; sourceTree = "<group>"; };
 		62F5728C1C7F61FB005F57D0 /* JChatRightMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatRightMessageCell.swift; sourceTree = "<group>"; };
@@ -645,6 +647,7 @@
 				624ED9961C7458BD000F421D /* JChatInputView.swift */,
 				624ED9FA1C759523000F421D /* JChatTableCellMaker.swift */,
 				626AE6111C8D5044008C9E0D /* JChatMessageTable.swift */,
+				62EA7F0A1D0D86AA00175A12 /* JChatMessageInputView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1378,6 +1381,7 @@
 				62F573A11C858554005F57D0 /* JChatAvatarView.swift in Sources */,
 				624ED9971C7458BD000F421D /* JChatInputView.swift in Sources */,
 				623FDDA11D081C9A00EEB98D /* JChatFriendDetailSendMsgCell.swift in Sources */,
+				62EA7F0B1D0D86AA00175A12 /* JChatMessageInputView.swift in Sources */,
 				62F5728D1C7F61FB005F57D0 /* JChatRightMessageCell.swift in Sources */,
 				62F6AC781C7E155F00BDBA30 /* NSString+Utilites.swift in Sources */,
 				62F572891C7F2C96005F57D0 /* JChatMessageBubble.swift in Sources */,

@@ -55,6 +55,7 @@ class JCHATGroupDetailViewController: UIViewController {
   func setupGroupMemberGrip() {
     let flowLayout = UICollectionViewFlowLayout()
     flowLayout.scrollDirection = .Vertical
+    flowLayout.sectionInset = UIEdgeInsets(top: 23, left: 20, bottom: 35, right: 20)
     self.groupMemberGrip = UICollectionView(frame: CGRectZero, collectionViewLayout: flowLayout)
     self.view.addSubview(self.groupMemberGrip)
     self.groupMemberGrip.snp_makeConstraints { (make) -> Void in

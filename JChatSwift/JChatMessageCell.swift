@@ -133,6 +133,7 @@ class JChatMessageCell: UITableViewCell {
   
   func setCellData(model:JChatMessageModel) {
     self.messageModel = model
+    self.messageBubble?.message = model.message
     
     model.message.fromUser.thumbAvatarData { (data, ObjectId, error) -> Void in
       if error == nil {
