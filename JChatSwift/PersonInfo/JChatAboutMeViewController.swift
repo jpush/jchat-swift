@@ -16,11 +16,12 @@ class JChatAboutMeViewController: UIViewController {
   var cellDataArr:NSArray?
   var cellImgArr:NSArray?
   var bgView:JChatAvatarView!
-  var headerView:JChatExpandHeader!
+  var tableHeader:JChatExpandHeader!
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.navigationController?.navigationBar.translucent = false
+    self.title = "我"
     
     self.table = UITableView()
     self.table.delegate = self
@@ -30,13 +31,16 @@ class JChatAboutMeViewController: UIViewController {
     self.table.estimatedRowHeight = 40
     self.table.rowHeight = UITableViewAutomaticDimension
     self.table.tableFooterView = UIView()
+    self.table.tableHeaderView = UIView()
+
     self.table.snp_makeConstraints { (make) -> Void in
       make.left.top.right.bottom.equalTo(self.view)
     }
     
     self.getData()
+    self.setAvatar()
     
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.setAvatar), name: kupdateUserInfo, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateAvatar), name: kupdateUserInfo, object: nil)
   }
 
   func getData() {
@@ -49,7 +53,7 @@ class JChatAboutMeViewController: UIViewController {
   }
   
   override func viewDidLayoutSubviews() {
-    self.setAvatar()
+    
   }
   
   override func viewWillAppear(animated: Bool) {
@@ -58,18 +62,24 @@ class JChatAboutMeViewController: UIViewController {
   }
   
   func setAvatar() {
-    self.bgView = JChatAvatarView(frame: CGRectMake(0, 0, kApplicationWidth, 0.54 * kApplicationWidth))
+    self.bgView = JChatAvatarView(frame: CGRectMake(0, 0, kApplicationWidth, 0.55 * kApplicationWidth))
+
     self.bgView.backgroundColor = UIColor(netHex: 0xdddddd)
-    let gesture = UITapGestureRecognizer(target: self, action: #selector(self.tapPicture(_:)))
+    let gesture = UITapGestureRecognizer(target: self, action: #selector(tapPicture(_:)))
+    gesture.numberOfTapsRequired = 1
+    self.bgView.userInteractionEnabled = true
     self.bgView.addGestureRecognizer(gesture)
-    self.headerView = JChatExpandHeader.expandWithScrollView(self.table, expandView: self.bgView)
+    
+    self.tableHeader = JChatExpandHeader.expandWithScrollView(self.table, expandView: self.bgView)
+    self.updateAvatar()
+
   }
 
   func updateAvatar() {
     let user:JMSGUser = JMSGUser.myInfo()
     self.bgView.updataNameLable()
     user.thumbAvatarData { (data, objectId, error) -> Void in
-      if data == nil {
+      if error == nil {
         if data != nil {
           self.bgView.setHeadImage(UIImage(data: data)!)
         } else {
@@ -79,38 +89,13 @@ class JChatAboutMeViewController: UIViewController {
         self.bgView.setDefaultAvatar()
       }
     }
-    
   }
 
   func tapPicture(gesture:UIGestureRecognizer) {
     let actionSheet = UIActionSheet(title: "更换头像", delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "拍照", "相册")
+    actionSheet.delegate = self
     actionSheet.showInView(UIApplication.sharedApplication().keyWindow!)
     
-  }
-
-  func photoClick() {
-    let picker = UIImagePickerController()
-    picker.delegate = self
-    picker.sourceType = .PhotoLibrary
-    let temp_mediaType = UIImagePickerController.availableMediaTypesForSourceType(picker.sourceType)
-    picker.mediaTypes = temp_mediaType!
-    picker.modalTransitionStyle = .CoverVertical
-    self.presentViewController(picker, animated: true, completion: nil)
-  }
-
-  func cameraClick() {
-    let picker:UIImagePickerController = UIImagePickerController()
-    if UIImagePickerController.isSourceTypeAvailable(.Camera) {
-      picker.sourceType = .Camera
-      let requiredMediaType = kUTTypeImage as String
-      let arrMediaTypes = [requiredMediaType]
-      picker.mediaTypes = arrMediaTypes
-      picker.showsCameraControls = true
-      picker.modalTransitionStyle = .CoverVertical
-      picker.editing = true
-      picker.delegate = self
-      self.presentViewController(picker, animated: true, completion: nil)
-    }
   }
   
   override func didReceiveMemoryWarning() {
@@ -164,14 +149,39 @@ extension JChatAboutMeViewController: UITableViewDelegate, UITableViewDataSource
 
 extension JChatAboutMeViewController: UIActionSheetDelegate {
   func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
-    if buttonIndex == 0 {
+    if buttonIndex == 1 {
       self.cameraClick()
       return
     }
     
-    if buttonIndex == 1 {
+    if buttonIndex == 2 {
       self.photoClick()
       return
+    }
+  }
+  
+  func photoClick() {
+    let picker = UIImagePickerController()
+    picker.delegate = self
+    picker.sourceType = .PhotoLibrary
+    let temp_mediaType = UIImagePickerController.availableMediaTypesForSourceType(picker.sourceType)
+    picker.mediaTypes = temp_mediaType!
+    picker.modalTransitionStyle = .CoverVertical
+    self.presentViewController(picker, animated: true, completion: nil)
+  }
+  
+  func cameraClick() {
+    let picker:UIImagePickerController = UIImagePickerController()
+    if UIImagePickerController.isSourceTypeAvailable(.Camera) {
+      picker.sourceType = .Camera
+      let requiredMediaType = kUTTypeImage as String
+      let arrMediaTypes = [requiredMediaType]
+      picker.mediaTypes = arrMediaTypes
+      picker.showsCameraControls = true
+      picker.modalTransitionStyle = .CoverVertical
+      picker.editing = true
+      picker.delegate = self
+      self.presentViewController(picker, animated: true, completion: nil)
     }
   }
   

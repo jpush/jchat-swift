@@ -13,7 +13,7 @@ internal let interval = 60
 internal let messagePageNumber = 25
 internal let messageFristPageNumber = 20
 
-
+@objc(JChatChattingViewController)
 class JChatChattingViewController: UIViewController {
   
   var conversation:JMSGConversation!
@@ -360,6 +360,12 @@ extension JChatChattingViewController : JChatMessageCellDelegate {
     } else {
       let friendInfoVC = JChatFriendDetailViewController()
       friendInfoVC.user = model.message.fromUser
+      if conversation.conversationType == .Group {
+        friendInfoVC.isGroupFlag = true
+      } else {
+        friendInfoVC.isGroupFlag = false
+      }
+      
       self.navigationController?.pushViewController(friendInfoVC, animated: true)
     }
   }

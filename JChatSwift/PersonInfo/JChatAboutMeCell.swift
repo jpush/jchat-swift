@@ -15,6 +15,7 @@ class JChatAboutMeCell: UITableViewCell {
   var arrowImg:UIImageView!
   var iconImg:UIImageView!
   var baseLine:UIView!
+  var topLine:UIView!
   var infoLabel:UILabel!
   
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -64,12 +65,22 @@ class JChatAboutMeCell: UITableViewCell {
     
     self.baseLine = UIView()
     self.contentView.addSubview(self.baseLine)
+    self.baseLine.backgroundColor = kSeparatorColor
     self.baseLine.snp_makeConstraints { (make) -> Void in
       make.left.right.equalTo(self.contentView)
       make.height.equalTo(0.5)
-      make.bottom.equalTo(self.contentView)
+      make.bottom.equalTo(self.contentView).offset(0.5)
     }
-    self.baseLine.backgroundColor = kSeparatorColor
+    
+    self.topLine = UIView()
+    self.contentView.addSubview(self.topLine)
+    self.topLine.backgroundColor = kSeparatorColor
+    self.topLine.snp_makeConstraints { (make) in
+      make.left.right.equalTo(self.contentView)
+      make.height.equalTo(0.5)
+      make.top.equalTo(self.contentView)
+    }
+    
   }
   
   required init?(coder aDecoder: NSCoder) {

@@ -9,8 +9,11 @@
 import UIKit
 import MBProgressHUD
 
+let kSkipToSingleChatViewState = "SkipToSingleChatViewState"
+
 class JChatFriendDetailViewController: UIViewController {
   var user:JMSGUser!
+  var isGroupFlag:Bool?
   
   var infoTable:UITableView!
   var nameLabel:UILabel!
@@ -19,6 +22,8 @@ class JChatFriendDetailViewController: UIViewController {
   var titleArr:NSArray!
   var imgArr:NSArray!
   var infoArr:NSMutableArray!
+  
+  
   override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -58,7 +63,7 @@ class JChatFriendDetailViewController: UIViewController {
     }
     
     let tableHeadView = UIView(frame: CGRect(x: 0, y: 0, width: kApplicationWidth, height: 150))
-    tableHeadView.backgroundColor = UIColor(netHex: 0xdddddd)
+    tableHeadView.backgroundColor = UIColor.whiteColor()
     self.headView = UIImageView()
     tableHeadView.addSubview(self.headView)
     self.headView.layer.cornerRadius = 35
@@ -148,10 +153,34 @@ class JChatFriendDetailViewController: UIViewController {
 
 extension JChatFriendDetailViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 3
+    return 4
   }
   
   func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    if indexPath.row == 3 {
+      identify = "JChatFriendDetailSendMsgCell"
+      var cell:JChatFriendDetailSendMsgCell? = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatFriendDetailSendMsgCell
+      if cell == nil {
+        tableView.registerNib(UINib(nibName: identify, bundle: nil), forCellReuseIdentifier: identify)
+        cell = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatFriendDetailSendMsgCell
+      }
+      cell!.setClickSendMsgCallback({
+        
+        for var ctl in (self.navigationController?.childViewControllers)! {
+          if ctl.isKindOfClass(JChatChattingViewController) {
+            
+            if self.isGroupFlag! {
+              self.navigationController?.popToRootViewControllerAnimated(true)
+              NSNotificationCenter.defaultCenter().postNotificationName(kSkipToSingleChatViewState, object: self.user)
+            } else {
+              self.navigationController?.popToViewController(ctl, animated: true)
+            }
+          }
+        }
+      })
+      return cell!
+    }
+    
     identify = "JChatAboutMeCell"
     var cell:JChatAboutMeCell? = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatAboutMeCell
     if cell == nil {
@@ -164,6 +193,13 @@ extension JChatFriendDetailViewController: UITableViewDelegate, UITableViewDataS
     
     cell?.setFriendCellData(tittle, icon: imgName, info: info)
     return cell!
+  }
+  
+  func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    if indexPath.row == 3 {
+      return 80
+    }
+    return 57;
   }
 }
 

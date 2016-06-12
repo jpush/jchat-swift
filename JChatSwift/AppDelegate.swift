@@ -58,16 +58,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     UINavigationBar.appearance().barTintColor = UIColor(netHex: 0x3f80de)
-    if Float(UIDevice.currentDevice().systemVersion) >= 8.0 {
-      UINavigationBar.appearance().translucent = false
-    }
     
+    UINavigationBar.appearance().translucent = false  //TODO: ios8
+  
     let shadow = NSShadow()
     UINavigationBar.appearance().titleTextAttributes = [
       NSForegroundColorAttributeName: UIColor.whiteColor(),
       NSFontAttributeName: UIFont.boldSystemFontOfSize(20),
       NSShadowAttributeName: shadow
     ]
+
+    UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+    
   }
   
   func application(application: UIApplication,

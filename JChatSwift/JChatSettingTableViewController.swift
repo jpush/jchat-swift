@@ -12,14 +12,29 @@ class JChatSettingTableViewController: UITableViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.title = "设置"
     self.tableView.separatorStyle = .None
+    self.setupNavigation()
   }
 
+
+  func setupNavigation() {
+    self.title = "设置"
+    
+    let leftBtn = UIButton(type: .Custom)
+    leftBtn.frame = kNavigationLeftButtonRect
+    leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
+    leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
+    leftBtn.addTarget(self, action: #selector(self.backClick), forControlEvents: .TouchUpInside)
+    self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
+  }
+  
+  func backClick() {
+    self.navigationController?.popViewControllerAnimated(true)
+  }
+  
   override func didReceiveMemoryWarning() {
       super.didReceiveMemoryWarning()
   }
-
 
   override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return 2

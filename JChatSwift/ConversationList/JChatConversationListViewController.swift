@@ -22,6 +22,7 @@ class JChatConversationListViewController: UIViewController {
     JMessage.addDelegate(self, withConversation: nil)
     self.setupNavigation()
     self.layoutAllViews()
+    self.addNotifications()
   }
   
   override func viewWillAppear(animated: Bool) {
@@ -93,7 +94,26 @@ class JChatConversationListViewController: UIViewController {
     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.dBMigrateFinish), name: kDBMigrateFinishNotification, object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.alreadyLoginClick), name: kLogin_NotifiCation, object: nil)
+    
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.skipToSingleChat(_:)), name: kSkipToSingleChatViewState, object: nil)
+    
 
+  }
+  
+  func skipToSingleChat(notification:NSNotification) {
+    let user:JMSGUser = notification.object?.copy() as! JMSGUser
+    let singleChatVC = JChatChattingViewController()
+    
+    JMSGConversation.createSingleConversationWithUsername(user.username) { (resultObject, error) in
+      if error == nil {
+        singleChatVC.conversation = resultObject as! JMSGConversation
+        singleChatVC.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(singleChatVC, animated: true)
+      } else {
+        print("fail to create single conversation")
+      }
+    }
+    
   }
   
   func netWorkConnectClose() {
