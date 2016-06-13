@@ -81,20 +81,27 @@ class JChatMessageCell: UITableViewCell {
     self.sendfailImg.image = UIImage(named: "fail05")
     self.contentView.addSubview(self.sendfailImg)
     
-    self.percentLable = UILabel()
-
     self.voiceTimeLable = UILabel()
     self.voiceTimeLable.backgroundColor = UIColor.clearColor()
     self.voiceTimeLable.font = UIFont.systemFontOfSize(18)
     self.contentView.addSubview(self.voiceTimeLable)
     
-    // test
     self.textMessageContent.backgroundColor = UIColor.clearColor()
     
     self.messageBubble = JChatMessageBubble(frame: CGRectZero)
     self.contentView.insertSubview(self.messageBubble!, belowSubview: self.textMessageContent)
-    self.addGestureForAllViews()
     
+    self.percentLable = UILabel()
+    self.percentLable.font = UIFont.systemFontOfSize(18)
+    self.percentLable.textAlignment = .Center
+    self.percentLable.textColor = UIColor.whiteColor()
+    self.messageBubble?.addSubview(percentLable)
+    self.percentLable.snp_makeConstraints { (make) in
+      make.size.equalTo(CGSizeMake(60, 40))
+      make.center.equalTo(self.messageBubble!)
+    }
+    
+    self.addGestureForAllViews()
   }
   
   func addGestureForAllViews() {
@@ -155,41 +162,43 @@ class JChatMessageCell: UITableViewCell {
         self.headImageView.image = UIImage(named: "headDefalt")
       }
       
-      self.messageBubble?.image = self.messageBubble?.maskBackgroupImage
-      
-      switch model.message.contentType {
-      case .Text:
-        let textContent = model.message.content as! JMSGTextContent
-        self.textMessageContent.text = textContent.text
-        break
-      case .Voice:
-        self.setVoiceBtmImage()
-        break
-      case .Image:
-        let imageContent = self.messageModel.message.content as! JMSGImageContent
-        
-        imageContent.thumbImageData({[weak weakSelf = self] (data, objectId, error) -> Void in
-          if error == nil {
-            if data != nil {
-              weakSelf?.messageBubble?.image = UIImage(data: data)
-              return
-            }
-          }
-          weakSelf?.messageBubble?.image = UIImage(named: "receiveFail")
-          })
-        break
-      default:
-        break
-      }
-      if self.messageModel.message.flag == 1 || self.messageModel.message.isReceived {
-        self.unreadStatusView.hidden = true
-      } else {
-        self.unreadStatusView.hidden = false
-      }
-      
-      self.layoutAllViews()
-      
     }
+    
+    self.messageBubble?.image = self.messageBubble?.maskBackgroupImage
+    
+    switch model.message.contentType {
+    case .Text:
+      let textContent = model.message.content as! JMSGTextContent
+      self.textMessageContent.text = textContent.text
+      break
+    case .Voice:
+      self.setVoiceBtmImage()
+      break
+    case .Image:
+      let imageContent = self.messageModel.message.content as! JMSGImageContent
+      
+      imageContent.thumbImageData({[weak weakSelf = self] (data, objectId, error) -> Void in
+        if error == nil {
+          if data != nil {
+            weakSelf?.messageBubble?.image = UIImage(data: data)
+            return
+          }
+        }
+        weakSelf?.messageBubble?.image = UIImage(named: "receiveFail")
+        })
+      break
+    default:
+      break
+    }
+    
+    if self.messageModel.message.flag == 1 || self.messageModel.message.isReceived {
+      self.unreadStatusView.hidden = true
+    } else {
+      self.unreadStatusView.hidden = false
+    }
+    
+    self.layoutAllViews()
+
   }
   
   func setCellData(model:JChatMessageModel, delegate:JChatMessageCellDelegate) {
@@ -277,7 +286,7 @@ class JChatMessageCell: UITableViewCell {
     (self.messageModel.message.content as! JMSGImageContent).uploadHandler = {[weak weakSelf = self] (percent:Float, msgId:(String!)) in
       dispatch_async(dispatch_get_main_queue(), { () -> Void in
         if weakSelf?.messageModel.message.msgId == msgId! {
-          let percent = "\(percent)"
+          let percent = "\(Int(percent*100))％"
           weakSelf?.percentLable.text = percent
           print("upload percent is \(percent)")
         }
@@ -293,8 +302,6 @@ class JChatMessageCell: UITableViewCell {
   func playVoice() {
     print("Action - playVoice")
 
-    
-//    self.delegate.getContinuePlay(self, indexPath: self.insertSubview(<#T##view: UIView##UIView#>, belowSubview: <#T##UIView#>))
     self.continuePlayer = false
     self.unreadStatusView.hidden = true
     self.messageModel.message.updateFlag(1)
@@ -370,7 +377,6 @@ class JChatMessageCell: UITableViewCell {
       fatalError("init(coder:) has not been implemented")
   }
   
-
   override func setSelected(selected: Bool, animated: Bool) {
       super.setSelected(selected, animated: animated)
 

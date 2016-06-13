@@ -14,6 +14,10 @@ class JChatMessageInputView: UITextView {
     return  action == #selector(self.paste(_:))
   }
   
+  override func canResignFirstResponder() -> Bool {
+    return true
+  }
+  
   override func paste(sender: AnyObject?) {
     let pasteboard = UIPasteboard.generalPasteboard()
     let textAttachment = NSTextAttachment()

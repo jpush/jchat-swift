@@ -117,19 +117,30 @@ class JChatConversationListViewController: UIViewController {
   }
   
   func netWorkConnectClose() {
-    self.title = "未连接"
+    
+    dispatch_async(dispatch_get_main_queue()) {
+      self.title = "未连接"
+    }
   }
 
   func netWorkConnectSetup() {
-    self.title = "收取中.."
+    dispatch_async(dispatch_get_main_queue()) {
+      self.title = "收取中.."
+    }
   }
   
   func connectSucceed() {
-     self.title = "会话"
+    dispatch_async(dispatch_get_main_queue()) {
+      self.title = "会话"
+    }
+ 
   }
   
   func isConnecting() {
-    self.title = "链接中.."
+    dispatch_async(dispatch_get_main_queue()) { 
+      self.title = "链接中.."
+    }
+    
   }
   
   func dBMigrateFinish() {
