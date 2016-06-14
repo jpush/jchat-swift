@@ -97,7 +97,7 @@ class JChatConversationListViewController: UIViewController {
     
     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.skipToSingleChat(_:)), name: kSkipToSingleChatViewState, object: nil)
     
-
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.didLoginJpush), name: kJPFNetworkDidLoginNotification, object: nil)
   }
   
   func skipToSingleChat(notification:NSNotification) {
@@ -123,6 +123,11 @@ class JChatConversationListViewController: UIViewController {
     }
   }
 
+  func didLoginJpush() {
+    dispatch_async(dispatch_get_main_queue()) {
+      self.title = "会话"
+    }
+  }
   func netWorkConnectSetup() {
     dispatch_async(dispatch_get_main_queue()) {
       self.title = "收取中.."

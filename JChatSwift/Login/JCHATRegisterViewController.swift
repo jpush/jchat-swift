@@ -74,11 +74,11 @@ class JCHATRegisterViewController: UIViewController {
       JMSGUser.registerWithUsername(usernameTF.text!, password: passwordTF.text!, completionHandler: { (resultObject, error) -> Void in
         if error == nil {
           MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
-          MBProgressHUD.showMessage("注册成功,正在自动登陆", view: self.view)
+          MBProgressHUD.showMessage("注册成功,正在自动登录", view: self.view)
           JMSGUser.loginWithUsername(self.usernameTF.text!, password: self.passwordTF.text!, completionHandler: { (resultObject, error) -> Void in
               MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
             if error == nil {
-              
+              NSNotificationCenter.defaultCenter().postNotificationName(kupdateUserInfo, object: nil)
               self.userLoginSave()
 
               let detailVC = JCHATSetDetailViewController()

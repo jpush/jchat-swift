@@ -38,7 +38,10 @@ class JChatAlreadyLoginViewController: UIViewController {
     let password = passwordTF.text
     MBProgressHUD.showMessage("正在登录", toView: self.view)
     JMSGUser.loginWithUsername(username, password: password!) { (resultObject, error) -> Void in
-      MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+      dispatch_async(dispatch_get_main_queue(), { 
+        MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+      })
+      
       if error == nil {
         MBProgressHUD.showMessage("登录成功", view: self.view)
         NSNotificationCenter.defaultCenter().postNotificationName(kupdateUserInfo, object: nil)

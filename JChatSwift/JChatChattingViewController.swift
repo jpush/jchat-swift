@@ -179,6 +179,7 @@ class JChatChattingViewController: UIViewController {
     })
 
   }
+  
 }
 
 extension JChatChattingViewController:UITableViewDelegate,UITableViewDataSource {

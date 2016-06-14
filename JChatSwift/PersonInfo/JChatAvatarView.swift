@@ -53,11 +53,11 @@ class JChatAvatarView: UIImageView {
   
   func updataNameLable() {
     let userInfo = JMSGUser.myInfo()
-
-    if userInfo.nickname != "" || userInfo.nickname != nil {
-      self.nameLable.text = userInfo.nickname
-    } else {
+    print("\(userInfo.nickname)    \(userInfo.username)")
+    if userInfo.nickname == nil || userInfo.nickname == "" {
       self.nameLable.text = userInfo.username
+    } else {
+      self.nameLable.text = userInfo.nickname
     }
   }
 

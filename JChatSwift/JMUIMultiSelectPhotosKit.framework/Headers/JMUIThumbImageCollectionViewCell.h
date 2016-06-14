@@ -10,12 +10,7 @@
 #import <Photos/Photos.h>
 #import "JMUIPhotoSelectViewController.h"
 #import "JMUIPhotoModel.h"
-
 @interface JMUIThumbImageCollectionViewCell : UICollectionViewCell
-@property (weak, nonatomic) IBOutlet UIImageView *thumbImage;
-@property (weak, nonatomic) IBOutlet UIButton *seletStatusBtn;
-@property (strong, nonatomic)JMUIPhotoModel *thumbImageModel;
-@property (strong, nonatomic)JMUIPhotoSelectViewController *SelectImagedelegate;
 
 - (void)setDataWithModel:(JMUIPhotoModel *)model withDelegate:(id)delegate;
 @end

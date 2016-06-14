@@ -17,7 +17,7 @@ internal let kAlertViewTagQuitGroup = 400
 
 class JCHATGroupDetailViewController: UIViewController {
   weak var chattingVC:JChatChattingViewController!
-  var conversation:JMSGConversation!
+  weak var conversation:JMSGConversation!
   var memberArr:NSMutableArray!
   var groupMemberGrip:UICollectionView!
   var isEditing:Bool!
@@ -157,6 +157,10 @@ class JCHATGroupDetailViewController: UIViewController {
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     
+  }
+  
+  deinit {
+    print("")
   }
 }
 

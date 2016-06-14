@@ -9,8 +9,8 @@
 import UIKit
 
 class JChatChattingLayout: NSObject {
-  internal var messageListTable:JChatMessageTable? = nil
-  internal var inputView:JChatInputView? = nil
+  internal weak var messageListTable:JChatMessageTable? = nil
+  internal weak var inputView:JChatInputView? = nil
   
   init(messageTable:JChatMessageTable, inputView:JChatInputView) {
     super.init()

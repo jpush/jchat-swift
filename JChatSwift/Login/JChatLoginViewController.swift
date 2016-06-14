@@ -72,7 +72,7 @@ class JChatLoginViewController: UIViewController {
     UIApplication.sharedApplication().sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, forEvent: nil)
     
     if self.checkValidUsername(self.userNameTF.text!, password: self.passwordTF.text!) {
-      MBProgressHUD.showMessage("正在登陆", toView: self.view)
+      MBProgressHUD.showMessage("正在登录", toView: self.view)
       JMSGUser.loginWithUsername(self.userNameTF.text!, password: self.passwordTF.text! , completionHandler: { (resultObject, error) -> Void in
         if error == nil {
           NSNotificationCenter.defaultCenter().postNotificationName(kupdateUserInfo, object: nil)

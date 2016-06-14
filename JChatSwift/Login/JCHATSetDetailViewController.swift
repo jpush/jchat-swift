@@ -46,8 +46,7 @@ class JCHATSetDetailViewController: UIViewController {
   @IBAction func clickToPickPhoto(sender: AnyObject) {
     self.nameTF.resignFirstResponder()
     let actionSheet = UIActionSheet(title: "更换头像", delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "拍照", "相册")
-    actionSheet.showInView(UIApplication.sharedApplication().keyWindow!)
-    
+    actionSheet.showInView(self.view)
   }
 
   @IBAction func clickToFinishi(sender: AnyObject) {
@@ -71,9 +70,12 @@ class JCHATSetDetailViewController: UIViewController {
 extension JCHATSetDetailViewController : UIActionSheetDelegate {
   
   func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
-    if buttonIndex == 0 {
+
+    if buttonIndex == 1 {
       self.cameraClick()
-    } else {
+    }
+    
+    if buttonIndex == 2 {
       self.photoClick()
     }
     
@@ -90,7 +92,9 @@ extension JCHATSetDetailViewController : UIActionSheetDelegate {
       picker.modalTransitionStyle = .CoverVertical
       picker.editing = true
       picker.delegate = self
-      self.presentViewController(picker, animated: true, completion: nil)  
+      dispatch_async(dispatch_get_main_queue(), { 
+        self.presentViewController(picker, animated: true, completion: nil)
+      })
     }
   }
   
@@ -101,8 +105,9 @@ extension JCHATSetDetailViewController : UIActionSheetDelegate {
     let tempMediaTypes = UIImagePickerController.availableMediaTypesForSourceType(picker.sourceType)
     picker.mediaTypes = tempMediaTypes!
     picker.modalTransitionStyle = .CoverVertical
-    self.presentViewController(picker, animated: true, completion: nil)
-    
+    dispatch_async(dispatch_get_main_queue()) { 
+      self.presentViewController(picker, animated: true, completion: nil)
+    }
   }
 }
 

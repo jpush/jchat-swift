@@ -53,6 +53,7 @@ class JChatEditUserInfoViewController: UIViewController {
     JMSGUser.updateMyInfoWithParameter(self.infoTextField.text!, userFieldType: self.updateType) { (resultObject, error) -> Void in
       MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
       if error == nil {
+        NSNotificationCenter.defaultCenter().postNotificationName(kupdateUserInfo, object: nil)
         MBProgressHUD.showMessage("修改成功", view: self.view)
         self.navigationController?.popViewControllerAnimated(true)
       } else {
@@ -146,7 +147,8 @@ class JChatEditUserInfoViewController: UIViewController {
       break
       case .FieldsRegion:
         self.deleteBtn.hidden = true
-        self.textNumberLable.text = "\(textNumberLimit)"
+        self.textNumberLable.hidden = true
+        
         self.descriptLable.hidden = true
         if user.region == nil {
           self.infoTextField.placeholder = "请输入你所在的地区"
@@ -166,14 +168,19 @@ class JChatEditUserInfoViewController: UIViewController {
   }
   
   func textFieldDidChangeName() {
-    if self.infoTextField.text?.characters.count > textNumberLimit {
-      self.infoTextField.text = self.infoTextField.text![0...textNumberLimit]
-      MBProgressHUD.showMessage("最多输入 \(textNumberLimit) 个字符", view: self.view)
+    if self.getStringByteLength(self.infoTextField.text) > textNumberLimit {
+      self.infoTextField.text = self.infoTextField.text![0...((self.infoTextField.text?.characters.count)! - 1)]
+      MBProgressHUD.showMessage("最多输入 \(textNumberLimit) 个字节", view: self.view)
       return
     }
-    self.textNumberLable.text = "\(textNumberLimit - (self.infoTextField.text?.characters.count)!)"
+    
+    self.textNumberLable.text = "\(textNumberLimit - self.getStringByteLength(self.infoTextField.text))"
   }
 
+  func getStringByteLength(str:String?) -> Int {
+    return (str?.utf8Array.count)!
+  }
+  
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
 

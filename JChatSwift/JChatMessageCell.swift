@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-protocol JChatMessageCellDelegate {
+protocol JChatMessageCellDelegate:NSObjectProtocol {
   func selectHeadView(model:JChatMessageModel)
   
   //  picture
@@ -40,7 +40,7 @@ class JChatMessageCell: UITableViewCell {
   internal var voiceTimeLable:UILabel!
   internal var continuePlayer:Bool!
   
-  var delegate:JChatMessageCellDelegate!
+  weak var delegate:JChatMessageCellDelegate!
   var messageModel:JChatMessageModel!
   
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -305,35 +305,7 @@ class JChatMessageCell: UITableViewCell {
     self.continuePlayer = false
     self.unreadStatusView.hidden = true
     self.messageModel.message.updateFlag(1)
-    //  [((JMSGVoiceContent *)_model.message.content) voiceData:^(NSData *data, NSString *objectId, NSError *error) {
-    //    if (error == nil) {
-    //    if (data != nil) {
-    //    status =  @"下载语音成功";
-    //    self.index = 0;
-    //
-    //    if (!_isPlaying) {
-    //    if ([[JMUIAudioPlayerHelper shareInstance] isPlaying]) {
-    //    [[JMUIAudioPlayerHelper shareInstance] stopAudio];
-    //    [[JMUIAudioPlayerHelper shareInstance] setDelegate:nil];
-    //    }
-    //    [[JMUIAudioPlayerHelper shareInstance] setDelegate:(id) self];
-    //    _isPlaying = YES;
-    //    } else {
-    //    _isPlaying = NO;
-    //    self.continuePlayer = NO;
-    //    [[JMUIAudioPlayerHelper shareInstance] stopAudio];
-    //    [[JMUIAudioPlayerHelper shareInstance] setDelegate:nil];
-    //    }
-    //    [[JMUIAudioPlayerHelper shareInstance] managerAudioWithData:data toplay:YES];
-    //    [self changeVoiceImage];
-    //    }
-    //    } else {
-    //    NSLog(@"Action  voiceData");
-    //    [self AlertInCurrentViewWithString:@"下载语音数据失败"];
-    //    status = @"获取消息失败。。。";
-    //    }
-    //    }];
-    //  return;
+
     (self.messageModel.message.content as! JMSGVoiceContent).voiceData {[weak weakSelf = self] (data, objectId, error) -> Void in
       var alertString = ""
       if error == nil {

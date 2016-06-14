@@ -32,15 +32,13 @@ class JChatVersionViewController: UIViewController {
   
   func setupNavigation() {
     self.title = "版本"
-    let backBtn = UIButton(type: .Custom)
-    backBtn.frame = kNavigationLeftButtonRect
-    backBtn.setBackgroundImage(UIImage(named: "goBack"), forState: .Normal)
-    backBtn.contentMode = .Center
-    backBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    backBtn .addTarget(self, action: #selector(self.doBack), forControlEvents: .TouchUpInside)
-    
-    let backItem = UIBarButtonItem(customView: backBtn)
-    self.navigationItem.leftBarButtonItem = backItem
+
+    let leftBtn = UIButton(type: .Custom)
+    leftBtn.frame = kNavigationLeftButtonRect
+    leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
+    leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
+    leftBtn.addTarget(self, action: #selector(self.doBack), forControlEvents: .TouchUpInside)
+    self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
     self.navigationController?.navigationBar.translucent = false
   }
   

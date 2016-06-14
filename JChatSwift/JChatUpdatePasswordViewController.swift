@@ -26,15 +26,13 @@ class JChatUpdatePasswordViewController: UIViewController {
 
   func setupNavigation() {
     self.title = "修改密码"
-    let backBtn = UIButton(type: .Custom)
-    backBtn.frame = kNavigationLeftButtonRect
-    backBtn.setBackgroundImage(UIImage(named: "goBack"), forState: .Normal)
-    backBtn.contentMode = .Center
-    backBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    backBtn .addTarget(self, action: #selector(JChatUpdatePasswordViewController.doBack), forControlEvents: .TouchUpInside)
+    let leftBtn = UIButton(type: .Custom)
+    leftBtn.frame = kNavigationLeftButtonRect
+    leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
+    leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
+    leftBtn.addTarget(self, action: #selector(self.doBack), forControlEvents: .TouchUpInside)
+    self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
     
-    let backItem = UIBarButtonItem(customView: backBtn)
-    self.navigationItem.leftBarButtonItem = backItem
     self.navigationController?.navigationBar.translucent = false
   }
   
@@ -63,7 +61,10 @@ class JChatUpdatePasswordViewController: UIViewController {
     if self.newPassword.text == self.comfortNewPassword.text {
       MBProgressHUD.showMessage("正在修改", toView: self.view)
       JMSGUser.updateMyPasswordWithNewPassword(self.newPassword.text!, oldPassword: self.oldPassword.text!, completionHandler: { (resultObject, error) -> Void in
-        MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+        dispatch_async(dispatch_get_main_queue(), { 
+          MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+        })
+        
         if error == nil {
           self.navigationController?.popViewControllerAnimated(true)
           MBProgressHUD.showMessage("修改密码成功", view: self.view)

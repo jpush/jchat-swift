@@ -79,6 +79,14 @@ class JChatMainTabViewController: UITabBarController {
     return tabBarVCArray
   }
   
+  override func shouldAutorotate() -> Bool {
+    return false
+  }
+  
+  override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+    return .Portrait
+  }
+  
     override func didReceiveMemoryWarning() {
       super.didReceiveMemoryWarning()
 

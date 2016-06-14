@@ -45,9 +45,9 @@ class JChatAboutMeViewController: UIViewController {
 
   func getData() {
     if JMSGUser.myInfo().nickname == nil {
-      self.cellDataArr = [JMSGUser.myInfo().username, "设置", "退出登陆"]
+      self.cellDataArr = [JMSGUser.myInfo().username, "设置", "退出登录"]
     } else {
-      self.cellDataArr = [JMSGUser.myInfo().nickname!, "设置", "退出登陆"]
+      self.cellDataArr = [JMSGUser.myInfo().nickname!, "设置", "退出登录"]
     }
     self.cellImgArr = ["wo_20", "setting_22", "loginOut_17"]
   }
@@ -93,11 +93,10 @@ class JChatAboutMeViewController: UIViewController {
 
   func tapPicture(gesture:UIGestureRecognizer) {
     let actionSheet = UIActionSheet(title: "更换头像", delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "拍照", "相册")
-    actionSheet.delegate = self
-    actionSheet.showInView(UIApplication.sharedApplication().keyWindow!)
+    actionSheet.showInView(self.view)
     
   }
-  
+
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
   }
@@ -167,7 +166,10 @@ extension JChatAboutMeViewController: UIActionSheetDelegate {
     let temp_mediaType = UIImagePickerController.availableMediaTypesForSourceType(picker.sourceType)
     picker.mediaTypes = temp_mediaType!
     picker.modalTransitionStyle = .CoverVertical
-    self.presentViewController(picker, animated: true, completion: nil)
+    dispatch_async(dispatch_get_main_queue()) { 
+      self.presentViewController(picker, animated: true, completion: nil)
+    }
+    
   }
   
   func cameraClick() {
@@ -181,7 +183,10 @@ extension JChatAboutMeViewController: UIActionSheetDelegate {
       picker.modalTransitionStyle = .CoverVertical
       picker.editing = true
       picker.delegate = self
-      self.presentViewController(picker, animated: true, completion: nil)
+      dispatch_async(dispatch_get_main_queue(), { 
+        self.presentViewController(picker, animated: true, completion: nil)
+      })
+      
     }
   }
   

@@ -17,4 +17,8 @@ extension String {
       return self[Range(start: startIndex, end: endIndex)]
     }
   }
+  
+  var utf8Array: [UInt8] {
+    return Array(utf8)
+  }
 }

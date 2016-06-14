@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-protocol JChatAudioPlayerHelperDelegate {
+protocol JChatAudioPlayerHelperDelegate:NSObjectProtocol {
   func didAudioPlayerBeginPlay(AudioPlayer:AVAudioPlayer)
   func didAudioPlayerStopPlay(AudioPlayer:AVAudioPlayer)
   func didAudioPlayerPausePlay(AudioPlayer:AVAudioPlayer)
@@ -18,7 +18,7 @@ protocol JChatAudioPlayerHelperDelegate {
 class JChatAudioPlayerHelper: NSObject {
 
   var player:AVAudioPlayer!
-  var delegate:JChatAudioPlayerHelperDelegate?
+  weak var delegate:JChatAudioPlayerHelperDelegate?
   
   class var sharedInstance: JChatAudioPlayerHelper {
     struct Static {

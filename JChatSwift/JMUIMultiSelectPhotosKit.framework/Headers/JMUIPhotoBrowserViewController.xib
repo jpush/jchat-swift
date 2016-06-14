@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JMUIPhotoBrowserViewController">
+            <connections>
+                <outlet property="bottomBar" destination="kFf-nK-xIw" id="KsM-QL-aL4"/>
+                <outlet property="collectionView" destination="JXb-Pq-rLu" id="dWI-X4-O3J"/>
+                <outlet property="selectOriginBtn" destination="r7v-W6-hAw" id="59K-Vf-weP"/>
+                <outlet property="selectStatusBtn" destination="h7r-O1-xnY" id="ZWx-g8-TFU"/>
+                <outlet property="topBar" destination="pHZ-QK-ODH" id="0KO-1b-zc1"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="JXb-Pq-rLu">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="n2f-eU-TsX">
+                        <size key="itemSize" width="50" height="50"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pHZ-QK-ODH">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h7r-O1-xnY">
+                            <rect key="frame" x="557" y="20" width="35" height="35"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="35" id="FGK-Ty-IYm"/>
+                                <constraint firstAttribute="height" constant="35" id="JuF-Nq-bqm"/>
+                            </constraints>
+                            <state key="normal" image="image_no_picked@3x.png"/>
+                            <state key="selected" image="image_picked@3x.png"/>
+                            <connections>
+                                <action selector="ClickToSelectImage:" destination="-1" eventType="touchUpInside" id="cXP-99-eev"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BwJ-sQ-tcl">
+                            <rect key="frame" x="16" y="20" width="35" height="35"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="35" id="Tc1-te-6LT"/>
+                                <constraint firstAttribute="width" constant="35" id="Wob-FJ-9Lz"/>
+                            </constraints>
+                            <state key="normal" title="返回">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="ClickToBack:" destination="-1" eventType="touchUpInside" id="PuS-Ti-KOL"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.50548537234042556" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="LV3-u9-83F"/>
+                        <constraint firstAttribute="trailing" secondItem="h7r-O1-xnY" secondAttribute="trailing" constant="8" id="ZAe-ca-M3U"/>
+                        <constraint firstItem="h7r-O1-xnY" firstAttribute="centerY" secondItem="pHZ-QK-ODH" secondAttribute="centerY" constant="5" id="c95-Ho-wny"/>
+                        <constraint firstItem="BwJ-sQ-tcl" firstAttribute="leading" secondItem="pHZ-QK-ODH" secondAttribute="leading" constant="16" id="hwX-eg-efI"/>
+                        <constraint firstItem="BwJ-sQ-tcl" firstAttribute="centerY" secondItem="pHZ-QK-ODH" secondAttribute="centerY" constant="5" id="kMB-3p-cmc"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kFf-nK-xIw">
+                    <rect key="frame" x="0.0" y="555" width="600" height="45"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r7v-W6-hAw">
+                            <rect key="frame" x="16" y="8" width="30" height="30"/>
+                            <state key="normal" title="原图">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <state key="selected">
+                                <color key="titleColor" red="0.14356955301568139" green="0.8469199934554974" blue="0.041683228005373947" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="clickToSelectOriginImage:" destination="-1" eventType="touchUpInside" id="v81-eO-lKR"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r1S-Ne-YNh">
+                            <rect key="frame" x="557" y="5" width="35" height="35"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="35" id="EzL-xo-rGa"/>
+                                <constraint firstAttribute="height" constant="35" id="pTC-ko-I8y"/>
+                            </constraints>
+                            <state key="normal" title="发送">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="ClickToSendImage:" destination="-1" eventType="touchUpInside" id="MfY-Vc-SiN"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.50975177304964536" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="r1S-Ne-YNh" secondAttribute="trailing" constant="8" id="JNX-Ue-cZp"/>
+                        <constraint firstItem="r1S-Ne-YNh" firstAttribute="centerY" secondItem="kFf-nK-xIw" secondAttribute="centerY" id="XMg-sQ-ayf"/>
+                        <constraint firstAttribute="height" constant="45" id="d9i-XI-8zo"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="kFf-nK-xIw" secondAttribute="trailing" id="6Wy-Cq-8Yc"/>
+                <constraint firstItem="JXb-Pq-rLu" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="6eO-XS-gCP"/>
+                <constraint firstItem="JXb-Pq-rLu" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="8Xb-hp-MwY"/>
+                <constraint firstItem="pHZ-QK-ODH" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="9Vz-tD-lG9"/>
+                <constraint firstItem="kFf-nK-xIw" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Ahx-gc-8Cu"/>
+                <constraint firstAttribute="bottom" secondItem="kFf-nK-xIw" secondAttribute="bottom" id="F8h-7H-xfe"/>
+                <constraint firstAttribute="trailing" secondItem="JXb-Pq-rLu" secondAttribute="trailing" id="VJ3-Uc-afY"/>
+                <constraint firstAttribute="bottom" secondItem="JXb-Pq-rLu" secondAttribute="bottom" id="pG4-jV-iVW"/>
+                <constraint firstItem="pHZ-QK-ODH" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="rkt-ga-EV0"/>
+                <constraint firstAttribute="trailing" secondItem="pHZ-QK-ODH" secondAttribute="trailing" id="xTs-eu-GMw"/>
+            </constraints>
+        </view>
+    </objects>
+    <resources>
+        <image name="image_no_picked@3x.png" width="27" height="27"/>
+        <image name="image_picked@3x.png" width="27" height="27"/>
+    </resources>
+</document>
