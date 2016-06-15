@@ -65,7 +65,8 @@ class JChatLeftMessageCell:JChatMessageCell {
   
   override func layoutAllViews() {
     super.layoutAllViews()
-    if messageModel.message.contentType == .Image {
+    switch messageModel.message.contentType {
+    case .Image:
       self.messageBubble?.snp_remakeConstraints(closure: { (make) -> Void in
         make.right.equalTo(self.textMessageContent.snp_right).offset(5)
         make.top.equalTo(self.textMessageContent.snp_top).offset(-5)
@@ -73,19 +74,26 @@ class JChatLeftMessageCell:JChatMessageCell {
         make.left.equalTo(self.textMessageContent.snp_left).offset(-13)
         make.size.equalTo(CGSize(width: self.messageModel.imageSize!.width, height: self.messageModel.imageSize!.height))
       })
-//      self.textMessageContent.snp_updateConstraints(closure: { (make) -> Void in
-//        make.size.equalTo(CGSize(width: self.messageModel.imageSize!.width, height: self.messageModel.imageSize!.height))
-//      })
-    } else {
+      break
+    case .Voice:
+      self.messageBubble?.snp_remakeConstraints(closure: { (make) in
+        make.right.equalTo(self.textMessageContent.snp_right).offset(5)
+        make.top.equalTo(self.textMessageContent.snp_top).offset(-5)
+        make.bottom.equalTo(self.textMessageContent.snp_bottom).offset(5)
+        make.left.equalTo(self.textMessageContent.snp_left).offset(-13)
+        make.size.equalTo(CGSizeMake(CGFloat(messageModel.voiceBubbleWidth!), 45))
+      })
+      break
+    case .Text:
       self.messageBubble?.snp_remakeConstraints(closure: { (make) -> Void in
         make.right.equalTo(self.textMessageContent.snp_right).offset(5)
         make.top.equalTo(self.textMessageContent.snp_top).offset(-5)
         make.bottom.equalTo(self.textMessageContent.snp_bottom).offset(5)
         make.left.equalTo(self.textMessageContent.snp_left).offset(-13)
       })
-//      self.textMessageContent.snp_updateConstraints(closure: { (make) -> Void in
-//        make.size.equalTo(CGSize(width: self.messageModel.imageSize!.width, height: self.messageModel.imageSize!.height))
-//      })
+      break
+    default:
+      break
     }
   }
   
