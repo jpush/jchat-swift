@@ -198,6 +198,18 @@ extension JChatConversationListViewController: UITableViewDataSource,UITableView
     self.navigationController?.pushViewController(chattingVC, animated: true)
   }
 
+  func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    let conversation = self.conversationArr[indexPath.row] as! JMSGConversation
+    
+    if conversation.conversationType == .Single {
+      JMSGConversation.deleteSingleConversationWithUsername((conversation.target as! JMSGUser).username)
+    } else {
+      JMSGConversation.deleteGroupConversationWithGroupId((conversation.target as! JMSGGroup).gid)
+    }
+    
+    self.conversationArr.removeObjectAtIndex(indexPath.row)
+    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+  }
 }
 
 

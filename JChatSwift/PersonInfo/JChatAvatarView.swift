@@ -48,6 +48,7 @@ class JChatAvatarView: UIImageView {
   
   func setDefaultAvatar() {
     self.centerAvatar.image = UIImage(named: "wo_05")
+    self.image = nil
     self.backgroundColor = UIColor(netHex: 0xe1e1e1)
   }
   
@@ -62,11 +63,20 @@ class JChatAvatarView: UIImageView {
   }
 
   func setHeadImage(originImage:UIImage) {
-    self.centerAvatar.image = originImage
-    // TODO: blend
-//    self.image = originImage
+    var theImage = originImage
+    self.centerAvatar.image = theImage
+
+    let imageOrientation = theImage.imageOrientation
+    
+    if imageOrientation != .Up {
+      UIGraphicsBeginImageContext(theImage.size);
+      theImage.drawInRect(CGRectMake(0, 0, theImage.size.width, theImage.size.height))
+      theImage = UIGraphicsGetImageFromCurrentImageContext();
+      UIGraphicsEndImageContext();
+    }
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-      let outputImage = UIImage.blur(20, inputImage: originImage)
+      let outputImage = UIImage.blur(20, inputImage: theImage)
       dispatch_async(dispatch_get_main_queue(), { 
         self.image = outputImage
       })

@@ -54,6 +54,7 @@ class JChatChattingDataSource: NSObject {
       self.getMessageCellHeight(model as! JChatMessageModel)
       self.allMessageDic.setObject(model, forKey: (model as! JChatMessageModel).message.msgId)
       self.allMessageIdArr.addObject((model as! JChatMessageModel).message.msgId)
+      self.imageMessageArr.addObject(model)
     }
   }
   

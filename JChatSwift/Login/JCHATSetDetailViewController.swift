@@ -59,6 +59,7 @@ class JCHATSetDetailViewController: UIViewController {
     
     JMSGUser.updateMyInfoWithParameter(nickName!, userFieldType: .FieldsNickname) { (resultObject, error) -> Void in
       UIApplication.sharedApplication().delegate?.window!!.rootViewController = JChatMainTabViewController.sharedInstance
+      NSNotificationCenter.defaultCenter().postNotificationName(kupdateUserInfo, object: nil)
     }
   }
   
@@ -124,8 +125,7 @@ extension JCHATSetDetailViewController : UIImagePickerControllerDelegate, UINavi
           MBProgressHUD.showMessage("上传成功", view: self.view)
           let image = info[UIImagePickerControllerOriginalImage] as! UIImage
           self.avatarBtn.setBackgroundImage(image, forState: .Normal)
-          let appDelegate = UIApplication.sharedApplication().delegate
-          appDelegate!.window!!.rootViewController = JChatMainTabViewController.sharedInstance
+          self.avatarBtn.setBackgroundImage(image, forState: .Highlighted)
         } else {
           MBProgressHUD.showMessage("上传失败", view: self.view)
         }

@@ -89,6 +89,9 @@ class JCHATRegisterViewController: UIViewController {
               MBProgressHUD.showMessage(NSString.errorAlert(error), view: self.view)
             }
           })
+        } else {
+          print("login fail error \(NSString.errorAlert(error))")
+          MBProgressHUD.showMessage(NSString.errorAlert(error), view: self.view)
         }
       })
     }

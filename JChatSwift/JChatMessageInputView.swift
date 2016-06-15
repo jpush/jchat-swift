@@ -11,7 +11,8 @@ import UIKit
 class JChatMessageInputView: UITextView {
 
   override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
-    return  action == #selector(self.paste(_:))
+    super.canPerformAction(action, withSender: sender)
+    return  (action == #selector(self.paste(_:))) || (action == #selector(self.resignFirstResponder))
   }
   
   override func canResignFirstResponder() -> Bool {

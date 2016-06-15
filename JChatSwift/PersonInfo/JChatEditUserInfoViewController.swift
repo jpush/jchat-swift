@@ -50,6 +50,12 @@ class JChatEditUserInfoViewController: UIViewController {
   }
   
   func clickToSave() {
+    if self.updateType == .FieldsNickname {
+      if self.getStringByteLength(self.infoTextField.text) > textNumberLimit {
+        MBProgressHUD.showMessage("输入的用户名超过30字节限制", view: self.view)
+        return
+      }
+    }
     JMSGUser.updateMyInfoWithParameter(self.infoTextField.text!, userFieldType: self.updateType) { (resultObject, error) -> Void in
       MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
       if error == nil {

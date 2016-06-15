@@ -122,7 +122,15 @@ class JChatChattingViewController: UIViewController {
     print("Action - viewWillAppear")
     super.viewWillAppear(animated)
     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardFrameChanged(_:)), name: UIKeyboardWillChangeFrameNotification, object: nil)
+    
     self.messageTable.reloadData()
+//    self.conversation.refreshTargetInfoFromServer { (resultObject, error) in
+//      if error == nil {
+//
+//      } else {
+//        print("\(NSString.errorAlert(error)))")
+//      }
+//    }
   }
   
   func setupAllViews() {
@@ -392,6 +400,7 @@ extension JChatChattingViewController : JChatMessageCellDelegate {
     let browserImageVC = JChatImageBrowserViewController()
     let tmpImageArr = self.messageDataSource.imageMessageArr
     browserImageVC.imageArr = tmpImageArr
+    print("\(tmpImageArr.indexOfObject(messageModel))")
     browserImageVC.imgCurrentIndex = tmpImageArr.indexOfObject(messageModel)
     
     self.presentViewController(browserImageVC, animated: true) {
@@ -467,5 +476,9 @@ extension JChatChattingViewController: JMessageDelegate {
 }
 
 func hideKeyBoardAnimation() {
+  dispatch_async(dispatch_get_main_queue()) { 
+    UIApplication.sharedApplication().sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, forEvent: nil)
+  }
   UIApplication.sharedApplication().sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, forEvent: nil)
+  
 }
