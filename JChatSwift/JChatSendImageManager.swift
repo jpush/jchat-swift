@@ -99,14 +99,11 @@ class JChatSendImageController: NSObject {
 
 extension JChatSendImageController : JMessageDelegate {
   func onSendMessageResponse(message: JMSGMessage!, error: NSError!) {
-    if error != nil {return}
+    
+    
     if message.contentType != .Image {
       return
     }
-
-//    if self.msgConversation.isMessageForThisConversation(message) {
-//      return
-//    }
 
     self.draftImageMessageArr.removeObjectAtIndex(0)
     if self.draftImageMessageArr.count > 0 {
