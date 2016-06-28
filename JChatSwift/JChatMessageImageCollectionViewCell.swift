@@ -40,7 +40,7 @@ class JChatMessageImageCollectionViewCell: UICollectionViewCell {
   
   internal func setImage(model:JChatMessageModel) {
     messageModel = model
-    (model.message.content as! JMSGImageContent).thumbImageData { (data, msgId, error) in
+    (model.message.content as? JMSGImageContent)?.thumbImageData { (data, msgId, error) in
       if msgId == self.messageModel?.message.msgId {
         self.messageImage.image = UIImage(data: data)!;
       }
