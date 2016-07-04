@@ -191,7 +191,7 @@ class JChatMessageCell: UITableViewCell {
       break
     }
     
-    if self.messageModel.message.flag == 1 || self.messageModel.message.isReceived {
+    if self.messageModel.message.flag == 1 || !self.messageModel.message.isReceived {
       self.unreadStatusView.hidden = true
     } else {
       self.unreadStatusView.hidden = false

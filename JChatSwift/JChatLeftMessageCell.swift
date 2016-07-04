@@ -47,7 +47,7 @@ class JChatLeftMessageCell:JChatMessageCell {
     self.unreadStatusView.snp_makeConstraints { (make) -> Void in
       make.size.equalTo(CGSize(width: 8, height: 8))
       make.top.equalTo(self.messageBubble!.snp_top).offset(5)
-      make.right.equalTo(self.messageBubble!.snp_left).offset(5)
+      make.right.equalTo(self.messageBubble!.snp_right).offset(15)
     }
     
     self.circleView.snp_makeConstraints { (make) -> Void in
