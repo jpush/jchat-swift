@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import JChatSwift
+@testable import JChatSwiftTests
 
 class JChatSwiftTests: XCTestCase {
     

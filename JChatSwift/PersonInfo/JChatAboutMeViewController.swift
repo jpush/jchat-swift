@@ -225,7 +225,7 @@ extension JChatAboutMeViewController: UIImagePickerControllerDelegate, UINavigat
   func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
     print("Action - imagePickerController ")//UIImageJPEGRepresentation
     MBProgressHUD.showMessage("正在上传", toView: self.view)
-    var pickedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+    let pickedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
     
     JMSGUser.updateMyInfoWithParameter(UIImageJPEGRepresentation(pickedImage, 1)!, userFieldType: .FieldsAvatar) { (resultObject, error) -> Void in
       dispatch_async(dispatch_get_main_queue(), { () -> Void in

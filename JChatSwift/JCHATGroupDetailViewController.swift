@@ -289,7 +289,7 @@ extension JCHATGroupDetailViewController: UICollectionViewDelegate, UICollection
         MBProgressHUD.showMessage("删除成员成功！", view: self.view)
         self.refreshMemberGrid()
       } else {
-        print("removeMembersWithUsernameArray fail with error \(NSString.errorAlert(error))")
+        print("removeMembersWithUsernameArray fail with error \(NSString.errorAlert(error as NSError))")
         MBProgressHUD.showMessage("删除成员错误！", view: self.view)
       }
     }
@@ -327,7 +327,7 @@ extension JCHATGroupDetailViewController: UITableViewDelegate, UITableViewDataSo
     return cell!
   }
 
-  func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     switch self.conversation.conversationType {
     case .Single:
       return 1
@@ -338,7 +338,7 @@ extension JCHATGroupDetailViewController: UITableViewDelegate, UITableViewDataSo
   }
   
   func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-    let cell = tableView.cellForRowAtIndexPath(indexPath)
+    let cell = tableView.cellForRowAtIndexPath(indexPath as NSIndexPath)
     cell?.selected = false
     if self.conversation?.conversationType == .Group {
       switch indexPath.row {
@@ -372,7 +372,7 @@ extension JCHATGroupDetailViewController: UIAlertViewDelegate {
     switch alertView.tag {
     case kAlertViewTagClearChatRecord:
       if buttonIndex == 1 {  self.conversation?.deleteAllMessages() }
-      NSNotificationCenter.defaultCenter().postNotificationName(kDeleteAllMessage, object: nil)
+      NSNotificationCenter.defaultCenter().postNotificationName(kDeleteMessage, object: nil)
       break
     case kAlertViewTagAddMember:
       let userName = alertView.textFieldAtIndex(0)?.text
@@ -446,9 +446,9 @@ extension JCHATGroupDetailViewController: UIAlertViewDelegate {
             self.chattingVC.conversation = groupconveration
             JMessage.addDelegate(self.chattingVC, withConversation: groupconveration)
             self.chattingVC.title = group.displayName()
-            self.navigationController?.popViewControllerAnimated(true)
+            self.navigationController?.popToRootViewControllerAnimated(true)
           } else {
-            print("创建group conversation 成功\(NSString.errorAlert(error))")
+            print("创建group conversation 成功\(NSString.errorAlert(error as! NSError))")
             MBProgressHUD.showMessage("创建group conversation 成功", view: self.view)
           }
         })

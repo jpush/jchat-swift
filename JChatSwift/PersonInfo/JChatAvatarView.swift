@@ -71,7 +71,7 @@ class JChatAvatarView: UIImageView {
     if imageOrientation != .Up {
       UIGraphicsBeginImageContext(theImage.size);
       theImage.drawInRect(CGRectMake(0, 0, theImage.size.width, theImage.size.height))
-      theImage = UIGraphicsGetImageFromCurrentImageContext();
+      theImage = UIGraphicsGetImageFromCurrentImageContext()!;
       UIGraphicsEndImageContext();
     }
     

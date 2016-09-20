@@ -121,8 +121,11 @@ class JChatFriendDetailViewController: UIViewController {
     MBProgressHUD.showMessage("正在加载", toView: self.view)
     JMSGUser.userInfoArrayWithUsernameArray([self.user.username]) { (resultObject, error) -> Void in
       MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+      let arr = ["adsf","sadf"] as Array
+      print(arr[0])
+      
       if error == nil {
-        let user = ((resultObject as! Array)[0] as! JMSGUser)
+        let user = (resultObject as! Array<JMSGUser>)[0]
         user.thumbAvatarData({ (data, objId, error) -> Void in
           if error == nil {
             if data != nil {
