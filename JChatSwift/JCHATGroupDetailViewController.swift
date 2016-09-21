@@ -44,7 +44,7 @@ class JCHATGroupDetailViewController: UIViewController {
   }
   
   func backClick() {
-    self.navigationController?.popViewController(animated: true)
+    _ = self.navigationController?.popViewController(animated: true)
   }
   
   func refreshMemberGrid() {
@@ -446,7 +446,7 @@ extension JCHATGroupDetailViewController: UIAlertViewDelegate {
             self.chattingVC.conversation = groupconveration
             JMessage.add(self.chattingVC, with: groupconveration)
             self.chattingVC.title = (group as! JMSGGroup).displayName()
-            self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
           } else {
             print("创建group conversation 成功\(NSString.errorAlert(error as! NSError))")
             MBProgressHUD.showMessage("创建group conversation 成功", view: self.view)

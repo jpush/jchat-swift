@@ -43,7 +43,7 @@ class JChatVersionViewController: UIViewController {
   }
   
   func doBack() {
-    self.navigationController?.popViewController(animated: true)
+    _ = self.navigationController?.popViewController(animated: true)
   }
 
   override func didReceiveMemoryWarning() {

@@ -37,7 +37,7 @@ class JChatUpdatePasswordViewController: UIViewController {
   }
   
   func doBack() {
-    self.navigationController?.popViewController(animated: true)
+    _ = self.navigationController?.popViewController(animated: true)
   }
   
   @IBAction func clickToUpdatePassword(_ sender: AnyObject) {
@@ -66,7 +66,7 @@ class JChatUpdatePasswordViewController: UIViewController {
         })
         
         if error == nil {
-          self.navigationController?.popViewController(animated: true)
+          _ = self.navigationController?.popViewController(animated: true)
           MBProgressHUD.showMessage("修改密码成功", view: self.view)
         } else {
           MBProgressHUD.showMessage("修改密码失败", view: self.view)

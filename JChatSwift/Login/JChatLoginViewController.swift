@@ -47,7 +47,7 @@ class JChatLoginViewController: UIViewController {
   }
 
   func backClick() {
-    self.navigationController?.popViewController(animated: true)
+    _ = self.navigationController?.popViewController(animated: true)
   }
   
   func checkValidUsername(_ username: String, password:String) -> Bool{

@@ -46,7 +46,7 @@ class JChatEditUserInfoViewController: UIViewController {
   }
   
   func backClick() {
-    self.navigationController?.popViewController(animated: true)
+    _ = self.navigationController?.popViewController(animated: true)
   }
   
   func clickToSave() {
@@ -61,7 +61,7 @@ class JChatEditUserInfoViewController: UIViewController {
       if error == nil {
         NotificationCenter.default.post(name: Notification.Name(rawValue: kupdateUserInfo), object: nil)
         MBProgressHUD.showMessage("修改成功", view: self.view)
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
       } else {
         MBProgressHUD.showMessage("修改成功", view: self.view)
       }

@@ -103,7 +103,7 @@ class JChatChattingViewController: UIViewController {
   }
   
   func backClick() {
-    self.navigationController?.popViewController(animated: true)
+    _ = self.navigationController?.popViewController(animated: true)
   }
   
   func clickRightBtn() {

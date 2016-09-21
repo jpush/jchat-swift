@@ -46,7 +46,7 @@ class JChatFriendDetailViewController: UIViewController {
   
   func backClick() {
 //    self.navigationController?.popViewController(animated: true)
-    self.navigationController?.popViewController(animated: true)
+    _ = self.navigationController?.popViewController(animated: true)
   }
   
   func layoutAllViews() {
@@ -118,28 +118,28 @@ class JChatFriendDetailViewController: UIViewController {
       self.infoArr.add(self.user.signature!)
     }
     
+    _ = MBProgressHUD.showMessage("正在加载", toView: self.view)
     
-    MBProgressHUD.showMessage("正在加载", toView: self.view)
     JMSGUser.userInfoArray(withUsernameArray: [self.user.username]) { (resultObject, error) -> Void in
-      MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
+      _ = MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
       if error == nil {
-        let user = ((resultObject as! Array)[0] as! JMSGUser)
+        let user = ((resultObject as! Array<JMSGUser>)[0] as! JMSGUser)
         user.thumbAvatarData({ (data, objId, error) -> Void in
           if error == nil {
             if data != nil {
-              self.headView.image = UIImage(data: data)
+              self.headView.image = UIImage(data: data!)
             } else {
               self.headView.image = UIImage(named: "headDefalt")
             }
           } else {
             self.headView.image = UIImage(named: "headDefalt")
-            MBProgressHUD.showMessage("获取数据失败", view: self.view)
+            _ = MBProgressHUD.showMessage("获取数据失败", view: self.view)
           }
         })
 
       } else {
         self.headView.image = UIImage(named: "headDefalt")
-        MBProgressHUD.showMessage("获取数据失败", view: self.view)
+        _ = MBProgressHUD.showMessage("获取数据失败", view: self.view)
       }
       self.infoTable.reloadData()
     }

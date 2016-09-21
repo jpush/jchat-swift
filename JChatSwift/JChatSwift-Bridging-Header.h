@@ -5,3 +5,4 @@
 #import <JMessage/JMessage.h>
 #import <JMUIMultiSelectPhotosKit/JMUIAlbumTableViewCell.h>
 #import <JMUIMultiSelectPhotosKit/JMUIMultiSelectPhotosViewController.h>
+#import <MBProgressHUD/MBProgressHUD.h>

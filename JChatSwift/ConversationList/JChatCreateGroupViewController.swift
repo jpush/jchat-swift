@@ -37,7 +37,7 @@ class JChatCreateGroupViewController: UIViewController {
   }
   
   func backClick() {
-    self.navigationController?.popViewController(animated: true)
+    _ = self.navigationController?.popViewController(animated: true)
   }
   
   override func didReceiveMemoryWarning() {

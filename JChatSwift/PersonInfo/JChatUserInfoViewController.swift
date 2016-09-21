@@ -68,7 +68,7 @@ class JChatUserInfoViewController: UIViewController {
   }
   
   func backClick() {
-    self.navigationController?.popViewController(animated: true)
+    _ = self.navigationController?.popViewController(animated: true)
   }
 
   func clickTable() {
@@ -217,7 +217,6 @@ extension JChatUserInfoViewController: UITableViewDelegate, UITableViewDataSourc
     default:
       self.selectFlagGender = true
       self.showSelectGenderView(true)
-      return
       break
     }
     self.navigationController?.pushViewController(editUserInfoVC, animated: true)
