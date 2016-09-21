@@ -286,7 +286,7 @@ class JChatMessageCell: UITableViewCell {
   }
   
   func addUpLoadHandler() {
-    (self.messageModel.message.content as! JMSGImageContent).uploadHandler = {[weak weakSelf = self] (percent:Float, msgId:(String!)) in
+    (self.messageModel.message.content as! JMSGImageContent).uploadHandler = {[weak weakSelf = self] (percent:Float, msgId:(String?)) -> Void in
       DispatchQueue.main.async(execute: { () -> Void in
         if weakSelf?.messageModel.message.msgId == msgId! {
           let percent = "\(Int(percent*100))％"
@@ -294,8 +294,9 @@ class JChatMessageCell: UITableViewCell {
           print("upload percent is \(percent)")
         }
       })
-    } as! JMSGMediaProgressHandler
-    
+      return
+    } as? JMSGMediaProgressHandler
+
   }
   
   //#pragma mark --连续播放语音
@@ -310,10 +311,8 @@ class JChatMessageCell: UITableViewCell {
     self.messageModel.message.updateFlag(1)
 
     (self.messageModel.message.content as! JMSGVoiceContent).voiceData {[weak weakSelf = self] (data, objectId, error) -> Void in
-      var alertString = ""
       if error == nil {
         if data != nil {
-          alertString = "下载语言成功"
           weakSelf!.voiceImgIndex = 0
         }
 // TODO:
