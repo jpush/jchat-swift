@@ -48,7 +48,7 @@ class JChatRecordingView: UIView {
       self.remiadeLable.text = voiceRecordPauseString
       self.remiadeLable.textAlignment = .center
       self.addSubview(self.remiadeLable!)
-      self.remiadeLable.snp_makeConstraints({ (make) -> Void in
+      self.remiadeLable.snp.makeConstraints({ (make) -> Void in
         make.left.equalTo(self).offset(9.0)
         make.top.equalTo(self).offset(114)
         make.size.equalTo(CGSize(width: 120.0, height: 21.0))
@@ -61,7 +61,7 @@ class JChatRecordingView: UIView {
       self.microPhoneImageView.autoresizingMask = [.flexibleRightMargin, .flexibleBottomMargin]
       self.microPhoneImageView.contentMode = .scaleToFill
       self.addSubview(self.microPhoneImageView)
-      self.microPhoneImageView.snp_makeConstraints({ (make) -> Void in
+      self.microPhoneImageView.snp.makeConstraints({ (make) -> Void in
         make.left.equalTo(self).offset(27.0)
         make.top.equalTo(self).offset(8.0)
         make.size.equalTo(CGSize(width: 50.0, height: 99.0))
@@ -73,7 +73,7 @@ class JChatRecordingView: UIView {
       self.recordingHUDImageView.image = UIImage(named: "RecordingSignal")
       self.recordingHUDImageView.autoresizingMask = [.flexibleRightMargin, .flexibleBottomMargin]
       self.addSubview(self.recordingHUDImageView)
-      self.recordingHUDImageView.snp_makeConstraints({ (make) -> Void in
+      self.recordingHUDImageView.snp.makeConstraints({ (make) -> Void in
         make.left.equalTo(self).offset(82.0)
         make.top.equalTo(self).offset(34.0)
         make.size.equalTo(CGSize(width: 18.0, height: 61.0))
@@ -86,7 +86,7 @@ class JChatRecordingView: UIView {
       self.cancelRecordImageView.autoresizingMask = [.flexibleRightMargin, .flexibleBottomMargin]
       self.cancelRecordImageView.contentMode = .scaleToFill
       self.addSubview(self.cancelRecordImageView)
-      self.cancelRecordImageView.snp_makeConstraints({ (make) -> Void in
+      self.cancelRecordImageView.snp.makeConstraints({ (make) -> Void in
         make.left.equalTo(self).offset(19.0)
         make.top.equalTo(self).offset(7.0)
         make.size.equalTo(CGSize(width: 100.0, height: 100.0))
@@ -96,7 +96,7 @@ class JChatRecordingView: UIView {
 
   func startRecordingHUDAtView(_ view:UIView) {
     view.addSubview(self)
-    self.snp_makeConstraints { (make) -> Void in
+    self.snp.makeConstraints { (make) -> Void in
       make.center.equalTo(view)
     }
     self.configRecoding(true)

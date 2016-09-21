@@ -52,7 +52,7 @@ class JChatUserInfoViewController: UIViewController {
     self.personTable.backgroundView = UIView()
     self.personTable.backgroundView!.addGestureRecognizer(gesture)
     
-    self.personTable.snp_makeConstraints { (make) -> Void in
+    self.personTable.snp.makeConstraints { (make) -> Void in
       make.left.right.top.bottom.equalTo(self.view)
     }
     
@@ -60,7 +60,7 @@ class JChatUserInfoViewController: UIViewController {
     self.genderPicker.delegate = self
     self.genderPicker.dataSource = self
     self.view.addSubview(self.genderPicker)
-    self.genderPicker.snp_makeConstraints { (make) -> Void in
+    self.genderPicker.snp.makeConstraints { (make) -> Void in
       make.left.right.equalTo(self.view)
       make.height.right.equalTo(100)
       make.bottom.equalTo(self.view).offset(100)
@@ -227,16 +227,16 @@ extension JChatUserInfoViewController: UITableViewDelegate, UITableViewDataSourc
     if flag {
       self.view.setNeedsDisplay()
       UIView.animate(withDuration: 0.5, animations: { () -> Void in
-        self.genderPicker.snp_updateConstraints({ (make) -> Void in
-          make.bottom.equalTo(self.view.snp_bottom)
+        self.genderPicker.snp.updateConstraints({ (make) -> Void in
+          make.bottom.equalTo(self.view.snp.bottom)
         })
       self.view.setNeedsDisplay()
       })
     } else {
       self.view.setNeedsDisplay()
       UIView.animate(withDuration: 0.5, animations: { () -> Void in
-        self.genderPicker.snp_updateConstraints({ (make) -> Void in
-          make.bottom.equalTo(self.view.snp_bottom).offset(100)
+        self.genderPicker.snp.updateConstraints({ (make) -> Void in
+          make.bottom.equalTo(self.view.snp.bottom).offset(100)
         })
       self.view.setNeedsDisplay()
       })

@@ -30,7 +30,7 @@ class JChatFootTableTableViewCell: UITableViewCell {
     let topLine = UIView()
     topLine.backgroundColor = kSeparatorColor
     self.contentView.addSubview(topLine)
-    topLine.snp_makeConstraints { (make) -> Void in
+    topLine.snp.makeConstraints { (make) -> Void in
       make.top.left.right.equalTo(self.contentView)
       make.height.equalTo(0.5)
     }

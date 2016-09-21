@@ -64,7 +64,7 @@ class JChatConversationListViewController: UIViewController {
     self.conversationListTable.estimatedRowHeight = 60
     self.conversationListTable.rowHeight = UITableViewAutomaticDimension
     self.view.addSubview(self.conversationListTable)
-    self.conversationListTable.snp_makeConstraints { (make) -> Void in
+    self.conversationListTable.snp.makeConstraints { (make) -> Void in
       make.top.right.left.bottom.equalTo(self.view)
     }
   }

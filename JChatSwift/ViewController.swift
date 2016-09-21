@@ -24,7 +24,7 @@ class ViewController: UIViewController {
     loginBtn.layer.borderColor = UIColor.purple.cgColor
     loginBtn.addTarget(self, action: #selector(self.clickLogin), for: .touchUpInside)
     self.view.addSubview(loginBtn)
-    loginBtn.snp_makeConstraints { (make) -> Void in
+    loginBtn.snp.makeConstraints { (make) -> Void in
       make.center.equalTo(self.view)
       make.size.equalTo(CGSize(width: 60, height: 30))
     }

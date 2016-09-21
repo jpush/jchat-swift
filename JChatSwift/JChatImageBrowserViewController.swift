@@ -32,7 +32,7 @@ class JChatImageBrowserViewController: UIViewController {
     flowLayout.minimumLineSpacing = 0
     self.imageBrowser = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
     self.view.addSubview(self.imageBrowser)
-    self.imageBrowser.snp_makeConstraints { (make) in
+    self.imageBrowser.snp.makeConstraints { (make) in
       make.right.left.top.bottom.equalTo(self.view)
     }
     

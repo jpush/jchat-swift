@@ -44,7 +44,7 @@ class JChatConversationListCell: UITableViewCell {
     self.conversationAvatar.layer.cornerRadius = 22.5
     self.conversationAvatar.layer.masksToBounds = true
     self.contentView.addSubview(self.conversationAvatar)
-    self.conversationAvatar.snp_makeConstraints { (make) -> Void in
+    self.conversationAvatar.snp.makeConstraints { (make) -> Void in
       make.top.equalTo(self.contentView).offset(5)
       make.bottom.equalTo(self.contentView).offset(-5)
       make.width.equalTo(45)
@@ -57,7 +57,7 @@ class JChatConversationListCell: UITableViewCell {
     self.timeLable.textAlignment = .right
     self.timeLable.textColor = UIColor.gray
     self.timeLable.font = UIFont.systemFont(ofSize: 16)
-    self.timeLable.snp_makeConstraints { (make) -> Void in
+    self.timeLable.snp.makeConstraints { (make) -> Void in
       make.top.equalTo(self.contentView).offset(7)
       make.width.equalTo(100)
       make.height.equalTo(11)
@@ -68,21 +68,21 @@ class JChatConversationListCell: UITableViewCell {
     self.contentView.addSubview(self.title)
     self.title.font = UIFont.systemFont(ofSize: 16)
     self.title.textColor = UIColor(netHex: 0x3f80dd)
-    self.title.snp_makeConstraints { (make) -> Void in
+    self.title.snp.makeConstraints { (make) -> Void in
       make.top.equalTo(self.contentView).offset(7)
-      make.left.equalTo(self.conversationAvatar.snp_right).offset(10)
+      make.left.equalTo(self.conversationAvatar.snp.right).offset(10)
       make.height.equalTo(17)
-      make.right.equalTo(self.timeLable.snp_left)
+      make.right.equalTo(self.timeLable.snp.left)
     }
     
     self.lastMessage = UILabel()
     self.contentView.addSubview(self.lastMessage)
     self.lastMessage.textColor = UIColor(netHex: 0x808080)
-    self.lastMessage.snp_makeConstraints { (make) -> Void in
+    self.lastMessage.snp.makeConstraints { (make) -> Void in
       make.height.equalTo(21)
       make.bottom.equalTo(self.contentView).offset(-5)
-      make.top.equalTo(self.title.snp_bottom).offset(3)
-      make.left.equalTo(self.conversationAvatar.snp_right).offset(10)
+      make.top.equalTo(self.title.snp.bottom).offset(3)
+      make.left.equalTo(self.conversationAvatar.snp.right).offset(10)
     }
     
     self.unReadCount = UILabel()
@@ -95,7 +95,7 @@ class JChatConversationListCell: UITableViewCell {
     self.unReadCount.layer.masksToBounds = true
     self.unReadCount.textAlignment = .center
     self.unReadCount.font = UIFont.systemFont(ofSize: 11)
-    self.unReadCount.snp_makeConstraints { (make) -> Void in
+    self.unReadCount.snp.makeConstraints { (make) -> Void in
       make.size.equalTo(CGSize(width: 22, height: 22))
       make.right.equalTo(self.conversationAvatar).offset(3)
       make.top.equalTo(self.conversationAvatar).offset(-3)

@@ -139,12 +139,12 @@ class JChatChattingViewController: UIViewController {
     self.messageInputView = JChatInputView(frame: CGRect.zero)
     self.view.addSubview(messageInputView)
     self.messageInputView.inputDelegate = self
-    self.messageInputView.snp_makeConstraints { (make) -> Void in
+    self.messageInputView.snp.makeConstraints { (make) -> Void in
       make.left.right.equalTo(self.view)
     }
     
-    self.messageInputView.moreView.snp_makeConstraints { (make) -> Void in
-      make.bottom.equalTo(self.view.snp_bottom)
+    self.messageInputView.moreView.snp.makeConstraints { (make) -> Void in
+      make.bottom.equalTo(self.view.snp.bottom)
     }
     //init messageTable
     self.messageTable = JChatMessageTable(frame: CGRect.zero)
@@ -154,9 +154,9 @@ class JChatChattingViewController: UIViewController {
     self.messageTable.dataSource = self
     self.messageTable.keyboardDismissMode = .interactive
     self.view.addSubview(messageTable)
-    self.messageTable.snp_makeConstraints { (make) -> Void in
+    self.messageTable.snp.makeConstraints { (make) -> Void in
       make.top.left.right.equalTo(self.view)
-      make.bottom.equalTo(self.messageInputView.snp_top)
+      make.bottom.equalTo(self.messageInputView.snp.top)
     }
   }
   
@@ -178,7 +178,7 @@ class JChatChattingViewController: UIViewController {
     let duration = Double(dic.object(forKey: UIKeyboardAnimationDurationUserInfoKey) as! NSNumber)
     
     UIView.animate(withDuration: duration, animations: {
-      self.messageInputView.moreView?.snp_updateConstraints({ (make) -> Void in
+      self.messageInputView.moreView?.snp.updateConstraints({ (make) -> Void in
         make.height.equalTo(bottomDistance)
       })
       self.view.layoutIfNeeded()
@@ -262,7 +262,7 @@ extension JChatChattingViewController:UIGestureRecognizerDelegate {
 
     UIView.animate(withDuration: keyboardAnimationDuration, animations: { () -> Void in
       self.view.layoutIfNeeded()
-      self.messageInputView.moreView.snp_updateConstraints { (make) -> Void in
+      self.messageInputView.moreView.snp.updateConstraints { (make) -> Void in
         make.height.equalTo(0)
       }
       self.view.layoutIfNeeded()
@@ -276,8 +276,8 @@ extension JChatChattingViewController:JChatInputViewDelegate {
   func showMoreView() {
     hideKeyBoardAnimation()
     UIView.animate(withDuration: 0.25) { () -> Void in
-      self.messageInputView.moreView?.snp_updateConstraints({ (make) -> Void in
-        make.bottom.equalTo(self.view.snp_bottom)
+      self.messageInputView.moreView?.snp.updateConstraints({ (make) -> Void in
+        make.bottom.equalTo(self.view.snp.bottom)
       })
     }
   }

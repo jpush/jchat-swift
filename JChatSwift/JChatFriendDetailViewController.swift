@@ -59,7 +59,7 @@ class JChatFriendDetailViewController: UIViewController {
     self.infoTable.dataSource = self
     self.infoTable.separatorStyle = .none
 
-    self.infoTable.snp_makeConstraints { (make) -> Void in
+    self.infoTable.snp.makeConstraints { (make) -> Void in
       make.left.bottom.right.top.equalTo(self.view)
     }
     
@@ -69,7 +69,7 @@ class JChatFriendDetailViewController: UIViewController {
     tableHeadView.addSubview(self.headView)
     self.headView.layer.cornerRadius = 35
     self.headView.layer.masksToBounds = true
-    self.headView.snp_makeConstraints { (make) -> Void in
+    self.headView.snp.makeConstraints { (make) -> Void in
       make.center.equalTo(tableHeadView)
       make.size.equalTo(CGSize(width: 70, height: 70))
     }
@@ -80,8 +80,8 @@ class JChatFriendDetailViewController: UIViewController {
     self.nameLabel.textAlignment = .center
 
     tableHeadView.addSubview(nameLabel)
-    self.nameLabel.snp_makeConstraints { (make) -> Void in
-      make.top.equalTo(self.headView.snp_bottom).offset(10)
+    self.nameLabel.snp.makeConstraints { (make) -> Void in
+      make.top.equalTo(self.headView.snp.bottom).offset(10)
       make.left.right.equalTo(tableHeadView)
       make.height.equalTo(19)
     }

@@ -60,27 +60,27 @@ class JChatInputView: UIView {
     self.inputWrapView.backgroundColor = UIColor(netHex: 0xdfdfdf)
     self.addSubview(inputWrapView)
     
-    moreView?.snp_makeConstraints({ (make) -> Void in
+    moreView?.snp.makeConstraints({ (make) -> Void in
       make.left.right.equalTo(self)
       make.height.equalTo(0)
-      make.bottom.equalTo(self.snp_bottom)
-      make.top.equalTo(self.inputWrapView.snp_bottom)
+      make.bottom.equalTo(self.snp.bottom)
+      make.top.equalTo(self.inputWrapView.snp.bottom)
     })
     
     self.showPhotoBtn = UIButton()
     self.moreView.addSubview(self.showPhotoBtn)
     self.showPhotoBtn.setImage(UIImage(named: "photo_24"), for: UIControlState())
     self.showPhotoBtn.addTarget(self, action: #selector(JChatInputView.clickShowPhotoBtn), for: .touchUpInside)
-    self.showPhotoBtn.snp_makeConstraints { (make) -> Void in
+    self.showPhotoBtn.snp.makeConstraints { (make) -> Void in
       make.top.equalTo(self.moreView).offset(10)
       make.left.equalTo(self.moreView).offset(10)
       make.size.equalTo(CGSize(width: 50, height: 50))
     }
     
     // 输入框的view
-    self.inputWrapView.snp_makeConstraints { (make) -> Void in
+    self.inputWrapView.snp.makeConstraints { (make) -> Void in
       make.left.right.top.equalTo(self)
-      make.bottom.equalTo(inputWrapView.snp_top)
+      make.bottom.equalTo(inputWrapView.snp.top)
       make.height.equalTo(35)
     }
     
@@ -91,7 +91,7 @@ class JChatInputView: UIView {
     
     self.switchBtn.addTarget(self, action: #selector(JChatInputView.changeInputMode), for: .touchUpInside)
     self.addSubview(self.switchBtn!)
-    switchBtn?.snp_makeConstraints({ (make) -> Void in
+    switchBtn?.snp.makeConstraints({ (make) -> Void in
       make.left.equalTo(inputWrapView).offset(4)
       make.bottom.equalTo(inputWrapView).offset(-4)
       make.size.equalTo(CGSize(width: 27, height: 27))
@@ -103,7 +103,7 @@ class JChatInputView: UIView {
     self.showMoreBtn.setBackgroundImage(UIImage(named: "add01_pre"), for: .highlighted)
     self.showMoreBtn.addTarget(self, action: #selector(JChatInputView.changeMoreViewStatus), for: .touchUpInside)
     self.addSubview(self.showMoreBtn)
-    showMoreBtn?.snp_makeConstraints({ (make) -> Void in
+    showMoreBtn?.snp.makeConstraints({ (make) -> Void in
       make.right.equalTo(inputWrapView).offset(-4)
       make.bottom.equalTo(inputWrapView).offset(-4)
       make.size.equalTo(CGSize(width: 27, height: 27))
@@ -118,9 +118,9 @@ class JChatInputView: UIView {
     self.inputTextView.delegate = self
     self.inputTextView.enablesReturnKeyAutomatically = true
     self.addSubview(self.inputTextView!)
-    inputTextView?.snp_makeConstraints({ (make) -> Void in
-      make.right.equalTo(self.showMoreBtn.snp_left).offset(-5)
-      make.left.equalTo(self.switchBtn.snp_right).offset(5)
+    inputTextView?.snp.makeConstraints({ (make) -> Void in
+      make.right.equalTo(self.showMoreBtn.snp.left).offset(-5)
+      make.left.equalTo(self.switchBtn.snp.right).offset(5)
       make.top.equalTo(inputWrapView).offset(5)
       make.bottom.equalTo(inputWrapView).offset(-5)
       make.height.greaterThanOrEqualTo(30)
@@ -141,9 +141,9 @@ class JChatInputView: UIView {
     self.recordVoiceBtn.addTarget(self, action: #selector(JChatInputView.holdDownButtonTouchUpOutside), for: .touchUpOutside)
     self.recordVoiceBtn.addTarget(self, action: #selector(JChatInputView.holdDownDragOutside), for: .touchDragExit)
     self.recordVoiceBtn.addTarget(self, action: #selector(JChatInputView.holdDownDragInside), for: .touchDragEnter)
-    self.recordVoiceBtn.snp_makeConstraints { (make) -> Void in
-      make.right.equalTo(self.showMoreBtn.snp_left).offset(-5)
-      make.left.equalTo(self.switchBtn.snp_right).offset(5)
+    self.recordVoiceBtn.snp.makeConstraints { (make) -> Void in
+      make.right.equalTo(self.showMoreBtn.snp.left).offset(-5)
+      make.left.equalTo(self.switchBtn.snp.right).offset(5)
       make.top.equalTo(inputWrapView).offset(5).priorityRequired()
       make.bottom.equalTo(inputWrapView).offset(-5)
       make.height.equalTo(35).priorityLow()
@@ -163,7 +163,7 @@ class JChatInputView: UIView {
     }
 
     self.recordingHub.startRecordingHUDAtView(self.superview!)
-    self.recordingHub.snp_makeConstraints { (make) -> Void in
+    self.recordingHub.snp.makeConstraints { (make) -> Void in
       make.center.equalTo(self.superview!)
       make.size.equalTo(CGSize(width: 140, height: 140))
     }
@@ -209,7 +209,7 @@ class JChatInputView: UIView {
       self.recordVoiceBtn.isHidden = false
       self.inputTextView.isHidden = true
       self.inputTextView.resignFirstResponder()
-      self.inputTextView.snp_updateConstraints({ (make) -> Void in
+      self.inputTextView.snp.updateConstraints({ (make) -> Void in
         make.height.equalTo(35)
       })
     }
@@ -220,7 +220,7 @@ class JChatInputView: UIView {
     CATransaction.begin()
     hideKeyBoardAnimation()
     self.superview!.layoutIfNeeded()
-    self.moreView.snp_updateConstraints { (make) -> Void in
+    self.moreView.snp.updateConstraints { (make) -> Void in
       make.height.equalTo(150)
     }
     UIView.animate(withDuration: keyboardAnimationDuration, animations: { () -> Void in
@@ -258,7 +258,7 @@ extension JChatInputView:UITextViewDelegate {
     print("output：\(textContentH)")
     let textHeight = textContentH > 35 ? (textContentH<100 ? textContentH:100):30
     UIView.animate(withDuration: 0.2) { () -> Void in
-      self.inputTextView.snp_updateConstraints({ (make) -> Void in
+      self.inputTextView.snp.updateConstraints({ (make) -> Void in
         make.height.equalTo(textHeight)
       })
     }

@@ -33,7 +33,7 @@ class JChatAboutMeViewController: UIViewController {
     self.table.tableFooterView = UIView()
     self.table.tableHeaderView = UIView()
 
-    self.table.snp_makeConstraints { (make) -> Void in
+    self.table.snp.makeConstraints { (make) -> Void in
       make.left.top.right.bottom.equalTo(self.view)
     }
     

@@ -24,7 +24,7 @@ class JChatAboutMeCell: UITableViewCell {
     
     self.iconImg = UIImageView()
     self.contentView.addSubview(self.iconImg)
-    self.iconImg.snp_makeConstraints { (make) -> Void in
+    self.iconImg.snp.makeConstraints { (make) -> Void in
       make.left.equalTo(self.contentView).offset(9)
       make.size.equalTo(CGSize(width: 22, height: 22))
       make.bottom.equalTo(self.contentView).offset(-10)
@@ -33,7 +33,7 @@ class JChatAboutMeCell: UITableViewCell {
     self.arrowImg = UIImageView()
     self.contentView.addSubview(self.arrowImg)
     self.arrowImg.image = UIImage(named: "jiantou")
-    self.arrowImg.snp_makeConstraints { (make) -> Void in
+    self.arrowImg.snp.makeConstraints { (make) -> Void in
       make.size.equalTo(CGSize(width: 8, height: 15))
       make.centerY.equalTo(self.contentView)
       make.right.equalTo(self.contentView).offset(-1)
@@ -42,9 +42,9 @@ class JChatAboutMeCell: UITableViewCell {
     self.tittleLable = UILabel()
     self.contentView.addSubview(self.tittleLable)
     self.tittleLable.font = UIFont.systemFont(ofSize: 17)
-    self.tittleLable.snp_makeConstraints { (make) -> Void in
-      make.left.equalTo(self.iconImg.snp_right).offset(8)
-      make.centerY.equalTo(self.contentView.snp_centerY)
+    self.tittleLable.snp.makeConstraints { (make) -> Void in
+      make.left.equalTo(self.iconImg.snp.right).offset(8)
+      make.centerY.equalTo(self.contentView.snp.centerY)
       make.width.equalTo(75)
     }
     
@@ -54,9 +54,9 @@ class JChatAboutMeCell: UITableViewCell {
     self.infoLabel.font = UIFont.systemFont(ofSize: 17)
     self.infoLabel.textColor = UIColor.gray
     self.contentView.addSubview(self.infoLabel)
-    self.infoLabel.snp_makeConstraints { (make) -> Void in
-      make.right.equalTo(self.arrowImg.snp_left).offset(-10)
-      make.left.equalTo(self.tittleLable.snp_right)
+    self.infoLabel.snp.makeConstraints { (make) -> Void in
+      make.right.equalTo(self.arrowImg.snp.left).offset(-10)
+      make.left.equalTo(self.tittleLable.snp.right)
       make.top.equalTo(self.contentView).offset(5)
       make.bottom.equalTo(self.contentView).offset(-5)
       make.height.greaterThanOrEqualTo(40)
@@ -65,7 +65,7 @@ class JChatAboutMeCell: UITableViewCell {
     self.baseLine = UIView()
     self.contentView.addSubview(self.baseLine)
     self.baseLine.backgroundColor = kSeparatorColor
-    self.baseLine.snp_makeConstraints { (make) -> Void in
+    self.baseLine.snp.makeConstraints { (make) -> Void in
       make.left.right.equalTo(self.contentView)
       make.height.equalTo(0.5)
       make.bottom.equalTo(self.contentView).offset(0.5)
@@ -74,7 +74,7 @@ class JChatAboutMeCell: UITableViewCell {
     self.topLine = UIView()
     self.contentView.addSubview(self.topLine)
     self.topLine.backgroundColor = kSeparatorColor
-    self.topLine.snp_makeConstraints { (make) in
+    self.topLine.snp.makeConstraints { (make) in
       make.left.right.equalTo(self.contentView)
       make.height.equalTo(0.5)
       make.top.equalTo(self.contentView)

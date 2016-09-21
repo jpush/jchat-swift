@@ -58,7 +58,7 @@ class JCHATGroupDetailViewController: UIViewController {
     flowLayout.sectionInset = UIEdgeInsets(top: 23, left: 20, bottom: 35, right: 20)
     self.groupMemberGrip = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
     self.view.addSubview(self.groupMemberGrip)
-    self.groupMemberGrip.snp_makeConstraints { (make) -> Void in
+    self.groupMemberGrip.snp.makeConstraints { (make) -> Void in
       make.left.right.top.bottom.equalTo(self.view)
     }
     self.groupMemberGrip.backgroundColor = UIColor.clear

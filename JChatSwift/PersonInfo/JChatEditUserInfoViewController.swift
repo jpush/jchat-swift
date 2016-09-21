@@ -95,33 +95,33 @@ class JChatEditUserInfoViewController: UIViewController {
     self.descriptLable.textColor = kPlaceHoldTextColor
     self.view.addSubview(self.descriptLable)
     
-    self.infoTextField.snp_makeConstraints { (make) -> Void in
+    self.infoTextField.snp.makeConstraints { (make) -> Void in
       make.top.equalTo(self.view).offset(27)
-      make.right.equalTo(self.textNumberLable.snp_left).offset(10)
+      make.right.equalTo(self.textNumberLable.snp.left).offset(10)
       make.left.equalTo(self.view).offset(10)
     }
     
-    self.baseLine.snp_makeConstraints { (make) -> Void in
+    self.baseLine.snp.makeConstraints { (make) -> Void in
       make.left.right.equalTo(self.view)
       make.height.equalTo(0.5)
-      make.top.equalTo(self.infoTextField.snp_bottom).offset(3)
+      make.top.equalTo(self.infoTextField.snp.bottom).offset(3)
     }
     
-    self.textNumberLable.snp_makeConstraints { (make) -> Void in
+    self.textNumberLable.snp.makeConstraints { (make) -> Void in
       make.bottom.equalTo(self.baseLine).offset(-4)
       make.size.equalTo(CGSize(width: 42, height: 12))
       make.right.equalTo(self.view)
     }
     
-    self.deleteBtn.snp_makeConstraints { (make) -> Void in
+    self.deleteBtn.snp.makeConstraints { (make) -> Void in
       make.size.equalTo(CGSize(width: 16, height: 16))
-      make.bottom.equalTo(self.textNumberLable.snp_top).offset(-4)
-      make.centerX.equalTo(self.textNumberLable.snp_centerX)
+      make.bottom.equalTo(self.textNumberLable.snp.top).offset(-4)
+      make.centerX.equalTo(self.textNumberLable.snp.centerX)
     }
     
-    self.descriptLable.snp_makeConstraints { (make) -> Void in
+    self.descriptLable.snp.makeConstraints { (make) -> Void in
       make.right.left.equalTo(self.view).offset(19)
-      make.top.equalTo(self.baseLine.snp_bottom).offset(3)
+      make.top.equalTo(self.baseLine.snp.bottom).offset(3)
       make.height.equalTo(13)
     }
   }

@@ -51,7 +51,7 @@ class JChatAlertViewManager: NSObject {
     bubbleImg = bubbleImg?.resizableImage(withCapInsets: UIEdgeInsetsMake(30, 10, 30, 64), resizingMode: .tile)
     bubbleView.image = bubbleImg
     self.alertView.addSubview(bubbleView)
-    bubbleView.snp_makeConstraints { (make) -> Void in
+    bubbleView.snp.makeConstraints { (make) -> Void in
       make.left.right.top.bottom.equalTo(self.alertView)
     }
     
@@ -59,7 +59,7 @@ class JChatAlertViewManager: NSObject {
     self.alertView.addSubview(fristBtn)
     fristBtn.setBackgroundColor(UIColor(netHex: 0x4880d7), forState: .highlighted)
     fristBtn.setTitle("发起群聊", for: UIControlState())
-    fristBtn.snp_makeConstraints { (make) -> Void in
+    fristBtn.snp.makeConstraints { (make) -> Void in
       make.left.equalTo(self.alertView).offset(10)
       make.right.equalTo(self.alertView).offset(-10)
       make.height.equalTo(30)
@@ -72,15 +72,15 @@ class JChatAlertViewManager: NSObject {
     self.alertView.addSubview(secondBtn)
     secondBtn.setBackgroundColor(UIColor(netHex: 0x4880d7), forState: .highlighted)
     secondBtn.setTitle("添加朋友", for: UIControlState())
-    secondBtn.snp_makeConstraints { (make) -> Void in
+    secondBtn.snp.makeConstraints { (make) -> Void in
       make.left.equalTo(self.alertView).offset(10)
       make.right.equalTo(self.alertView).offset(-10)
       make.height.equalTo(30)
-      make.top.equalTo(fristBtn.snp_bottom).offset(10)
+      make.top.equalTo(fristBtn.snp.bottom).offset(10)
     }
     secondBtn.addTarget(self, action: #selector(JChatAlertViewManager.clickSecondBtn), for: .touchUpInside)
     view.addSubview(self.alertView)
-    self.alertView.snp_makeConstraints { (make) -> Void in
+    self.alertView.snp.makeConstraints { (make) -> Void in
       make.size.equalTo(CGSize(width: 100, height: 100))
       make.right.equalTo(view)
       make.top.equalTo(view).offset(1)
@@ -113,7 +113,7 @@ extension JChatAlertViewManager {
     myWindow?.windowLevel = UIWindowLevelAlert
     myWindow?.addSubview(self.alertView)
     
-    self.alertView.snp_makeConstraints { (make) in
+    self.alertView.snp.makeConstraints { (make) in
       make.right.equalTo(myWindow!)
             make.top.equalTo(myWindow!)
             make.left.equalTo(myWindow!)
@@ -125,7 +125,7 @@ extension JChatAlertViewManager {
     alertHub.layer.cornerRadius = 5
     alertHub.layer.masksToBounds = true
     self.alertView.addSubview(alertHub)
-    alertHub.snp_makeConstraints { (make) in
+    alertHub.snp.makeConstraints { (make) in
       make.center.equalTo(self.alertView);
       make.size.equalTo(CGSize(width: 280, height: 235));
     }
@@ -134,7 +134,7 @@ extension JChatAlertViewManager {
     imgView.contentMode = .scaleAspectFit
     imgView.image = self.alertSendImage
     alertHub.addSubview(imgView)
-    imgView.snp_makeConstraints { (make) in
+    imgView.snp.makeConstraints { (make) in
             make.top.equalTo(alertHub).offset(15);
             make.left.equalTo(alertHub).offset(15);
             make.right.equalTo(alertHub).offset(-15);
@@ -148,7 +148,7 @@ extension JChatAlertViewManager {
     cancelBtn.layer.borderColor = UIColor.gray.cgColor
     cancelBtn.setTitle("取消", for: UIControlState())
     alertHub.addSubview(cancelBtn)
-    cancelBtn.snp_makeConstraints { (make) in
+    cancelBtn.snp.makeConstraints { (make) in
       make.height.equalTo(50);
       make.width.equalTo(140);
       make.left.equalTo(alertHub).offset(-1);
@@ -163,7 +163,7 @@ extension JChatAlertViewManager {
     sendBtn.layer.borderColor = UIColor.gray.cgColor
     sendBtn.setTitle("确定", for: UIControlState())
     alertHub.addSubview(sendBtn)
-    sendBtn.snp_makeConstraints { (make) in
+    sendBtn.snp.makeConstraints { (make) in
       make.height.equalTo(50);
       make.width.equalTo(142);
       make.right.equalTo(alertHub).offset(0.5);

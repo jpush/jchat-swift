@@ -96,7 +96,7 @@ class JChatMessageCell: UITableViewCell {
     self.percentLable.textAlignment = .center
     self.percentLable.textColor = UIColor.white
     self.messageBubble?.addSubview(percentLable)
-    self.percentLable.snp_makeConstraints { (make) in
+    self.percentLable.snp.makeConstraints { (make) in
       make.size.equalTo(CGSize(width: 60, height: 40))
       make.center.equalTo(self.messageBubble!)
     }

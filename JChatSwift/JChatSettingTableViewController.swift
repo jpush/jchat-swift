@@ -80,7 +80,7 @@ class JChatSettingCell: UITableViewCell {
     self.titleLable = UILabel()
     self.contentView.addSubview(self.titleLable)
     self.titleLable.font = UIFont.systemFont(ofSize: 17)
-    self.titleLable.snp_makeConstraints { (make) -> Void in
+    self.titleLable.snp.makeConstraints { (make) -> Void in
       make.height.equalTo(21)
       make.left.equalTo(self.contentView).offset(10)
       make.top.equalTo(self.contentView).offset(10)
@@ -91,7 +91,7 @@ class JChatSettingCell: UITableViewCell {
     self.arrowImg = UIImageView()
     self.arrowImg.image = UIImage(named: "jiantou")
     self.contentView.addSubview(self.arrowImg)
-    self.arrowImg.snp_makeConstraints { (make) -> Void in
+    self.arrowImg.snp.makeConstraints { (make) -> Void in
       make.size.equalTo(CGSize(width: 8, height: 15))
       make.right.equalTo(self.contentView).offset(-8)
       make.centerY.equalTo(self.contentView)
@@ -100,7 +100,7 @@ class JChatSettingCell: UITableViewCell {
     let baseLine = UIView()
     self.contentView.addSubview(baseLine)
     baseLine.backgroundColor = UIColor(netHex: 0xcccccc)
-    baseLine.snp_makeConstraints { (make) -> Void in
+    baseLine.snp.makeConstraints { (make) -> Void in
       make.left.right.equalTo(self.contentView)
       make.height.equalTo(0.5)
       make.bottom.equalTo(self.contentView)

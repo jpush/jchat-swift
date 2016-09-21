@@ -21,10 +21,10 @@ class JChatAvatarView: UIImageView {
     self.centerAvatar?.layer.cornerRadius = 35
     self.centerAvatar.layer.masksToBounds = true
     self.addSubview(self.centerAvatar!)
-    self.centerAvatar?.snp_makeConstraints({ (make) -> Void in
+    self.centerAvatar?.snp.makeConstraints({ (make) -> Void in
       make.centerX.equalTo(self)
       make.size.equalTo(CGSize(width: 70, height: 70))
-      make.bottom.equalTo(self.snp_bottom).offset(-70)
+      make.bottom.equalTo(self.snp.bottom).offset(-70)
     })
     
     self.nameLable = UILabel()
@@ -35,10 +35,10 @@ class JChatAvatarView: UIImageView {
     self.nameLable.textAlignment = .center
     self.nameLable.shadowOffset = CGSize(width: -1.0, height: 1.0)
     
-    self.nameLable?.snp_makeConstraints({ (make) -> Void in
+    self.nameLable?.snp.makeConstraints({ (make) -> Void in
       make.centerX.equalTo(self)
       make.left.right.equalTo(self)
-      make.bottom.equalTo(self.snp_bottom).offset(-40)
+      make.bottom.equalTo(self.snp.bottom).offset(-40)
     })
   }
 
