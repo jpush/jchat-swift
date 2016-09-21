@@ -109,7 +109,7 @@ class JChatInputView: UIView {
       make.size.equalTo(CGSize(width: 27, height: 27))
     })
     
-    // 输入宽的大小
+    // 输入框的大小
     self.inputTextView = JChatMessageInputView()
     self.inputTextView.layer.borderWidth = 0.5
     self.inputTextView.layer.borderColor = UIColor.lightGray.cgColor
@@ -121,10 +121,11 @@ class JChatInputView: UIView {
     inputTextView?.snp.makeConstraints({ (make) -> Void in
       make.right.equalTo(self.showMoreBtn.snp.left).offset(-5)
       make.left.equalTo(self.switchBtn.snp.right).offset(5)
-      make.top.equalTo(inputWrapView).offset(5)
-      make.bottom.equalTo(inputWrapView).offset(-5)
+      make.top.equalTo(self.inputWrapView).offset(5)
+      make.bottom.equalTo(self.inputWrapView).offset(-5)
       make.height.greaterThanOrEqualTo(30)
       make.height.lessThanOrEqualTo(100)
+      make.height.equalTo(35)
     })
     self.updateInputTextViewHeight(self.inputTextView)
     
@@ -210,7 +211,7 @@ class JChatInputView: UIView {
       self.inputTextView.isHidden = true
       self.inputTextView.resignFirstResponder()
       self.inputTextView.snp.updateConstraints({ (make) -> Void in
-        make.height.equalTo(35)
+//        make.height.equalTo(35)
       })
     }
     self.switchBtn.isSelected = !self.switchBtn.isSelected;
@@ -256,9 +257,17 @@ extension JChatInputView:UITextViewDelegate {
   func updateInputTextViewHeight(_ textView: UITextView) {
     let textContentH = textView.contentSize.height
     print("output：\(textContentH)")
-    let textHeight = textContentH > 35 ? (textContentH<100 ? textContentH:100):30
+    let textHeight = textContentH > 35 ? (textContentH<100 ? textContentH:100):31
+    
+
     UIView.animate(withDuration: 0.2) { () -> Void in
       self.inputTextView.snp.updateConstraints({ (make) -> Void in
+        make.right.equalTo(self.showMoreBtn.snp.left).offset(-5)
+        make.left.equalTo(self.switchBtn.snp.right).offset(5)
+        make.top.equalTo(self.inputWrapView).offset(5)
+        make.bottom.equalTo(self.inputWrapView).offset(-5)
+        make.height.greaterThanOrEqualTo(30)
+        make.height.lessThanOrEqualTo(100)
         make.height.equalTo(textHeight)
       })
     }
