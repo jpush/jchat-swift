@@ -25,32 +25,32 @@ class JChatLoginViewController: UIViewController {
   }
   
   func layoutAllViews() {
-    self.navigationController?.navigationBar.translucent = false
-    if NSUserDefaults.standardUserDefaults().objectForKey(klastLoginUserName) == nil {
+    self.navigationController?.navigationBar.isTranslucent = false
+    if UserDefaults.standard.object(forKey: klastLoginUserName) == nil {
       self.navigationItem.hidesBackButton = true
     } else {
-      let leftBtn = UIButton(type: .Custom)
+      let leftBtn = UIButton(type: .custom)
       leftBtn.frame = kNavigationLeftButtonRect
-      leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
+      leftBtn.setImage(UIImage(named: "goBack"), for: UIControlState())
       leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-      leftBtn.addTarget(self, action: #selector(self.backClick), forControlEvents: .TouchUpInside)
+      leftBtn.addTarget(self, action: #selector(self.backClick), for: .touchUpInside)
       self.title = "登录"
       self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
     }
     
-    self.view.backgroundColor = UIColor.whiteColor()
-    self.loginBtn.setBackgroundColor(UIColor(netHex: 0x6fd66b), forState: .Normal)
-    self.loginBtn.setBackgroundColor(UIColor(netHex: 0x498d67), forState: .Highlighted)
+    self.view.backgroundColor = UIColor.white
+    self.loginBtn.setBackgroundColor(UIColor(netHex: 0x6fd66b), forState: UIControlState())
+    self.loginBtn.setBackgroundColor(UIColor(netHex: 0x498d67), forState: .highlighted)
     self.loginBtn.layer.cornerRadius = 4
     self.loginBtn.layer.masksToBounds = true
     self.userNameTF.becomeFirstResponder()
   }
 
   func backClick() {
-    self.navigationController?.popViewControllerAnimated(true)
+    self.navigationController?.popViewController(animated: true)
   }
   
-  func checkValidUsername(username: String, password:String) -> Bool{
+  func checkValidUsername(_ username: String, password:String) -> Bool{
     if password != "" && username != "" {
       return true
     }
@@ -67,23 +67,23 @@ class JChatLoginViewController: UIViewController {
     return false
   }
   
-  @IBAction func clickToLogin(sender: AnyObject) {
+  @IBAction func clickToLogin(_ sender: AnyObject) {
     print("Action - Login")
-    UIApplication.sharedApplication().sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, forEvent: nil)
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     
     if self.checkValidUsername(self.userNameTF.text!, password: self.passwordTF.text!) {
       MBProgressHUD.showMessage("正在登录", toView: self.view)
-      JMSGUser.loginWithUsername(self.userNameTF.text!, password: self.passwordTF.text! , completionHandler: { (resultObject, error) -> Void in
+      JMSGUser.login(withUsername: self.userNameTF.text!, password: self.passwordTF.text! , completionHandler: { (resultObject, error) -> Void in
         if error == nil {
-          NSNotificationCenter.defaultCenter().postNotificationName(kupdateUserInfo, object: nil)
-          let appDelegate = UIApplication.sharedApplication().delegate
+          NotificationCenter.default.post(name: Notification.Name(rawValue: kupdateUserInfo), object: nil)
+          let appDelegate = UIApplication.shared.delegate
           self.userLoginSave()
           appDelegate!.window!!.rootViewController = JChatMainTabViewController.sharedInstance
         } else {
-          dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+          DispatchQueue.main.async(execute: { () -> Void in
+            MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
           })
-          MBProgressHUD.showMessage(NSString.errorAlert(error), view: self.view)
+          MBProgressHUD.showMessage(NSString.errorAlert(error as! NSError), view: self.view)
         }
       })
       
@@ -91,16 +91,16 @@ class JChatLoginViewController: UIViewController {
   }
 
   func userLoginSave() {
-    NSUserDefaults.standardUserDefaults().setObject(self.userNameTF.text, forKey: kuserName)
-    NSUserDefaults.standardUserDefaults().setObject(self.userNameTF.text, forKey: klastLoginUserName)
-    NSUserDefaults.standardUserDefaults().synchronize()
+    UserDefaults.standard.set(self.userNameTF.text, forKey: kuserName)
+    UserDefaults.standard.set(self.userNameTF.text, forKey: klastLoginUserName)
+    UserDefaults.standard.synchronize()
   }
   
   func handleTap() {
-    UIApplication.sharedApplication().sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, forEvent: nil)
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
   }
   
-  @IBAction func clickToRegister(sender: AnyObject) {
+  @IBAction func clickToRegister(_ sender: AnyObject) {
 
     let registerCtl = JCHATRegisterViewController()
     self.navigationController?.pushViewController(registerCtl, animated: true)

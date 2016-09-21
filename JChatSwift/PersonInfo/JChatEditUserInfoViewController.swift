@@ -30,38 +30,38 @@ class JChatEditUserInfoViewController: UIViewController {
   func setupNavigation() {
     
     self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-    self.navigationController?.navigationBar.translucent = false
+    self.navigationController?.navigationBar.isTranslucent = false
 
-    let rightBtn = UIBarButtonItem(title: "保存", style: .Plain, target: self, action: #selector(self.clickToSave))
-    rightBtn.tintColor = UIColor.whiteColor()
+    let rightBtn = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(self.clickToSave))
+    rightBtn.tintColor = UIColor.white
     self.navigationItem.rightBarButtonItem = rightBtn
     
-    let leftBtn = UIButton(type: .Custom)
+    let leftBtn = UIButton(type: .custom)
     leftBtn.frame = kNavigationLeftButtonRect
-    leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
+    leftBtn.setImage(UIImage(named: "goBack"), for: UIControlState())
     leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    leftBtn.addTarget(self, action: #selector(self.backClick), forControlEvents: .TouchUpInside)
+    leftBtn.addTarget(self, action: #selector(self.backClick), for: .touchUpInside)
     self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
     
   }
   
   func backClick() {
-    self.navigationController?.popViewControllerAnimated(true)
+    self.navigationController?.popViewController(animated: true)
   }
   
   func clickToSave() {
-    if self.updateType == .FieldsNickname {
+    if self.updateType == .fieldsNickname {
       if self.getStringByteLength(self.infoTextField.text) > textNumberLimit {
         MBProgressHUD.showMessage("输入的用户名超过30字节限制", view: self.view)
         return
       }
     }
-    JMSGUser.updateMyInfoWithParameter(self.infoTextField.text!, userFieldType: self.updateType) { (resultObject, error) -> Void in
-      MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+    JMSGUser.updateMyInfo(withParameter: self.infoTextField.text!, userFieldType: self.updateType) { (resultObject, error) -> Void in
+      MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
       if error == nil {
-        NSNotificationCenter.defaultCenter().postNotificationName(kupdateUserInfo, object: nil)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: kupdateUserInfo), object: nil)
         MBProgressHUD.showMessage("修改成功", view: self.view)
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
       } else {
         MBProgressHUD.showMessage("修改成功", view: self.view)
       }
@@ -69,7 +69,7 @@ class JChatEditUserInfoViewController: UIViewController {
   }
   
   func layoutAllViews() {
-    self.view.backgroundColor = UIColor.whiteColor()
+    self.view.backgroundColor = UIColor.white
     
     self.baseLine = UIView()
     self.baseLine.backgroundColor = kSeparatorColor
@@ -80,18 +80,18 @@ class JChatEditUserInfoViewController: UIViewController {
     self.view.addSubview(self.infoTextField)
     
     self.deleteBtn = UIButton()
-    self.deleteBtn.setBackgroundImage(UIImage(named: "set_btn_del_"), forState: .Normal)
-    self.deleteBtn.setBackgroundImage(UIImage(named: "set_btn_del_pre_"), forState: .Highlighted)
+    self.deleteBtn.setBackgroundImage(UIImage(named: "set_btn_del_"), for: UIControlState())
+    self.deleteBtn.setBackgroundImage(UIImage(named: "set_btn_del_pre_"), for: .highlighted)
     self.view.addSubview(self.deleteBtn)
     
     self.textNumberLable = UILabel()
-    self.textNumberLable.font = UIFont.systemFontOfSize(16)
+    self.textNumberLable.font = UIFont.systemFont(ofSize: 16)
     self.textNumberLable.textColor = kPlaceHoldTextColor
-    self.textNumberLable.textAlignment = .Center
+    self.textNumberLable.textAlignment = .center
     self.view.addSubview(self.textNumberLable)
     
     self.descriptLable = UILabel()
-    self.descriptLable.font = UIFont.systemFontOfSize(12)
+    self.descriptLable.font = UIFont.systemFont(ofSize: 12)
     self.descriptLable.textColor = kPlaceHoldTextColor
     self.view.addSubview(self.descriptLable)
     
@@ -129,21 +129,21 @@ class JChatEditUserInfoViewController: UIViewController {
   func setData() {
     let user = JMSGUser.myInfo()
     switch self.updateType as JMSGUserField {
-      case .FieldsNickname:
-        self.deleteBtn.hidden = false
-        self.textNumberLable.hidden = false
+      case .fieldsNickname:
+        self.deleteBtn.isHidden = false
+        self.textNumberLable.isHidden = false
         self.descriptLable.text = "好名字可以让你的朋友更加容易记住你"
         if user.nickname == nil {
           self.infoTextField.placeholder = "请输入你的姓名"
         } else {
           self.infoTextField.placeholder = user.nickname
         }
-        self.infoTextField.addTarget(self, action: #selector(self.textFieldDidChangeName), forControlEvents: .EditingChanged)
+        self.infoTextField.addTarget(self, action: #selector(self.textFieldDidChangeName), for: .editingChanged)
         self.title = "修改昵称"
       break
-      case .FieldsSignature:
-        self.descriptLable.hidden = true
-        self.infoTextField.addTarget(self, action: #selector(self.textFieldDidChangeName), forControlEvents: .EditingChanged)
+      case .fieldsSignature:
+        self.descriptLable.isHidden = true
+        self.infoTextField.addTarget(self, action: #selector(self.textFieldDidChangeName), for: .editingChanged)
         if user.signature == nil {
           self.infoTextField.placeholder = "请输入你的签名"
         } else {
@@ -151,11 +151,11 @@ class JChatEditUserInfoViewController: UIViewController {
         }
         self.title = "修改签名"
       break
-      case .FieldsRegion:
-        self.deleteBtn.hidden = true
-        self.textNumberLable.hidden = true
+      case .fieldsRegion:
+        self.deleteBtn.isHidden = true
+        self.textNumberLable.isHidden = true
         
-        self.descriptLable.hidden = true
+        self.descriptLable.isHidden = true
         if user.region == nil {
           self.infoTextField.placeholder = "请输入你所在的地区"
         } else {
@@ -175,7 +175,8 @@ class JChatEditUserInfoViewController: UIViewController {
   
   func textFieldDidChangeName() {
     if self.getStringByteLength(self.infoTextField.text) > textNumberLimit {
-      self.infoTextField.text = self.infoTextField.text![0...((self.infoTextField.text?.characters.count)! - 1)]
+      self.infoTextField.text = self.infoTextField.text![0..<((self.infoTextField.text?.characters.count)! - 1)]
+      
       MBProgressHUD.showMessage("最多输入 \(textNumberLimit) 个字节", view: self.view)
       return
     }
@@ -183,7 +184,7 @@ class JChatEditUserInfoViewController: UIViewController {
     self.textNumberLable.text = "\(textNumberLimit - self.getStringByteLength(self.infoTextField.text))"
   }
 
-  func getStringByteLength(str:String?) -> Int {
+  func getStringByteLength(_ str:String?) -> Int {
     return (str?.utf8Array.count)!
   }
   

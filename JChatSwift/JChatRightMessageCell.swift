@@ -13,8 +13,8 @@ class JChatRightMessageCell : JChatMessageCell {
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-    self.messageBubble?.maskBackgroupImage = UIImage(named: "mychatBg")!.resizableImageWithCapInsets(UIEdgeInsetsMake(28, 20, 28, 20))
-    self.messageBubble?.contentMode = .ScaleToFill
+    self.messageBubble?.maskBackgroupImage = UIImage(named: "mychatBg")!.resizableImage(withCapInsets: UIEdgeInsetsMake(28, 20, 28, 20))
+    self.messageBubble?.contentMode = .scaleToFill
     self.messageBubble?.layer.masksToBounds = true
 
     self.headImageView.snp_makeConstraints { (make) -> Void in
@@ -68,8 +68,8 @@ class JChatRightMessageCell : JChatMessageCell {
     super.layoutAllViews()
 
     switch messageModel.message.contentType {
-    case .Image:
-      self.messageBubble?.snp_remakeConstraints(closure: { (make) -> Void in
+    case .image:
+      self.messageBubble?.snp_remakeConstraints({ (make) -> Void in
         make.right.equalTo(self.textMessageContent.snp_right).offset(15)
         make.top.equalTo(self.textMessageContent.snp_top).offset(-5)
         make.bottom.equalTo(self.textMessageContent.snp_bottom).offset(5)
@@ -77,17 +77,17 @@ class JChatRightMessageCell : JChatMessageCell {
         make.size.equalTo(CGSize(width: self.messageModel.imageSize!.width, height: self.messageModel.imageSize!.height))
       })
       break
-    case .Voice:
-      self.messageBubble?.snp_remakeConstraints(closure: { (make) in
+    case .voice:
+      self.messageBubble?.snp_remakeConstraints({ (make) in
         make.right.equalTo(self.textMessageContent.snp_right).offset(15)
         make.top.equalTo(self.textMessageContent.snp_top).offset(-5)
         make.bottom.equalTo(self.textMessageContent.snp_bottom).offset(5)
         make.left.equalTo(self.textMessageContent.snp_left).offset(-5)
-        make.size.equalTo(CGSizeMake(CGFloat(messageModel.voiceBubbleWidth!), 45))
+        make.size.equalTo(CGSize(width: CGFloat(messageModel.voiceBubbleWidth!), height: 45))
       })
       break
-    case .Text:
-      self.messageBubble?.snp_remakeConstraints(closure: { (make) -> Void in
+    case .text:
+      self.messageBubble?.snp_remakeConstraints({ (make) -> Void in
         make.right.equalTo(self.textMessageContent.snp_right).offset(15)
         make.top.equalTo(self.textMessageContent.snp_top).offset(-5)
         make.bottom.equalTo(self.textMessageContent.snp_bottom).offset(5)

@@ -12,42 +12,42 @@ private var CellIdentifier = ""
 
 class JChatImageBrowserViewController: UIViewController {
   
-  private var imageBrowser:UICollectionView!
+  fileprivate var imageBrowser:UICollectionView!
   var imageArr:NSArray!
   var imgCurrentIndex:Int = 0
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.view.backgroundColor = UIColor.blackColor()
+    self.view.backgroundColor = UIColor.black
     self.setupImageBrowser()
   }
 
   override func viewDidLayoutSubviews() {
-    self.imageBrowser.scrollToItemAtIndexPath(NSIndexPath(forItem: imgCurrentIndex, inSection: 0), atScrollPosition: .Left, animated: false)
+    self.imageBrowser.scrollToItem(at: IndexPath(item: imgCurrentIndex, section: 0), at: .left, animated: false)
   }
   
   func setupImageBrowser() {
     let flowLayout = UICollectionViewFlowLayout()
-    flowLayout.scrollDirection = .Horizontal
+    flowLayout.scrollDirection = .horizontal
     flowLayout.minimumLineSpacing = 0
-    self.imageBrowser = UICollectionView(frame: CGRectZero, collectionViewLayout: flowLayout)
+    self.imageBrowser = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
     self.view.addSubview(self.imageBrowser)
     self.imageBrowser.snp_makeConstraints { (make) in
       make.right.left.top.bottom.equalTo(self.view)
     }
     
-    self.imageBrowser.backgroundColor = UIColor.clearColor()
+    self.imageBrowser.backgroundColor = UIColor.clear
     self.imageBrowser.delegate = self
     self.imageBrowser.dataSource = self
     self.imageBrowser.minimumZoomScale = 0
-    self.imageBrowser.pagingEnabled = true
-    self.imageBrowser.registerNib(UINib(nibName: "JChatMessageImageCollectionViewCell", bundle: nil),
+    self.imageBrowser.isPagingEnabled = true
+    self.imageBrowser.register(UINib(nibName: "JChatMessageImageCollectionViewCell", bundle: nil),
                                   forCellWithReuseIdentifier: "JChatMessageImageCollectionViewCell")
     
     self.addGestureToImageBrowser()
   }
   
-  private func addGestureToImageBrowser() {
+  fileprivate func addGestureToImageBrowser() {
     let singleTapGesture = UITapGestureRecognizer(target: self, action: #selector(self.singleTapImage(_:)))
     singleTapGesture.delegate = self
     singleTapGesture.numberOfTapsRequired = 1
@@ -58,25 +58,25 @@ class JChatImageBrowserViewController: UIViewController {
     doubleTapGesture.numberOfTapsRequired = 2
     self.imageBrowser.addGestureRecognizer(doubleTapGesture)
     
-    singleTapGesture.requireGestureRecognizerToFail(doubleTapGesture)
+    singleTapGesture.require(toFail: doubleTapGesture)
   }
   
-  func singleTapImage(gestureRecognizer:UITapGestureRecognizer)  {
+  func singleTapImage(_ gestureRecognizer:UITapGestureRecognizer)  {
     print("\(gestureRecognizer)")
     
-    self.dismissViewControllerAnimated(true, completion: nil)
+    self.dismiss(animated: true, completion: nil)
   }
   
-  func doubleTapImage(gestureRecognizer:UITapGestureRecognizer) {
+  func doubleTapImage(_ gestureRecognizer:UITapGestureRecognizer) {
     print("double tap image")
-    let cell = imageBrowser.cellForItemAtIndexPath(self.currentIndex()) as! JChatMessageImageCollectionViewCell
+    let cell = imageBrowser.cellForItem(at: self.currentIndex()) as! JChatMessageImageCollectionViewCell
     cell.adjustImageScale()
   }
   
 
-  private func currentIndex() -> NSIndexPath {
+  fileprivate func currentIndex() -> IndexPath {
     let itemIndex:Int = Int(imageBrowser.contentOffset.x / imageBrowser.frame.size.width)
-    return NSIndexPath(forItem: itemIndex, inSection: 0)
+    return IndexPath(item: itemIndex, section: 0)
   }
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
@@ -84,24 +84,24 @@ class JChatImageBrowserViewController: UIViewController {
 }
 
 extension JChatImageBrowserViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-  func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return imageArr.count;
     
   }
   
-  func collectionView(collectionView: UICollectionView,
+  func collectionView(_ collectionView: UICollectionView,
                       layout collectionViewLayout: UICollectionViewLayout,
-                             sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-    print("\(UIScreen.mainScreen().bounds.size)")
-    return CGSize(width: UIScreen.mainScreen().bounds.size.width, height: UIScreen.mainScreen().bounds.size.height)
+                             sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
+    print("\(UIScreen.main.bounds.size)")
+    return CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
   }
   
 
-  func collectionView(collectionView: UICollectionView,
-                      cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+  func collectionView(_ collectionView: UICollectionView,
+                      cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     CellIdentifier = "JChatMessageImageCollectionViewCell"
-    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("JChatMessageImageCollectionViewCell", forIndexPath: indexPath) as! JChatMessageImageCollectionViewCell
-    cell.setImage(imageArr[indexPath.row] as! JChatMessageModel)
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "JChatMessageImageCollectionViewCell", for: indexPath) as! JChatMessageImageCollectionViewCell
+    cell.setImage(imageArr[(indexPath as NSIndexPath).row] as! JChatMessageModel)
     return cell
   }
 }

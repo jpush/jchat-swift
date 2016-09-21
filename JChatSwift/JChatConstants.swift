@@ -13,10 +13,10 @@ let kTableViewBackgroupColor = UIColor(netHex: 0xececec)
 let kPlaceHoldTextColor = UIColor(netHex: 0xbbbbbb)
 
 // navigation custom frame
-let kNavigationLeftButtonRect = CGRectMake(0, 0, 30, 30)
+let kNavigationLeftButtonRect = CGRect(x: 0, y: 0, width: 30, height: 30)
 let kGoBackBtnImageOffset = UIEdgeInsetsMake(0, 0, 0, 15)
 
-let kApplicationWidth = CGRectGetWidth((UIScreen.mainScreen().bounds))
+let kApplicationWidth = (UIScreen.main.bounds).width
 
 // notification
 let kDeleteAllMessage = "deleteAllMessage"

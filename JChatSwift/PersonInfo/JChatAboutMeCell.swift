@@ -20,7 +20,7 @@ class JChatAboutMeCell: UITableViewCell {
   
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
-    self.backgroundColor = UIColor.clearColor()
+    self.backgroundColor = UIColor.clear
     
     self.iconImg = UIImageView()
     self.contentView.addSubview(self.iconImg)
@@ -34,14 +34,14 @@ class JChatAboutMeCell: UITableViewCell {
     self.contentView.addSubview(self.arrowImg)
     self.arrowImg.image = UIImage(named: "jiantou")
     self.arrowImg.snp_makeConstraints { (make) -> Void in
-      make.size.equalTo(CGSizeMake(8, 15))
+      make.size.equalTo(CGSize(width: 8, height: 15))
       make.centerY.equalTo(self.contentView)
       make.right.equalTo(self.contentView).offset(-1)
     }
     
     self.tittleLable = UILabel()
     self.contentView.addSubview(self.tittleLable)
-    self.tittleLable.font = UIFont.systemFontOfSize(17)
+    self.tittleLable.font = UIFont.systemFont(ofSize: 17)
     self.tittleLable.snp_makeConstraints { (make) -> Void in
       make.left.equalTo(self.iconImg.snp_right).offset(8)
       make.centerY.equalTo(self.contentView.snp_centerY)
@@ -50,9 +50,9 @@ class JChatAboutMeCell: UITableViewCell {
     
     self.infoLabel = UILabel()
     self.infoLabel.numberOfLines = 0
-    self.infoLabel.textAlignment = .Right
-    self.infoLabel.font = UIFont.systemFontOfSize(17)
-    self.infoLabel.textColor = UIColor.grayColor()
+    self.infoLabel.textAlignment = .right
+    self.infoLabel.font = UIFont.systemFont(ofSize: 17)
+    self.infoLabel.textColor = UIColor.gray
     self.contentView.addSubview(self.infoLabel)
     self.infoLabel.snp_makeConstraints { (make) -> Void in
       make.right.equalTo(self.arrowImg.snp_left).offset(-10)
@@ -86,26 +86,26 @@ class JChatAboutMeCell: UITableViewCell {
     fatalError("init(coder:) has not been implemented")
   }
   
-  func setCellData(tittle: String, icon: String) {
-    self.infoLabel.hidden = true
+  func setCellData(_ tittle: String, icon: String) {
+    self.infoLabel.isHidden = true
     self.iconImg.image = UIImage(named: icon)
     self.tittleLable.text = tittle
   }
   
-  func setCellData(tittle: String, icon: String, info: String) {
+  func setCellData(_ tittle: String, icon: String, info: String) {
     self.iconImg.image = UIImage(named: icon)
     self.tittleLable.text = tittle
     self.infoLabel.text = info
   }
   
-  func setFriendCellData(tittle: String, icon: String, info: String) {
+  func setFriendCellData(_ tittle: String, icon: String, info: String) {
     self.iconImg.image = UIImage(named: icon)
     self.tittleLable.text = tittle
     self.infoLabel.text = info
-    self.arrowImg.hidden = true
+    self.arrowImg.isHidden = true
   }
 
-  override func setSelected(selected: Bool, animated: Bool) {
+  override func setSelected(_ selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
     
     // Configure the view for the selected state

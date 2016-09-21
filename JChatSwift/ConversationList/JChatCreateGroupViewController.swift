@@ -18,17 +18,17 @@ class JChatCreateGroupViewController: UIViewController {
   func setupNavigation() {
     self.title = "创建群聊"
     self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-    self.navigationController?.navigationBar.translucent = false
+    self.navigationController?.navigationBar.isTranslucent = false
     
-    let rightBtn = UIBarButtonItem(title: "确定", style: .Plain, target: self, action: #selector(self.clickToFinish))
-    rightBtn.tintColor = UIColor.whiteColor()
+    let rightBtn = UIBarButtonItem(title: "确定", style: .plain, target: self, action: #selector(self.clickToFinish))
+    rightBtn.tintColor = UIColor.white
     self.navigationItem.rightBarButtonItem = rightBtn
     
-    let leftBtn = UIButton(type: .Custom)
+    let leftBtn = UIButton(type: .custom)
     leftBtn.frame = kNavigationLeftButtonRect
-    leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
+    leftBtn.setImage(UIImage(named: "goBack"), for: UIControlState())
     leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    leftBtn.addTarget(self, action: #selector(self.backClick), forControlEvents: .TouchUpInside)
+    leftBtn.addTarget(self, action: #selector(self.backClick), for: .touchUpInside)
     self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
   }
   
@@ -37,7 +37,7 @@ class JChatCreateGroupViewController: UIViewController {
   }
   
   func backClick() {
-    self.navigationController?.popViewControllerAnimated(true)
+    self.navigationController?.popViewController(animated: true)
   }
   
   override func didReceiveMemoryWarning() {

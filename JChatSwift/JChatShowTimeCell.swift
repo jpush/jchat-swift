@@ -14,15 +14,15 @@ class JChatShowTimeCell: UITableViewCell {
 
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
-    self.selectionStyle = .None
-    self.backgroundColor = UIColor.clearColor()
+    self.selectionStyle = .none
+    self.backgroundColor = UIColor.clear
     
     self.timeLable = UILabel()
     self.contentView.addSubview(self.timeLable)
     self.timeLable.layer.cornerRadius = 2
-    self.timeLable.textColor = UIColor.grayColor()
-    self.textLabel?.font = UIFont.systemFontOfSize(14)
-    self.textLabel?.textAlignment = .Center
+    self.timeLable.textColor = UIColor.gray
+    self.textLabel?.font = UIFont.systemFont(ofSize: 14)
+    self.textLabel?.textAlignment = .center
     self.timeLable.snp_makeConstraints { (make) -> Void in
       make.center.equalTo(self.contentView)
       make.height.equalTo(15)
@@ -36,19 +36,19 @@ class JChatShowTimeCell: UITableViewCell {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func layoutModel(model:JChattimeModel) {
+  func layoutModel(_ model:JChattimeModel) {
     self.timeLable.text = NSString.getFriendlyDateString(model.messageTime.doubleValue, forConversation: false)
     print("did layoutModel")
   }
   
-  func layoutWithNotifcation(model:JChatMessageModel) {
-    if model.message.contentType == .EventNotification {
+  func layoutWithNotifcation(_ model:JChatMessageModel) {
+    if model.message.contentType == .eventNotification {
       let eventContent = model.message.content as! JMSGEventContent
       self.timeLable.text = eventContent.showEventNotification()
     }
   }
   
-  override func setSelected(selected: Bool, animated: Bool) {
+  override func setSelected(_ selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
   }
 

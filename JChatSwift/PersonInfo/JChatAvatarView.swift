@@ -21,21 +21,21 @@ class JChatAvatarView: UIImageView {
     self.centerAvatar?.layer.cornerRadius = 35
     self.centerAvatar.layer.masksToBounds = true
     self.addSubview(self.centerAvatar!)
-    self.centerAvatar?.snp_makeConstraints(closure: { (make) -> Void in
+    self.centerAvatar?.snp_makeConstraints({ (make) -> Void in
       make.centerX.equalTo(self)
-      make.size.equalTo(CGSizeMake(70, 70))
+      make.size.equalTo(CGSize(width: 70, height: 70))
       make.bottom.equalTo(self.snp_bottom).offset(-70)
     })
     
     self.nameLable = UILabel()
     self.addSubview(self.nameLable)
     self.nameLable.font = UIFont(name: "helvetica", size: 16)
-    self.nameLable.textColor = UIColor.whiteColor()
-    self.nameLable.shadowColor = UIColor.grayColor()
-    self.nameLable.textAlignment = .Center
-    self.nameLable.shadowOffset = CGSizeMake(-1.0, 1.0)
+    self.nameLable.textColor = UIColor.white
+    self.nameLable.shadowColor = UIColor.gray
+    self.nameLable.textAlignment = .center
+    self.nameLable.shadowOffset = CGSize(width: -1.0, height: 1.0)
     
-    self.nameLable?.snp_makeConstraints(closure: { (make) -> Void in
+    self.nameLable?.snp_makeConstraints({ (make) -> Void in
       make.centerX.equalTo(self)
       make.left.right.equalTo(self)
       make.bottom.equalTo(self.snp_bottom).offset(-40)
@@ -62,22 +62,22 @@ class JChatAvatarView: UIImageView {
     }
   }
 
-  func setHeadImage(originImage:UIImage) {
+  func setHeadImage(_ originImage:UIImage) {
     var theImage = originImage
     self.centerAvatar.image = theImage
 
     let imageOrientation = theImage.imageOrientation
     
-    if imageOrientation != .Up {
+    if imageOrientation != .up {
       UIGraphicsBeginImageContext(theImage.size);
-      theImage.drawInRect(CGRectMake(0, 0, theImage.size.width, theImage.size.height))
-      theImage = UIGraphicsGetImageFromCurrentImageContext();
+      theImage.draw(in: CGRect(x: 0, y: 0, width: theImage.size.width, height: theImage.size.height))
+      theImage = UIGraphicsGetImageFromCurrentImageContext()!;
       UIGraphicsEndImageContext();
     }
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+    DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async {
       let outputImage = UIImage.blur(20, inputImage: theImage)
-      dispatch_async(dispatch_get_main_queue(), { 
+      DispatchQueue.main.async(execute: { 
         self.image = outputImage
       })
       

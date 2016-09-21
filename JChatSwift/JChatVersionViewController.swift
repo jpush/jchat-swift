@@ -22,9 +22,9 @@ class JChatVersionViewController: UIViewController {
     super.viewDidLoad()
     self.setupNavigation()
 
-    let infoDic = NSBundle.mainBundle().infoDictionary as! NSDictionary
-    self.jchatVersionLB.text = infoDic.objectForKey("CFBundleShortVersionString") as! String
-    self.jchatBuildNumber.text = infoDic.objectForKey("CFBundleVersion") as! String
+    let infoDic = Bundle.main.infoDictionary as! NSDictionary
+    self.jchatVersionLB.text = infoDic.object(forKey: "CFBundleShortVersionString") as! String
+    self.jchatBuildNumber.text = infoDic.object(forKey: "CFBundleVersion") as! String
     
     jmessageVersion.text = JMESSAGE_VERSION
     jmessagebuildNumber.text = "\(JMESSAGE_BUILD)"
@@ -33,17 +33,17 @@ class JChatVersionViewController: UIViewController {
   func setupNavigation() {
     self.title = "版本"
 
-    let leftBtn = UIButton(type: .Custom)
+    let leftBtn = UIButton(type: .custom)
     leftBtn.frame = kNavigationLeftButtonRect
-    leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
+    leftBtn.setImage(UIImage(named: "goBack"), for: UIControlState())
     leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    leftBtn.addTarget(self, action: #selector(self.doBack), forControlEvents: .TouchUpInside)
+    leftBtn.addTarget(self, action: #selector(self.doBack), for: .touchUpInside)
     self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
-    self.navigationController?.navigationBar.translucent = false
+    self.navigationController?.navigationBar.isTranslucent = false
   }
   
   func doBack() {
-    self.navigationController?.popViewControllerAnimated(true)
+    self.navigationController?.popViewController(animated: true)
   }
 
   override func didReceiveMemoryWarning() {

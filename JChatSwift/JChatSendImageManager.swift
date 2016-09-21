@@ -10,58 +10,60 @@ import UIKit
 
 class JChatSendImageManager: NSObject {
 
+//  private static var __once: () = {
+//      Static.instance = JChatSendImageManager()
+//    }()
+
   var sendMsgListDic:NSMutableDictionary!
   var textDraftDic:NSMutableDictionary! //未发送的草稿
 
-  class var sharedInstance: JChatSendImageManager {
-    struct Static {
-      static var onceToken: dispatch_once_t = 0
-      static var instance: JChatSendImageManager? = nil
-    }
-    dispatch_once(&Static.onceToken) {
-      Static.instance = JChatSendImageManager()
-    }
-    return Static.instance!
-  }
-
+//  class var sharedInstance: JChatSendImageManager {
+//    struct Static {
+//      static var onceToken: Int = 0
+//      static var instance: JChatSendImageManager? = nil
+//    }
+//    _ = JChatSendImageManager.__once
+//    return Static.instance!
+//  }
+  static let sharedInstance = JChatSendImageManager()
   override init() {
     super.init()
     self.sendMsgListDic = NSMutableDictionary()
     self.textDraftDic = NSMutableDictionary()
   }
 
-  func addMessage(imgMsg:JMSGMessage, withConversation conversation:JMSGConversation) {
+  func addMessage(_ imgMsg:JMSGMessage, withConversation conversation:JMSGConversation) {
     var key:String = ""
-    if conversation.conversationType == .Single {
+    if conversation.conversationType == .single {
       key = (conversation.target as! JMSGUser).username
     } else {
       key = (conversation.target as! JMSGGroup).gid
     }
     
-    if self.sendMsgListDic.objectForKey(key) == nil {
+    if self.sendMsgListDic.object(forKey: key) == nil {
       let sendMsgCtl:JChatSendImageController = JChatSendImageController()
       sendMsgCtl.msgConversation = conversation
       sendMsgCtl.addDelegateForConversation(conversation)
       sendMsgCtl.prepareImageMessage(imgMsg)
-      self.sendMsgListDic.setObject(sendMsgCtl, forKey: key)
+      self.sendMsgListDic.setObject(sendMsgCtl, forKey: key as NSCopying)
     } else {
-      let sendMsgCtl = self.sendMsgListDic.objectForKey(key)
-      sendMsgCtl!.prepareImageMessage(imgMsg)
+      let sendMsgCtl = self.sendMsgListDic.object(forKey: key)
+      (sendMsgCtl! as AnyObject).prepareImageMessage(imgMsg)
     }
     
   }
 
-  func updateConversation(conversation:JMSGConversation, withDraft draftString:String) {
+  func updateConversation(_ conversation:JMSGConversation, withDraft draftString:String) {
     var key = ""
     key = NSString.conversationIdWithConversation(conversation)
-    self.textDraftDic.setObject(draftString, forKey: key)
+    self.textDraftDic.setObject(draftString, forKey: key as NSCopying)
   }
 
-  func draftStringWithConversation(conversaion:JMSGConversation) -> String {
+  func draftStringWithConversation(_ conversaion:JMSGConversation) -> String {
     var key = ""
     key = NSString.conversationIdWithConversation(conversaion)
-    if self.textDraftDic.objectForKey(key) != nil {
-      return self.textDraftDic.objectForKey(key) as! String
+    if self.textDraftDic.object(forKey: key) != nil {
+      return self.textDraftDic.object(forKey: key) as! String
     } else {
       return ""
     }
@@ -77,20 +79,20 @@ class JChatSendImageController: NSObject {
     self.draftImageMessageArr = NSMutableArray()
   }
 
-  func addDelegateForConversation(conversation:JMSGConversation) {
-    JMessage.addDelegate(self, withConversation: conversation)
+  func addDelegateForConversation(_ conversation:JMSGConversation) {
+    JMessage.add(self, with: conversation)
   }
 
   func removeDelegate() {
-    JMessage.removeDelegate(self, withConversation: self.msgConversation)
+    JMessage.remove(self, with: self.msgConversation)
   }
   
   func sendStart() {
-    self.msgConversation.sendMessage(self.draftImageMessageArr[0] as! JMSGMessage)
+    self.msgConversation.send(self.draftImageMessageArr[0] as! JMSGMessage)
   }
 
-  func prepareImageMessage(imgMsg:JMSGMessage) {
-    self.draftImageMessageArr.addObject(imgMsg)
+  func prepareImageMessage(_ imgMsg:JMSGMessage) {
+    self.draftImageMessageArr.add(imgMsg)
     if self.draftImageMessageArr.count == 1 {
       self.sendStart()
     }
@@ -98,14 +100,14 @@ class JChatSendImageController: NSObject {
 }
 
 extension JChatSendImageController : JMessageDelegate {
-  func onSendMessageResponse(message: JMSGMessage!, error: NSError!) {
+  func onSendMessageResponse(_ message: JMSGMessage!, error: NSError!) {
     
     
-    if message.contentType != .Image {
+    if message.contentType != .image {
       return
     }
 
-    self.draftImageMessageArr.removeObjectAtIndex(0)
+    self.draftImageMessageArr.removeObject(at: 0)
     if self.draftImageMessageArr.count > 0 {
       self.sendStart()
     }

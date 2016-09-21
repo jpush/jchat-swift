@@ -12,44 +12,44 @@ internal var identify = ""
 
 class JChatTableCellMaker: NSObject {
 
-  class func rightMessageCellInTable(tableview:UITableView) -> JChatRightMessageCell {
+  class func rightMessageCellInTable(_ tableview:UITableView) -> JChatRightMessageCell {
     identify = "JChatRightMessageCell"
-    var cell:JChatRightMessageCell? = tableview.dequeueReusableCellWithIdentifier(identify) as? JChatRightMessageCell
+    var cell:JChatRightMessageCell? = tableview.dequeueReusableCell(withIdentifier: identify) as? JChatRightMessageCell
     if cell == nil {
-      tableview.registerClass(NSClassFromString(identify), forCellReuseIdentifier: identify)
-      cell = tableview.dequeueReusableCellWithIdentifier(identify) as? JChatRightMessageCell
+      tableview.register(NSClassFromString(identify), forCellReuseIdentifier: identify)
+      cell = tableview.dequeueReusableCell(withIdentifier: identify) as? JChatRightMessageCell
     }
     return cell!
   }
   
-  class func leftMessageCellInTable(tableview:UITableView) -> JChatLeftMessageCell {
+  class func leftMessageCellInTable(_ tableview:UITableView) -> JChatLeftMessageCell {
     identify = "JChatLeftMessageCell"
-    var cell:JChatLeftMessageCell? = tableview.dequeueReusableCellWithIdentifier(identify) as? JChatLeftMessageCell
+    var cell:JChatLeftMessageCell? = tableview.dequeueReusableCell(withIdentifier: identify) as? JChatLeftMessageCell
     if cell == nil {
-      tableview.registerClass(NSClassFromString(identify), forCellReuseIdentifier: identify)
-      cell = tableview.dequeueReusableCellWithIdentifier(identify) as? JChatLeftMessageCell
-      cell = tableview.dequeueReusableCellWithIdentifier(identify) as? JChatLeftMessageCell
+      tableview.register(NSClassFromString(identify), forCellReuseIdentifier: identify)
+      cell = tableview.dequeueReusableCell(withIdentifier: identify) as? JChatLeftMessageCell
+      cell = tableview.dequeueReusableCell(withIdentifier: identify) as? JChatLeftMessageCell
     }
     return cell!
   }
   
 
-  class func LoadingCellInTable(tableView:UITableView) -> JChatLoadingMessageCell {
+  class func LoadingCellInTable(_ tableView:UITableView) -> JChatLoadingMessageCell {
     identify = "JChatLoadingMessageCell"
-    var cell:JChatLoadingMessageCell? = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatLoadingMessageCell
+    var cell:JChatLoadingMessageCell? = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatLoadingMessageCell
     if cell == nil {
-      tableView.registerClass(NSClassFromString(identify), forCellReuseIdentifier: identify)
-      cell = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatLoadingMessageCell
+      tableView.register(NSClassFromString(identify), forCellReuseIdentifier: identify)
+      cell = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatLoadingMessageCell
     }
     return cell!
   }
 
-  class func timeCellInTable(tableView:UITableView) -> JChatShowTimeCell {
+  class func timeCellInTable(_ tableView:UITableView) -> JChatShowTimeCell {
     identify = "JChatShowTimeCell"
-    var cell:JChatShowTimeCell? = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatShowTimeCell
+    var cell:JChatShowTimeCell? = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatShowTimeCell
     if cell == nil {
-      tableView.registerClass(NSClassFromString(identify), forCellReuseIdentifier: identify)
-      cell = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatShowTimeCell
+      tableView.register(NSClassFromString(identify), forCellReuseIdentifier: identify)
+      cell = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatShowTimeCell
     }
     return cell!
   }

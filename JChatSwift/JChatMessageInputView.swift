@@ -10,17 +10,18 @@ import UIKit
 
 class JChatMessageInputView: UITextView {
 
-  override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+  override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
     super.canPerformAction(action, withSender: sender)
     return  (action == #selector(self.paste(_:))) || (action == #selector(self.resignFirstResponder))
   }
   
-  override func canResignFirstResponder() -> Bool {
+  override var canResignFirstResponder : Bool {
     return true
   }
+
   
-  override func paste(sender: AnyObject?) {
-    let pasteboard = UIPasteboard.generalPasteboard()
+  override func paste(_ sender: Any?) {
+    let pasteboard = UIPasteboard.general
     let textAttachment = NSTextAttachment()
     if pasteboard.string != nil {
       super.paste(sender)

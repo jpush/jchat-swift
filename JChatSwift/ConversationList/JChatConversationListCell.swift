@@ -7,6 +7,26 @@
 //
 
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 @objc(JChatConversationListCell)
 class JChatConversationListCell: UITableViewCell {
@@ -34,9 +54,9 @@ class JChatConversationListCell: UITableViewCell {
 
     self.timeLable = UILabel()
     self.contentView.addSubview(self.timeLable)
-    self.timeLable.textAlignment = .Right
-    self.timeLable.textColor = UIColor.grayColor()
-    self.timeLable.font = UIFont.systemFontOfSize(16)
+    self.timeLable.textAlignment = .right
+    self.timeLable.textColor = UIColor.gray
+    self.timeLable.font = UIFont.systemFont(ofSize: 16)
     self.timeLable.snp_makeConstraints { (make) -> Void in
       make.top.equalTo(self.contentView).offset(7)
       make.width.equalTo(100)
@@ -46,7 +66,7 @@ class JChatConversationListCell: UITableViewCell {
     
     self.title = UILabel()
     self.contentView.addSubview(self.title)
-    self.title.font = UIFont.systemFontOfSize(16)
+    self.title.font = UIFont.systemFont(ofSize: 16)
     self.title.textColor = UIColor(netHex: 0x3f80dd)
     self.title.snp_makeConstraints { (make) -> Void in
       make.top.equalTo(self.contentView).offset(7)
@@ -67,14 +87,14 @@ class JChatConversationListCell: UITableViewCell {
     
     self.unReadCount = UILabel()
     self.contentView.addSubview(unReadCount)
-    self.unReadCount.textColor = UIColor.whiteColor()
+    self.unReadCount.textColor = UIColor.white
     self.unReadCount.backgroundColor = UIColor(netHex: 0xfa3e32)
     self.unReadCount.layer.borderWidth = 1
-    self.unReadCount.layer.borderColor = UIColor.whiteColor().CGColor
+    self.unReadCount.layer.borderColor = UIColor.white.cgColor
     self.unReadCount.layer.cornerRadius = 11
     self.unReadCount.layer.masksToBounds = true
-    self.unReadCount.textAlignment = .Center
-    self.unReadCount.font = UIFont.systemFontOfSize(11)
+    self.unReadCount.textAlignment = .center
+    self.unReadCount.font = UIFont.systemFont(ofSize: 11)
     self.unReadCount.snp_makeConstraints { (make) -> Void in
       make.size.equalTo(CGSize(width: 22, height: 22))
       make.right.equalTo(self.conversationAvatar).offset(3)
@@ -82,20 +102,20 @@ class JChatConversationListCell: UITableViewCell {
     }
   }
   
-  func setCellData(conversation:JMSGConversation) {
+  func setCellData(_ conversation:JMSGConversation) {
     self.conversationID = self.conversationIdWithConversation(conversation)
     self.title.text = conversation.title
 
     conversation.avatarData { (data, ObjectId, error) -> Void in
       if error == nil {
         if data != nil {
-          self.conversationAvatar.image = UIImage(data: data)
+          self.conversationAvatar.image = UIImage(data: data!)
         } else {
           switch conversation.conversationType {
-          case .Single:
+          case .single:
             self.conversationAvatar.image = UIImage(named: "headDefalt")
             break
-          case .Group:
+          case .group:
             self.conversationAvatar.image = UIImage(named: "talking_icon_group")
             break
           }
@@ -103,11 +123,11 @@ class JChatConversationListCell: UITableViewCell {
       } else { print("get avatar fail") }
     }
 
-    if conversation.unreadCount?.integerValue > 0 {
-      self.unReadCount.hidden = false
+    if conversation.unreadCount?.intValue > 0 {
+      self.unReadCount.isHidden = false
       self.unReadCount.text = "\(conversation.unreadCount!)"
     } else {
-      self.unReadCount.hidden = true
+      self.unReadCount.isHidden = true
     }
 
     if conversation.latestMessage?.timestamp != nil {
@@ -124,14 +144,14 @@ class JChatConversationListCell: UITableViewCell {
       fatalError("init(coder:) has not been implemented")
   }
   
-  func conversationIdWithConversation(conversation: JMSGConversation) -> String {
+  func conversationIdWithConversation(_ conversation: JMSGConversation) -> String {
     var conversationid = ""
     switch conversation.conversationType {
-    case .Single:
+    case .single:
       let user = conversation.target as! JMSGUser
       conversationid = "\(user.username)_\(conversation.conversationType)"
       break
-    case .Group:
+    case .group:
       let group = conversation.target as! JMSGGroup
       conversationid = "\(group.gid)_\(conversation.conversationType)"
       break
@@ -140,14 +160,14 @@ class JChatConversationListCell: UITableViewCell {
   }
 
   
-  override func setSelected(selected: Bool, animated: Bool) {
+  override func setSelected(_ selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
     if selected {
       self.unReadCount.backgroundColor = UIColor(netHex: 0xfa3e32)
     }
   }
   
-  override func setHighlighted(highlighted: Bool, animated: Bool) {
+  override func setHighlighted(_ highlighted: Bool, animated: Bool) {
     super.setHighlighted(highlighted, animated: animated)
 
     if highlighted {

@@ -12,7 +12,7 @@ class JChatSettingTableViewController: UITableViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.tableView.separatorStyle = .None
+    self.tableView.separatorStyle = .none
     self.setupNavigation()
   }
 
@@ -20,35 +20,35 @@ class JChatSettingTableViewController: UITableViewController {
   func setupNavigation() {
     self.title = "设置"
     
-    let leftBtn = UIButton(type: .Custom)
+    let leftBtn = UIButton(type: .custom)
     leftBtn.frame = kNavigationLeftButtonRect
-    leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
+    leftBtn.setImage(UIImage(named: "goBack"), for: UIControlState())
     leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    leftBtn.addTarget(self, action: #selector(self.backClick), forControlEvents: .TouchUpInside)
+    leftBtn.addTarget(self, action: #selector(self.backClick), for: .touchUpInside)
     self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
   }
   
   func backClick() {
-    self.navigationController?.popViewControllerAnimated(true)
+    self.navigationController?.popViewController(animated: true)
   }
   
   override func didReceiveMemoryWarning() {
       super.didReceiveMemoryWarning()
   }
 
-  override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return 2
   }
   
-  override func tableView(tableview: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+  override func tableView(_ tableview: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     identify = "JChatSettingCell"
-    var cell:JChatSettingCell? = tableview.dequeueReusableCellWithIdentifier(identify) as? JChatSettingCell
+    var cell:JChatSettingCell? = tableview.dequeueReusableCell(withIdentifier: identify) as? JChatSettingCell
     if cell == nil {
-      tableview.registerClass(NSClassFromString(identify), forCellReuseIdentifier: identify)
-      cell = tableview.dequeueReusableCellWithIdentifier(identify) as? JChatSettingCell
-      cell = tableview.dequeueReusableCellWithIdentifier(identify) as? JChatSettingCell
+      tableview.register(NSClassFromString(identify), forCellReuseIdentifier: identify)
+      cell = tableview.dequeueReusableCell(withIdentifier: identify) as? JChatSettingCell
+      cell = tableview.dequeueReusableCell(withIdentifier: identify) as? JChatSettingCell
     }
-    if indexPath.row == 0 {
+    if (indexPath as NSIndexPath).row == 0 {
       cell?.setCellData("修改密码")
     } else {
       cell?.setCellData("关于")
@@ -56,11 +56,11 @@ class JChatSettingTableViewController: UITableViewController {
     return cell!
   }
   
-  override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-    let cell = tableView.cellForRowAtIndexPath(indexPath)
-    cell?.selected = false
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    let cell = tableView.cellForRow(at: indexPath)
+    cell?.isSelected = false
     
-    if indexPath.row == 0 {
+    if (indexPath as NSIndexPath).row == 0 {
       let updatepasswordVC = JChatUpdatePasswordViewController()
       self.navigationController?.pushViewController(updatepasswordVC, animated: true)
     } else {
@@ -79,7 +79,7 @@ class JChatSettingCell: UITableViewCell {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     self.titleLable = UILabel()
     self.contentView.addSubview(self.titleLable)
-    self.titleLable.font = UIFont.systemFontOfSize(17)
+    self.titleLable.font = UIFont.systemFont(ofSize: 17)
     self.titleLable.snp_makeConstraints { (make) -> Void in
       make.height.equalTo(21)
       make.left.equalTo(self.contentView).offset(10)
@@ -107,7 +107,7 @@ class JChatSettingCell: UITableViewCell {
     }
   }
 
-  func setCellData(title:String) {
+  func setCellData(_ title:String) {
     self.titleLable.text = title
   }
   

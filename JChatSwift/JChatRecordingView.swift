@@ -19,7 +19,7 @@ class JChatRecordingView: UIView {
   var recordingHUDImageView:UIImageView!
   var peakPower:Float!
   
-  func dismissCompled(completed: (finish:Bool) -> Void) {
+  func dismissCompled(_ completed: (_ finish:Bool) -> Void) {
   
   }
 
@@ -38,17 +38,17 @@ class JChatRecordingView: UIView {
     self.layer.masksToBounds = true
     self.layer.cornerRadius = 10
     if self.remiadeLable == nil {
-      self.remiadeLable = UILabel(frame: CGRectZero)
-      self.remiadeLable.textColor = UIColor.whiteColor()
-      self.remiadeLable.font = UIFont.systemFontOfSize(13)
+      self.remiadeLable = UILabel(frame: CGRect.zero)
+      self.remiadeLable.textColor = UIColor.white
+      self.remiadeLable.font = UIFont.systemFont(ofSize: 13)
       self.remiadeLable.layer.masksToBounds = true
       self.remiadeLable.layer.cornerRadius = 4
-      self.remiadeLable.autoresizingMask = [.FlexibleRightMargin, .FlexibleBottomMargin]
-      self.remiadeLable.backgroundColor = UIColor.clearColor()
+      self.remiadeLable.autoresizingMask = [.flexibleRightMargin, .flexibleBottomMargin]
+      self.remiadeLable.backgroundColor = UIColor.clear
       self.remiadeLable.text = voiceRecordPauseString
-      self.remiadeLable.textAlignment = .Center
+      self.remiadeLable.textAlignment = .center
       self.addSubview(self.remiadeLable!)
-      self.remiadeLable.snp_makeConstraints(closure: { (make) -> Void in
+      self.remiadeLable.snp_makeConstraints({ (make) -> Void in
         make.left.equalTo(self).offset(9.0)
         make.top.equalTo(self).offset(114)
         make.size.equalTo(CGSize(width: 120.0, height: 21.0))
@@ -58,10 +58,10 @@ class JChatRecordingView: UIView {
     if self.microPhoneImageView == nil {
       self.microPhoneImageView = UIImageView()
       self.microPhoneImageView.image = UIImage(named: "RecordingBkg")
-      self.microPhoneImageView.autoresizingMask = [.FlexibleRightMargin, .FlexibleBottomMargin]
-      self.microPhoneImageView.contentMode = .ScaleToFill
+      self.microPhoneImageView.autoresizingMask = [.flexibleRightMargin, .flexibleBottomMargin]
+      self.microPhoneImageView.contentMode = .scaleToFill
       self.addSubview(self.microPhoneImageView)
-      self.microPhoneImageView.snp_makeConstraints(closure: { (make) -> Void in
+      self.microPhoneImageView.snp_makeConstraints({ (make) -> Void in
         make.left.equalTo(self).offset(27.0)
         make.top.equalTo(self).offset(8.0)
         make.size.equalTo(CGSize(width: 50.0, height: 99.0))
@@ -71,9 +71,9 @@ class JChatRecordingView: UIView {
     if self.recordingHUDImageView == nil {
       self.recordingHUDImageView = UIImageView()
       self.recordingHUDImageView.image = UIImage(named: "RecordingSignal")
-      self.recordingHUDImageView.autoresizingMask = [.FlexibleRightMargin, .FlexibleBottomMargin]
+      self.recordingHUDImageView.autoresizingMask = [.flexibleRightMargin, .flexibleBottomMargin]
       self.addSubview(self.recordingHUDImageView)
-      self.recordingHUDImageView.snp_makeConstraints(closure: { (make) -> Void in
+      self.recordingHUDImageView.snp_makeConstraints({ (make) -> Void in
         make.left.equalTo(self).offset(82.0)
         make.top.equalTo(self).offset(34.0)
         make.size.equalTo(CGSize(width: 18.0, height: 61.0))
@@ -83,10 +83,10 @@ class JChatRecordingView: UIView {
     if self.cancelRecordImageView == nil {
       self.cancelRecordImageView = UIImageView()
       self.cancelRecordImageView.image = UIImage(named: "RecordCancel")
-      self.cancelRecordImageView.autoresizingMask = [.FlexibleRightMargin, .FlexibleBottomMargin]
-      self.cancelRecordImageView.contentMode = .ScaleToFill
+      self.cancelRecordImageView.autoresizingMask = [.flexibleRightMargin, .flexibleBottomMargin]
+      self.cancelRecordImageView.contentMode = .scaleToFill
       self.addSubview(self.cancelRecordImageView)
-      self.cancelRecordImageView.snp_makeConstraints(closure: { (make) -> Void in
+      self.cancelRecordImageView.snp_makeConstraints({ (make) -> Void in
         make.left.equalTo(self).offset(19.0)
         make.top.equalTo(self).offset(7.0)
         make.size.equalTo(CGSize(width: 100.0, height: 100.0))
@@ -94,7 +94,7 @@ class JChatRecordingView: UIView {
     }
   }
 
-  func startRecordingHUDAtView(view:UIView) {
+  func startRecordingHUDAtView(_ view:UIView) {
     view.addSubview(self)
     self.snp_makeConstraints { (make) -> Void in
       make.center.equalTo(view)
@@ -111,35 +111,35 @@ class JChatRecordingView: UIView {
 
   func resaueRecord() {
     self.configRecoding(false)
-    self.remiadeLable!.backgroundColor = UIColor.clearColor()
+    self.remiadeLable!.backgroundColor = UIColor.clear
     self.remiadeLable!.text = voiceRecordResaueString
     self.backgroundColor = UIColor(netHex: 0xf47e7e)
   }
 
-  func stopRecordCompleted(completed: (finish:Bool) -> Void) {
+  func stopRecordCompleted(_ completed: (_ finish:Bool) -> Void) {
     self.dismissCompled(completed)
   }
 
-  func cancelRecordCompleted(completed: (finish:Bool) -> Void) {
+  func cancelRecordCompleted(_ completed: (_ finish:Bool) -> Void) {
     self.dismissCompled(completed)
   }
 
-  func dismissCompleted(completed:(finish:Bool) -> Void) {
-    UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseOut, animations: { () -> Void in
+  func dismissCompleted(_ completed:@escaping (_ finish:Bool) -> Void) {
+    UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: { () -> Void in
       self.alpha = 0.0
       }) { (finished:Bool) -> Void in
       super.removeFromSuperview()
-        completed(finish: finished)
+        completed(finished)
     }
   }
   
-  func configRecoding(recording:Bool) {
-    self.microPhoneImageView.hidden = !recording
-    self.recordingHUDImageView.hidden = !recording
-    self.cancelRecordImageView.hidden = recording
+  func configRecoding(_ recording:Bool) {
+    self.microPhoneImageView.isHidden = !recording
+    self.recordingHUDImageView.isHidden = !recording
+    self.cancelRecordImageView.isHidden = recording
   }
   
-  func configRecordingHUDImageWithPeakPower(peakPower:Float) {
+  func configRecordingHUDImageWithPeakPower(_ peakPower:Float) {
     var imageName = "RecordingSignal00"
     switch peakPower {
     case peakPower where peakPower > 0 && peakPower <= 0.1:
@@ -171,7 +171,7 @@ class JChatRecordingView: UIView {
     self.recordingHUDImageView.image = UIImage(named: imageName)
   }
 
-  func setPeakPower(peakPower:Float) {
+  func setPeakPower(_ peakPower:Float) {
     self.peakPower = peakPower
     self.configRecordingHUDImageWithPeakPower(peakPower)
   }

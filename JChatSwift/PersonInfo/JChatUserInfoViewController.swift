@@ -24,7 +24,7 @@ class JChatUserInfoViewController: UIViewController {
     super.viewDidLoad()
   }
 
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     self.setupDataSource()
     self.layoutAllViews()
@@ -32,21 +32,21 @@ class JChatUserInfoViewController: UIViewController {
   
   func layoutAllViews() {
     self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-    self.navigationController?.navigationBar.translucent = false
+    self.navigationController?.navigationBar.isTranslucent = false
     self.title = "个人信息"
-    let leftBtn = UIButton(type: .Custom)
+    let leftBtn = UIButton(type: .custom)
     leftBtn.frame = kNavigationLeftButtonRect
-    leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
+    leftBtn.setImage(UIImage(named: "goBack"), for: UIControlState())
     leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    leftBtn.addTarget(self, action: #selector(self.backClick), forControlEvents: .TouchUpInside)
+    leftBtn.addTarget(self, action: #selector(self.backClick), for: .touchUpInside)
     self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
 
     self.personTable = UITableView()
     self.personTable.tableFooterView = UIView()
-    self.personTable.separatorStyle = .None
+    self.personTable.separatorStyle = .none
     self.personTable.delegate = self
     self.personTable.dataSource = self
-    self.personTable.scrollEnabled = false
+    self.personTable.isScrollEnabled = false
     self.view.addSubview(self.personTable)
     let gesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.clickTable))
     self.personTable.backgroundView = UIView()
@@ -68,13 +68,13 @@ class JChatUserInfoViewController: UIViewController {
   }
   
   func backClick() {
-    self.navigationController?.popViewControllerAnimated(true)
+    self.navigationController?.popViewController(animated: true)
   }
 
   func clickTable() {
 
     if selectFlagGender! {
-      JMSGUser.updateMyInfoWithParameter(self.genderNumber, userFieldType: .FieldsGender, completionHandler: { (resultObject, error) -> Void in
+      JMSGUser.updateMyInfo(withParameter: self.genderNumber, userFieldType: .fieldsGender, completionHandler: { (resultObject, error) -> Void in
         if error == nil {
           print("Action update gender success")
         } else {
@@ -110,30 +110,30 @@ class JChatUserInfoViewController: UIViewController {
     } else {
       name = user.nickname
     }
-    self.infoArr.addObject(name!)
+    self.infoArr.add(name!)
     self.genderNumber = 1
     switch user.gender {
-    case .Unknown:
-      self.infoArr.addObject("未知")
+    case .unknown:
+      self.infoArr.add("未知")
       break
-    case .Female:
-      self.infoArr.addObject("女")
+    case .female:
+      self.infoArr.add("女")
       break
     default:
-      self.infoArr.addObject("男")
+      self.infoArr.add("男")
       break
     }
     
     if user.region != nil {
-      self.infoArr.addObject(user.region!)
+      self.infoArr.add(user.region!)
     } else {
-      self.infoArr.addObject("")
+      self.infoArr.add("")
     }
     
     if user.signature != nil {
-      self.infoArr.addObject(user.signature!)
+      self.infoArr.add(user.signature!)
     } else {
-      self.infoArr.addObject("")
+      self.infoArr.add("")
     }
   
   }
@@ -145,19 +145,19 @@ class JChatUserInfoViewController: UIViewController {
 
 extension JChatUserInfoViewController: UIPickerViewDataSource, UIPickerViewDelegate {
 
-  func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+  func numberOfComponents(in pickerView: UIPickerView) -> Int {
     return 1
   }
 
-  func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+  func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
     return self.pickerDataArr.count
   }
 
-  func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+  func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
     return self.pickerDataArr[row] as? String
   }
   
-  func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+  func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
     if component == 0 && row == 0 {
       self.genderNumber = 1
       self.infoArr[1] = "男"
@@ -180,39 +180,39 @@ extension JChatUserInfoViewController: UIGestureRecognizerDelegate {
 }
 
 extension JChatUserInfoViewController: UITableViewDelegate, UITableViewDataSource {
-  func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return self.titleArr.count
   }
   
-  func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     identify = "JChatAboutMeCell"
-    var cell:JChatAboutMeCell? = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatAboutMeCell
+    var cell:JChatAboutMeCell? = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatAboutMeCell
     if cell == nil {
-      tableView.registerClass(NSClassFromString(identify), forCellReuseIdentifier: identify)
-      cell = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatAboutMeCell
+      tableView.register(NSClassFromString(identify), forCellReuseIdentifier: identify)
+      cell = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatAboutMeCell
     }
-    let tittle = self.titleArr![indexPath.row] as! String
-    let imgName = self.imgArr![indexPath.row] as! String
-    let info = self.infoArr![indexPath.row] as! String
+    let tittle = self.titleArr![(indexPath as NSIndexPath).row] as! String
+    let imgName = self.imgArr![(indexPath as NSIndexPath).row] as! String
+    let info = self.infoArr![(indexPath as NSIndexPath).row] as! String
 
     cell?.setCellData(tittle, icon: imgName, info: info)
     return cell!
   }
   
-  func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-    let cell = tableView.cellForRowAtIndexPath(indexPath)
-    cell?.selected = false
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    let cell = tableView.cellForRow(at: indexPath)
+    cell?.isSelected = false
     
     let editUserInfoVC = JChatEditUserInfoViewController()
-    switch indexPath.row {
+    switch (indexPath as NSIndexPath).row {
     case 0:
-      editUserInfoVC.updateType = .FieldsNickname
+      editUserInfoVC.updateType = .fieldsNickname
       break
     case 2:
-      editUserInfoVC.updateType = .FieldsRegion
+      editUserInfoVC.updateType = .fieldsRegion
       break
     case 3:
-      editUserInfoVC.updateType = .FieldsSignature
+      editUserInfoVC.updateType = .fieldsSignature
       break
     default:
       self.selectFlagGender = true
@@ -223,19 +223,19 @@ extension JChatUserInfoViewController: UITableViewDelegate, UITableViewDataSourc
     self.navigationController?.pushViewController(editUserInfoVC, animated: true)
   }
 
-  func showSelectGenderView(flag: Bool) {
+  func showSelectGenderView(_ flag: Bool) {
     if flag {
       self.view.setNeedsDisplay()
-      UIView.animateWithDuration(0.5, animations: { () -> Void in
-        self.genderPicker.snp_updateConstraints(closure: { (make) -> Void in
+      UIView.animate(withDuration: 0.5, animations: { () -> Void in
+        self.genderPicker.snp_updateConstraints({ (make) -> Void in
           make.bottom.equalTo(self.view.snp_bottom)
         })
       self.view.setNeedsDisplay()
       })
     } else {
       self.view.setNeedsDisplay()
-      UIView.animateWithDuration(0.5, animations: { () -> Void in
-        self.genderPicker.snp_updateConstraints(closure: { (make) -> Void in
+      UIView.animate(withDuration: 0.5, animations: { () -> Void in
+        self.genderPicker.snp_updateConstraints({ (make) -> Void in
           make.bottom.equalTo(self.view.snp_bottom).offset(100)
         })
       self.view.setNeedsDisplay()

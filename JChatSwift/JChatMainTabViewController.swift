@@ -15,17 +15,21 @@ internal let TabbarItemSelectedImage = "TabbarItemSelectedImage"
 
 class JChatMainTabViewController: UITabBarController {
 
-  class var sharedInstance: JChatMainTabViewController {
-    struct Static {
-      static var onceToken: dispatch_once_t = 0
-      static var instance: JChatMainTabViewController? = nil
-    }
-    dispatch_once(&Static.onceToken) {
-      Static.instance = JChatMainTabViewController()
-    }
-    return Static.instance!
-  }
+////  private static var __once: () = {
+////      Static.instance = JChatMainTabViewController()
+////    
+////    }()
+//
+//  class var sharedInstance: JChatMainTabViewController {
+//    struct Static {
+//      static var onceToken: Int = 0
+//      static var instance: JChatMainTabViewController? = nil
+//    }
+////    _ = JChatMainTabViewController.__once
+//    return Static.instance!
+//  }
   
+  static let sharedInstance = JChatMainTabViewController()
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -37,10 +41,10 @@ class JChatMainTabViewController: UITabBarController {
   func setupItemVC() {
     let tabControllerArr = NSMutableArray()
     for itemInfoDic in self.tabBarArrs() {
-      let className = (itemInfoDic as! NSDictionary).objectForKey(TabbarItemVC) as! String
-      let tittle = (itemInfoDic as! NSDictionary).objectForKey(TabbarItemTittle) as! String
-      let imageName = (itemInfoDic as! NSDictionary).objectForKey(TabbarItemImage) as! String
-      let selectedImageName = (itemInfoDic as! NSDictionary).objectForKey(TabbarItemSelectedImage) as! String
+      let className = (itemInfoDic as! NSDictionary).object(forKey: TabbarItemVC) as! String
+      let tittle = (itemInfoDic as! NSDictionary).object(forKey: TabbarItemTittle) as! String
+      let imageName = (itemInfoDic as! NSDictionary).object(forKey: TabbarItemImage) as! String
+      let selectedImageName = (itemInfoDic as! NSDictionary).object(forKey: TabbarItemSelectedImage) as! String
       let theClass = NSClassFromString(className) as! NSObject.Type
       
       let vc = theClass.init() as! UIViewController
@@ -49,7 +53,7 @@ class JChatMainTabViewController: UITabBarController {
       let nv:UINavigationController = UINavigationController(rootViewController: vc)
       nv.tabBarItem = UITabBarItem(title: tittle, image: UIImage(named: imageName), selectedImage: UIImage(named: selectedImageName))
       
-      tabControllerArr.addObject(nv)
+      tabControllerArr.add(nv)
     }
     self.viewControllers = tabControllerArr as! Array<UIViewController>
   }
@@ -76,15 +80,15 @@ class JChatMainTabViewController: UITabBarController {
       ],
     ]
     
-    return tabBarVCArray
+    return tabBarVCArray as NSArray
   }
   
-  override func shouldAutorotate() -> Bool {
+  override var shouldAutorotate : Bool {
     return false
   }
   
-  override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-    return .Portrait
+  override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
+    return .portrait
   }
   
     override func didReceiveMemoryWarning() {

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		26FABA67E73E4792FD93B741 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 701A42FFE9F946C5695656EB /* Pods.framework */; };
 		622A48B51C8974F50040E659 /* JCHATMemberCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622A48B31C8974F50040E659 /* JCHATMemberCollectionCell.swift */; };
 		622A48B61C8974F50040E659 /* JCHATMemberCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 622A48B41C8974F50040E659 /* JCHATMemberCollectionCell.xib */; };
 		622A48BD1C897A290040E659 /* JCHATCollectionFootTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622A48BB1C897A290040E659 /* JCHATCollectionFootTableView.swift */; };
@@ -229,6 +228,7 @@
 		62F573DD1C86B972005F57D0 /* set_btn_on_@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 62F573D51C86B972005F57D0 /* set_btn_on_@3x.png */; };
 		62F6AC761C7DFEDB00BDBA30 /* NSDate+Utilites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F6AC751C7DFEDB00BDBA30 /* NSDate+Utilites.swift */; };
 		62F6AC781C7E155F00BDBA30 /* NSString+Utilites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F6AC771C7E155F00BDBA30 /* NSString+Utilites.swift */; };
+		DF7F9D80FB3E69070236483D /* Pods_JChatSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 772087CD62B5D98369154E0E /* Pods_JChatSwift.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -249,8 +249,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		01DBED33CA97897B40441970 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		494542298F503542DFB656CA /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		2E3FCC1F633C9D645A233D0A /* Pods-JChatSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JChatSwift.release.xcconfig"; path = "Pods/Target Support Files/Pods-JChatSwift/Pods-JChatSwift.release.xcconfig"; sourceTree = "<group>"; };
 		622A48B31C8974F50040E659 /* JCHATMemberCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCHATMemberCollectionCell.swift; sourceTree = "<group>"; };
 		622A48B41C8974F50040E659 /* JCHATMemberCollectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JCHATMemberCollectionCell.xib; sourceTree = "<group>"; };
 		622A48BB1C897A290040E659 /* JCHATCollectionFootTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCHATCollectionFootTableView.swift; sourceTree = "<group>"; };
@@ -480,6 +479,8 @@
 		62F6AC751C7DFEDB00BDBA30 /* NSDate+Utilites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+Utilites.swift"; sourceTree = "<group>"; };
 		62F6AC771C7E155F00BDBA30 /* NSString+Utilites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSString+Utilites.swift"; sourceTree = "<group>"; };
 		701A42FFE9F946C5695656EB /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		772087CD62B5D98369154E0E /* Pods_JChatSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JChatSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B57FFCAF44ABC95F44B39D7 /* Pods-JChatSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JChatSwift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JChatSwift/Pods-JChatSwift.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -506,7 +507,7 @@
 				623B07221C731806000914DB /* Photos.framework in Frameworks */,
 				62DA5CB01CC0DE9F00160750 /* JMUIMultiSelectPhotosKit.framework in Frameworks */,
 				62DA5CB31CC0E44F00160750 /* JMUICommon.framework in Frameworks */,
-				26FABA67E73E4792FD93B741 /* Pods.framework in Frameworks */,
+				DF7F9D80FB3E69070236483D /* Pods_JChatSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -533,6 +534,7 @@
 				62C013811D0D02D300ADE358 /* CoreImage.framework */,
 				62DA5C421CC0D5B500160750 /* libz.tbd */,
 				701A42FFE9F946C5695656EB /* Pods.framework */,
+				772087CD62B5D98369154E0E /* Pods_JChatSwift.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -768,7 +770,7 @@
 				62DE36CA1C719B2D009FB693 /* JChatSwiftUITests */,
 				62DE36A91C719B2D009FB693 /* Products */,
 				42AC2886612228B83CC83C6D /* Frameworks */,
-				F4A8E31BDA188CC13E6CA9B5 /* Pods */,
+				9378084F732B5782235C0384 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1019,11 +1021,11 @@
 			path = Utilites;
 			sourceTree = "<group>";
 		};
-		F4A8E31BDA188CC13E6CA9B5 /* Pods */ = {
+		9378084F732B5782235C0384 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				01DBED33CA97897B40441970 /* Pods.debug.xcconfig */,
-				494542298F503542DFB656CA /* Pods.release.xcconfig */,
+				7B57FFCAF44ABC95F44B39D7 /* Pods-JChatSwift.debug.xcconfig */,
+				2E3FCC1F633C9D645A233D0A /* Pods-JChatSwift.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1035,12 +1037,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 62DE36D01C719B2D009FB693 /* Build configuration list for PBXNativeTarget "JChatSwift" */;
 			buildPhases = (
-				91C060D978AD583B3D64DB6B /* Check Pods Manifest.lock */,
+				67994D089FE75C34B375B967 /* [CP] Check Pods Manifest.lock */,
 				62DE36A41C719B2D009FB693 /* Sources */,
 				62DE36A51C719B2D009FB693 /* Frameworks */,
 				62DE36A61C719B2D009FB693 /* Resources */,
-				4D37917C11157C211EF41FE5 /* Embed Pods Frameworks */,
-				C23DF88C1F9CB3E92E8FB5C9 /* Copy Pods Resources */,
+				FE77F037C30528B0C1971014 /* [CP] Embed Pods Frameworks */,
+				4DB517875F08EE0C7621D25D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1101,13 +1103,16 @@
 					62DE36A71C719B2D009FB693 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = RL64Y54S9V;
+						LastSwiftMigration = 0800;
 					};
 					62DE36BB1C719B2D009FB693 = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0800;
 						TestTargetID = 62DE36A71C719B2D009FB693;
 					};
 					62DE36C61C719B2D009FB693 = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0800;
 						TestTargetID = 62DE36A71C719B2D009FB693;
 					};
 				};
@@ -1300,49 +1305,49 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4D37917C11157C211EF41FE5 /* Embed Pods Frameworks */ = {
+		4DB517875F08EE0C7621D25D /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-JChatSwift/Pods-JChatSwift-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		91C060D978AD583B3D64DB6B /* Check Pods Manifest.lock */ = {
+		67994D089FE75C34B375B967 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		C23DF88C1F9CB3E92E8FB5C9 /* Copy Pods Resources */ = {
+		FE77F037C30528B0C1971014 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-JChatSwift/Pods-JChatSwift-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1540,7 +1545,7 @@
 		};
 		62DE36D11C719B2D009FB693 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 01DBED33CA97897B40441970 /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 7B57FFCAF44ABC95F44B39D7 /* Pods-JChatSwift.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1567,12 +1572,13 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "JChatSwift/JChatSwift-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		62DE36D21C719B2D009FB693 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 494542298F503542DFB656CA /* Pods.release.xcconfig */;
+			baseConfigurationReference = 2E3FCC1F633C9D645A233D0A /* Pods-JChatSwift.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1598,6 +1604,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.jchat.JChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "JChatSwift/JChatSwift-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1609,6 +1616,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = HXHG.JChatSwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JChatSwift.app/JChatSwift";
 			};
 			name = Debug;
@@ -1621,6 +1629,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = HXHG.JChatSwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JChatSwift.app/JChatSwift";
 			};
 			name = Release;
@@ -1632,6 +1641,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = HXHG.JChatSwiftUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = JChatSwift;
 				USES_XCTRUNNER = YES;
 			};
@@ -1644,6 +1654,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = HXHG.JChatSwiftUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = JChatSwift;
 				USES_XCTRUNNER = YES;
 			};

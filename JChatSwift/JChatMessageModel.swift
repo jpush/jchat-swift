@@ -7,6 +7,26 @@
 //
 
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
 
 internal let st_receiveUnknowMessageDes = "收到新消息类型无法解析的数据，请升级查看"
 internal let st_receiveErrorMessageDes = "接收消息错误"
@@ -23,20 +43,20 @@ class JChatMessageModel:NSObject {
 
   var messageCellHeight:CGFloat!
 
-  func setChatModel(message:JMSGMessage!, conversation:JMSGConversation!) {
+  func setChatModel(_ message:JMSGMessage!, conversation:JMSGConversation!) {
     self.message = message
     self.messageTime = message.timestamp
     switch message.contentType {
-    case .Unknown:
+    case .unknown:
       
       break
-    case .Text:
+    case .text:
 
       break
-    case .Image:
+    case .image:
       (message.content as! JMSGImageContent).thumbImageData({ (data, objectId, error) -> Void in
         if error == nil {
-          let img:UIImage? = UIImage(data: data)
+          let img:UIImage? = UIImage(data: data!)
           if img == nil {return}
           
           var imgHeight:CGFloat?
@@ -55,17 +75,17 @@ class JChatMessageModel:NSObject {
         }
       })
       break
-    case .Voice:
+    case .voice:
       self.setVoiceLength((message.content as! JMSGVoiceContent).duration)
       break
-    case .Custom:
+    case .custom:
       break
-    case .EventNotification:
+    case .eventNotification:
       break
     }
   }
   
-  internal func setVoiceLength(timeDuration:NSNumber) {
+  internal func setVoiceLength(_ timeDuration:NSNumber) {
     var voiceBubbleWidth = 0.0
     let duration = timeDuration.doubleValue
     switch duration {
@@ -87,7 +107,7 @@ class JChatMessageModel:NSObject {
     self.voiceBubbleWidth = voiceBubbleWidth
   }
   
-  func setError(error:NSError!) {
+  func setError(_ error:NSError!) {
     self.isErrorMessage = true
     self.messageError = error
   }

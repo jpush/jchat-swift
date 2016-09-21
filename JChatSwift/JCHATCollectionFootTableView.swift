@@ -16,8 +16,8 @@ class JCHATCollectionFootTableView: UICollectionReusableView {
   override func awakeFromNib() {
     super.awakeFromNib()
     self.footTable.tableFooterView = UIView()
-    self.footTable.separatorStyle = .None
-    self.footTable.scrollEnabled = false
+    self.footTable.separatorStyle = .none
+    self.footTable.isScrollEnabled = false
   }
 }
 

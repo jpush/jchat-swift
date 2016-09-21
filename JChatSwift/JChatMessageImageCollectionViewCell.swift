@@ -18,9 +18,9 @@ class JChatMessageImageCollectionViewCell: UICollectionViewCell {
   override func awakeFromNib() {
     super.awakeFromNib()
     messageImage = UIImageView()
-    messageImage.contentMode = .ScaleAspectFit
-    messageImage.backgroundColor = UIColor.blackColor()
-    messageImage.frame = UIScreen.mainScreen().bounds
+    messageImage.contentMode = .scaleAspectFit
+    messageImage.backgroundColor = UIColor.black
+    messageImage.frame = UIScreen.main.bounds
     
     messageImageContent.addSubview(messageImage)
     messageImageContent.delegate = self
@@ -38,14 +38,14 @@ class JChatMessageImageCollectionViewCell: UICollectionViewCell {
     }
   }
   
-  internal func setImage(model:JChatMessageModel) {
+  internal func setImage(_ model:JChatMessageModel) {
     messageModel = model
     (model.message.content as? JMSGImageContent)?.thumbImageData { (data, msgId, error) in
       if msgId == self.messageModel?.message.msgId {
-        self.messageImage.image = UIImage(data: data)!;
+        self.messageImage.image = UIImage(data: data!)!;
       }
       
-      (model.message.content as! JMSGImageContent).largeImageDataWithProgress({ (percent, msgId) in
+      (model.message.content as! JMSGImageContent).largeImageData(progress: { (percent, msgId) in
 
         }, completionHandler: { (data, msgId, error) in
           if error == nil {
@@ -54,9 +54,9 @@ class JChatMessageImageCollectionViewCell: UICollectionViewCell {
               return
             }
             
-            self.messageImage.image = UIImage(data: data)
+            self.messageImage.image = UIImage(data: data!)
           } else {
-            print("get larget image fail \(NSString.errorAlert(error))")
+            print("get larget image fail \(NSString.errorAlert(error as! NSError))")
           }
       })
 
@@ -68,7 +68,7 @@ class JChatMessageImageCollectionViewCell: UICollectionViewCell {
 }
 
 extension JChatMessageImageCollectionViewCell:UIScrollViewDelegate {
-  func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+  func viewForZooming(in scrollView: UIScrollView) -> UIView? {
     return messageImage
   }
   

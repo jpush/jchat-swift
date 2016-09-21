@@ -7,6 +7,17 @@
 //
 
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
 
 internal let ContentOffsetkeyPath = "contentOffset"
 class JChatExpandHeader: NSObject {
@@ -25,29 +36,29 @@ class JChatExpandHeader: NSObject {
     self.expandHeadView = nil
   }
 
-  class func expandWithScrollView(scrollView: UIScrollView, expandView: UIView) -> JChatExpandHeader {
+  class func expandWithScrollView(_ scrollView: UIScrollView, expandView: UIView) -> JChatExpandHeader {
     let expandHeader: JChatExpandHeader = JChatExpandHeader()
     expandHeader.expandWithScrollView(scrollView, expandView: expandView)
     return expandHeader
   }
 
-  func expandWithScrollView(scrollView: UIScrollView, expandView: UIView) {
-    self.expandHeight = CGRectGetHeight(expandView.frame)
+  func expandWithScrollView(_ scrollView: UIScrollView, expandView: UIView) {
+    self.expandHeight = expandView.frame.height
     self.scrollView = scrollView
     self.scrollView?.contentInset = UIEdgeInsets(top: self.expandHeight!, left: 0, bottom: 0, right: 0)
-    self.scrollView?.insertSubview(expandView, atIndex: 0)
-    self.scrollView?.addObserver(self, forKeyPath: ContentOffsetkeyPath, options: .New, context: nil)
+    self.scrollView?.insertSubview(expandView, at: 0)
+    self.scrollView?.addObserver(self, forKeyPath: ContentOffsetkeyPath, options: .new, context: nil)
     self.scrollView?.setContentOffset(CGPoint(x: 0, y: -180), animated: false)
     
     self.expandHeadView = expandView
-    self.expandHeadView?.contentMode = .ScaleAspectFill
+    self.expandHeadView?.contentMode = .scaleAspectFill
     self.expandHeadView?.clipsToBounds = true
 
-    self.expandHeight = CGRectGetWidth(self.expandHeadView!.frame)
+    self.expandHeight = self.expandHeadView!.frame.width
     self.reSizeView()
   }
   
-  override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+  override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
     if keyPath != ContentOffsetkeyPath { return }
     
     self.scrollViewDidScroll(self.scrollView!)
@@ -55,12 +66,12 @@ class JChatExpandHeader: NSObject {
 
   
   func reSizeView() {
-    self.expandHeadView?.frame = CGRectMake(0, -1 * self.expandHeight!, self.expandHeadView!.frame.width, self.expandHeight!)
+    self.expandHeadView?.frame = CGRect(x: 0, y: -1 * self.expandHeight!, width: self.expandHeadView!.frame.width, height: self.expandHeight!)
   }
 }
 
 extension JChatExpandHeader: UIScrollViewDelegate {
-  func scrollViewDidScroll(scrollView: UIScrollView) {
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
     let offsetY = self.scrollView?.contentOffset.y
     if offsetY < self.expandHeight! * -1 {
       var currentFrame = self.expandHeadView?.frame

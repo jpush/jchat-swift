@@ -15,7 +15,7 @@ class JChatMessageTable: UITableView {
   override var contentSize: CGSize {
     didSet {
         if self.isFlashToLoad != false {
-          if !CGSizeEqualToSize(self.contentSize, CGSizeZero) {
+          if !self.contentSize.equalTo(CGSize.zero) {
             if oldValue.height < self.contentSize.height {
               var offset = self.contentOffset
               offset.y = self.contentSize.height - oldValue.height

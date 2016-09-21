@@ -9,28 +9,28 @@
 import UIKit
 
 extension NSString {  
-  class func getTodayYesterdayString(theDate:NSDate) -> String {
-    let formatter = NSDateFormatter()
-    let locale:NSLocale = NSLocale(localeIdentifier: "zh")
+  class func getTodayYesterdayString(_ theDate:Date) -> String {
+    let formatter = DateFormatter()
+    let locale:Locale = Locale(identifier: "zh")
     formatter.locale = locale
-    formatter.dateStyle = .ShortStyle
-    formatter.timeStyle = .NoStyle
+    formatter.dateStyle = .short
+    formatter.timeStyle = .none
     formatter.doesRelativeDateFormatting = true
-    return formatter.stringFromDate(theDate)
+    return formatter.string(from: theDate)
   }
   
-  class func getPastDateString(theDate:NSDate) -> String {
-    let formatter = NSDateFormatter()
-    let locale:NSLocale = NSLocale(localeIdentifier: "zh")
+  class func getPastDateString(_ theDate:Date) -> String {
+    let formatter = DateFormatter()
+    let locale:Locale = Locale(identifier: "zh")
     formatter.locale = locale
-    formatter.dateStyle = .LongStyle
-    formatter.timeStyle = .NoStyle
+    formatter.dateStyle = .long
+    formatter.timeStyle = .none
     formatter.doesRelativeDateFormatting = true
-    return formatter.stringFromDate(theDate)
+    return formatter.string(from: theDate)
   }
 
-  class func getFriendlyDateString(timeInterval:NSTimeInterval, forConversation isShort:Bool) -> String {
-    let theDate:NSDate = NSDate(timeIntervalSince1970: timeInterval)
+  class func getFriendlyDateString(_ timeInterval:TimeInterval, forConversation isShort:Bool) -> String {
+    let theDate:Date = Date(timeIntervalSince1970: timeInterval)
     var output = ""
     let theDiff = -theDate.timeIntervalSinceNow
     switch theDiff {
@@ -42,8 +42,8 @@ extension NSString {
       output = "\(minute)分钟前"
       break
     default:
-      let formatter:NSDateFormatter = NSDateFormatter()
-      let locale:NSLocale = NSLocale(localeIdentifier: "zh")
+      let formatter:DateFormatter = DateFormatter()
+      let locale:Locale = Locale(identifier: "zh")
       formatter.locale = locale
       var isTodayYesterday = false
       var isPastLong = false
@@ -73,11 +73,11 @@ extension NSString {
         if isShort {
           output = todayYesterday
         } else {
-          output = formatter.stringFromDate(theDate)
+          output = formatter.string(from: theDate)
           output = "\(todayYesterday) \(output)"
         }
       } else {
-        output = formatter.stringFromDate(theDate)
+        output = formatter.string(from: theDate)
         if isPastLong {
           let thePastDate = NSString.getPastDateString(theDate)
           output = "\(thePastDate) \(output)"
@@ -89,9 +89,9 @@ extension NSString {
     return output
   }
   
-  class func conversationIdWithConversation(conversation:JMSGConversation) -> String {
+  class func conversationIdWithConversation(_ conversation:JMSGConversation) -> String {
     var conversationId = ""
-    if conversation.conversationType == .Single {
+    if conversation.conversationType == .single {
       let user = conversation.target as! JMSGUser
       conversationId = "\(user.username)_0"
     } else {
@@ -103,90 +103,90 @@ extension NSString {
 }
 
 extension NSString {
-  class func errorAlert(error :NSError) -> String {
+  class func errorAlert(_ error :NSError) -> String {
     var errorAlert:String = ""
     
     if error.code > 860000 {
       let  errorcode = JMSGSDKErrorCode(rawValue: Int(error.code))
       switch errorcode! as JMSGSDKErrorCode{
         
-      case .JMSGErrorSDKNetworkDownloadFailed:
+      case .jmsgErrorSDKNetworkDownloadFailed:
         errorAlert = "下载失败"
         break
       
-      case .JMSGErrorSDKNetworkUploadFailed:
+      case .jmsgErrorSDKNetworkUploadFailed:
         errorAlert = "上传资源文件失败"
         break
-      case .JMSGErrorSDKNetworkUploadTokenVerifyFailed:
+      case .jmsgErrorSDKNetworkUploadTokenVerifyFailed:
         errorAlert = "上传资源文件Token验证失败"
         break
-      case .JMSGErrorSDKNetworkUploadTokenGetFailed:
+      case .jmsgErrorSDKNetworkUploadTokenGetFailed:
         errorAlert = "获取服务器Token失败"
         break
-      case .JMSGErrorSDKDBDeleteFailed:
+      case .jmsgErrorSDKDBDeleteFailed:
         errorAlert = "数据库删除失败"
         break
-      case .JMSGErrorSDKDBUpdateFailed:
+      case .jmsgErrorSDKDBUpdateFailed:
         errorAlert = "数据库更新失败"
         break
-      case .JMSGErrorSDKDBSelectFailed:
+      case .jmsgErrorSDKDBSelectFailed:
         errorAlert = "数据库查询失败"
         break
-      case .JMSGErrorSDKDBInsertFailed:
+      case .jmsgErrorSDKDBInsertFailed:
         errorAlert = "数据库插入失败"
         break
-      case .JMSGErrorSDKParamAppkeyInvalid:
+      case .jmsgErrorSDKParamAppkeyInvalid:
         errorAlert = "appkey不合法"
         break
-      case .JMSGErrorSDKParamUsernameInvalid:
+      case .jmsgErrorSDKParamUsernameInvalid:
         errorAlert = "用户名不合法"
         break
-      case .JMSGErrorSDKParamPasswordInvalid:
+      case .jmsgErrorSDKParamPasswordInvalid:
         errorAlert = "用户密码不合法"
         break
-      case .JMSGErrorSDKUserNotLogin:
+      case .jmsgErrorSDKUserNotLogin:
         errorAlert = "用户没有登录"
         break
-      case .JMSGErrorSDKNotMediaMessage:
+      case .jmsgErrorSDKNotMediaMessage:
         errorAlert = "这不是一条媒体消息"
         break
-      case .JMSGErrorSDKMediaResourceMissing:
+      case .jmsgErrorSDKMediaResourceMissing:
         errorAlert = "下载媒体资源路径或者数据意外丢失"
         break
-      case .JMSGErrorSDKMediaCrcCodeIllegal:
+      case .jmsgErrorSDKMediaCrcCodeIllegal:
         errorAlert = "媒体CRC码无效"
         break
-      case .JMSGErrorSDKMediaCrcVerifyFailed:
+      case .jmsgErrorSDKMediaCrcVerifyFailed:
         errorAlert = "媒体CRC校验失败"
         break
-      case .JMSGErrorSDKMediaUploadEmptyFile:
+      case .jmsgErrorSDKMediaUploadEmptyFile:
         errorAlert = "上传媒体文件时, 发现文件不存在"
         break
-      case .JMSGErrorSDKParamContentInvalid:
+      case .jmsgErrorSDKParamContentInvalid:
         errorAlert = "无效的消息内容"
         break
-      case .JMSGErrorSDKParamMessageNil:
+      case .jmsgErrorSDKParamMessageNil:
         errorAlert = "空消息"
         break
-      case .JMSGErrorSDKMessageNotPrepared:
+      case .jmsgErrorSDKMessageNotPrepared:
         errorAlert = "消息不符合发送的基本条件检查"
         break
-      case .JMSGErrorSDKParamConversationTypeUnknown:
+      case .jmsgErrorSDKParamConversationTypeUnknown:
         errorAlert = "未知的会话类型"
         break
-      case .JMSGErrorSDKParamConversationUsernameInvalid:
+      case .jmsgErrorSDKParamConversationUsernameInvalid:
         errorAlert = "会话 username 无效"
         break
-      case .JMSGErrorSDKParamConversationGroupIdInvalid:
+      case .jmsgErrorSDKParamConversationGroupIdInvalid:
         errorAlert = "会话 groupId 无效"
         break
-      case .JMSGErrorSDKParamGroupGroupIdInvalid:
+      case .jmsgErrorSDKParamGroupGroupIdInvalid:
         errorAlert = "groupId 无效"
         break
-      case .JMSGErrorSDKParamGroupGroupInfoInvalid:
+      case .jmsgErrorSDKParamGroupGroupInfoInvalid:
         errorAlert = "group 相关字段无效"
         break
-      case .JMSGErrorSDKMessageNotInGroup:
+      case .jmsgErrorSDKMessageNotInGroup:
         errorAlert = "你已不在该群，无法发送消息"
         break
         //      case 810009:
@@ -200,10 +200,10 @@ extension NSString {
     if error.code > 800000 && error.code < 820000  {
       let errorcode = JMSGTcpErrorCode(rawValue: UInt(error.code))
       switch errorcode! {
-      case .ErrorTcpUserNotRegistered:
+      case .errorTcpUserNotRegistered:
         errorAlert = "用户名还没有被注册过"
         break
-      case .ErrorTcpUserPasswordError:
+      case .errorTcpUserPasswordError:
         errorAlert = "密码错误"
         break
       default:
@@ -214,37 +214,37 @@ extension NSString {
     if error.code < 600 {
       let errorcode = JMSGHttpErrorCode(rawValue: UInt(error.code))
       switch errorcode! {
-        case .ErrorHttpServerInternal:
+        case .errorHttpServerInternal:
           errorAlert = "服务器端内部错误"
           break
-        case .ErrorHttpUserExist:
+        case .errorHttpUserExist:
           errorAlert = "用户已经存在"
           break
-        case .ErrorHttpUserNotExist:
+        case .errorHttpUserNotExist:
           errorAlert = "用户不存在"
           break
-        case .ErrorHttpPrameterInvalid:
+        case .errorHttpPrameterInvalid:
           errorAlert = "参数无效"
           break
-        case .ErrorHttpPasswordError:
+        case .errorHttpPasswordError:
           errorAlert = "密码错误"
           break
-        case .ErrorHttpUidInvalid:
+        case .errorHttpUidInvalid:
           errorAlert = "内部UID 无效"
           break
-        case .ErrorHttpMissingAuthenInfo:
+        case .errorHttpMissingAuthenInfo:
           errorAlert = "Http 请求没有验证信息"
           break
-        case .ErrorHttpAuthenticationFailed:
+        case .errorHttpAuthenticationFailed:
           errorAlert = "Http 请求验证失败"
           break
-        case .ErrorHttpAppkeyNotExist:
+        case .errorHttpAppkeyNotExist:
           errorAlert = "Appkey 不存在"
           break
-        case .ErrorHttpTokenExpired:
+        case .errorHttpTokenExpired:
           errorAlert = "Http 请求 token 过期"
           break
-        case .ErrorHttpServerResponseTimeout:
+        case .errorHttpServerResponseTimeout:
           errorAlert = "服务器端响应超时"
           break
         default:

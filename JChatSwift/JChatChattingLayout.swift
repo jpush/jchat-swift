@@ -7,6 +7,26 @@
 //
 
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class JChatChattingLayout: NSObject {
   internal weak var messageListTable:JChatMessageTable? = nil
@@ -19,38 +39,38 @@ class JChatChattingLayout: NSObject {
   }
 
 
-  func insertTableViewCellAtRows(addIndexs:NSArray) {
+  func insertTableViewCellAtRows(_ addIndexs:NSArray) {
     if addIndexs.count == 0 { return }
     
-    var addIndexPaths:[NSIndexPath] = [NSIndexPath]()
-    for (_, value) in addIndexs.enumerate() {
-      addIndexPaths.append(NSIndexPath(forRow: (value as! Int), inSection: 0))
+    var addIndexPaths:[IndexPath] = [IndexPath]()
+    for (_, value) in addIndexs.enumerated() {
+      addIndexPaths.append(IndexPath(row: (value as! Int), section: 0))
     }
     self.messageListTable?.beginUpdates()
-    self.messageListTable?.insertRowsAtIndexPaths(addIndexPaths, withRowAnimation: .None)
+    self.messageListTable?.insertRows(at: addIndexPaths, with: .none)
     self.messageListTable?.endUpdates()
   }
 
-  func appendTableViewCellAtLastIndex(index:NSInteger) {
-    let path:NSIndexPath = NSIndexPath(forRow: index - 1, inSection: 0)
+  func appendTableViewCellAtLastIndex(_ index:NSInteger) {
+    let path:IndexPath = IndexPath(row: index - 1, section: 0)
     self.messageListTable?.beginUpdates()
-    self.messageListTable?.insertRowsAtIndexPaths([path], withRowAnimation: .None)
+    self.messageListTable?.insertRows(at: [path], with: .none)
     self.messageListTable?.endUpdates()
-    UIView.animateWithDuration(0.25) { () -> Void in
-      self.messageListTable?.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: false)
-    }
+    UIView.animate(withDuration: 0.25, animations: { () -> Void in
+      self.messageListTable?.scrollToRow(at: path, at: .bottom, animated: false)
+    }) 
 //    self.messageTableScrollToBottom(true)
-    dispatch_async(dispatch_get_main_queue()) { () -> Void in
+    DispatchQueue.main.async { () -> Void in
     }
   }
   
   // TODO: 
-  func messageTableScrollToBottom(animation:Bool) {
+  func messageTableScrollToBottom(_ animation:Bool) {
     if (self.messageListTable?.contentSize.height)! + (self.messageListTable?.contentInset.top)! > self.messageListTable?.frame.size.height {
-      let offset = CGPointMake(0, (self.messageListTable?.contentSize.height)! - self.messageListTable!.frame.size.height)
+      let offset = CGPoint(x: 0, y: (self.messageListTable?.contentSize.height)! - self.messageListTable!.frame.size.height)
 
       if animation {
-        UIView.animateWithDuration(0.25, animations: { () -> Void in
+        UIView.animate(withDuration: 0.25, animations: { () -> Void in
           self.messageListTable?.setContentOffset(offset, animated: true)
         })
       } else {
@@ -63,8 +83,8 @@ class JChatChattingLayout: NSObject {
     self.messageListTable?.loadMoreMessage()
   }
   
-  func messageTableScrollToIndexCell(index:Int) {
-    self.messageListTable?.scrollToRowAtIndexPath(NSIndexPath(forRow: index - 1, inSection: 0), atScrollPosition: .Bottom, animated: true)
+  func messageTableScrollToIndexCell(_ index:Int) {
+    self.messageListTable?.scrollToRow(at: IndexPath(row: index - 1, section: 0), at: .bottom, animated: true)
   }
   
   func hideKeyboard() {

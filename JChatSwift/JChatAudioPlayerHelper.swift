@@ -10,26 +10,30 @@ import UIKit
 import AVFoundation
 
 protocol JChatAudioPlayerHelperDelegate:NSObjectProtocol {
-  func didAudioPlayerBeginPlay(AudioPlayer:AVAudioPlayer)
-  func didAudioPlayerStopPlay(AudioPlayer:AVAudioPlayer)
-  func didAudioPlayerPausePlay(AudioPlayer:AVAudioPlayer)
+  func didAudioPlayerBeginPlay(_ AudioPlayer:AVAudioPlayer)
+  func didAudioPlayerStopPlay(_ AudioPlayer:AVAudioPlayer)
+  func didAudioPlayerPausePlay(_ AudioPlayer:AVAudioPlayer)
 }
 
 class JChatAudioPlayerHelper: NSObject {
 
+//  private static var __once: () = {
+//      Static.instance = JChatAudioPlayerHelper()
+//    }()
+//
   var player:AVAudioPlayer!
   weak var delegate:JChatAudioPlayerHelperDelegate?
-  
-  class var sharedInstance: JChatAudioPlayerHelper {
-    struct Static {
-      static var onceToken: dispatch_once_t = 0
-      static var instance: JChatAudioPlayerHelper? = nil
-    }
-    dispatch_once(&Static.onceToken) {
-      Static.instance = JChatAudioPlayerHelper()
-    }
-    return Static.instance!
-  }
+//
+//  class var sharedInstance: JChatAudioPlayerHelper {
+//    struct Static {
+//      static var onceToken: Int = 0
+//      static var instance: JChatAudioPlayerHelper? = nil
+//    }
+//    _ = JChatAudioPlayerHelper.__once
+//    return Static.instance!
+//  }
+
+  static let sharedInstance = JChatAudioPlayerHelper()
   
   override init() {
     super.init()
@@ -37,7 +41,7 @@ class JChatAudioPlayerHelper: NSObject {
   }
 
   
-  func managerAudioWithData(data:NSData, toplay:Bool) {
+  func managerAudioWithData(_ data:Data, toplay:Bool) {
     if toplay {
       self.playAudioWithData(data)
     } else {
@@ -45,7 +49,7 @@ class JChatAudioPlayerHelper: NSObject {
     }
   }
   
-  func playAudioWithData(voiceData:NSData) {
+  func playAudioWithData(_ voiceData:Data) {
     do {
       try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
     } catch let error as NSError {
@@ -66,7 +70,7 @@ class JChatAudioPlayerHelper: NSObject {
       print("alloc AVAudioPlayer with voice data fail with error \(error)")
     }
     
-    UIDevice.currentDevice().proximityMonitoringEnabled = true
+    UIDevice.current.isProximityMonitoringEnabled = true
   }
 
   func pausePlayingAudio() {
@@ -74,18 +78,18 @@ class JChatAudioPlayerHelper: NSObject {
   }
   
   func stopAudio() {
-    if self.player.playing {
+    if self.player.isPlaying {
       self.player.stop()
     }
     
-    UIDevice.currentDevice().proximityMonitoringEnabled = false
+    UIDevice.current.isProximityMonitoringEnabled = false
     self.delegate?.didAudioPlayerStopPlay(self.player)
   }
 }
 
 
 extension JChatAudioPlayerHelper:AVAudioPlayerDelegate {
-  func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+  func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
     self.stopAudio()
   }
 }

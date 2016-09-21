@@ -23,34 +23,34 @@ class JCHATRegisterViewController: UIViewController {
   
   func setupNavigationBar() {
     self.title = "极光IM"
-    let leftBtn = UIButton(type: .Custom)
+    let leftBtn = UIButton(type: .custom)
     leftBtn.frame = kNavigationLeftButtonRect
-    leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
+    leftBtn.setImage(UIImage(named: "goBack"), for: UIControlState())
     leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    leftBtn.addTarget(self, action: #selector(self.backClick), forControlEvents: .TouchUpInside)
+    leftBtn.addTarget(self, action: #selector(self.backClick), for: .touchUpInside)
     self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
-    self.navigationController?.navigationBar.translucent = false
+    self.navigationController?.navigationBar.isTranslucent = false
   }
   
   func backClick() {
-    self.navigationController?.popViewControllerAnimated(true)
+    self.navigationController?.popViewController(animated: true)
   }
   
   func layoutAllViews(){
     self.registerBtn.layer.cornerRadius = 4
     self.registerBtn.layer.masksToBounds = true
-    self.registerBtn.setBackgroundColor(UIColor(netHex: 0x3f80de), forState: .Normal)
-    self.registerBtn.setBackgroundColor(UIColor(netHex: 0x2840b0), forState: .Highlighted)
+    self.registerBtn.setBackgroundColor(UIColor(netHex: 0x3f80de), forState: UIControlState())
+    self.registerBtn.setBackgroundColor(UIColor(netHex: 0x2840b0), forState: .highlighted)
     self.usernameTF.becomeFirstResponder()
-    self.passwordTF.secureTextEntry = true
-    self.passwordTF.returnKeyType = .Default
+    self.passwordTF.isSecureTextEntry = true
+    self.passwordTF.returnKeyType = .default
   }
 
-  @objc func doBack(sender: AnyObject) {
-    self.navigationController?.popViewControllerAnimated(true)
+  @objc func doBack(_ sender: AnyObject) {
+    self.navigationController?.popViewController(animated: true)
   }
   
-  func checkValidUsername(username: String, password:String) -> Bool{
+  func checkValidUsername(_ username: String, password:String) -> Bool{
     if password != "" && username != "" {
       return true
     }
@@ -66,41 +66,41 @@ class JCHATRegisterViewController: UIViewController {
     return false
   }
   
-  @IBAction func clickToRegister(sender: AnyObject) {
+  @IBAction func clickToRegister(_ sender: AnyObject) {
     print("Action - clickToRegister")
-    UIApplication.sharedApplication().sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, forEvent: nil)
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     if self.checkValidUsername(usernameTF.text!, password: passwordTF.text!) {
       MBProgressHUD.showMessage("正在注册", view: self.view)
-      JMSGUser.registerWithUsername(usernameTF.text!, password: passwordTF.text!, completionHandler: { (resultObject, error) -> Void in
+      JMSGUser.register(withUsername: usernameTF.text!, password: passwordTF.text!, completionHandler: { (resultObject, error) -> Void in
         if error == nil {
-          MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+          MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
           MBProgressHUD.showMessage("注册成功,正在自动登录", view: self.view)
-          JMSGUser.loginWithUsername(self.usernameTF.text!, password: self.passwordTF.text!, completionHandler: { (resultObject, error) -> Void in
-              MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+          JMSGUser.login(withUsername: self.usernameTF.text!, password: self.passwordTF.text!, completionHandler: { (resultObject, error) -> Void in
+              MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
             if error == nil {
-              NSNotificationCenter.defaultCenter().postNotificationName(kupdateUserInfo, object: nil)
+              NotificationCenter.default.post(name: Notification.Name(rawValue: kupdateUserInfo), object: nil)
               self.userLoginSave()
 
               let detailVC = JCHATSetDetailViewController()
               self.navigationController?.pushViewController(detailVC, animated: true)
               
             } else {
-              print("login fail error \(NSString.errorAlert(error))")
-              MBProgressHUD.showMessage(NSString.errorAlert(error), view: self.view)
+              print("login fail error \(NSString.errorAlert(error as! NSError))")
+              MBProgressHUD.showMessage(NSString.errorAlert(error as! NSError), view: self.view)
             }
           })
         } else {
-          print("login fail error \(NSString.errorAlert(error))")
-          MBProgressHUD.showMessage(NSString.errorAlert(error), view: self.view)
+          print("login fail error \(NSString.errorAlert(error as! NSError))")
+          MBProgressHUD.showMessage(NSString.errorAlert(error as! NSError), view: self.view)
         }
       })
     }
   }
   
   func userLoginSave() {
-    NSUserDefaults.standardUserDefaults().setObject(self.usernameTF.text, forKey: kuserName)
-    NSUserDefaults.standardUserDefaults().setObject(self.usernameTF.text, forKey: klastLoginUserName)
-    NSUserDefaults.standardUserDefaults().synchronize()
+    UserDefaults.standard.set(self.usernameTF.text, forKey: kuserName)
+    UserDefaults.standard.set(self.usernameTF.text, forKey: klastLoginUserName)
+    UserDefaults.standard.synchronize()
   }
 
   override func didReceiveMemoryWarning() {

@@ -20,14 +20,14 @@ class JChatAboutMeViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.navigationController?.navigationBar.translucent = false
+    self.navigationController?.navigationBar.isTranslucent = false
     self.title = "我"
     
     self.table = UITableView()
     self.table.delegate = self
     self.table.dataSource = self
     self.view.addSubview(self.table)
-    self.table.separatorStyle = .None
+    self.table.separatorStyle = .none
     self.table.estimatedRowHeight = 40
     self.table.rowHeight = UITableViewAutomaticDimension
     self.table.tableFooterView = UIView()
@@ -40,7 +40,7 @@ class JChatAboutMeViewController: UIViewController {
     self.getData()
     self.setAvatar()
     
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateAvatar), name: kupdateUserInfo, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.updateAvatar), name: NSNotification.Name(rawValue: kupdateUserInfo), object: nil)
   }
 
   func getData() {
@@ -56,18 +56,18 @@ class JChatAboutMeViewController: UIViewController {
     
   }
   
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     self.getData()
     self.table.reloadData()
   }
   
   func setAvatar() {
-    self.bgView = JChatAvatarView(frame: CGRectMake(0, 0, kApplicationWidth, 0.55 * kApplicationWidth))
+    self.bgView = JChatAvatarView(frame: CGRect(x: 0, y: 0, width: kApplicationWidth, height: 0.55 * kApplicationWidth))
 
     self.bgView.backgroundColor = UIColor(netHex: 0xdddddd)
     let gesture = UITapGestureRecognizer(target: self, action: #selector(tapPicture(_:)))
     gesture.numberOfTapsRequired = 1
-    self.bgView.userInteractionEnabled = true
+    self.bgView.isUserInteractionEnabled = true
     self.bgView.addGestureRecognizer(gesture)
     
     self.tableHeader = JChatExpandHeader.expandWithScrollView(self.table, expandView: self.bgView)
@@ -81,7 +81,7 @@ class JChatAboutMeViewController: UIViewController {
     user.thumbAvatarData { (data, objectId, error) -> Void in
       if error == nil {
         if data != nil {
-          self.bgView.setHeadImage(UIImage(data: data)!)
+          self.bgView.setHeadImage(UIImage(data: data!)!)
         } else {
           self.bgView.setDefaultAvatar()
         }
@@ -91,9 +91,9 @@ class JChatAboutMeViewController: UIViewController {
     }
   }
 
-  func tapPicture(gesture:UIGestureRecognizer) {
+  func tapPicture(_ gesture:UIGestureRecognizer) {
     let actionSheet = UIActionSheet(title: "更换头像", delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "拍照", "相册")
-    actionSheet.showInView(self.view)
+    actionSheet.show(in: self.view)
     
   }
 
@@ -103,29 +103,29 @@ class JChatAboutMeViewController: UIViewController {
 }
 
 extension JChatAboutMeViewController: UITableViewDelegate, UITableViewDataSource {
-  func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return 3
   }
   
-  func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     identify = "JChatAboutMeCell"
-    var cell:JChatAboutMeCell? = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatAboutMeCell
+    var cell:JChatAboutMeCell? = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatAboutMeCell
     if cell == nil {
-      tableView.registerClass(NSClassFromString(identify), forCellReuseIdentifier: identify)
-      cell = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatAboutMeCell
+      tableView.register(NSClassFromString(identify), forCellReuseIdentifier: identify)
+      cell = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatAboutMeCell
     }
-    let tittle = self.cellDataArr![indexPath.row] as! String
-    let imgName = self.cellImgArr![indexPath.row] as! String
+    let tittle = self.cellDataArr![(indexPath as NSIndexPath).row] as! String
+    let imgName = self.cellImgArr![(indexPath as NSIndexPath).row] as! String
     
     cell?.setCellData(tittle, icon: imgName)
     return cell!
   }
   
-  func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-    let cell = tableView.cellForRowAtIndexPath(indexPath)
-    cell?.selected = false
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    let cell = tableView.cellForRow(at: indexPath)
+    cell?.isSelected = false
     
-    switch indexPath.row {
+    switch (indexPath as NSIndexPath).row {
     case 0:
       let userInfoVC = JChatUserInfoViewController()
       userInfoVC.hidesBottomBarWhenPushed = true
@@ -147,7 +147,7 @@ extension JChatAboutMeViewController: UITableViewDelegate, UITableViewDataSource
 }
 
 extension JChatAboutMeViewController: UIActionSheetDelegate {
-  func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
+  func actionSheet(_ actionSheet: UIActionSheet, clickedButtonAt buttonIndex: Int) {
     if buttonIndex == 1 {
       self.cameraClick()
       return
@@ -162,29 +162,29 @@ extension JChatAboutMeViewController: UIActionSheetDelegate {
   func photoClick() {
     let picker = UIImagePickerController()
     picker.delegate = self
-    picker.sourceType = .PhotoLibrary
-    let temp_mediaType = UIImagePickerController.availableMediaTypesForSourceType(picker.sourceType)
+    picker.sourceType = .photoLibrary
+    let temp_mediaType = UIImagePickerController.availableMediaTypes(for: picker.sourceType)
     picker.mediaTypes = temp_mediaType!
-    picker.modalTransitionStyle = .CoverVertical
-    dispatch_async(dispatch_get_main_queue()) { 
-      self.presentViewController(picker, animated: true, completion: nil)
+    picker.modalTransitionStyle = .coverVertical
+    DispatchQueue.main.async { 
+      self.present(picker, animated: true, completion: nil)
     }
     
   }
   
   func cameraClick() {
     let picker:UIImagePickerController = UIImagePickerController()
-    if UIImagePickerController.isSourceTypeAvailable(.Camera) {
-      picker.sourceType = .Camera
+    if UIImagePickerController.isSourceTypeAvailable(.camera) {
+      picker.sourceType = .camera
       let requiredMediaType = kUTTypeImage as String
       let arrMediaTypes = [requiredMediaType]
       picker.mediaTypes = arrMediaTypes
       picker.showsCameraControls = true
-      picker.modalTransitionStyle = .CoverVertical
-      picker.editing = true
+      picker.modalTransitionStyle = .coverVertical
+      picker.isEditing = true
       picker.delegate = self
-      dispatch_async(dispatch_get_main_queue(), { 
-        self.presentViewController(picker, animated: true, completion: nil)
+      DispatchQueue.main.async(execute: { 
+        self.present(picker, animated: true, completion: nil)
       })
       
     }
@@ -194,7 +194,7 @@ extension JChatAboutMeViewController: UIActionSheetDelegate {
 
 extension JChatAboutMeViewController: UIAlertViewDelegate {
 
-  func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+  func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
     if buttonIndex == 0 {
       return
     }
@@ -203,7 +203,7 @@ extension JChatAboutMeViewController: UIAlertViewDelegate {
       MBProgressHUD.showMessage("正在退出登录！", view: self.view)
       print("Logout anyway")
       JChatMainTabViewController.sharedInstance.selectedIndex = 0
-      MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+      MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
       JMSGUser.logout({ (resultObject, error) -> Void in
         if error == nil {
           print("Action logout success")
@@ -211,9 +211,9 @@ extension JChatAboutMeViewController: UIAlertViewDelegate {
       })
       let loginVC = JChatAlreadyLoginViewController()
       let loginNC = UINavigationController(rootViewController: loginVC)
-      let appDelegate = UIApplication.sharedApplication().delegate
+      let appDelegate = UIApplication.shared.delegate
       appDelegate!.window!!.rootViewController = loginNC
-      NSUserDefaults.standardUserDefaults().removeObjectForKey(kuserName)
+      UserDefaults.standard.removeObject(forKey: kuserName)
       
       return
     }
@@ -222,20 +222,20 @@ extension JChatAboutMeViewController: UIAlertViewDelegate {
 
 extension JChatAboutMeViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-  func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+  func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
     print("Action - imagePickerController ")//UIImageJPEGRepresentation
     MBProgressHUD.showMessage("正在上传", toView: self.view)
-    var pickedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+    let pickedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
     
-    JMSGUser.updateMyInfoWithParameter(UIImageJPEGRepresentation(pickedImage, 1)!, userFieldType: .FieldsAvatar) { (resultObject, error) -> Void in
-      dispatch_async(dispatch_get_main_queue(), { () -> Void in
-        MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+    JMSGUser.updateMyInfo(withParameter: UIImageJPEGRepresentation(pickedImage, 1)!, userFieldType: .fieldsAvatar) { (resultObject, error) -> Void in
+      DispatchQueue.main.async(execute: { () -> Void in
+        MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
         if error == nil {
           MBProgressHUD.showMessage("上传成功", view: self.view)
           let user = JMSGUser.myInfo()
           user.thumbAvatarData({ (data, ObjectId, error) -> Void in
             if error == nil {
-              self.bgView.setHeadImage(UIImage(data: data)!)
+              self.bgView.setHeadImage(UIImage(data: data!)!)
             } else {
               print("get thumbAvatarData fail")
             }
@@ -246,6 +246,6 @@ extension JChatAboutMeViewController: UIImagePickerControllerDelegate, UINavigat
         }
       })
     }
-    self.dismissViewControllerAnimated(true, completion: nil)
+    self.dismiss(animated: true, completion: nil)
   }
 }

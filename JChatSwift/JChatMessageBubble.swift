@@ -22,45 +22,45 @@ class JChatMessageBubble: UIImageView {
     self.attachTapHandler()
   }
 
-  override func canBecomeFirstResponder() -> Bool {
+  override var canBecomeFirstResponder : Bool {
     return true
   }
   
   func attachTapHandler() {
-    self.userInteractionEnabled = true
+    self.isUserInteractionEnabled = true
     let touch = UILongPressGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
     touch.minimumPressDuration = 0.7
     self.addGestureRecognizer(touch)
   }
   
-  func handleTap(recognizer: UIGestureRecognizer) {
+  func handleTap(_ recognizer: UIGestureRecognizer) {
     self.becomeFirstResponder()
-    UIMenuController.sharedMenuController().setTargetRect(self.frame, inView: self.superview!)
-    UIMenuController.sharedMenuController().setMenuVisible(true, animated: true)
+    UIMenuController.shared.setTargetRect(self.frame, in: self.superview!)
+    UIMenuController.shared.setMenuVisible(true, animated: true)
     
   }
   
-  override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
-    if self.message?.contentType == .Voice {
+  override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+    if self.message?.contentType == .voice {
       return action == #selector(self.delete(_:))
     } else {
       return action == #selector(self.copy(_:)) || action == #selector(self.delete(_:))
     }
   }
   
-  override func copy(sender: AnyObject?) {
+  override func copy(_ sender: Any?) {
     
-    let pboard = UIPasteboard.generalPasteboard()
+    let pboard = UIPasteboard.general
     switch self.message!.contentType {
-      case .Text:
+      case .text:
         let textContent = self.message?.content as! JMSGTextContent
         pboard.string = textContent.text
         break
-      case .Image:
+      case .image:
         let imageContent = self.message?.content as! JMSGImageContent
         imageContent.thumbImageData({ (imageData, msgId, error) in
           if (imageData != nil) && (error == nil) {
-            pboard.image = UIImage(data: imageData)
+            pboard.image = UIImage(data: imageData!)
           } else {
             print("get message image fail")
           }
@@ -71,8 +71,8 @@ class JChatMessageBubble: UIImageView {
     }
   }
   
-  override func delete(sender: AnyObject?) {
-    NSNotificationCenter.defaultCenter().postNotificationName(kDeleteMessage, object: self.message)
+  override func delete(_ sender: Any?) {
+    NotificationCenter.default.post(name: Notification.Name(rawValue: kDeleteMessage), object: self.message)
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -82,7 +82,7 @@ class JChatMessageBubble: UIImageView {
   override func layoutSubviews() {
     super.layoutSubviews()
     self.maskBackgroupView!.image = self.maskBackgroupImage
-    self.maskBackgroupView!.frame = CGRectMake(0, 0, self.frame.width, self.frame.height)
+    self.maskBackgroupView!.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
     self.layer.mask = self.maskBackgroupView!.layer
   }
 }

@@ -16,9 +16,9 @@ class JChatAlreadyLoginViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.title = "极光IM"
-    self.navigationController?.navigationBar.translucent = false
-    let username = NSUserDefaults.standardUserDefaults().objectForKey(klastLoginUserName) as! String
-    userNameLabel.setTitle(username, forState: .Normal)
+    self.navigationController?.navigationBar.isTranslucent = false
+    let username = UserDefaults.standard.object(forKey: klastLoginUserName) as! String
+    userNameLabel.setTitle(username, for: UIControlState())
     self.addGesture()
   }
 
@@ -29,39 +29,39 @@ class JChatAlreadyLoginViewController: UIViewController {
   }
   
   func handleTap() {
-    UIApplication.sharedApplication().sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, forEvent: nil)
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
   }
   
-  @IBAction func clickToLogin(sender: AnyObject) {
+  @IBAction func clickToLogin(_ sender: AnyObject) {
 
-    let username = NSUserDefaults.standardUserDefaults().objectForKey(klastLoginUserName) as! String
+    let username = UserDefaults.standard.object(forKey: klastLoginUserName) as! String
     let password = passwordTF.text
     MBProgressHUD.showMessage("正在登录", toView: self.view)
-    JMSGUser.loginWithUsername(username, password: password!) { (resultObject, error) -> Void in
-      dispatch_async(dispatch_get_main_queue(), { 
-        MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+    JMSGUser.login(withUsername: username, password: password!) { (resultObject, error) -> Void in
+      DispatchQueue.main.async(execute: { 
+        MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
       })
       
       if error == nil {
         MBProgressHUD.showMessage("登录成功", view: self.view)
-        NSNotificationCenter.defaultCenter().postNotificationName(kupdateUserInfo, object: nil)
-        let appDelegate = UIApplication.sharedApplication().delegate
+        NotificationCenter.default.post(name: Notification.Name(rawValue: kupdateUserInfo), object: nil)
+        let appDelegate = UIApplication.shared.delegate
         appDelegate!.window!!.rootViewController = JChatMainTabViewController.sharedInstance
         
-        NSUserDefaults.standardUserDefaults().setObject(username, forKey: kuserName)
+        UserDefaults.standard.set(username, forKey: kuserName)
       } else {
-        MBProgressHUD.showMessage("\(NSString.errorAlert(error))", view: self.view)
+        MBProgressHUD.showMessage("\(NSString.errorAlert(error as! NSError))", view: self.view)
       }
     }
   }
   
-  @IBAction func clickToRegister(sender: AnyObject) {
+  @IBAction func clickToRegister(_ sender: AnyObject) {
     let registerCtl = JCHATRegisterViewController()
     self.navigationController?.pushViewController(registerCtl, animated: true)
   }
   
 
-  @IBAction func switchToLogin(sender: AnyObject) {
+  @IBAction func switchToLogin(_ sender: AnyObject) {
     let loginVC = JChatLoginViewController()
     self.navigationController?.pushViewController(loginVC, animated: true)
   }

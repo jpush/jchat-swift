@@ -14,12 +14,12 @@ class JChatLoadingMessageCell: UITableViewCell {
   
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
-    self.selectionStyle = UITableViewCellSelectionStyle.None
+    self.selectionStyle = UITableViewCellSelectionStyle.none
     loadIndicator = UIActivityIndicatorView()
-    loadIndicator.color = UIColor.redColor()
+    loadIndicator.color = UIColor.red
     self.contentView.addSubview(self.loadIndicator)
     
-    self.contentView.snp_makeConstraints(closure: { (make) -> Void in
+    self.contentView.snp_makeConstraints({ (make) -> Void in
       make.center.equalTo(self.snp_center)
 
       make.top.equalTo(self.snp_top).offset(13)
@@ -29,7 +29,7 @@ class JChatLoadingMessageCell: UITableViewCell {
       
     })
     self.startLoading()
-    self.backgroundColor = UIColor.clearColor()
+    self.backgroundColor = UIColor.clear
   }
   
   func startLoading() {
@@ -40,7 +40,7 @@ class JChatLoadingMessageCell: UITableViewCell {
     fatalError("init(coder:) has not been implemented")
   }
 
-  override func setSelected(selected: Bool, animated: Bool) {
+  override func setSelected(_ selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
 
   }

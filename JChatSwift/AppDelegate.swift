@@ -17,36 +17,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
 
 
-  func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     
     JMessage.setupJMessage(launchOptions, appKey: JMSSAGE_APPKEY, channel: CHANNEL, apsForProduction: false, category: nil)
     if #available(iOS 8, *) {
       // 可以自定义 categories
-      JPUSHService.registerForRemoteNotificationTypes(
-        UIUserNotificationType.Badge.rawValue |
-        UIUserNotificationType.Sound.rawValue |
-        UIUserNotificationType.Alert.rawValue,
+      JPUSHService.register(
+        forRemoteNotificationTypes: UIUserNotificationType.badge.rawValue |
+        UIUserNotificationType.sound.rawValue |
+        UIUserNotificationType.alert.rawValue,
         categories: nil)
     } else {
       // ios 8 以前 categories 必须为nil
-      JPUSHService.registerForRemoteNotificationTypes(
-        UIRemoteNotificationType.Badge.rawValue |
-        UIRemoteNotificationType.Sound.rawValue |
-        UIRemoteNotificationType.Alert.rawValue,
+      JPUSHService.register(
+        forRemoteNotificationTypes: UIRemoteNotificationType.badge.rawValue |
+        UIRemoteNotificationType.sound.rawValue |
+        UIRemoteNotificationType.alert.rawValue,
         categories: nil)
     }
     self.registerJPushStatusNotification()
-    self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    self.window = UIWindow(frame: UIScreen.main.bounds)
     self.setupRootView()
     self.window?.makeKeyAndVisible()
     return true
   }
   
   func setupRootView() {
-    if NSUserDefaults.standardUserDefaults().objectForKey(kuserName) != nil {
+    if UserDefaults.standard.object(forKey: kuserName) != nil {
       self.window?.rootViewController = JChatMainTabViewController.sharedInstance
     } else {
-      if NSUserDefaults.standardUserDefaults().objectForKey(klastLoginUserName) != nil {
+      if UserDefaults.standard.object(forKey: klastLoginUserName) != nil {
         let rootVC = JChatAlreadyLoginViewController()
         let rootNV = UINavigationController(rootViewController: rootVC)
         self.window?.rootViewController = rootNV
@@ -59,80 +59,80 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     UINavigationBar.appearance().barTintColor = UIColor(netHex: 0x3f80de)
     
-    UINavigationBar.appearance().translucent = false  //TODO: ios8
+    UINavigationBar.appearance().isTranslucent = false  //TODO: ios8
   
     let shadow = NSShadow()
     UINavigationBar.appearance().titleTextAttributes = [
-      NSForegroundColorAttributeName: UIColor.whiteColor(),
-      NSFontAttributeName: UIFont.boldSystemFontOfSize(20),
+      NSForegroundColorAttributeName: UIColor.white,
+      NSFontAttributeName: UIFont.boldSystemFont(ofSize: 20),
       NSShadowAttributeName: shadow
     ]
 
-    UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+    UINavigationBar.appearance().tintColor = UIColor.white
     
   }
   
-  func application(application: UIApplication,
-                   didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+  func application(_ application: UIApplication,
+                   didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
     JPUSHService.registerDeviceToken(deviceToken)
   }
   
   func registerJPushStatusNotification() {
-    let defaultCenter = NSNotificationCenter.defaultCenter()
-    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidSetup(_:)), name: kJPFNetworkDidSetupNotification, object: nil)
-    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkIsConnecting(_:)), name: kJPFNetworkIsConnectingNotification, object: nil)
-    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidClose(_:)), name: kJPFNetworkDidCloseNotification, object: nil)
-    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidRegister(_:)), name: kJPFNetworkDidRegisterNotification, object: nil)
-    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidLogin(_:)), name: kJPFNetworkDidLoginNotification, object: nil)
-    defaultCenter.addObserver(self, selector: #selector(AppDelegate.receivePushMessage(_:)), name: kJPFNetworkDidReceiveMessageNotification, object: nil)
+    let defaultCenter = NotificationCenter.default
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidSetup(_:)), name: NSNotification.Name.jpfNetworkDidSetup, object: nil)
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkIsConnecting(_:)), name: NSNotification.Name.jpfNetworkIsConnecting, object: nil)
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidClose(_:)), name: NSNotification.Name.jpfNetworkDidClose, object: nil)
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidRegister(_:)), name: NSNotification.Name.jpfNetworkDidRegister, object: nil)
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidLogin(_:)), name: NSNotification.Name.jpfNetworkDidLogin, object: nil)
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.receivePushMessage(_:)), name: NSNotification.Name.jpfNetworkDidReceiveMessage, object: nil)
   }
   
   // notification from JPush
-  func networkDidSetup(notification:NSNotification) {
+  func networkDidSetup(_ notification:Notification) {
     print("Action - networkDidSetup")
   }
   
   // notification from JPush
-  func networkIsConnecting(notification:NSNotification) {
+  func networkIsConnecting(_ notification:Notification) {
     print("Action - networkIsConnecting")
   }
   
   // notification from JPush
-  func networkDidClose(notification:NSNotification) {
+  func networkDidClose(_ notification:Notification) {
     print("Action - networkDidClose")
   }
   
   // notification from JPush
-  func networkDidRegister(notification:NSNotification) {
+  func networkDidRegister(_ notification:Notification) {
     print("Action - networkDidRegister")
   }
   
   // notification from JPush
-  func networkDidLogin(notification:NSNotification) {
+  func networkDidLogin(_ notification:Notification) {
     print("Action - networkDidLogin")
   }
   // notification from JPush
 
-  func receivePushMessage(notification:NSNotification) {
+  func receivePushMessage(_ notification:Notification) {
     print("Action - receivePushMessage")
   }
   
   
-  func applicationWillResignActive(application: UIApplication) {
+  func applicationWillResignActive(_ application: UIApplication) {
   }
 
-  func applicationDidEnterBackground(application: UIApplication) {
+  func applicationDidEnterBackground(_ application: UIApplication) {
   }
 
-  func applicationWillEnterForeground(application: UIApplication) {
+  func applicationWillEnterForeground(_ application: UIApplication) {
     application.applicationIconBadgeNumber = 0
     application.cancelAllLocalNotifications()
   }
 
-  func applicationDidBecomeActive(application: UIApplication) {
+  func applicationDidBecomeActive(_ application: UIApplication) {
   }
 
-  func applicationWillTerminate(application: UIApplication) {
+  func applicationWillTerminate(_ application: UIApplication) {
   }
 }
 

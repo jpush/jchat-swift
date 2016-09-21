@@ -33,7 +33,7 @@ class JChatChattingDataSource: NSObject {
     self.imageMessageArr = NSMutableArray()
     self.isNoMoreHistoryMsg = false
     self.messageOffset = 0
-    self.messageCell = JChatRightMessageCell.init(style: .Default, reuseIdentifier: "MessageCellToGetRowHeight")
+    self.messageCell = JChatRightMessageCell.init(style: .default, reuseIdentifier: "MessageCellToGetRowHeight")
   }
   
   /**
@@ -47,38 +47,38 @@ class JChatChattingDataSource: NSObject {
   /**
   *  把消息拼接到消息列表的最后
   */
-  func appendMessage(model:NSObject) {
-    if model.isKindOfClass(JChattimeModel) {
-      self.allMessageIdArr.addObject(model)
+  func appendMessage(_ model:NSObject) {
+    if model.isKind(of: JChattimeModel.self) {
+      self.allMessageIdArr.add(model)
     } else {
       self.getMessageCellHeight(model as! JChatMessageModel)
-      self.allMessageDic.setObject(model, forKey: (model as! JChatMessageModel).message.msgId)
+      self.allMessageDic.setObject(model, forKey: (model as! JChatMessageModel).message.msgId as NSCopying)
 
-      self.allMessageIdArr.addObject((model as! JChatMessageModel).message.msgId)
+      self.allMessageIdArr.add((model as! JChatMessageModel).message.msgId)
       
-      self.imageMessageArr.addObject(model)
+      self.imageMessageArr.add(model)
     }
   }
   
   /**
   *  拼接时间消息到消息列表最后一行
   */
-  func appendTimeData(timeInterVal:NSTimeInterval) {
+  func appendTimeData(_ timeInterVal:TimeInterval) {
     let timeModel = JChattimeModel()
-    timeModel.messageTime = timeInterVal
+    timeModel.messageTime = timeInterVal as NSNumber!
     self.appendMessage(timeModel)
   }
   
   /**
   *  插入消息到消息列表的指定行
   */
-  func addmessage(model:NSObject, toIndex index:Int) {
-    if model.isKindOfClass(JChattimeModel) {
-      self.allMessageIdArr.insertObject(model, atIndex: index)
+  func addmessage(_ model:NSObject, toIndex index:Int) {
+    if model.isKind(of: JChattimeModel.self) {
+      self.allMessageIdArr.insert(model, at: index)
     } else {
       self.getMessageCellHeight(model as! JChatMessageModel)
-      self.allMessageIdArr.insertObject(model, atIndex: index)
-      self.allMessageDic.setObject(model, forKey: (model as! JChatMessageModel).message.msgId)
+      self.allMessageIdArr.insert(model, at: index)
+      self.allMessageDic.setObject(model, forKey: (model as! JChatMessageModel).message.msgId as NSCopying)
     }
   }
   
@@ -90,26 +90,26 @@ class JChatChattingDataSource: NSObject {
     self.allMessageDic.removeAllObjects()
     self.allMessageIdArr.removeAllObjects()
     let arrList = NSMutableArray()
-    self.allMessageIdArr.addObject(NSObject())
-    let thearr = self.conversation.messageArrayFromNewestWithOffset(self.messageOffset, limit: self.messagefristPageNumber) as NSArray
+    self.allMessageIdArr.add(NSObject())
+    let thearr = self.conversation.messageArrayFromNewest(withOffset: self.messageOffset as NSNumber?, limit: self.messagefristPageNumber as NSNumber?) as NSArray
     
-    arrList.addObjectsFromArray((self.conversation.messageArrayFromNewestWithOffset(self.messageOffset, limit: self.messagefristPageNumber) as NSArray).reverseObjectEnumerator().allObjects)
+    arrList.addObjects(from: (self.conversation.messageArrayFromNewest(withOffset: self.messageOffset as NSNumber?, limit: self.messagefristPageNumber as NSNumber?) as NSArray).reverseObjectEnumerator().allObjects)
     self.messageOffset = self.messageOffset + self.messagefristPageNumber
     if arrList.count < self.messagefristPageNumber {
       self.isNoMoreHistoryMsg = true
-      self.allMessageIdArr.removeObjectAtIndex(0)
+      self.allMessageIdArr.removeObject(at: 0)
     }
 
-    for (_, value) in arrList.enumerate() {
+    for (_, value) in arrList.enumerated() {
       let message:JMSGMessage = value as! JMSGMessage
       let model:JChatMessageModel = JChatMessageModel()
       model.setChatModel(message, conversation: self.conversation)
       self.getMessageCellHeight(model)
       self.dataMessageShowtime(message.timestamp)
-      self.allMessageDic.setObject(model, forKey: model.message.msgId)
-      self.allMessageIdArr.addObject(model.message.msgId)
-      if message.contentType == .Image {
-        imageMessageArr.addObject(model)
+      self.allMessageDic.setObject(model, forKey: model.message.msgId as NSCopying)
+      self.allMessageIdArr.add(model.message.msgId)
+      if message.contentType == .image {
+        imageMessageArr.add(model)
       }
     }
   }
@@ -121,30 +121,30 @@ class JChatChattingDataSource: NSObject {
     
     let arrList = NSMutableArray()
 //    arrList.addObjectsFromArray((self.conversation.messageArrayFromNewestWithOffset(self.messageOffset, limit: self.messageLimit) as NSArray).reverseObjectEnumerator().allObjects)
-    arrList.addObjectsFromArray(self.conversation.messageArrayFromNewestWithOffset(self.messageOffset, limit: self.messageLimit) as NSArray as [AnyObject])
+    arrList.addObjects(from: self.conversation.messageArrayFromNewest(withOffset: self.messageOffset as NSNumber?, limit: self.messageLimit as NSNumber?) as NSArray as [AnyObject])
     self.messageOffset = self.messageOffset + self.messageLimit
     if arrList.count < self.messageLimit {
       self.isNoMoreHistoryMsg = true
-      self.allMessageIdArr.removeObjectAtIndex(0)
+      self.allMessageIdArr.removeObject(at: 0)
     }
     
-    for (_, value) in arrList.enumerate() {
+    for (_, value) in arrList.enumerated() {
       let message:JMSGMessage = value as! JMSGMessage
       let model:JChatMessageModel = JChatMessageModel()
       model.setChatModel(message, conversation: self.conversation)
       self.getMessageCellHeight(model)
       self.dataMessageShowTimeToTop(message.timestamp)
       if self.isNoMoreHistoryMsg == true {
-        self.allMessageIdArr.insertObject(model.message.msgId, atIndex: 0)
+        self.allMessageIdArr.insert(model.message.msgId, at: 0)
       } else {
-        self.allMessageIdArr.insertObject(model.message.msgId, atIndex: 1)
+        self.allMessageIdArr.insert(model.message.msgId, at: 1)
       }
       
-      if message.contentType == .Image {
-        imageMessageArr.insertObject(model, atIndex: 0)
+      if message.contentType == .image {
+        imageMessageArr.insert(model, at: 0)
       }
       
-      self.allMessageDic.setObject(model, forKey: model.message.msgId)
+      self.allMessageDic.setObject(model, forKey: model.message.msgId as NSCopying)
       
     }
   }
@@ -166,13 +166,13 @@ class JChatChattingDataSource: NSObject {
   /**
   *  通过index 获取置顶消息model
   */
-  func getMessageWithIndex(index:Int) -> AnyObject {
+  func getMessageWithIndex(_ index:Int) -> AnyObject {
     let messageId = self.allMessageIdArr[index]
-    if messageId.isKindOfClass(JChattimeModel) {
-      return messageId
+    if (messageId as AnyObject) is JChattimeModel {
+      return messageId as AnyObject
     } else {
     
-      let model:JChatMessageModel = self.allMessageDic.objectForKey(messageId) as! JChatMessageModel
+      let model:JChatMessageModel = self.allMessageDic.object(forKey: messageId) as! JChatMessageModel
       return model
     }
   }
@@ -180,8 +180,8 @@ class JChatChattingDataSource: NSObject {
   /**
   *  通过msgId 获取指定消息model
   */
-  func getMessageWithMsgId(messageId:String) -> JChatMessageModel{
-    return self.allMessageDic.objectForKey(messageId) as! JChatMessageModel
+  func getMessageWithMsgId(_ messageId:String) -> JChatMessageModel{
+    return self.allMessageDic.object(forKey: messageId) as! JChatMessageModel
   }
   
   /**
@@ -196,9 +196,9 @@ class JChatChattingDataSource: NSObject {
   /**
   *  返回 指定message 的位置
   */
-  func tableIndexPathWithMessageId(messageId:String) -> NSIndexPath {
-    let index = self.allMessageIdArr.indexOfObject(messageId)
-    let indexPath = NSIndexPath(forRow: index, inSection: 0)
+  func tableIndexPathWithMessageId(_ messageId:String) -> IndexPath {
+    let index = self.allMessageIdArr.index(of: messageId)
+    let indexPath = IndexPath(row: index, section: 0)
     return indexPath
   }
 
@@ -206,15 +206,15 @@ class JChatChattingDataSource: NSObject {
   /**
    * 删除message
    */
-  func deleteMessage(message:JMSGMessage) {
-    self.allMessageIdArr.removeObject(message.msgId)
-    self.allMessageDic.removeObjectForKey(message.msgId)
+  func deleteMessage(_ message:JMSGMessage) {
+    self.allMessageIdArr.remove(message.msgId)
+    self.allMessageDic.removeObject(forKey: message.msgId)
   }
   
   /**
   *
   */
-  func isContaintMessage(msgId:String) -> Bool {
+  func isContaintMessage(_ msgId:String) -> Bool {
     if self.allMessageDic[msgId] == nil {
       return false
     } else {
@@ -222,68 +222,70 @@ class JChatChattingDataSource: NSObject {
     }
   }
   
-  internal func getMessageCellHeight(model: JChatMessageModel) -> CGFloat {
+  internal func getMessageCellHeight(_ model: JChatMessageModel) -> CGFloat {
     messageCell.setCellData(model)
     messageCell.layoutIfNeeded()
-    let height = messageCell.systemLayoutSizeFittingSize(CGSizeZero).height
+    let height = messageCell.systemLayoutSizeFitting(CGSize.zero).height
     model.messageCellHeight = height + 1
     return height
   }
   
-  internal func dataMessageShowtime(timeNumber:NSNumber) {
+  internal func dataMessageShowtime(_ timeNumber:NSNumber) {
     if self.allMessageIdArr.count > 0 {
-      if self.allMessageIdArr.lastObject!.isKindOfClass(NSString) {
+      if (self.allMessageIdArr.lastObject! as AnyObject) is NSString {
         let messageId = self.allMessageIdArr.lastObject
-        let lastModel = self.allMessageDic.objectForKey(messageId!) as! JChatMessageModel
+        let lastModel = self.allMessageDic.object(forKey: messageId!) as! JChatMessageModel
         let timeInterVal = timeNumber.doubleValue
-        if lastModel.isKindOfClass(JChatMessageModel) != false {
-          let lastDate:NSDate = NSDate(timeIntervalSince1970: (lastModel.messageTime?.doubleValue)!)
-          let currentDate = NSDate(timeIntervalSince1970: timeInterVal)
+        if lastModel.isKind(of: JChatMessageModel.self) != false {
+          let lastDate:Date = Date(timeIntervalSince1970: (lastModel.messageTime?.doubleValue)!)
+          let currentDate = Date(timeIntervalSince1970: timeInterVal)
           
-          let timeBetween = currentDate.timeIntervalSinceDate(lastDate)
+          let timeBetween = currentDate.timeIntervalSince(lastDate)
           if fabs(timeBetween) > showTimeInterval {
             let timeModel = JChattimeModel()
-            timeModel.messageTime = timeInterVal
-            self.allMessageIdArr.addObject(timeModel)
+            timeModel.messageTime = timeInterVal as NSNumber!
+            self.allMessageIdArr.add(timeModel)
           }
         }
       }
     } else {
       let timeInterVal = timeNumber.doubleValue
       let timeModel = JChattimeModel()
-      timeModel.messageTime = timeInterVal
-      self.allMessageIdArr.addObject(timeModel)
+      timeModel.messageTime = timeInterVal as NSNumber!
+      self.allMessageIdArr.add(timeModel)
     }
   }
   
-  func dataMessageShowTimeToTop(timeNumber:NSNumber) {
+  func dataMessageShowTimeToTop(_ timeNumber:NSNumber) {
     
     if self.allMessageIdArr.count > 0 {
       var fristObj:AnyObject
       
       if self.isNoMoreHistoryMsg! {
-        fristObj = self.allMessageIdArr[0]
+//        fristObj = self.allMessageIdArr[0]
+        fristObj = self.allMessageIdArr.object(at: 0) as AnyObject
       } else {
-        fristObj = self.allMessageIdArr[1]
+//        fristObj = self.allMessageIdArr[1]
+        fristObj = self.allMessageIdArr.object(at: 1) as AnyObject
       }
-      
-      if fristObj.isKindOfClass(NSString) {
-        let fristModel = self.allMessageDic.objectForKey(fristObj) as! JChatMessageModel
+      print(fristObj is NSString)
+      if fristObj is NSString {
+        let fristModel = self.allMessageDic.object(forKey: fristObj) as! JChatMessageModel
         let timeInterVal = timeNumber.doubleValue
         
-        if fristModel.isKindOfClass(JChatMessageModel) == true {
-          let lastDate:NSDate = NSDate(timeIntervalSince1970: (fristModel.messageTime?.doubleValue)!)
-          let currentDate = NSDate(timeIntervalSince1970: timeInterVal)
+        if fristModel.isKind(of: JChatMessageModel.self) == true {
+          let lastDate:Date = Date(timeIntervalSince1970: (fristModel.messageTime?.doubleValue)!)
+          let currentDate = Date(timeIntervalSince1970: timeInterVal)
           
-          let timeBetween = lastDate.timeIntervalSinceDate(currentDate)
+          let timeBetween = lastDate.timeIntervalSince(currentDate)
           
           if fabs(timeBetween) > showTimeInterval {
             let timeModel = JChattimeModel()
-            timeModel.messageTime = timeInterVal
+            timeModel.messageTime = timeInterVal as NSNumber!
             if self.isNoMoreHistoryMsg! {
-              self.allMessageIdArr.insertObject(timeModel, atIndex:0)
+              self.allMessageIdArr.insert(timeModel, at:0)
             } else {
-              self.allMessageIdArr.insertObject(timeModel, atIndex:1)
+              self.allMessageIdArr.insert(timeModel, at:1)
             }
           }
         }

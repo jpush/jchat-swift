@@ -20,20 +20,20 @@ class JCHATMemberCollectionCell: UICollectionViewCell {
     self.avatarImg.layer.masksToBounds = true
     self.deleteLableBtn.layer.masksToBounds = true
     self.avatarImg.layer.cornerRadius = self.avatarImg.bounds.size.height / 2
-    self.avatarImg.contentMode = .ScaleAspectFill
+    self.avatarImg.contentMode = .scaleAspectFill
     self.deleteLableBtn.layer.cornerRadius = 10
   }
 
-  func setCellData(user:JMSGUser, isDeleting: Bool) {
+  func setCellData(_ user:JMSGUser, isDeleting: Bool) {
     self.userNameLable.text = user.displayName()
-    self.deleteLableBtn.hidden = !isDeleting
+    self.deleteLableBtn.isHidden = !isDeleting
     
     user.thumbAvatarData { (data, objectId, error) -> Void in
       if error == nil {
         if data == nil {
           self.avatarImg.image = UIImage(named: "headDefalt")
         } else {
-          self.avatarImg.image = UIImage(data: data)
+          self.avatarImg.image = UIImage(data: data!)
         }
       } else {
         print("get thumbAvatar fail")
@@ -43,13 +43,13 @@ class JCHATMemberCollectionCell: UICollectionViewCell {
 
   func setDeleteMember() {
     self.userNameLable.text = ""
-    self.deleteLableBtn.hidden = true
+    self.deleteLableBtn.isHidden = true
     self.avatarImg.image = UIImage(named: "deleteMan")
   }
   
   func setAddMember() {
     self.userNameLable.text = ""
-    self.deleteLableBtn.hidden = true
+    self.deleteLableBtn.isHidden = true
     self.avatarImg.image = UIImage(named: "addMan")
   }
 }

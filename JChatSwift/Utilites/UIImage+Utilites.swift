@@ -10,11 +10,11 @@ import Foundation
 import CoreImage
 import UIKit
 
-typealias Filter = CIImage -> UIImage?
+typealias Filter = (CIImage) -> UIImage?
 
 extension UIImage {
   
-  class func blur(radius:Double, inputImage:UIImage) -> UIImage? {
+  class func blur(_ radius:Double, inputImage:UIImage) -> UIImage? {
 
     let filter = CIFilter(name: "CIGaussianBlur")
     let beginImage = CoreImage.CIImage(image: inputImage)
@@ -22,7 +22,7 @@ extension UIImage {
     filter?.setValue(radius, forKey: kCIInputRadiusKey)
     
     let cimage = (filter?.outputImage)!
-    return UIImage(CIImage: cimage)
+    return UIImage(ciImage: cimage)
   }
 
 }

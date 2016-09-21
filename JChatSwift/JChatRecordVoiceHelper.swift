@@ -8,6 +8,26 @@
 
 import UIKit
 import AVFoundation
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 let maxRecordTime = 60.0
 
@@ -23,8 +43,8 @@ class JChatRecordVoiceHelper: NSObject {
   var recordPath:String?
   var recordDuration:String?
   var recordProgress:Float?
-  var theTimer:NSTimer?
-  var currentTimeInterval:NSTimeInterval?
+  var theTimer:Timer?
+  var currentTimeInterval:TimeInterval?
 
   weak var updateMeterDelegate:JChatRecordingView?
   override init() {
@@ -40,21 +60,21 @@ class JChatRecordVoiceHelper: NSObject {
     if self.recorder == nil { return }
     self.currentTimeInterval = self.recorder?.currentTime
 
-    self.recordProgress = self.recorder?.peakPowerForChannel(0)
+    self.recordProgress = self.recorder?.peakPower(forChannel: 0)
     self.updateMeterDelegate?.setPeakPower(self.recordProgress!)
     
     if self.currentTimeInterval > maxRecordTime {
       self.stopRecord()
       if self.stopRecordCompletion != nil {
-        dispatch_async(dispatch_get_main_queue(), self.stopRecordCompletion!)
+        DispatchQueue.main.async(execute: self.stopRecordCompletion!)
         self.recorder?.updateMeters()
       }
     }
   }
   
-  func getVoiceDuration(recordPath:String) {
+  func getVoiceDuration(_ recordPath:String) {
     do {
-      let player:AVAudioPlayer = try AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: recordPath))
+      let player:AVAudioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: recordPath))
       player.play()
       self.recordDuration = "\(player.duration)"
     } catch let error as NSError {
@@ -74,7 +94,7 @@ class JChatRecordVoiceHelper: NSObject {
   func cancelRecording() {
     if self.recorder == nil { return }
     
-    if self.recorder?.recording != false {
+    if self.recorder?.isRecording != false {
       self.recorder?.stop()
     }
     
@@ -86,7 +106,7 @@ class JChatRecordVoiceHelper: NSObject {
     self.resetTimer()
   }
   
-  func startRecordingWithPath(path:String, startRecordCompleted:CompletionCallBack) {
+  func startRecordingWithPath(_ path:String, startRecordCompleted:@escaping CompletionCallBack) {
     print("Action - startRecordingWithPath:")
     self.startRecordCompleted = startRecordCompleted
     self.recordPath = path
@@ -107,17 +127,17 @@ class JChatRecordVoiceHelper: NSObject {
     }
     
     let recordSettings:[String : AnyObject] = [
-      AVFormatIDKey: NSNumber(unsignedInt:kAudioFormatAppleIMA4),
-      AVNumberOfChannelsKey: 1,
-      AVSampleRateKey : 16000.0
+      AVFormatIDKey: NSNumber(value: kAudioFormatAppleIMA4 as UInt32),
+      AVNumberOfChannelsKey: 1 as AnyObject,
+      AVSampleRateKey : 16000.0 as AnyObject
     ]
     
     do {
-      self.recorder = try AVAudioRecorder(URL: NSURL.fileURLWithPath(self.recordPath!), settings: recordSettings)
+      self.recorder = try AVAudioRecorder(url: URL(fileURLWithPath: self.recordPath!), settings: recordSettings)
       self.recorder!.delegate = self
-      self.recorder!.meteringEnabled = true
+      self.recorder!.isMeteringEnabled = true
       self.recorder!.prepareToRecord()
-      self.recorder?.recordForDuration(160.0)
+      self.recorder?.record(forDuration: 160.0)
     } catch let error as NSError {
       recorder = nil
       print(error.localizedDescription)
@@ -125,13 +145,13 @@ class JChatRecordVoiceHelper: NSObject {
     
     if ((self.recorder?.record()) != false) {
       self.resetTimer()
-      self.theTimer = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(JChatRecordVoiceHelper.updateMeters), userInfo: nil, repeats: true)
+      self.theTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(JChatRecordVoiceHelper.updateMeters), userInfo: nil, repeats: true)
     } else {
       print("fail record")
     }
     
     if self.startRecordCompleted != nil {
-      dispatch_async(dispatch_get_main_queue(), self.startRecordCompleted!)
+      DispatchQueue.main.async(execute: self.startRecordCompleted!)
     }
   }
   
@@ -140,33 +160,33 @@ class JChatRecordVoiceHelper: NSObject {
     self.getVoiceDuration(self.recordPath!)
     
     if self.stopRecordCompletion != nil {
-      dispatch_async(dispatch_get_main_queue(), self.stopRecordCompletion!)
+      DispatchQueue.main.async(execute: self.stopRecordCompletion!)
     }
   }
   
   func cancelledDeleteWithCompletion() {
     self.stopRecord()
     if self.recordPath != nil {
-      let fileManager:NSFileManager = NSFileManager.defaultManager()
-      if fileManager.fileExistsAtPath(self.recordPath!) == true {
+      let fileManager:FileManager = FileManager.default
+      if fileManager.fileExists(atPath: self.recordPath!) == true {
         do {
-          try fileManager.removeItemAtPath(self.recordPath!)
+          try fileManager.removeItem(atPath: self.recordPath!)
         } catch let error as NSError {
           print("can no to remove the voice file \(error.localizedDescription)")
         }
       } else {
         if self.cancelledDeleteCompletion != nil {
-          dispatch_async(dispatch_get_main_queue(), self.cancelledDeleteCompletion!)
+          DispatchQueue.main.async(execute: self.cancelledDeleteCompletion!)
         }
       }
       
     }
   }
 // test player
-  func playVoice(recordPath:String) {
+  func playVoice(_ recordPath:String) {
     do {
       print("\(recordPath)")
-      let player:AVAudioPlayer = try AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: recordPath))
+      let player:AVAudioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: recordPath))
       player.volume = 1
       player.delegate = self
       player.numberOfLoops = -1
@@ -182,12 +202,12 @@ class JChatRecordVoiceHelper: NSObject {
 }
 
 extension JChatRecordVoiceHelper : AVAudioPlayerDelegate {
-  func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+  func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
     print("finished playing \(flag)")
     
   }
   
-  func audioPlayerDecodeErrorDidOccur(player: AVAudioPlayer, error: NSError?) {
+  func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
     if let e = error {
       print("\(e.localizedDescription)")
     }

@@ -19,26 +19,26 @@ class JChatConversationListViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.conversationArr = NSMutableArray()
-    JMessage.addDelegate(self, withConversation: nil)
+    JMessage.add(self, with: nil)
     self.setupNavigation()
     self.layoutAllViews()
     self.addNotifications()
   }
   
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     self.getConversationList()
   }
   
   func setupNavigation() {
-    self.navigationController?.navigationBar.translucent = false
+    self.navigationController?.navigationBar.isTranslucent = false
     self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     self.title = "会话"
-    let rightBtn = UIButton(type: .Custom)
+    let rightBtn = UIButton(type: .custom)
     rightBtn.frame = CGRect(x: 0, y: 0, width: 50, height: 30)
-    rightBtn.addTarget(self, action: #selector(self.showBubbleView), forControlEvents: .TouchUpInside)
-    rightBtn.setImage(UIImage(named: "createConversation"), forState: .Normal)
-    rightBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -15 * UIScreen.mainScreen().scale)
+    rightBtn.addTarget(self, action: #selector(self.showBubbleView), for: .touchUpInside)
+    rightBtn.setImage(UIImage(named: "createConversation"), for: UIControlState())
+    rightBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -15 * UIScreen.main.scale)
     self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
     
   }
@@ -73,7 +73,7 @@ class JChatConversationListViewController: UIViewController {
     JMSGConversation.allConversations { (resultObject, error) -> Void in
       if error == nil {
         self.conversationArr.removeAllObjects()
-        self.conversationArr.addObjectsFromArray((resultObject as! [AnyObject]).reverse())
+        self.conversationArr.addObjects(from: (resultObject as! [AnyObject]).reversed())
       } else {
         self.conversationArr.removeAllObjects()
       }
@@ -83,28 +83,28 @@ class JChatConversationListViewController: UIViewController {
   
   func addNotifications() {
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.netWorkConnectClose), name: kJPFNetworkDidCloseNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.netWorkConnectClose), name: NSNotification.Name.jpfNetworkDidClose, object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.netWorkConnectSetup), name: kJPFNetworkDidSetupNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.netWorkConnectSetup), name: NSNotification.Name.jpfNetworkDidSetup, object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.connectSucceed), name: kJPFNetworkDidCloseNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.connectSucceed), name: NSNotification.Name.jpfNetworkDidClose, object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.isConnecting), name: kJPFNetworkIsConnectingNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.isConnecting), name: NSNotification.Name.jpfNetworkIsConnecting, object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.dBMigrateFinish), name: kDBMigrateFinishNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.dBMigrateFinish), name: NSNotification.Name(rawValue: kDBMigrateFinishNotification), object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.alreadyLoginClick), name: kLogin_NotifiCation, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.alreadyLoginClick), name: NSNotification.Name(rawValue: kLogin_NotifiCation), object: nil)
     
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.skipToSingleChat(_:)), name: kSkipToSingleChatViewState, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.skipToSingleChat(_:)), name: NSNotification.Name(rawValue: kSkipToSingleChatViewState), object: nil)
     
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.didLoginJpush), name: kJPFNetworkDidLoginNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.didLoginJpush), name: NSNotification.Name.jpfNetworkDidLogin, object: nil)
   }
   
-  func skipToSingleChat(notification:NSNotification) {
-    let user:JMSGUser = notification.object?.copy() as! JMSGUser
+  func skipToSingleChat(_ notification:Notification) {
+    let user:JMSGUser = (notification.object as AnyObject) as! JMSGUser
     let singleChatVC = JChatChattingViewController()
     
-    JMSGConversation.createSingleConversationWithUsername(user.username) { (resultObject, error) in
+    JMSGConversation.createSingleConversation(withUsername: user.username) { (resultObject, error) in
       if error == nil {
         singleChatVC.conversation = resultObject as! JMSGConversation
         singleChatVC.hidesBottomBarWhenPushed = true
@@ -118,31 +118,31 @@ class JChatConversationListViewController: UIViewController {
   
   func netWorkConnectClose() {
     
-    dispatch_async(dispatch_get_main_queue()) {
+    DispatchQueue.main.async {
       self.title = "未连接"
     }
   }
 
   func didLoginJpush() {
-    dispatch_async(dispatch_get_main_queue()) {
+    DispatchQueue.main.async {
       self.title = "会话"
     }
   }
   func netWorkConnectSetup() {
-    dispatch_async(dispatch_get_main_queue()) {
+    DispatchQueue.main.async {
       self.title = "收取中.."
     }
   }
   
   func connectSucceed() {
-    dispatch_async(dispatch_get_main_queue()) {
+    DispatchQueue.main.async {
       self.title = "会话"
     }
  
   }
   
   func isConnecting() {
-    dispatch_async(dispatch_get_main_queue()) { 
+    DispatchQueue.main.async { 
       self.title = "链接中.."
     }
     
@@ -170,45 +170,45 @@ extension JChatConversationListViewController: TouchTableViewDelegate {
 
 
 extension JChatConversationListViewController: UITableViewDataSource,UITableViewDelegate {
-  func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let identify = "JChatConversationListCell"
-    var cell:JChatConversationListCell? = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatConversationListCell
+    var cell:JChatConversationListCell? = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatConversationListCell
     
     if cell == nil {
-      tableView.registerClass(NSClassFromString(identify), forCellReuseIdentifier: identify)
-      cell = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatConversationListCell
-      cell = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatConversationListCell
+      tableView.register(NSClassFromString(identify), forCellReuseIdentifier: identify)
+      cell = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatConversationListCell
+      cell = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatConversationListCell
     }
     
-    cell?.setCellData(self.conversationArr.objectAtIndex(indexPath.row) as! JMSGConversation)
+    cell?.setCellData(self.conversationArr.object(at: (indexPath as NSIndexPath).row) as! JMSGConversation)
     return cell!
   }
   
-  func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return self.conversationArr.count
   }
   
-  func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-    let cell = tableView.cellForRowAtIndexPath(indexPath)
-    cell?.selected = false
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    let cell = tableView.cellForRow(at: indexPath)
+    cell?.isSelected = false
     
     let chattingVC = JChatChattingViewController()
     chattingVC.hidesBottomBarWhenPushed = true
-    chattingVC.conversation = self.conversationArr.objectAtIndex(indexPath.row) as! JMSGConversation
+    chattingVC.conversation = self.conversationArr.object(at: (indexPath as NSIndexPath).row) as! JMSGConversation
     self.navigationController?.pushViewController(chattingVC, animated: true)
   }
 
-  func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-    let conversation = self.conversationArr[indexPath.row] as! JMSGConversation
+  func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    let conversation = self.conversationArr[(indexPath as NSIndexPath).row] as! JMSGConversation
     
-    if conversation.conversationType == .Single {
-      JMSGConversation.deleteSingleConversationWithUsername((conversation.target as! JMSGUser).username)
+    if conversation.conversationType == .single {
+      JMSGConversation.deleteSingleConversation(withUsername: (conversation.target as! JMSGUser).username)
     } else {
-      JMSGConversation.deleteGroupConversationWithGroupId((conversation.target as! JMSGGroup).gid)
+      JMSGConversation.deleteGroupConversation(withGroupId: (conversation.target as! JMSGGroup).gid)
     }
     
-    self.conversationArr.removeObjectAtIndex(indexPath.row)
-    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+    self.conversationArr.removeObject(at: (indexPath as NSIndexPath).row)
+    tableView.deleteRows(at: [indexPath], with: .none)
   }
 }
 
@@ -221,10 +221,10 @@ extension JChatConversationListViewController: UIGestureRecognizerDelegate {
 extension JChatConversationListViewController: JChatBubbleAlertViewDelegate {
   func clickBubbleFristBtn() {
     MBProgressHUD.showMessage("正在创建群组", toView: self.view)
-    JMSGGroup.createGroupWithName(JMSGUser.myInfo().displayName(), desc: "", memberArray: nil) { (group, error) -> Void in
-      MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+    JMSGGroup.createGroup(withName: JMSGUser.myInfo().displayName(), desc: "", memberArray: nil) { (group, error) -> Void in
+      MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
       if error == nil {
-        JMSGConversation.createGroupConversationWithGroupId((group as! JMSGGroup).gid, completionHandler: { (groupConversation, error) -> Void in
+        JMSGConversation.createGroupConversation(withGroupId: (group as! JMSGGroup).gid, completionHandler: { (groupConversation, error) -> Void in
           
           if error == nil {
             let conversationVC = JChatChattingViewController()
@@ -232,12 +232,12 @@ extension JChatConversationListViewController: JChatBubbleAlertViewDelegate {
             conversationVC.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(conversationVC, animated: true)
           } else {
-            print("createGroup error with \(NSString.errorAlert(error))")
+            print("createGroup error with \(NSString.errorAlert(error as! NSError))")
           }
         })
 
       } else {
-        print("createGroup error with \(NSString.errorAlert(error))")
+        print("createGroup error with \(NSString.errorAlert(error as! NSError))")
       }
 
     }
@@ -245,24 +245,24 @@ extension JChatConversationListViewController: JChatBubbleAlertViewDelegate {
   
   func clickBubbleSecondBtn() {
     let alertView = UIAlertView(title: "添加好友", message: "输入好友用户名!", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "确定")
-    alertView.alertViewStyle = .PlainTextInput
+    alertView.alertViewStyle = .plainTextInput
     alertView.show()
   }
 }
 
 
 extension JChatConversationListViewController: UIAlertViewDelegate {
-  func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+  func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
     if buttonIndex == 0 { return }
 
-    if alertView.textFieldAtIndex(0)?.text == "" {
+    if alertView.textField(at: 0)?.text == "" {
       MBProgressHUD .showMessage("请输入用户名", view: self.view)
       return
     } else {
       MBProgressHUD.showMessage("正在创建单聊", toView: self.view)
-      JMSGConversation.createSingleConversationWithUsername((alertView.textFieldAtIndex(0)?.text)!, completionHandler: { (singleConversation, error) -> Void in
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-          MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+      JMSGConversation.createSingleConversation(withUsername: (alertView.textField(at: 0)?.text)!, completionHandler: { (singleConversation, error) -> Void in
+        DispatchQueue.main.async(execute: { () -> Void in
+          MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
         })
         
         if error == nil {
@@ -282,17 +282,17 @@ extension JChatConversationListViewController: UIAlertViewDelegate {
 
 extension JChatConversationListViewController: JMessageDelegate {
 
-  func onReceiveMessage(message: JMSGMessage!, error: NSError!) {
+  func onReceive(_ message: JMSGMessage!, error: NSError!) {
     print("Action -- onReceivemessage \(message)")
     self.getConversationList()
     
   }
-  func onConversationChanged(conversation: JMSGConversation!) {
+  func onConversationChanged(_ conversation: JMSGConversation!) {
     print("Action -- onConversationChanged")
     self.getConversationList()
   }
 
-  func onGroupInfoChanged(group: JMSGGroup!) {
+  func onGroupInfoChanged(_ group: JMSGGroup!) {
     print("Action -- onGroupInfoChanged")
     self.getConversationList()
   }

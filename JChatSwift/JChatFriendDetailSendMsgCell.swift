@@ -17,19 +17,19 @@ class JChatFriendDetailSendMsgCell: UITableViewCell {
   
   override func awakeFromNib() {
     super.awakeFromNib()
-    self.sendMsgBtn.setBackgroundColor(UIColor(netHex: 0x6fd66b), forState: .Normal)
-    self.sendMsgBtn.setBackgroundColor(UIColor(netHex: 0x50cb50), forState: .Highlighted)
+    self.sendMsgBtn.setBackgroundColor(UIColor(netHex: 0x6fd66b), forState: UIControlState())
+    self.sendMsgBtn.setBackgroundColor(UIColor(netHex: 0x50cb50), forState: .highlighted)
   }
 
-  func setClickSendMsgCallback(clickBtnCallback:SendMessageCallback) {
+  func setClickSendMsgCallback(_ clickBtnCallback:@escaping SendMessageCallback) {
     self.callBack = clickBtnCallback
   }
   
-  @IBAction func clickSendMessageBtn(sender: AnyObject) {
+  @IBAction func clickSendMessageBtn(_ sender: AnyObject) {
    self.callBack?()
   }
   
-  override func setSelected(selected: Bool, animated: Bool) {
+  override func setSelected(_ selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
 
   }

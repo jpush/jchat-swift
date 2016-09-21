@@ -21,69 +21,69 @@ let D_DAY = 86400.0
 let D_WEEK = 604800.0
 let D_YEAR = 31556926.0
 
-internal let componentFlags:NSCalendarUnit = [.Year, .Month, .Day, .Weekday, .Hour, .Minute, .Second, .WeekdayOrdinal]
+internal let componentFlags:NSCalendar.Unit = [.year, .month, .day, .weekday, .hour, .minute, .second, .weekdayOrdinal]
 
-extension NSDate {
-  class func currentCalendar() -> NSCalendar{
-    let calendar = NSCalendar.autoupdatingCurrentCalendar()
+extension Date {
+  static func currentCalendar() -> Calendar{
+    let calendar = Calendar.autoupdatingCurrent
     return calendar
   }
 
-  func isEqualToDateIgnoringTime(date:NSDate) -> Bool{
-    let components1:NSDateComponents = NSDate.currentCalendar().components(componentFlags, fromDate: self)
-    let components2:NSDateComponents = NSDate.currentCalendar().components(componentFlags, fromDate: date)
-    return (components1.year == components2.year) && (components1.month == components2.month) && (components1.date == components2.day)
+  func isEqualToDateIgnoringTime(_ date:Date) -> Bool{
+    let components1:DateComponents = (Date.currentCalendar() as NSCalendar).components(componentFlags, from: self)
+    let components2:DateComponents = (Date.currentCalendar() as NSCalendar).components(componentFlags, from: date)
+    return (components1.year == components2.year) && (components1.month == components2.month) && ((components1).day == components2.day)
 
   }
 
-  func dateByAddingDays(days:Int) -> NSDate {
-    let dateComponents = NSDateComponents()
+  func dateByAddingDays(_ days:Int) -> Date {
+    var dateComponents = DateComponents()
     dateComponents.day = days
-    let newDate:NSDate = NSCalendar.currentCalendar().dateByAddingComponents(dateComponents, toDate: self, options:NSCalendarOptions(rawValue: 0))!
+    let newDate:Date = (Calendar.current as NSCalendar).date(byAdding: dateComponents, to: self, options:NSCalendar.Options(rawValue: 0))!
     return newDate
   }
   
-  func dateBySubtractingDays(days:Int) -> NSDate {
+  func dateBySubtractingDays(_ days:Int) -> Date {
      return self.dateByAddingDays(days * -1)
   }
   
-  class func dateWithDaysFromNow(days:Int) -> NSDate {
-    return NSDate().dateByAddingDays(days)
+  static func dateWithDaysFromNow(_ days:Int) -> Date {
+    return Date().dateByAddingDays(days)
   }
 
-  class func dateWithDaysBeforeNow(days:Int) -> NSDate {
-    return NSDate().dateBySubtractingDays(days)
+  static func dateWithDaysBeforeNow(_ days:Int) -> Date {
+    return Date().dateBySubtractingDays(days)
   }
 
-  class func dateTomorrow() -> NSDate{
-    return NSDate.dateWithDaysFromNow(1)
+  static func dateTomorrow() -> Date{
+    return Date.dateWithDaysFromNow(1)
   }
   
-  class func dateYesterday() -> NSDate {
+  static func dateYesterday() -> Date {
 
-    return NSDate.dateWithDaysBeforeNow(1)
+    return Date.dateWithDaysBeforeNow(1)
   }
   
   func isToday() -> Bool {
-    return self.isEqualToDateIgnoringTime(NSDate())
+    return self.isEqualToDateIgnoringTime(Date())
   }
 
   func isTomorrow() -> Bool {
-    return self.isEqualToDateIgnoringTime(NSDate.dateTomorrow())
+    return self.isEqualToDateIgnoringTime(Date.dateTomorrow())
   }
 
   func isYesterday() -> Bool {
-    return self.isEqualToDateIgnoringTime(NSDate.dateYesterday())
+    return self.isEqualToDateIgnoringTime(Date.dateYesterday())
   }
 
-  func isSameWeekAsDate(date:NSDate) -> Bool {
-    let components1:NSDateComponents = NSDate.currentCalendar().components(componentFlags, fromDate: self)
-    let components2:NSDateComponents = NSDate.currentCalendar().components(componentFlags, fromDate: date)
+  func isSameWeekAsDate(_ date:Date) -> Bool {
+    let components1:DateComponents = (Date.currentCalendar() as NSCalendar).components(componentFlags, from: self)
+    let components2:DateComponents = (Date.currentCalendar() as NSCalendar).components(componentFlags, from: date)
     if components1.weekOfYear != components2.weekOfYear { return false }
-    return (fabs(self.timeIntervalSinceDate(date)) < D_WEEK)
+    return (fabs(self.timeIntervalSince(date)) < D_WEEK)
   }
   
   func isThisWeek() -> Bool {
-    return self.isSameWeekAsDate(NSDate())
+    return self.isSameWeekAsDate(Date())
   }
 }

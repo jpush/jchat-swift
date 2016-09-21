@@ -26,21 +26,21 @@ class JChatUpdatePasswordViewController: UIViewController {
 
   func setupNavigation() {
     self.title = "修改密码"
-    let leftBtn = UIButton(type: .Custom)
+    let leftBtn = UIButton(type: .custom)
     leftBtn.frame = kNavigationLeftButtonRect
-    leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
+    leftBtn.setImage(UIImage(named: "goBack"), for: UIControlState())
     leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-    leftBtn.addTarget(self, action: #selector(self.doBack), forControlEvents: .TouchUpInside)
+    leftBtn.addTarget(self, action: #selector(self.doBack), for: .touchUpInside)
     self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
     
-    self.navigationController?.navigationBar.translucent = false
+    self.navigationController?.navigationBar.isTranslucent = false
   }
   
   func doBack() {
-    self.navigationController?.popViewControllerAnimated(true)
+    self.navigationController?.popViewController(animated: true)
   }
   
-  @IBAction func clickToUpdatePassword(sender: AnyObject) {
+  @IBAction func clickToUpdatePassword(_ sender: AnyObject) {
     
     if self.oldPassword.text == "" {
       MBProgressHUD.showMessage("请输入原密码", view: self.view)
@@ -60,17 +60,17 @@ class JChatUpdatePasswordViewController: UIViewController {
     
     if self.newPassword.text == self.comfortNewPassword.text {
       MBProgressHUD.showMessage("正在修改", toView: self.view)
-      JMSGUser.updateMyPasswordWithNewPassword(self.newPassword.text!, oldPassword: self.oldPassword.text!, completionHandler: { (resultObject, error) -> Void in
-        dispatch_async(dispatch_get_main_queue(), { 
-          MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+      JMSGUser.updateMyPassword(withNewPassword: self.newPassword.text!, oldPassword: self.oldPassword.text!, completionHandler: { (resultObject, error) -> Void in
+        DispatchQueue.main.async(execute: { 
+          MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
         })
         
         if error == nil {
-          self.navigationController?.popViewControllerAnimated(true)
+          self.navigationController?.popViewController(animated: true)
           MBProgressHUD.showMessage("修改密码成功", view: self.view)
         } else {
           MBProgressHUD.showMessage("修改密码失败", view: self.view)
-          print("update password fail with error \(NSString.errorAlert(error))")
+          print("update password fail with error \(NSString.errorAlert(error as! NSError))")
         }
       })
     } else {

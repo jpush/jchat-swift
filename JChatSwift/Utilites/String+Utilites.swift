@@ -11,10 +11,10 @@ import Foundation
 extension String {
   subscript (r: Range<Int>) -> String {
     get {
-      let startIndex = self.startIndex.advancedBy(r.startIndex)
-      let endIndex = self.startIndex.advancedBy(r.endIndex)
+      let startIndex = self.characters.index(self.startIndex, offsetBy: r.lowerBound)
+      let endIndex = self.characters.index(self.startIndex, offsetBy: r.upperBound)
       
-      return self[Range(start: startIndex, end: endIndex)]
+      return self[(startIndex ..< endIndex)]
     }
   }
   

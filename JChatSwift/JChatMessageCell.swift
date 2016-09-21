@@ -10,15 +10,15 @@ import UIKit
 import AVFoundation
 
 protocol JChatMessageCellDelegate:NSObjectProtocol {
-  func selectHeadView(model:JChatMessageModel)
+  func selectHeadView(_ model:JChatMessageModel)
   
   //  picture
-  func tapPicture(messageModel:JChatMessageModel, tableViewCell:UITableViewCell)
+  func tapPicture(_ messageModel:JChatMessageModel, tableViewCell:UITableViewCell)
 
   //  voice
-  func getContinuePlay(cell:UITableViewCell)
+  func getContinuePlay(_ cell:UITableViewCell)
 
-  func successionalPlayVoice(cell:UITableViewCell)
+  func successionalPlayVoice(_ cell:UITableViewCell)
 }
 
 @objc(JChatMessageCell)
@@ -45,8 +45,8 @@ class JChatMessageCell: UITableViewCell {
   
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
-    self.selectionStyle = UITableViewCellSelectionStyle.None
-    self.backgroundColor = UIColor.clearColor()
+    self.selectionStyle = UITableViewCellSelectionStyle.none
+    self.backgroundColor = UIColor.clear
     
     self.continuePlayer = false
     self.voiceImgIndex = 0
@@ -59,7 +59,7 @@ class JChatMessageCell: UITableViewCell {
     
     self.textMessageContent = UILabel()
     self.textMessageContent.numberOfLines = 0
-    self.textMessageContent.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
+    self.textMessageContent.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.subheadline)
     self.contentView.addSubview(textMessageContent)
     
     self.voiceBtn = UIImageView()
@@ -68,12 +68,12 @@ class JChatMessageCell: UITableViewCell {
     self.unreadStatusView = UIView()
     self.unreadStatusView.layer.cornerRadius = 4
     self.unreadStatusView.layer.masksToBounds = true
-    self.unreadStatusView.backgroundColor = UIColor.redColor()
+    self.unreadStatusView.backgroundColor = UIColor.red
     self.contentView.addSubview(self.unreadStatusView)
     
     self.circleView = UIActivityIndicatorView()
-    self.circleView.backgroundColor = UIColor.clearColor()
-    self.circleView.hidden = true
+    self.circleView.backgroundColor = UIColor.clear
+    self.circleView.isHidden = true
     self.circleView.hidesWhenStopped = true
     self.contentView.addSubview(self.circleView)
 
@@ -82,22 +82,22 @@ class JChatMessageCell: UITableViewCell {
     self.contentView.addSubview(self.sendfailImg)
     
     self.voiceTimeLable = UILabel()
-    self.voiceTimeLable.backgroundColor = UIColor.clearColor()
-    self.voiceTimeLable.font = UIFont.systemFontOfSize(18)
+    self.voiceTimeLable.backgroundColor = UIColor.clear
+    self.voiceTimeLable.font = UIFont.systemFont(ofSize: 18)
     self.contentView.addSubview(self.voiceTimeLable)
     
-    self.textMessageContent.backgroundColor = UIColor.clearColor()
+    self.textMessageContent.backgroundColor = UIColor.clear
     
-    self.messageBubble = JChatMessageBubble(frame: CGRectZero)
+    self.messageBubble = JChatMessageBubble(frame: CGRect.zero)
     self.contentView.insertSubview(self.messageBubble!, belowSubview: self.textMessageContent)
     
     self.percentLable = UILabel()
-    self.percentLable.font = UIFont.systemFontOfSize(18)
-    self.percentLable.textAlignment = .Center
-    self.percentLable.textColor = UIColor.whiteColor()
+    self.percentLable.font = UIFont.systemFont(ofSize: 18)
+    self.percentLable.textAlignment = .center
+    self.percentLable.textColor = UIColor.white
     self.messageBubble?.addSubview(percentLable)
     self.percentLable.snp_makeConstraints { (make) in
-      make.size.equalTo(CGSizeMake(60, 40))
+      make.size.equalTo(CGSize(width: 60, height: 40))
       make.center.equalTo(self.messageBubble!)
     }
     
@@ -107,22 +107,22 @@ class JChatMessageCell: UITableViewCell {
   func addGestureForAllViews() {
     let gesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tapContent))
     self.messageBubble?.addGestureRecognizer(gesture)
-    self.messageBubble?.userInteractionEnabled = true
+    self.messageBubble?.isUserInteractionEnabled = true
 
     let tapHeadGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tapHeadView))
     self.headImageView.addGestureRecognizer(tapHeadGesture)
-    self.headImageView.userInteractionEnabled = true
+    self.headImageView.isUserInteractionEnabled = true
     
   }
   
   func tapContent() {
     print("tap message")
     switch messageModel.message.contentType {
-    case .Voice:
+    case .voice:
       self.playVoice()
       break
-    case .Image:
-      if messageModel.message.status == .ReceiveDownloadFailed {
+    case .image:
+      if messageModel.message.status == .receiveDownloadFailed {
         print("正在下载缩略图")
         self.circleView.startAnimating()
       } else {
@@ -138,7 +138,7 @@ class JChatMessageCell: UITableViewCell {
     self.delegate.selectHeadView(self.messageModel)
   }
   
-  func setCellData(model:JChatMessageModel) {
+  func setCellData(_ model:JChatMessageModel) {
     self.messageModel = model
     self.messageBubble?.message = model.message
     
@@ -148,7 +148,7 @@ class JChatMessageCell: UITableViewCell {
         if ObjectId == user.username {
           
           if data != nil {
-            self.headImageView.image = UIImage(data: data)
+            self.headImageView.image = UIImage(data: data!)
           } else {
             self.headImageView.image = UIImage(named: "headDefalt")
           }
@@ -167,20 +167,20 @@ class JChatMessageCell: UITableViewCell {
     self.messageBubble?.image = self.messageBubble?.maskBackgroupImage
     
     switch model.message.contentType {
-    case .Text:
+    case .text:
       let textContent = model.message.content as! JMSGTextContent
       self.textMessageContent.text = textContent.text
       break
-    case .Voice:
+    case .voice:
       self.setVoiceBtmImage()
       break
-    case .Image:
+    case .image:
       let imageContent = self.messageModel.message.content as! JMSGImageContent
       
       imageContent.thumbImageData({[weak weakSelf = self] (data, objectId, error) -> Void in
         if error == nil {
           if data != nil {
-            weakSelf?.messageBubble?.image = UIImage(data: data)
+            weakSelf?.messageBubble?.image = UIImage(data: data!)
             return
           }
         }
@@ -192,31 +192,32 @@ class JChatMessageCell: UITableViewCell {
     }
     
     if self.messageModel.message.flag == 1 || !self.messageModel.message.isReceived {
-      self.unreadStatusView.hidden = true
+      self.unreadStatusView.isHidden = true
     } else {
-      self.unreadStatusView.hidden = false
+      self.unreadStatusView.isHidden = false
     }
     
     self.layoutAllViews()
 
   }
   
-  func setCellData(model:JChatMessageModel, delegate:JChatMessageCellDelegate) {
+  func setCellData(_ model:JChatMessageModel, delegate:JChatMessageCellDelegate) {
     self.delegate = delegate
     self.setCellData(model)
   }
   
   func layoutAllViews() {
     let tmpMessage = self.messageModel.message
-    switch tmpMessage.status {
-    case .Sending:
+
+    switch tmpMessage?.status {
+    case .sending?:
       fallthrough
-    case .SendDraft:
+    case .sendDraft?:
       self.circleView.startAnimating()
-      self.sendfailImg.hidden = true
-      self.percentLable.hidden = false
+      self.sendfailImg.isHidden = true
+      self.percentLable.isHidden = false
       
-      if tmpMessage.contentType == .Image {
+      if tmpMessage?.contentType == .image {
         self.messageBubble?.alpha = 0.5
         self.addUpLoadHandler()
       } else {
@@ -225,73 +226,75 @@ class JChatMessageCell: UITableViewCell {
 
       break
       
-    case .SendFailed:
+    case .sendFailed?:
       fallthrough
-    case .SendUploadFailed:
+    case .sendUploadFailed?:
       fallthrough
-    case .ReceiveDownloadFailed:
+    case .receiveDownloadFailed?:
       self.circleView.stopAnimating()
-      if tmpMessage.isReceived {
-        self.sendfailImg.hidden = false
+      if (tmpMessage?.isReceived)! {
+        self.sendfailImg.isHidden = false
       } else {
-        self.percentLable.hidden = true
+        self.percentLable.isHidden = true
       }
       self.messageBubble?.alpha = 1
       break
     default:
       self.messageBubble?.alpha = 1
       self.circleView.stopAnimating()
-      self.sendfailImg.hidden = true
-      self.percentLable.hidden = true
+      self.sendfailImg.isHidden = true
+      self.percentLable.isHidden = true
       break
     }
     
-    if tmpMessage.contentType != .Voice {
-      self.unreadStatusView.hidden = true
+    if tmpMessage?.contentType != .voice {
+      self.unreadStatusView.isHidden = true
     }
     
-    switch tmpMessage.contentType {
-    case .Unknown:
+    switch tmpMessage?.contentType {
+    case .unknown?:
       
       break
-    case .Text:
-      self.textMessageContent.hidden = false
-      self.percentLable.hidden = true
-      self.unreadStatusView.hidden = true
-      self.voiceTimeLable.hidden = true
-      self.voiceBtn.hidden = true
+    case .text?:
+      self.textMessageContent.isHidden = false
+      self.percentLable.isHidden = true
+      self.unreadStatusView.isHidden = true
+      self.voiceTimeLable.isHidden = true
+      self.voiceBtn.isHidden = true
       break
-    case .Image:
-      self.textMessageContent.hidden = true
-      self.unreadStatusView.hidden = true
-      self.voiceTimeLable.hidden = true
-      self.voiceBtn.hidden = true
+    case .image?:
+      self.textMessageContent.isHidden = true
+      self.unreadStatusView.isHidden = true
+      self.voiceTimeLable.isHidden = true
+      self.voiceBtn.isHidden = true
       break
-    case .Voice:
-      self.textMessageContent.hidden = true
-      self.textLabel?.hidden = true
-      self.percentLable.hidden = true
-      self.voiceTimeLable.hidden = false
-      self.voiceBtn.hidden = false
-      self.voiceTimeLable.text = "\((tmpMessage.content as! JMSGVoiceContent).duration)"
+    case .voice?:
+      self.textMessageContent.isHidden = true
+      self.textLabel?.isHidden = true
+      self.percentLable.isHidden = true
+      self.voiceTimeLable.isHidden = false
+      self.voiceBtn.isHidden = false
+      self.voiceTimeLable.text = "\((tmpMessage?.content as! JMSGVoiceContent).duration)"
       break
-    case .Custom:
+    case .custom?:
       break
-    case .EventNotification:
+    case .eventNotification?:
+      break
+    default:
       break
     }
   }
-
+  
   func addUpLoadHandler() {
     (self.messageModel.message.content as! JMSGImageContent).uploadHandler = {[weak weakSelf = self] (percent:Float, msgId:(String!)) in
-      dispatch_async(dispatch_get_main_queue(), { () -> Void in
+      DispatchQueue.main.async(execute: { () -> Void in
         if weakSelf?.messageModel.message.msgId == msgId! {
           let percent = "\(Int(percent*100))％"
           weakSelf?.percentLable.text = percent
           print("upload percent is \(percent)")
         }
       })
-    } as JMSGMediaProgressHandler
+    } as! JMSGMediaProgressHandler
     
   }
   
@@ -303,7 +306,7 @@ class JChatMessageCell: UITableViewCell {
     print("Action - playVoice")
 
     self.continuePlayer = false
-    self.unreadStatusView.hidden = true
+    self.unreadStatusView.isHidden = true
     self.messageModel.message.updateFlag(1)
 
     (self.messageModel.message.content as! JMSGVoiceContent).voiceData {[weak weakSelf = self] (data, objectId, error) -> Void in
@@ -316,7 +319,7 @@ class JChatMessageCell: UITableViewCell {
 // TODO:
         self.isPlaying = true
         JChatAudioPlayerHelper.sharedInstance.delegate = self
-        JChatAudioPlayerHelper.sharedInstance.managerAudioWithData(data, toplay: true)
+        JChatAudioPlayerHelper.sharedInstance.managerAudioWithData(data!, toplay: true)
       }
     }
     
@@ -328,8 +331,8 @@ class JChatMessageCell: UITableViewCell {
     }
     self.setVoiceBtmImage()
     if self.isPlaying == true{
-      self.voiceImgIndex?++
-      self.performSelector(#selector(self.changeVoiceBtmImage), withObject: nil, afterDelay: 0.25)
+      self.voiceImgIndex? = self.voiceImgIndex! + 1
+      self.perform(#selector(self.changeVoiceBtmImage), with: nil, afterDelay: 0.25)
     }
   }
   
@@ -340,8 +343,8 @@ class JChatMessageCell: UITableViewCell {
     } else {
       voiceImagePreStr = "SenderVoiceNodePlaying00"
     }
-    print(voiceImagePreStr.stringByAppendingString("\(self.voiceImgIndex % 4)"))
-    self.voiceBtn.image = UIImage(named: voiceImagePreStr.stringByAppendingString("\(self.voiceImgIndex % 4)"))
+    print(voiceImagePreStr.appending("\(self.voiceImgIndex % 4)"))
+    self.voiceBtn.image = UIImage(named: voiceImagePreStr.appending("\(self.voiceImgIndex % 4)"))
 
   }
   
@@ -349,7 +352,7 @@ class JChatMessageCell: UITableViewCell {
       fatalError("init(coder:) has not been implemented")
   }
   
-  override func setSelected(selected: Bool, animated: Bool) {
+  override func setSelected(_ selected: Bool, animated: Bool) {
       super.setSelected(selected, animated: animated)
 
       // Configure the view for the selected state
@@ -360,11 +363,11 @@ class JChatMessageCell: UITableViewCell {
 // TODO:
 
 extension JChatMessageCell:JChatAudioPlayerHelperDelegate {
-  func didAudioPlayerBeginPlay(AudioPlayer:AVAudioPlayer) {
+  func didAudioPlayerBeginPlay(_ AudioPlayer:AVAudioPlayer) {
   
   }
 
-  func didAudioPlayerStopPlay(AudioPlayer:AVAudioPlayer) {
+  func didAudioPlayerStopPlay(_ AudioPlayer:AVAudioPlayer) {
     JChatAudioPlayerHelper.sharedInstance.delegate = nil
     self.isPlaying = false
     self.voiceImgIndex = 0
@@ -372,7 +375,7 @@ extension JChatMessageCell:JChatAudioPlayerHelperDelegate {
     
     if self.continuePlayer == true {
       self.continuePlayer = false
-      self.performSelector(#selector(JChatMessageCell.prepareToPlayVoice), withObject: nil, afterDelay: 0.5)
+      self.perform(#selector(JChatMessageCell.prepareToPlayVoice), with: nil, afterDelay: 0.5)
     }
   }
   
@@ -380,7 +383,7 @@ extension JChatMessageCell:JChatAudioPlayerHelperDelegate {
     self.delegate?.successionalPlayVoice(self)
   }
   
-  func didAudioPlayerPausePlay(AudioPlayer:AVAudioPlayer) {
+  func didAudioPlayerPausePlay(_ AudioPlayer:AVAudioPlayer) {
   
   }
 }

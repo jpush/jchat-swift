@@ -1,13 +1,15 @@
 PODS:
-  - MBProgressHUD (0.9.2)
-  - SnapKit (0.20.0)
+  - MBProgressHUD (1.0.0)
+  - SnapKit (3.0.1)
 
 DEPENDENCIES:
-  - MBProgressHUD (~> 0.9.2)
-  - SnapKit (~> 0.20.0)
+  - MBProgressHUD (~> 1.0.0)
+  - SnapKit (~> 3.0.0)
 
 SPEC CHECKSUMS:
-  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
-  SnapKit: 5fce3c1bbbf1fbd31de9aa92f33eb9fa03f15650
+  MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
+  SnapKit: f818b8326d45b4e1c777d0ab27b5c0a3624bfdeb
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 531edfd64087e23eb0a7c2135d9c183f5d3a1775
+
+COCOAPODS: 1.1.0.rc.2

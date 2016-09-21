@@ -36,34 +36,35 @@ class JChatFriendDetailViewController: UIViewController {
       self.navigationController?.interactivePopGestureRecognizer?.delegate = self
 //      self.navigationController?.navigationBar.translucent = false
       self.title = "详情资料"
-      let leftBtn = UIButton(type: .Custom)
+      let leftBtn = UIButton(type: .custom)
       leftBtn.frame = kNavigationLeftButtonRect
-      leftBtn.setImage(UIImage(named: "goBack"), forState: .Normal)
+      leftBtn.setImage(UIImage(named: "goBack"), for: UIControlState())
       leftBtn.imageEdgeInsets = kGoBackBtnImageOffset
-      leftBtn.addTarget(self, action: #selector(self.backClick), forControlEvents: .TouchUpInside)
+      leftBtn.addTarget(self, action: #selector(self.backClick), for: .touchUpInside)
       self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
   }
   
   func backClick() {
-    self.navigationController?.popViewControllerAnimated(true)
+//    self.navigationController?.popViewController(animated: true)
+    self.navigationController?.popViewController(animated: true)
   }
   
   func layoutAllViews() {
 
-    self.view.backgroundColor = UIColor.whiteColor()
+    self.view.backgroundColor = UIColor.white
     
-    self.infoTable = UITableView(frame: CGRectZero)
+    self.infoTable = UITableView(frame: CGRect.zero)
     self.view.addSubview(self.infoTable)
     self.infoTable.delegate = self
     self.infoTable.dataSource = self
-    self.infoTable.separatorStyle = .None
+    self.infoTable.separatorStyle = .none
 
     self.infoTable.snp_makeConstraints { (make) -> Void in
       make.left.bottom.right.top.equalTo(self.view)
     }
     
     let tableHeadView = UIView(frame: CGRect(x: 0, y: 0, width: kApplicationWidth, height: 150))
-    tableHeadView.backgroundColor = UIColor.whiteColor()
+    tableHeadView.backgroundColor = UIColor.white
     self.headView = UIImageView()
     tableHeadView.addSubview(self.headView)
     self.headView.layer.cornerRadius = 35
@@ -75,8 +76,8 @@ class JChatFriendDetailViewController: UIViewController {
     
     self.nameLabel = UILabel()
     self.nameLabel.text = user.displayName()
-    self.nameLabel.font = UIFont.boldSystemFontOfSize(18)
-    self.nameLabel.textAlignment = .Center
+    self.nameLabel.font = UIFont.boldSystemFont(ofSize: 18)
+    self.nameLabel.textAlignment = .center
 
     tableHeadView.addSubview(nameLabel)
     self.nameLabel.snp_makeConstraints { (make) -> Void in
@@ -93,34 +94,34 @@ class JChatFriendDetailViewController: UIViewController {
 
     self.infoArr = NSMutableArray()
     switch self.user.gender {
-    case .Unknown:
-      self.infoArr.addObject("未知")
+    case .unknown:
+      self.infoArr.add("未知")
       break
-    case .Male:
-      self.infoArr.addObject("男")
+    case .male:
+      self.infoArr.add("男")
       break
-    case .Female:
-      self.infoArr.addObject("女")
+    case .female:
+      self.infoArr.add("女")
       break
       
     }
     
     if self.user.region == nil {
-      self.infoArr.addObject("")
+      self.infoArr.add("")
     } else {
-      self.infoArr.addObject(self.user.region!)
+      self.infoArr.add(self.user.region!)
     }
     
     if self.user.signature == nil {
-      self.infoArr.addObject("")
+      self.infoArr.add("")
     } else {
-      self.infoArr.addObject(self.user.signature!)
+      self.infoArr.add(self.user.signature!)
     }
     
     
     MBProgressHUD.showMessage("正在加载", toView: self.view)
-    JMSGUser.userInfoArrayWithUsernameArray([self.user.username]) { (resultObject, error) -> Void in
-      MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+    JMSGUser.userInfoArray(withUsernameArray: [self.user.username]) { (resultObject, error) -> Void in
+      MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
       if error == nil {
         let user = ((resultObject as! Array)[0] as! JMSGUser)
         user.thumbAvatarData({ (data, objId, error) -> Void in
@@ -152,26 +153,26 @@ class JChatFriendDetailViewController: UIViewController {
 
 
 extension JChatFriendDetailViewController: UITableViewDelegate, UITableViewDataSource {
-  func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return 4
   }
   
-  func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-    if indexPath.row == 3 {
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    if (indexPath as NSIndexPath).row == 3 {
       identify = "JChatFriendDetailSendMsgCell"
-      var cell:JChatFriendDetailSendMsgCell? = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatFriendDetailSendMsgCell
+      var cell:JChatFriendDetailSendMsgCell? = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatFriendDetailSendMsgCell
       if cell == nil {
-        tableView.registerNib(UINib(nibName: identify, bundle: nil), forCellReuseIdentifier: identify)
-        cell = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatFriendDetailSendMsgCell
+        tableView.register(UINib(nibName: identify, bundle: nil), forCellReuseIdentifier: identify)
+        cell = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatFriendDetailSendMsgCell
       }
       cell!.setClickSendMsgCallback({
         
         for var ctl in (self.navigationController?.childViewControllers)! {
-          if ctl.isKindOfClass(JChatChattingViewController) {
+          if ctl.isKind(of: JChatChattingViewController.self) {
             
             if self.isGroupFlag! {
-              self.navigationController?.popToRootViewControllerAnimated(true)
-              NSNotificationCenter.defaultCenter().postNotificationName(kSkipToSingleChatViewState, object: self.user)
+              self.navigationController?.popToRootViewController(animated: true)
+              NotificationCenter.default.post(name: Notification.Name(rawValue: kSkipToSingleChatViewState), object: self.user)
             } else {
               self.navigationController?.popToViewController(ctl, animated: true)
             }
@@ -182,21 +183,21 @@ extension JChatFriendDetailViewController: UITableViewDelegate, UITableViewDataS
     }
     
     identify = "JChatAboutMeCell"
-    var cell:JChatAboutMeCell? = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatAboutMeCell
+    var cell:JChatAboutMeCell? = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatAboutMeCell
     if cell == nil {
-      tableView.registerClass(NSClassFromString(identify), forCellReuseIdentifier: identify)
-      cell = tableView.dequeueReusableCellWithIdentifier(identify) as? JChatAboutMeCell
+      tableView.register(NSClassFromString(identify), forCellReuseIdentifier: identify)
+      cell = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatAboutMeCell
     }
-    let tittle = self.titleArr![indexPath.row] as! String
-    let imgName = self.imgArr![indexPath.row] as! String
-    let info = self.infoArr![indexPath.row] as! String
+    let tittle = self.titleArr![(indexPath as NSIndexPath).row] as! String
+    let imgName = self.imgArr![(indexPath as NSIndexPath).row] as! String
+    let info = self.infoArr![(indexPath as NSIndexPath).row] as! String
     
     cell?.setFriendCellData(tittle, icon: imgName, info: info)
     return cell!
   }
   
-  func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-    if indexPath.row == 3 {
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    if (indexPath as NSIndexPath).row == 3 {
       return 80
     }
     return 57;

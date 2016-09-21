@@ -17,12 +17,12 @@ class ViewController: UIViewController {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
     let loginBtn:UIButton = UIButton()
-    loginBtn.setTitle("Login", forState: .Normal)
-    loginBtn.setTitleColor(UIColor.purpleColor(), forState: .Normal)
+    loginBtn.setTitle("Login", for: UIControlState())
+    loginBtn.setTitleColor(UIColor.purple, for: UIControlState())
     loginBtn.layer.cornerRadius = 5
     loginBtn.layer.borderWidth = 2
-    loginBtn.layer.borderColor = UIColor.purpleColor().CGColor
-    loginBtn.addTarget(self, action: #selector(self.clickLogin), forControlEvents: .TouchUpInside)
+    loginBtn.layer.borderColor = UIColor.purple.cgColor
+    loginBtn.addTarget(self, action: #selector(self.clickLogin), for: .touchUpInside)
     self.view.addSubview(loginBtn)
     loginBtn.snp_makeConstraints { (make) -> Void in
       make.center.equalTo(self.view)
@@ -35,12 +35,12 @@ class ViewController: UIViewController {
 //test
     let nextVC = JChatMainTabViewController.sharedInstance
     let nextNV = UINavigationController(rootViewController: nextVC)
-    self.presentViewController(nextNV, animated: true, completion: nil)
+    self.present(nextNV, animated: true, completion: nil)
     return
     
     //
-    if NSUserDefaults.standardUserDefaults().objectForKey(loginedUserName) == nil {
-      JMSGUser.loginWithUsername("uikit1", password: "111111") { (resultObj, error) -> Void in
+    if UserDefaults.standard.object(forKey: loginedUserName) == nil {
+      JMSGUser.login(withUsername: "uikit1", password: "111111") { (resultObj, error) -> Void in
         if error == nil {
           self.getSingleConversation()
         } else {
@@ -54,10 +54,10 @@ class ViewController: UIViewController {
   }
   
   func getSingleConversation() {
-    let conversation:JMSGConversation? = JMSGConversation.singleConversationWithUsername("5558")
+    let conversation:JMSGConversation? = JMSGConversation.singleConversation(withUsername: "5558")
     print("\(conversation)")
     if conversation == nil {
-      JMSGConversation.createSingleConversationWithUsername("5558", completionHandler: { (resultObj, error) -> Void in
+      JMSGConversation.createSingleConversation(withUsername: "5558", completionHandler: { (resultObj, error) -> Void in
         if error != nil {
           print("创建 conversatiion 失败")
           return
@@ -70,7 +70,7 @@ class ViewController: UIViewController {
     } else {
       let ChatController = JChatChattingViewController()
       ChatController.conversation = conversation
-      self.presentViewController(ChatController, animated: true, completion: nil)
+      self.present(ChatController, animated: true, completion: nil)
       
     }
   }
