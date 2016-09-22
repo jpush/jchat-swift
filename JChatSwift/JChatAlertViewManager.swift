@@ -17,23 +17,13 @@ protocol JChatBubbleAlertViewDelegate {
 }
 
 class JChatAlertViewManager: NSObject {
-//  private static var __once: () = {
-//      Static.instance = JChatAlertViewManager()
-//    }()
+
   var alertView:UIView!
   var alertSendImage:UIImage?
   
   weak var delegate:JChatBubbleAlertViewDelegate?
   var isShowing:Bool!
   
-//  class var sharedInstance: JChatAlertViewManager {
-//    struct Static {
-//      static var onceToken: Int = 0
-//      static var instance: JChatAlertViewManager? = nil
-//    }
-//    _ = JChatAlertViewManager.__once
-//    return Static.instance!
-//  }
   static let sharedInstance = JChatAlertViewManager()
   override init() {
     super.init()

@@ -9,22 +9,9 @@
 import UIKit
 
 class JChatSendImageManager: NSObject {
-
-//  private static var __once: () = {
-//      Static.instance = JChatSendImageManager()
-//    }()
-
   var sendMsgListDic:NSMutableDictionary!
   var textDraftDic:NSMutableDictionary! //未发送的草稿
 
-//  class var sharedInstance: JChatSendImageManager {
-//    struct Static {
-//      static var onceToken: Int = 0
-//      static var instance: JChatSendImageManager? = nil
-//    }
-//    _ = JChatSendImageManager.__once
-//    return Static.instance!
-//  }
   static let sharedInstance = JChatSendImageManager()
   override init() {
     super.init()

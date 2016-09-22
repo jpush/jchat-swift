@@ -14,20 +14,6 @@ internal let TabbarItemImage = "TabbarItemImage"
 internal let TabbarItemSelectedImage = "TabbarItemSelectedImage"
 
 class JChatMainTabViewController: UITabBarController {
-
-////  private static var __once: () = {
-////      Static.instance = JChatMainTabViewController()
-////    
-////    }()
-//
-//  class var sharedInstance: JChatMainTabViewController {
-//    struct Static {
-//      static var onceToken: Int = 0
-//      static var instance: JChatMainTabViewController? = nil
-//    }
-////    _ = JChatMainTabViewController.__once
-//    return Static.instance!
-//  }
   
   static let sharedInstance = JChatMainTabViewController()
   

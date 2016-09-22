@@ -17,22 +17,8 @@ protocol JChatAudioPlayerHelperDelegate:NSObjectProtocol {
 
 class JChatAudioPlayerHelper: NSObject {
 
-//  private static var __once: () = {
-//      Static.instance = JChatAudioPlayerHelper()
-//    }()
-//
   var player:AVAudioPlayer!
   weak var delegate:JChatAudioPlayerHelperDelegate?
-//
-//  class var sharedInstance: JChatAudioPlayerHelper {
-//    struct Static {
-//      static var onceToken: Int = 0
-//      static var instance: JChatAudioPlayerHelper? = nil
-//    }
-//    _ = JChatAudioPlayerHelper.__once
-//    return Static.instance!
-//  }
-
   static let sharedInstance = JChatAudioPlayerHelper()
   
   override init() {
