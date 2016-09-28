@@ -1,6 +1,7 @@
 # jchat-swift
 
-
+## 应用快照
+![image](https://github.com/jpush/jchat-swift/blob/master/READMEREC/chattingIMG.gif)
 ### 介绍
 
 JChatSwift 是用Swift实现的一个聊天 App。
@@ -164,81 +165,4 @@ func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         
         if error == nil {
           let chattingVC = JChatChattingViewController()
-          chattingVC.hidesBottomBarWhenPushed = true
-          chattingVC.conversation = singleConversation as! JMSGConversation
-          self.navigationController?.pushViewController(chattingVC, animated: true)
-          
-        } else {
-          MBProgressHUD.showMessage("添加的用户不存在", view: self.view)
-        }
-      })
-    }
-  }
-```
-
-#### 2. 获取历史会话
-JChatSwift 在 JChatConversationListViewController类中获取所有历史会话的具体代码如下
-```
-  func getConversationList() {
-    JMSGConversation.allConversations { (resultObject, error) -> Void in
-      print("huangmin 888 \(resultObject)")
-      if error == nil {
-        self.conversationArr.removeAllObjects()
-        self.conversationArr.addObjectsFromArray((resultObject as! [AnyObject]).reverse())
-      } else {
-        self.conversationArr.removeAllObjects()
-      }
-      self.conversationListTable.reloadData()
-    }
-  }
-```
-#### 3. 添加代理
-若想监听conversation 的消息需要把某个对象设为conversation的delegate（可以是任何对象），比如JChatSwift JChatChattingViewController类需要监听发送回调，受消息回调则必须先设置代理，具体代码如下
-```
-JMessage.addDelegate(self, withConversation: self.conversation)
-```
-
-#### 4. 发送消息
-JMSGMessage 是消息的实体。需要自己创建要发送的消息，JChatSwift JCHATConversationViewController类中发送消息的代码如下
-```  
-  func sendTextMessage(messageText: String) {
-    let textContent:JMSGTextContent = JMSGTextContent(text: messageText)
-    let textMessage:JMSGMessage = self.conversation.createMessageWithContent(textContent)!
-    self.conversation.sendMessage(textMessage)
-    let textModel:JChatMessageModel = JChatMessageModel()
-    textModel.setChatModel(textMessage, conversation: self.conversation)
-    self.appendMessage(textModel)
-  }
-```
-
-#### 5. 接收消息
-前面已经说了可以给conversation 添加回调delegate，收到消息也是通过回调函数来获取的，JChatSwift JChatChattingViewController类 收到消息回调方法如下
-```
-func onReceiveMessage(message: JMSGMessage!, error: NSError!) {
-    self.conversation.clearUnreadCount()
-    if message != nil {
-      print("收到 message msgID 为 \(message.msgId)")
-    } else {
-      print("收到message 为 nil")
-    }
-    
-    if error != nil {
-      return
-    }
-    
-    if !self.conversation.isMessageForThisConversation(message) {
-      return
-    }
-    
-    if message.contentType == .Custom { return }
-
-    if messageDataSource.isContaintMessage(message.msgId) { print("该条消息已加载") }
-
-    if message.contentType == .EventNotification {}
-    
-    let model = JChatMessageModel()
-    model.setChatModel(message, conversation: self.conversation)
-    self.appendMessage(model)
-  }
-```
-
+          chattingVC.hidesBottomBarWhenPushed 
