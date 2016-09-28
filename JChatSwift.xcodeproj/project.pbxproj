@@ -331,6 +331,7 @@
 		624ED9FA1C759523000F421D /* JChatTableCellMaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatTableCellMaker.swift; sourceTree = "<group>"; };
 		624ED9FC1C759674000F421D /* JChatLoadingMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatLoadingMessageCell.swift; sourceTree = "<group>"; };
 		624ED9FE1C75969B000F421D /* JChatShowTimeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatShowTimeCell.swift; sourceTree = "<group>"; };
+		625D60471D9BB49C0064E613 /* JChatSwift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JChatSwift.entitlements; sourceTree = "<group>"; };
 		626AE6111C8D5044008C9E0D /* JChatMessageTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatMessageTable.swift; sourceTree = "<group>"; };
 		627035CF1CE07DBB0041D4BA /* JChatConversationTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatConversationTable.swift; sourceTree = "<group>"; };
 		62827FA11C88044500B66007 /* JChatCreateGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatCreateGroupViewController.swift; sourceTree = "<group>"; };
@@ -787,6 +788,7 @@
 		62DE36AA1C719B2D009FB693 /* JChatSwift */ = {
 			isa = PBXGroup;
 			children = (
+				625D60471D9BB49C0064E613 /* JChatSwift.entitlements */,
 				62AAD8C11D06C0E10098071A /* ImageBrowser */,
 				622A48AF1C896DEB0040E659 /* DetailVC */,
 				62B26E351C873EAC0062EA48 /* AlertView */,
@@ -1102,8 +1104,13 @@
 				TargetAttributes = {
 					62DE36A71C719B2D009FB693 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = RL64Y54S9V;
+						DevelopmentTeam = 8X2A38Q9VD;
 						LastSwiftMigration = 0800;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					62DE36BB1C719B2D009FB693 = {
 						CreatedOnToolsVersion = 7.2;
@@ -1555,7 +1562,9 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = JChatSwift/JChatSwift.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 8X2A38Q9VD;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1589,7 +1598,9 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = JChatSwift/JChatSwift.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 8X2A38Q9VD;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
