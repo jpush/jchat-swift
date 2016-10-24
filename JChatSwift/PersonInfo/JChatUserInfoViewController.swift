@@ -216,8 +216,9 @@ extension JChatUserInfoViewController: UITableViewDelegate, UITableViewDataSourc
       break
     default:
       self.selectFlagGender = true
+      editUserInfoVC.updateType = .fieldsGender
       self.showSelectGenderView(true)
-      break
+      return
     }
     self.navigationController?.pushViewController(editUserInfoVC, animated: true)
   }
