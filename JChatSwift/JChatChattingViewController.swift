@@ -87,6 +87,7 @@ class JChatChattingViewController: UIViewController {
     NotificationCenter.default.addObserver(self, selector: #selector(self.deleteMessage(_:)), name: NSNotification.Name(rawValue: kDeleteMessage), object: nil)
     
     JMessage.add(self, with: self.conversation)
+//    JMessage.add(self, with: nil)
   }
   
   func deleteMessage(_ notifacation: Notification) {
@@ -341,6 +342,7 @@ extension JChatChattingViewController:JChatInputDelegate {
       message = self.conversation.createMessage(with: locationContent)
       locationManager.locationImageName = message?.msgId
       JChatFileManage.sharedInstance.writeImage(name: "\((message?.msgId)!).png", image: placeholdImg)
+      self.conversation.send(message!)
       let model:JChatMessageModel = JChatMessageModel()
       model.setChatModel(message, conversation: self.conversation)
       self.messageDataSource.appendMessage(model)
@@ -398,13 +400,14 @@ extension JChatChattingViewController:JChatInputDelegate {
 extension JChatChattingViewController : JChatLocationDelegate {
   
   func currentLocationCallBack(location:CLLocation) {
-    self.locationManager.getLocationImage(location: location, size: CGSize(width: 400, height: 250))
+    self.locationManager.getLocationImage(location: location, size: CGSize(width: 200, height: 100))
   }
   
   func locationImageCallBack(location:CLLocation, image:UIImage?) {
-//    FileManager
+    //    发送消息
     self.sendLocationMessage(location: location, placeholdImg:image!)
-    
+
+    //    接收消息
   }
 }
   
@@ -461,9 +464,10 @@ extension JChatChattingViewController : JChatMessageCellDelegate {
   }
 }
 
+
 extension JChatChattingViewController: JMessageDelegate {
 
-  func onSendMessageResponse(_ message: JMSGMessage!, error: NSError!) {
+  @nonobjc func onSendMessageResponse(_ message: JMSGMessage!, error: NSError!) {
     print("Event - sendMessageResponse")
     self.relayoutTableCellWithMsgId(message.msgId)
     
@@ -475,7 +479,7 @@ extension JChatChattingViewController: JMessageDelegate {
       MBProgressHUD.showMessage(NSString.errorAlert(error), view: self.view)
     }
   }
-
+  
   func onReceive(_ message: JMSGMessage!, error: NSError!) {
     self.conversation.clearUnreadCount()
     if message != nil {
@@ -498,9 +502,23 @@ extension JChatChattingViewController: JMessageDelegate {
 
     if message.contentType == .eventNotification {}
     
-    let model = JChatMessageModel()
-    model.setChatModel(message, conversation: self.conversation)
-    self.appendMessage(model)
+    if message.contentType == .location {
+      let locationContent = message.content! as! JMSGLocationContent
+      let location = CLLocation(latitude: CLLocationDegrees(locationContent.latitude), longitude: CLLocationDegrees(locationContent.longitude))
+      let locationImgGetter = JChatLocationManager()
+      
+      locationImgGetter.getLocationImageCallBack(location: location, size: locationImageSizeDefault, callback: { (locationImage) in
+        JChatFileManage.sharedInstance.writeImage(name: "\(message.msgId).png", image: locationImage)
+        let model = JChatMessageModel()
+        model.setChatModel(message, conversation: self.conversation)
+        self.appendMessage(model)
+      })
+    } else {
+      let model = JChatMessageModel()
+      model.setChatModel(message, conversation: self.conversation)
+      self.appendMessage(model)
+    }
+    
   }
 
   func onReceiveMessageDownloadFailed(_ message: JMSGMessage!) {

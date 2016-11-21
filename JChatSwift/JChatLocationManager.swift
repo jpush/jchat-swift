@@ -9,15 +9,24 @@
 import UIKit
 import MapKit
 
+let locationImageSizeDefault = CGSize(width: 200, height: 100)
+
 protocol JChatLocationDelegate:NSObjectProtocol {
   func currentLocationCallBack(location:CLLocation)//
   func locationImageCallBack(location: CLLocation,image:UIImage?)
 }
 
+typealias CompletionBlock = (_ result: UIImage) -> Void
+
+
 class JChatLocationManager: NSObject {
   var locationManager:CLLocationManager!
   weak var locationDelegate:JChatLocationDelegate!
   var locationImageName:String? = nil
+  
+  override init() {
+    super.init()
+  }
   
   init(delegate:JChatLocationDelegate) {
     super.init()
@@ -45,6 +54,7 @@ class JChatLocationManager: NSObject {
     options.scale = UIScreen.main.scale
     options.showsPointsOfInterest = true
     let mapShoot = MKMapSnapshotter(options: options)
+    
     mapShoot.start { (mapshoot, error) in
       
       let image = mapshoot!.image
@@ -58,7 +68,40 @@ class JChatLocationManager: NSObject {
       let finalImage = UIGraphicsGetImageFromCurrentImageContext()
       self.locationDelegate.locationImageCallBack(location: location,image: finalImage)
     }
+    print("fasdadf")
   }
+  
+  func getLocationImageCallBack(location:CLLocation, size:CGSize, callback:@escaping CompletionBlock) {
+    
+    let region = MKCoordinateRegion(center: location.coordinate, span: MKCoordinateSpan())
+    
+    let options = MKMapSnapshotOptions()
+    options.region = region
+    options.size = size
+    options.scale = UIScreen.main.scale
+    options.showsPointsOfInterest = true
+    let mapShoot = MKMapSnapshotter(options: options)
+    
+    mapShoot.start { (mapshoot, error) in
+      
+      let image = mapshoot!.image
+      let finalImageRect = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
+      let pin = MKPinAnnotationView()
+      
+      let pinImage = pin.image
+      UIGraphicsBeginImageContextWithOptions(image.size, true, image.scale)
+      image.draw(at: CGPoint(x: 0, y: 0))
+      pinImage?.draw(at: CGPoint(x: finalImageRect.size.width/2, y: finalImageRect.size.height/2))
+      let finalImage = UIGraphicsGetImageFromCurrentImageContext()
+//      self.locationDelegate.locationImageCallBack(location: location,image: finalImage)
+      if finalImage != nil {
+        callback(finalImage!)
+      }
+      
+    }
+    
+  }
+  
 }
 
 extension JChatLocationManager: CLLocationManagerDelegate{
