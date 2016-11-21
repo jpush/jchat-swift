@@ -70,7 +70,7 @@ class JChatConversationListViewController: UIViewController {
   }
 
   func getConversationList() {
-    JMSGConversation.allConversations { (resultObject, error) -> Void in
+    JMSGConversation.allConversations({ (resultObject, error) -> Void in
       if error == nil {
         self.conversationArr.removeAllObjects()
         self.conversationArr.addObjects(from: (resultObject as! [AnyObject]).reversed())
@@ -78,7 +78,7 @@ class JChatConversationListViewController: UIViewController {
         self.conversationArr.removeAllObjects()
       }
       self.conversationListTable.reloadData()
-    }
+    })
   }
   
   func addNotifications() {

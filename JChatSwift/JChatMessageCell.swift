@@ -188,6 +188,8 @@ class JChatMessageCell: UITableViewCell {
         })
       break
     default:
+      let locationImg = JChatFileManage.sharedInstance.getImage(name: "\(self.messageModel.message.msgId).png")
+      self.messageBubble?.image = locationImg
       break
     }
     
@@ -275,6 +277,12 @@ class JChatMessageCell: UITableViewCell {
       self.voiceTimeLable.isHidden = false
       self.voiceBtn.isHidden = false
       self.voiceTimeLable.text = "\((tmpMessage?.content as! JMSGVoiceContent).duration)"
+      break
+    case .location?:
+      self.textMessageContent.isHidden = true
+      self.unreadStatusView.isHidden = true
+      self.voiceTimeLable.isHidden = true
+      self.voiceBtn.isHidden = true
       break
     case .custom?:
       break

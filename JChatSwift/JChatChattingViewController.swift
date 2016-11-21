@@ -8,6 +8,7 @@
 
 import UIKit
 import MBProgressHUD
+import MapKit
 
 internal let interval = 60
 internal let messagePageNumber = 25
@@ -22,14 +23,17 @@ class JChatChattingViewController: UIViewController {
   var messageInputView:JChatInputView!
   var messageDataSource:JChatChattingDataSource!
   var chatLayout:JChatChattingLayout!
-  var messageOffset = 0
   
+  var messageOffset = 0
   var isAllowToScrollMessageTable:Bool = true
   
+  var locationManager:JChatLocationManager!
   override func viewDidLoad() {
     super.viewDidLoad()
     
     print("Action - viewDidLoad")
+    self.locationManager = JChatLocationManager(delegate: self)
+    
     self.setupNavigation()
     self.setupAllViews()
     self.setupDataSource()
@@ -136,7 +140,7 @@ class JChatChattingViewController: UIViewController {
   func setupAllViews() {
     self.view.backgroundColor = UIColor.white
     
-    self.messageInputView = JChatInputView(frame: CGRect.zero)
+    self.messageInputView = JChatInputView(delegate: self)
     self.view.addSubview(messageInputView)
     self.messageInputView.inputDelegate = self
     self.messageInputView.snp.makeConstraints { (make) -> Void in
@@ -271,7 +275,7 @@ extension JChatChattingViewController:UIGestureRecognizerDelegate {
 }
 
 
-extension JChatChattingViewController:JChatInputViewDelegate {
+extension JChatChattingViewController:JChatInputDelegate {
   
   func showMoreView() {
     hideKeyBoardAnimation()
@@ -329,6 +333,23 @@ extension JChatChattingViewController:JChatInputViewDelegate {
     }
   }
   
+  func sendLocationMessage(location:CLLocation, placeholdImg:UIImage) {
+    var message:JMSGMessage? = nil
+    let scale = Double(UIScreen.main.scale)
+    let locationContent = JMSGLocationContent(latitude: NSNumber(value: location.coordinate.latitude), longitude: NSNumber(value: location.coordinate.longitude) , scale: NSNumber(value: scale), address: "")
+    if locationContent != nil {
+      message = self.conversation.createMessage(with: locationContent)
+      locationManager.locationImageName = message?.msgId
+      JChatFileManage.sharedInstance.writeImage(name: "\((message?.msgId)!).png", image: placeholdImg)
+      let model:JChatMessageModel = JChatMessageModel()
+      model.setChatModel(message, conversation: self.conversation)
+      self.messageDataSource.appendMessage(model)
+      self.messageTable.reloadData()
+      self.chatLayout.messageTableScrollToBottom(false)
+    }
+    
+  }
+  
   func relayoutTableCellWithMsgId(_ messageId:String) {
     if messageId == "" { return }
     
@@ -350,7 +371,8 @@ extension JChatChattingViewController:JChatInputViewDelegate {
   func cancelRecordingVoice() {
     
   }
-  
+
+  // moreview delegate
   func photoClick() {
     let lib:ALAssetsLibrary = ALAssetsLibrary()
     lib.enumerateGroupsWithTypes(ALAssetsGroupSavedPhotos, usingBlock: { (group, stop) -> Void in
@@ -363,8 +385,29 @@ extension JChatChattingViewController:JChatInputViewDelegate {
         alertView.show()
     }
   }
+  
+  func locationClick() {
+    self.locationManager.getCurrentLocation()
+  }
+  
+  func cameraClick() {
+    
+  }
 }
 
+extension JChatChattingViewController : JChatLocationDelegate {
+  
+  func currentLocationCallBack(location:CLLocation) {
+    self.locationManager.getLocationImage(location: location, size: CGSize(width: 400, height: 250))
+  }
+  
+  func locationImageCallBack(location:CLLocation, image:UIImage?) {
+//    FileManager
+    self.sendLocationMessage(location: location, placeholdImg:image!)
+    
+  }
+}
+  
 extension JChatChattingViewController : JMUIMultiSelectPhotosDelegate {
 
   func jmuiMultiSelectedPhotoArray(_ selected_photo_array: [Any]!) {

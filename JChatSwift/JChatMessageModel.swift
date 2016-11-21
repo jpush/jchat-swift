@@ -82,6 +82,12 @@ class JChatMessageModel:NSObject {
       break
     case .eventNotification:
       break
+    case .location:
+      self.imageSize = CGSize(width: 400, height: 250)
+      break
+      
+    default:
+      break
     }
   }
   

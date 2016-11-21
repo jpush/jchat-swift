@@ -25,6 +25,10 @@ protocol JChatInputViewDelegate:NSObjectProtocol {
   func photoClick()
 }
 
+protocol JChatInputDelegate:JChatMoreViewDelegate,JChatInputViewDelegate {
+  
+}
+
 class JChatInputView: UIView {
   var inputWrapView:UIView!
   var switchBtn:UIButton!
@@ -33,16 +37,19 @@ class JChatInputView: UIView {
   var showMoreBtn:UIButton!
   var isTextInput:Bool!
   
-  var moreView:UIView!
+  var moreView:UICollectionView!
+  var moreViewManager:JChatMoreViewManager!
   var showPhotoBtn:UIButton!
   
   var recordingHub:JChatRecordingView!
   var recordHelper:JChatRecordVoiceHelper!
   
-  weak var inputDelegate:JChatInputViewDelegate!
+  weak var inputDelegate:JChatInputDelegate!
   
-  override init(frame: CGRect) {
-    super.init(frame: frame)
+  init(delegate: JChatInputDelegate!) {
+    
+    super.init(frame: CGRect.zero)
+    self.inputDelegate = delegate
     self.setupAllViews()
 
     self.recordHelper = JChatRecordVoiceHelper()
@@ -52,9 +59,17 @@ class JChatInputView: UIView {
     self.isTextInput = true
     
     // 更多功能展示
-    self.moreView = UIView()
+    let flowLayout = UICollectionViewFlowLayout()
+    flowLayout.scrollDirection = .vertical
+//    flowLayout.sectionInset = UIEdgeInsets(top: 23, left: 20, bottom: 35, right: 20)
+    flowLayout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 10)
+    self.moreView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
+    self.moreViewManager = JChatMoreViewManager(moreView: self.moreView, delegate:self.inputDelegate)
+    
+
     self.addSubview(self.moreView!)
     self.moreView.backgroundColor = UIColor(netHex: 0xececec)
+    self.moreViewManager.moreViewdelegate = self.inputDelegate as! JChatMoreViewDelegate!
     
     self.inputWrapView = UIView()
     self.inputWrapView.backgroundColor = UIColor(netHex: 0xdfdfdf)
@@ -66,16 +81,6 @@ class JChatInputView: UIView {
       make.bottom.equalTo(self.snp.bottom)
       make.top.equalTo(self.inputWrapView.snp.bottom)
     })
-    
-    self.showPhotoBtn = UIButton()
-    self.moreView.addSubview(self.showPhotoBtn)
-    self.showPhotoBtn.setImage(UIImage(named: "photo_24"), for: UIControlState())
-    self.showPhotoBtn.addTarget(self, action: #selector(JChatInputView.clickShowPhotoBtn), for: .touchUpInside)
-    self.showPhotoBtn.snp.makeConstraints { (make) -> Void in
-      make.top.equalTo(self.moreView).offset(10)
-      make.left.equalTo(self.moreView).offset(10)
-      make.size.equalTo(CGSize(width: 50, height: 50))
-    }
     
     // 输入框的view
     self.inputWrapView.snp.makeConstraints { (make) -> Void in
@@ -227,7 +232,7 @@ class JChatInputView: UIView {
     UIView.animate(withDuration: keyboardAnimationDuration, animations: { () -> Void in
 
       self.superview!.layoutIfNeeded()
-    }) 
+    })
     CATransaction.commit()
   }
   

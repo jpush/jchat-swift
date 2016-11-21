@@ -92,6 +92,15 @@ class JChatLeftMessageCell:JChatMessageCell {
         make.left.equalTo(self.textMessageContent.snp.left).offset(-13)
       })
       break
+    case .location:
+      self.messageBubble?.snp.remakeConstraints({ (make) -> Void in
+        make.right.equalTo(self.textMessageContent.snp.right).offset(5)
+        make.top.equalTo(self.textMessageContent.snp.top).offset(-5)
+        make.bottom.equalTo(self.textMessageContent.snp.bottom).offset(5)
+        make.left.equalTo(self.textMessageContent.snp.left).offset(-13)
+        make.size.equalTo(CGSize(width: self.messageModel.imageSize!.width, height: self.messageModel.imageSize!.height))
+      })
+      break
     default:
       break
     }
