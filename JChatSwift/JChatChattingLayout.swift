@@ -53,12 +53,16 @@ class JChatChattingLayout: NSObject {
 
   func appendTableViewCellAtLastIndex(_ index:NSInteger) {
     let path:IndexPath = IndexPath(row: index - 1, section: 0)
-    self.messageListTable?.beginUpdates()
-    self.messageListTable?.insertRows(at: [path], with: .none)
-    self.messageListTable?.endUpdates()
-    UIView.animate(withDuration: 0.25, animations: { () -> Void in
-      self.messageListTable?.scrollToRow(at: path, at: .bottom, animated: false)
-    }) 
+    DispatchQueue.main.async {
+      self.messageListTable?.beginUpdates()
+      self.messageListTable?.insertRows(at: [path], with: .none)
+      self.messageListTable?.endUpdates()
+    
+    
+      UIView.animate(withDuration: 0.25, animations: { () -> Void in
+        self.messageListTable?.scrollToRow(at: path, at: .bottom, animated: false)
+      })
+    }
 //    self.messageTableScrollToBottom(true)
     DispatchQueue.main.async { () -> Void in
     }

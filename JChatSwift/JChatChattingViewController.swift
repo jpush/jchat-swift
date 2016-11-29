@@ -87,7 +87,6 @@ class JChatChattingViewController: UIViewController {
     NotificationCenter.default.addObserver(self, selector: #selector(self.deleteMessage(_:)), name: NSNotification.Name(rawValue: kDeleteMessage), object: nil)
     
     JMessage.add(self, with: self.conversation)
-//    JMessage.add(self, with: nil)
   }
   
   func deleteMessage(_ notifacation: Notification) {
@@ -467,20 +466,19 @@ extension JChatChattingViewController : JChatMessageCellDelegate {
 
 extension JChatChattingViewController: JMessageDelegate {
 
-  @nonobjc func onSendMessageResponse(_ message: JMSGMessage!, error: NSError!) {
+  func onSendMessageResponse(_ message: JMSGMessage!, error: Error!) {
     print("Event - sendMessageResponse")
     self.relayoutTableCellWithMsgId(message.msgId)
     
     if message != nil { print("发送的消息为 msgId 为 \(message.msgId)") }
     
     if error != nil {
-      print("Send response error \(NSString.errorAlert(error))")
+      print("Send response error \(NSString.errorAlert(error as NSError))")
       self.conversation.clearUnreadCount()
-      MBProgressHUD.showMessage(NSString.errorAlert(error), view: self.view)
+      MBProgressHUD.showMessage(NSString.errorAlert(error as NSError), view: self.view)
     }
   }
-  
-  func onReceive(_ message: JMSGMessage!, error: NSError!) {
+  func onReceive(_ message: JMSGMessage!, error: Error!) {
     self.conversation.clearUnreadCount()
     if message != nil {
       print("收到 message msgID 为 \(message.msgId)")
@@ -505,13 +503,17 @@ extension JChatChattingViewController: JMessageDelegate {
     if message.contentType == .location {
       let locationContent = message.content! as! JMSGLocationContent
       let location = CLLocation(latitude: CLLocationDegrees(locationContent.latitude), longitude: CLLocationDegrees(locationContent.longitude))
-      let locationImgGetter = JChatLocationManager()
+//      let locationImgGetter = JChatLocationManager()//!
       
-      locationImgGetter.getLocationImageCallBack(location: location, size: locationImageSizeDefault, callback: { (locationImage) in
+      JChatLocationManager.getLocationImageCallBack(location: location, size: locationImageSizeDefault, callback: { (locationImage) in
         JChatFileManage.sharedInstance.writeImage(name: "\(message.msgId).png", image: locationImage)
+        
         let model = JChatMessageModel()
         model.setChatModel(message, conversation: self.conversation)
-        self.appendMessage(model)
+        DispatchQueue.main.async {
+            self.appendMessage(model)
+        }
+        
       })
     } else {
       let model = JChatMessageModel()

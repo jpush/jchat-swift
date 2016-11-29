@@ -68,10 +68,24 @@ class JChatLocationManager: NSObject {
       let finalImage = UIGraphicsGetImageFromCurrentImageContext()
       self.locationDelegate.locationImageCallBack(location: location,image: finalImage)
     }
-    print("fasdadf")
   }
   
-  func getLocationImageCallBack(location:CLLocation, size:CGSize, callback:@escaping CompletionBlock) {
+  class func getLocationImage(message:JMSGMessage, size:CGSize, callback: @escaping CompletionBlock) {
+    if JChatFileManage.sharedInstance.exitImage(name: "\(message.msgId).png") {
+      let locationImg = JChatFileManage.sharedInstance.getImage(name: "\(message.msgId).png")
+      callback(locationImg!)
+    } else {
+      let content = message.content as! JMSGLocationContent
+      let location = CLLocation(latitude: CLLocationDegrees(content.latitude), longitude: CLLocationDegrees(content.longitude))
+//      JChatLocationManager.getLocationImageCallBack(location: location, size: size, callback: )
+      JChatLocationManager.getLocationImageCallBack(location: location, size: size, callback: { (image) in
+        JChatFileManage.sharedInstance.writeImage(name: "\(message.msgId).png", image: image)
+        callback(image)
+      })
+    }
+  }
+  
+  class func getLocationImageCallBack(location:CLLocation, size:CGSize, callback:@escaping CompletionBlock) {
     
     let region = MKCoordinateRegion(center: location.coordinate, span: MKCoordinateSpan())
     
@@ -94,6 +108,8 @@ class JChatLocationManager: NSObject {
       pinImage?.draw(at: CGPoint(x: finalImageRect.size.width/2, y: finalImageRect.size.height/2))
       let finalImage = UIGraphicsGetImageFromCurrentImageContext()
 //      self.locationDelegate.locationImageCallBack(location: location,image: finalImage)
+      
+//       writeimage
       if finalImage != nil {
         callback(finalImage!)
       }
@@ -107,8 +123,9 @@ class JChatLocationManager: NSObject {
 extension JChatLocationManager: CLLocationManagerDelegate{
   
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    locationManager.stopUpdatingLocation()
-    
+//    locationManager.stopUpdatingLocation()
+    manager.stopUpdatingLocation()
+    manager.delegate = nil;
     let location = locations[0]
     self.locationDelegate.currentLocationCallBack(location: location)
   }

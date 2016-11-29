@@ -23,6 +23,7 @@ class JChatConversationListViewController: UIViewController {
     self.setupNavigation()
     self.layoutAllViews()
     self.addNotifications()
+    
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -281,8 +282,8 @@ extension JChatConversationListViewController: UIAlertViewDelegate {
 
 
 extension JChatConversationListViewController: JMessageDelegate {
-
-  func onReceive(_ message: JMSGMessage!, error: NSError!) {
+  
+  func onReceive(_ message: JMSGMessage!, error: Error!) {
     print("Action -- onReceivemessage \(message)")
     self.getConversationList()
     

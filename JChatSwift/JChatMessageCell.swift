@@ -187,9 +187,15 @@ class JChatMessageCell: UITableViewCell {
         weakSelf?.messageBubble?.image = UIImage(named: "receiveFail")
         })
       break
+    case .location:
+//      let locationImg = JChatFileManage.sharedInstance.getImage(name: "\(self.messageModel.message.msgId).png")
+//      self.messageBubble?.image = locationImg
+//        let locationMng = JChatLocationManager.getlo
+      JChatLocationManager.getLocationImage(message: model.message, size: locationImageSizeDefault, callback: { (image) in
+        self.messageBubble?.image = image
+      })
+      break
     default:
-      let locationImg = JChatFileManage.sharedInstance.getImage(name: "\(self.messageModel.message.msgId).png")
-      self.messageBubble?.image = locationImg
       break
     }
     
