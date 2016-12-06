@@ -1,18 +1,18 @@
 PODS:
-  - JMessage (2.2.1)
+  - JMessage (2.2.3)
   - MBProgressHUD (0.9.2)
   - SnapKit (3.0.1)
 
 DEPENDENCIES:
-  - JMessage (~> 2.2.1)
+  - JMessage (~> 2.2.3)
   - MBProgressHUD (~> 0.9)
   - SnapKit (~> 3.0.0)
 
 SPEC CHECKSUMS:
-  JMessage: 73c7fbc9c93b647108013ba63652c505c2c19ba6
+  JMessage: 63ed6c178b426067bc752c86d0c4d3945ca8ab1d
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   SnapKit: f818b8326d45b4e1c777d0ab27b5c0a3624bfdeb
 
-PODFILE CHECKSUM: 54f4495ae24bcb527e135f0c6d409089dd6a6fcf
+PODFILE CHECKSUM: 03959f34cfd49872f90eed12538cbcf5a927377c
 
-COCOAPODS: 1.1.0.rc.2
+COCOAPODS: 1.2.0.beta.1
