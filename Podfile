@@ -4,5 +4,5 @@ use_frameworks!
 target 'JChatSwift' do
     pod 'SnapKit', '~> 3.0.0'
     pod 'MBProgressHUD', '~> 0.9'
-    pod 'JMessage', '~> 2.2.3'
+    pod 'JMessage', '~> 2.2.4'
 end
