@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 internal let TabbarItemVC = "TabbarItemClassName"
 internal let TabbarItemTittle = "TabbarItemTittle"
