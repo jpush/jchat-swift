@@ -194,6 +194,7 @@ class JChatChattingViewController: UIViewController {
   
 }
 
+// MARK: - UITableViewDelegate,UITableViewDataSource
 extension JChatChattingViewController:UITableViewDelegate,UITableViewDataSource {
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -259,7 +260,7 @@ extension JChatChattingViewController:UITableViewDelegate,UITableViewDataSource 
   
 }
 
-
+// MARK: - UIGestureRecognizerDelegate
 extension JChatChattingViewController:UIGestureRecognizerDelegate {
   func handleTap(_ recognizer: UITapGestureRecognizer) {
     hideKeyBoardAnimation()
@@ -274,7 +275,7 @@ extension JChatChattingViewController:UIGestureRecognizerDelegate {
   }
 }
 
-
+// MARK: - JChatInputDelegate
 extension JChatChattingViewController:JChatInputDelegate {
   
   func showMoreView() {
@@ -421,6 +422,7 @@ extension JChatChattingViewController : JMUIMultiSelectPhotosDelegate {
 
 
 // TODO:
+// MARK: - JChatMessageCellDelegate
 extension JChatChattingViewController : JChatMessageCellDelegate {
 
   func selectHeadView(_ model:JChatMessageModel) {
@@ -463,7 +465,7 @@ extension JChatChattingViewController : JChatMessageCellDelegate {
   }
 }
 
-
+// MARK: - JMessageDelegate
 extension JChatChattingViewController: JMessageDelegate {
 
   func onSendMessageResponse(_ message: JMSGMessage!, error: Error!) {

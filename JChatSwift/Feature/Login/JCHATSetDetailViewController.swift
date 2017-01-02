@@ -24,7 +24,6 @@ class JCHATSetDetailViewController: UIViewController {
     self.layoutAllViews()
   }
 
-  
   func setupNavigationBar() {
     self.navigationController?.navigationBar.isTranslucent = false
     self.navigationItem.hidesBackButton = true

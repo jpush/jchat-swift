@@ -7,6 +7,7 @@
 //
 
 import UIKit
+//import PinYin4Objc
 
 let JMSSAGE_APPKEY = "4f7aef34fb361292c566a1cd"
 let CHANNEL = ""
@@ -38,6 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     self.window = UIWindow(frame: UIScreen.main.bounds)
     self.setupRootView()
     self.window?.makeKeyAndVisible()
+    
     return true
   }
   
