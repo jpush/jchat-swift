@@ -85,10 +85,12 @@ class JChatFriendTableViewCell: UITableViewCell {
     self.avatar.image = headImage
     self.usernameLable.text = title
     self.selectBtn.isHidden = true
+    self.avatarLeadSuperContrain.constant = 7
   }
   
   func setupData(with user:JMSGUser) {
     self.username = user.username
+    self.selectBtn.isHidden = true
     self.avatar.image = UIImage(named: "headDefalt")
     self.usernameLable.text = user.displayName()
     self.friend?.user?.thumbAvatarData({[weak weakSelf = self] (avatarData, username, error) in

@@ -60,7 +60,7 @@ class JChatDataBaseManager: NSObject {
   }
   
   func createContactsTable(currentUser: String) -> Bool {
-    let sql = "CREATE TABLE IF NOT EXISTS \(currentUser)_Contacts( \n" +
+    let sql = "CREATE TABLE IF NOT EXISTS Contacts_\(currentUser)( \n" +
                   "id INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
                   "username TEXT UNIQUE\n" +
               ");"
@@ -69,7 +69,7 @@ class JChatDataBaseManager: NSObject {
   }
   
   func createInvitationTable(currentUser: String) -> Bool {
-    let sql = "CREATE TABLE IF NOT EXISTS \(currentUser)_Invitation( \n" +
+    let sql = "CREATE TABLE IF NOT EXISTS Invitation_\(currentUser)( \n" +
                       "id INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
                       "username TEXT UNIQUE, \n" +
                       "reason TEXT, \n" +
@@ -85,7 +85,7 @@ class JChatDataBaseManager: NSObject {
       return false
     }
     
-    let sql = "DELETE FROM \(currentUser)_Contacts WHERE username = '\(username)';"
+    let sql = "DELETE FROM Contacts_\(currentUser) WHERE username = '\(username)';"
     do {
       return self.db.executeUpdate(sql, withVAList: nil)
     } catch let error as NSError {
@@ -105,10 +105,10 @@ class JChatDataBaseManager: NSObject {
 
       self.db.beginTransaction()
       // delete all contact
-      var sql = "DELETE FROM \(currentUser)_Contacts;"
+      var sql = "DELETE FROM Contacts_\(currentUser);"
       self.db.executeUpdate(sql, withVAList: nil)
       
-      sql = "INSERT INTO \(currentUser)_Contacts(username) values (?)"
+      sql = "INSERT INTO Contacts_\(currentUser)(username) values (?)"
       for contact in contactUsernameArr {
         try self.db.executeUpdate(sql, values: [contact.username])
       }
@@ -129,7 +129,7 @@ class JChatDataBaseManager: NSObject {
     }
     
     do {
-      let sql = "INSERT INTO \(currentUser)_Contacts(username) values (?)"
+      let sql = "INSERT INTO Contacts_\(currentUser)(username) values (?)"
       try self.db.executeUpdate(sql, values: [username])
       return true
 
@@ -145,7 +145,7 @@ class JChatDataBaseManager: NSObject {
       return []
     }
     
-    let sql = "SELECT * FROM \(currentUser)_Contacts;"
+    let sql = "SELECT * FROM Contacts_\(currentUser);"
     do {
       let contactArr = NSMutableArray()
       let rs = try self.db.executeQuery(sql, values: nil)
@@ -168,7 +168,7 @@ class JChatDataBaseManager: NSObject {
     }
     
     var username = ""
-    let sql = "SELECT * FROM \(currentUser)_Contacts WHERE username = '\(user.username)';"
+    let sql = "SELECT * FROM Contacts_\(currentUser) WHERE username = '\(user.username)';"
     do {
       let rs = try self.db.executeQuery(sql, values: nil)
       while rs.next() {
@@ -188,10 +188,10 @@ class JChatDataBaseManager: NSObject {
     }
     
     do {
-      var sql = "DELETE FROM \(currentUser)_Invitation WHERE username = '\(username)';"
+      var sql = "DELETE FROM Invitation_\(currentUser) WHERE username = '\(username)';"
       self.db.executeUpdate(sql, withVAList: nil)
       
-      sql = "INSERT INTO \(currentUser)_Invitation(username,reason,invitation_type) values (?,?,?)"
+      sql = "INSERT INTO Invitation_\(currentUser)(username,reason,invitation_type) values (?,?,?)"
       try self.db.executeUpdate(sql, values: [username,reason,invitationType])
       return true
       
@@ -207,7 +207,7 @@ class JChatDataBaseManager: NSObject {
       return false
     }
     
-    let sql = "DELETE FROM \(currentUser)_Invitation WHERE username = '\(username)';"
+    let sql = "DELETE FROM Invitation_\(currentUser) WHERE username = '\(username)';"
     do {
       return self.db.executeUpdate(sql, withVAList: nil)
     } catch let error as NSError {
@@ -222,7 +222,7 @@ class JChatDataBaseManager: NSObject {
       return false
     }
     
-    let sql = "DELETE FROM \(currentUser)_Invitation;"
+    let sql = "DELETE FROM Invitation_\(currentUser);"
     do {
       return self.db.executeUpdate(sql, withVAList: nil)
     } catch let error as NSError {
@@ -237,7 +237,7 @@ class JChatDataBaseManager: NSObject {
       callback([])
     }
     
-    let sql = "SELECT * FROM \(currentUser)_Invitation;"
+    let sql = "SELECT * FROM Invitation_\(currentUser);"
     do {
       let contactArr = NSMutableArray()
       let contactDic = NSMutableDictionary()

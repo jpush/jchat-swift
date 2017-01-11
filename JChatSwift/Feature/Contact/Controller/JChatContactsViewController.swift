@@ -51,9 +51,9 @@ class JChatContactsViewController: UITabBarController {
     super.viewDidLoad()
     self.view.backgroundColor = UIColor.white
     self.setupNavigation()
-    
+
     self.setupAllView()
-    
+
     JMessage.add(self, with: nil)
     JChatContatctsDataSource.sharedInstance.resetSelected()
     self.addAllNotification()
@@ -72,7 +72,10 @@ class JChatContactsViewController: UITabBarController {
   }
   
   func reflashContactTable(_ notification:Notification) {
-    self.contactsList?.reloadData()
+    DispatchQueue.main.async(execute: {
+      self.contactsList?.reloadData()
+    })
+    
   }
   
   func deleteFriend(_ notification:Notification) {
@@ -91,34 +94,7 @@ class JChatContactsViewController: UITabBarController {
   }
   
   
-//  override func viewDidLayoutSubviews() {
-//    self.setupAllView()
-//    self.setupDatasource()
-//  }
 
-  
-//  func setupDatasource() {
-//    self.contactsDataSource = JChatContatctsDataSource()
-
-//    JChatDataBaseManager.sharedInstance.setupTable(username: JMSGUser.myInfo().username)
-//    let usernameArr = JChatDataBaseManager.sharedInstance.selectAllContact(currentUser: JMSGUser.myInfo().username)
-//    if usernameArr.count == 0 {
-//      JMSGFriendManager.getFriendList { (friendList, error) in
-//        if error == nil {
-//          JChatContatctsDataSource.sharedInstance.setupData(friendList as! NSArray)
-//          JChatDataBaseManager.sharedInstance.addContactList(currentUser: JMSGUser.myInfo().username, contactUsernameArr: friendList as! Array<JMSGUser>)
-//        }
-//        self.contactsList.reloadData()
-//      }
-//    } else {
-//      JMSGUser.userInfoArray(withUsernameArray: usernameArr, completionHandler: { (contactArr, error) in
-//        if error != nil { return }
-//        
-//        JChatContatctsDataSource.sharedInstance.setupData(contactArr as! NSArray)
-//        self.contactsList.reloadData()
-//      })
-//    }
-//  }
   
   func setupNavigation() {
     self.title = "通讯录"
@@ -148,7 +124,6 @@ class JChatContactsViewController: UITabBarController {
       selectUserNameArr += self.defaulSelectedArr
       MBProgressHUD.showMessage("正在创建群聊", toView: self.view)
       self.callBack?(selectArr)
-//      self.navigationController?.popToRootViewController(animated: false)
     } else {
       let alertView = UIAlertView(title: "添加好友", message: "输入好友用户名!", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "确定")
       alertView.alertViewStyle = .plainTextInput
@@ -167,7 +142,7 @@ class JChatContactsViewController: UITabBarController {
     self.contactsList.keyboardDismissMode = .onDrag
     self.contactsList.sectionIndexColor = UIColor(netHex: 0x3e3e3e)
     self.contactsList.sectionIndexBackgroundColor = UIColor.clear
-
+    self.contactsList.tableFooterView = UIView()
     self.view.addSubview(self.contactsList)
 
     self.contactsList.delegate = self
@@ -177,7 +152,7 @@ class JChatContactsViewController: UITabBarController {
       self.contactsList.snp.makeConstraints { (make) in
         make.left.equalTo(self.view)
         make.right.equalTo(self.view)
-        make.bottom.equalTo(self.view)
+        make.bottom.equalTo(self.view).offset(-50)
         make.top.equalTo(self.view)
       }
       
@@ -190,16 +165,8 @@ class JChatContactsViewController: UITabBarController {
       self.searchController.searchBar.layer.borderColor = kcontactColor.cgColor
       self.contactsList.tableHeaderView = self.searchController.searchBar
     } else {
-    // TODO: select mode
-//      self.selectContactView = JChatSelectContactView()
-//      self.selectContactView?.snp.makeConstraints({ (make) in
-//        make.top.right.left.equalToSuperview()
-//        make.height.equalTo(54)
-//      })
-      // TODO: setup selectContactView
       self.contactsList.snp.makeConstraints({ (make) in
         make.right.left.bottom.top.equalToSuperview()
-//        make.top.equalTo(self.selectContactView!.snp.bottom)
       })
     }
     
@@ -289,16 +256,16 @@ extension JChatContactsViewController: UITableViewDelegate, UITableViewDataSourc
     let nameLetterArr = JChatContatctsDataSource.sharedInstance.friendsDic[nameLetter] as! NSMutableArray
     let friend = nameLetterArr[indexPath.row]
     
-    cell?.setupData(model: friend as! JChatFriendModel, isSelectModel: self.isSelectMode, selectDefaults: self.defaulSelectedArr, selectCallBack: { (user) in
+    cell?.setupData(model: friend as! JChatFriendModel, isSelectModel: self.isSelectMode, selectDefaults: self.defaulSelectedArr, selectCallBack: {[weak weakSelf = self] (user) in
       if user == nil { return }
       
       JChatContatctsDataSource.sharedInstance.addSelectedUser(with: user as! JChatFriendModel)
-      self.navigationRightBtn.setTitle("确定(\(JChatContatctsDataSource.sharedInstance.seletedCount()))", for: .normal)
-    }, delSelectCallBack: { (user) in
+      weakSelf?.navigationRightBtn.setTitle("确定(\(JChatContatctsDataSource.sharedInstance.seletedCount()))", for: .normal)
+    }, delSelectCallBack: {[weak weakSelf = self] (user) in
       if user == nil { return }
       
       JChatContatctsDataSource.sharedInstance.removeSelectedUser(with: user as! JChatFriendModel)
-      self.navigationRightBtn.setTitle("确定(\(JChatContatctsDataSource.sharedInstance.seletedCount()))", for: .normal)
+      weakSelf?.navigationRightBtn.setTitle("确定(\(JChatContatctsDataSource.sharedInstance.seletedCount()))", for: .normal)
     })
     return cell!
   }

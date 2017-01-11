@@ -20,6 +20,7 @@ class JChatSearchFriendViewController: UIViewController {
     super.viewDidLoad()
     
     self.filterContactTable = UITableView()
+    self.filterContactTable.tableFooterView = UIView()
     self.view.addSubview(self.filterContactTable)
     self.filterContactTable.delegate = self
     self.filterContactTable.dataSource = self

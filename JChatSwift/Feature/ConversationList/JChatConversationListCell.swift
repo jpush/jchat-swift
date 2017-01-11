@@ -132,7 +132,12 @@ class JChatConversationListCell: UITableViewCell {
     }
 
     if conversation.latestMessage?.timestamp != nil {
-      let time = conversation.latestMessage?.timestamp.doubleValue
+      var time = conversation.latestMessage?.timestamp.doubleValue
+      
+      if time > 1999999999 {
+        time! /= 1000
+      }
+      
       self.timeLable.text = NSString.getFriendlyDateString(time!, forConversation: true)
     } else {
       self.timeLable.text = ""
