@@ -223,9 +223,10 @@ extension JChatConversationListViewController: JChatBubbleAlertViewDelegate {
   func clickBubbleFristBtn() {
     JChatAlertViewManager.sharedInstance.hidenAll()
     
-    let selectFriendVC = JChatContactsViewController(isSelect: true) { (usernames) in
-      if usernames == nil { return}
-      let usernameArr = usernames as! [String]
+    let selectFriendVC = JChatContactsViewController(isSelect: true) { (userModels) in
+      if userModels == nil { return}
+      
+      let usernameArr = JChatContatctsDataSource.sharedInstance.usernameArr(with: userModels as! [JChatFriendModel])
       if usernameArr.count == 0 { return }
       
       MBProgressHUD.showMessage("正在创建群组", toView: self.view)
@@ -238,7 +239,9 @@ extension JChatConversationListViewController: JChatBubbleAlertViewDelegate {
               let conversationVC = JChatChattingViewController()
               conversationVC.conversation = groupConversation as! JMSGConversation
               conversationVC.hidesBottomBarWhenPushed = true
-              self.navigationController?.pushViewController(conversationVC, animated: true)
+              let conversationListVC = self.navigationController?.viewControllers.first
+              self.navigationController?.popToRootViewController(animated: false)
+              conversationListVC?.navigationController?.pushViewController(conversationVC, animated: true)
             } else {
               print("createGroup error with \(NSString.errorAlert(error as! NSError))")
             }

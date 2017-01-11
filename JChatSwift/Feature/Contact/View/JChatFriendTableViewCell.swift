@@ -24,6 +24,7 @@ class JChatFriendTableViewCell: UITableViewCell {
   
   override func awakeFromNib() {
     super.awakeFromNib()
+    
   }
   
   override func setSelected(_ selected: Bool, animated: Bool) {
@@ -43,6 +44,7 @@ class JChatFriendTableViewCell: UITableViewCell {
       self.selectBtn.isHidden = false
       self.avatarLeadSuperContrain.constant = 33
       self.selectBtn.isSelected = model.isSelected
+      self.selectionStyle = .none
     } else {
       self.selectBtn.isHidden = true
       self.avatarLeadSuperContrain.constant = 7

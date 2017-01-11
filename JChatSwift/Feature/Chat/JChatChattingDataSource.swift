@@ -230,14 +230,25 @@ class JChatChattingDataSource: NSObject {
     return height
   }
   
+  // 添加时间
   internal func dataMessageShowtime(_ timeNumber:NSNumber) {
     if self.allMessageIdArr.count > 0 {
       if (self.allMessageIdArr.lastObject! as AnyObject) is NSString {
         let messageId = self.allMessageIdArr.lastObject
         let lastModel = self.allMessageDic.object(forKey: messageId!) as! JChatMessageModel
-        let timeInterVal = timeNumber.doubleValue
+        var timeInterVal = timeNumber.doubleValue
+        var lastTimeInterVal = (lastModel.messageTime?.doubleValue)!
+        
+        if timeInterVal > 1999999999 {
+          timeInterVal /= 1000
+        }
+        
+        if lastTimeInterVal > 1999999999 {
+          lastTimeInterVal /= 1000
+        }
+        
         if lastModel.isKind(of: JChatMessageModel.self) != false {
-          let lastDate:Date = Date(timeIntervalSince1970: (lastModel.messageTime?.doubleValue)!)
+          let lastDate:Date = Date(timeIntervalSince1970: lastTimeInterVal)
           let currentDate = Date(timeIntervalSince1970: timeInterVal)
           
           let timeBetween = currentDate.timeIntervalSince(lastDate)
@@ -256,25 +267,33 @@ class JChatChattingDataSource: NSObject {
     }
   }
   
+  // 添加时间到最上面
   func dataMessageShowTimeToTop(_ timeNumber:NSNumber) {
     
     if self.allMessageIdArr.count > 0 {
       var fristObj:AnyObject
       
       if self.isNoMoreHistoryMsg! {
-//        fristObj = self.allMessageIdArr[0]
         fristObj = self.allMessageIdArr.object(at: 0) as AnyObject
       } else {
-//        fristObj = self.allMessageIdArr[1]
         fristObj = self.allMessageIdArr.object(at: 1) as AnyObject
       }
       print(fristObj is NSString)
       if fristObj is NSString {
         let fristModel = self.allMessageDic.object(forKey: fristObj) as! JChatMessageModel
-        let timeInterVal = timeNumber.doubleValue
+        var fristTimeInterVal = (fristModel.messageTime?.doubleValue)!
+        var timeInterVal = timeNumber.doubleValue
+        
+        if timeInterVal > 1999999999 {
+          timeInterVal /= 1000
+        }
+        
+        if fristTimeInterVal > 1999999999 {
+          fristTimeInterVal /= 1000
+        }
         
         if fristModel.isKind(of: JChatMessageModel.self) == true {
-          let lastDate:Date = Date(timeIntervalSince1970: (fristModel.messageTime?.doubleValue)!)
+          let lastDate:Date = Date(timeIntervalSince1970: fristTimeInterVal)
           let currentDate = Date(timeIntervalSince1970: timeInterVal)
           
           let timeBetween = lastDate.timeIntervalSince(currentDate)

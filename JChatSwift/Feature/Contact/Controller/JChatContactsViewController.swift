@@ -72,7 +72,7 @@ class JChatContactsViewController: UITabBarController {
   }
   
   func reflashContactTable(_ notification:Notification) {
-    self.contactsList.reloadData()
+    self.contactsList?.reloadData()
   }
   
   func deleteFriend(_ notification:Notification) {
@@ -125,7 +125,7 @@ class JChatContactsViewController: UITabBarController {
     self.navigationController?.navigationBar.isTranslucent = false
     self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     self.navigationRightBtn = UIButton(type: .custom)
-    self.navigationRightBtn.frame = CGRect(x: 0, y: 0, width: 150, height: 30)
+    self.navigationRightBtn.frame = CGRect(x: 0, y: 0, width: 100, height: 30)
     self.navigationRightBtn.contentHorizontalAlignment = .right
     self.navigationRightBtn.addTarget(self, action: #selector(self.clickToRightNavigationBtn), for: .touchUpInside)
     
@@ -133,7 +133,6 @@ class JChatContactsViewController: UITabBarController {
       self.navigationRightBtn.setTitle("确定", for: .normal)
     } else {
       self.navigationRightBtn.setImage(UIImage(named: "createConversation"), for: UIControlState())
-      self.navigationRightBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -15 * UIScreen.main.scale)
     }
     
     self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.navigationRightBtn)
