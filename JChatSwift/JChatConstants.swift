@@ -22,7 +22,7 @@ let kApplicationWidth = (UIScreen.main.bounds).width
 
 // notification
 let kDeleteAllMessage = "deleteAllMessage"
-let kupdateUserInfo = "updateUserInfo"
+//let kupdateUserInfo = "updateUserInfo"
 
 let kDBMigrateStartNotification = "DBMigrateStartNotification"
 let kDBMigrateFinishNotification = "DBMigrateFinishNotification"

@@ -78,7 +78,7 @@ class JCHATRegisterViewController: UIViewController {
           JMSGUser.login(withUsername: self.usernameTF.text!, password: self.passwordTF.text!, completionHandler: { (resultObject, error) -> Void in
               MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
             if error == nil {
-              NotificationCenter.default.post(name: Notification.Name(rawValue: kupdateUserInfo), object: nil)
+              NotificationCenter.default.post(name: Notification.Name(rawValue: kAccountChangeNotification), object: nil)
               self.userLoginSave()
 
               let detailVC = JCHATSetDetailViewController()

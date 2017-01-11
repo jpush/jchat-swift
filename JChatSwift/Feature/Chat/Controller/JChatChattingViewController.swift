@@ -508,7 +508,7 @@ extension JChatChattingViewController: JMessageDelegate {
 //      let locationImgGetter = JChatLocationManager()//!
       
       JChatLocationManager.getLocationImageCallBack(location: location, size: locationImageSizeDefault, callback: { (locationImage) in
-        JChatFileManage.sharedInstance.writeImage(name: "\(message.msgId).png", image: locationImage)
+        JChatFileManage.sharedInstance.writeImage(name: "\(message.msgId).png", image: (locationImage as! UIImage))
         
         let model = JChatMessageModel()
         model.setChatModel(message, conversation: self.conversation)

@@ -75,7 +75,7 @@ class JChatLoginViewController: UIViewController {
       MBProgressHUD.showMessage("正在登录", toView: self.view)
       JMSGUser.login(withUsername: self.userNameTF.text!, password: self.passwordTF.text! , completionHandler: { (resultObject, error) -> Void in
         if error == nil {
-          NotificationCenter.default.post(name: Notification.Name(rawValue: kupdateUserInfo), object: nil)
+          NotificationCenter.default.post(name: Notification.Name(rawValue: kAccountChangeNotification), object: nil)
           let appDelegate = UIApplication.shared.delegate
           self.userLoginSave()
           appDelegate!.window!!.rootViewController = JChatMainTabViewController.sharedInstance

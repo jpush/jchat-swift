@@ -59,7 +59,7 @@ class JChatEditUserInfoViewController: UIViewController {
     JMSGUser.updateMyInfo(withParameter: self.infoTextField.text!, userFieldType: self.updateType) { (resultObject, error) -> Void in
       MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
       if error == nil {
-        NotificationCenter.default.post(name: Notification.Name(rawValue: kupdateUserInfo), object: nil)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: kAccountChangeNotification), object: nil)
         MBProgressHUD.showMessage("修改成功", view: self.view)
         _ = self.navigationController?.popViewController(animated: true)
       } else {

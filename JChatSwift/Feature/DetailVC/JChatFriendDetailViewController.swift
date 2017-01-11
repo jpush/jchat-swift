@@ -14,6 +14,7 @@ let kSkipToSingleChatViewState = "SkipToSingleChatViewState"
 class JChatFriendDetailViewController: UIViewController {
   var user:JMSGUser!
   var isGroupFlag:Bool?
+  var isMyFriend:Bool?
   
   var infoTable:UITableView!
   var nameLabel:UILabel!
@@ -23,18 +24,18 @@ class JChatFriendDetailViewController: UIViewController {
   var imgArr:NSArray!
   var infoArr:NSMutableArray!
   
-  
   override func viewDidLoad() {
     super.viewDidLoad()
 
     self.setupNavigationBar()
-    self.layoutAllViews()
     self.loadUserInfoData()
+    
+    self.layoutAllViews()
+    
   }
   
   func setupNavigationBar() {
       self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-//      self.navigationController?.navigationBar.translucent = false
       self.title = "详情资料"
       let leftBtn = UIButton(type: .custom)
       leftBtn.frame = kNavigationLeftButtonRect
@@ -45,7 +46,6 @@ class JChatFriendDetailViewController: UIViewController {
   }
   
   func backClick() {
-//    self.navigationController?.popViewController(animated: true)
     _ = self.navigationController?.popViewController(animated: true)
   }
   
@@ -89,6 +89,12 @@ class JChatFriendDetailViewController: UIViewController {
   }
 
   func loadUserInfoData() {
+    if JChatDataBaseManager.sharedInstance.selectContact(currentUser: JMSGUser.myInfo().username, user: self.user) == "" {
+      self.isMyFriend = false
+    } else {
+      self.isMyFriend = true
+    }
+    
     self.titleArr = ["性别", "地区", "个性签名"]
     self.imgArr = ["gender", "location_21", "signature"]
 
@@ -133,19 +139,19 @@ class JChatFriendDetailViewController: UIViewController {
             }
           } else {
             self.headView.image = UIImage(named: "headDefalt")
-            _ = MBProgressHUD.showMessage("获取数据失败", view: self.view)
           }
         })
 
       } else {
         self.headView.image = UIImage(named: "headDefalt")
-        _ = MBProgressHUD.showMessage("获取数据失败", view: self.view)
       }
+      
       self.infoTable.reloadData()
     }
     
   }
 
+  
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
   }
@@ -154,32 +160,60 @@ class JChatFriendDetailViewController: UIViewController {
 
 extension JChatFriendDetailViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 4
+    return self.isMyFriend! ? 5 : 4
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    if (indexPath as NSIndexPath).row == 3 {
+    if (indexPath as NSIndexPath).row >= 3 {
       identify = "JChatFriendDetailSendMsgCell"
       var cell:JChatFriendDetailSendMsgCell? = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatFriendDetailSendMsgCell
       if cell == nil {
         tableView.register(UINib(nibName: identify, bundle: nil), forCellReuseIdentifier: identify)
         cell = tableView.dequeueReusableCell(withIdentifier: identify) as? JChatFriendDetailSendMsgCell
       }
-      cell!.setClickSendMsgCallback({
-        
-        for var ctl in (self.navigationController?.childViewControllers)! {
-          if ctl.isKind(of: JChatChattingViewController.self) {
+      
+      if indexPath.row == 3 {
+        if self.isMyFriend! { //发送消息
+          cell!.setClickSendMsgCallback({
             
-            if self.isGroupFlag! {
-              self.navigationController?.popToRootViewController(animated: true)
-              NotificationCenter.default.post(name: Notification.Name(rawValue: kSkipToSingleChatViewState), object: self.user)
-            } else {
-              self.navigationController?.popToViewController(ctl, animated: true)
+            for var ctl in (self.navigationController?.childViewControllers)! {
+              if ctl.isKind(of: JChatChattingViewController.self) {
+                
+                if self.isGroupFlag! {
+                  self.navigationController?.popToRootViewController(animated: true)
+                  NotificationCenter.default.post(name: Notification.Name(rawValue: kSkipToSingleChatViewState), object: self.user)
+                } else {
+                  self.navigationController?.popToViewController(ctl, animated: true)
+                }
+              }
+              
+              if ctl.isKind(of: JChatContactsViewController.self) {
+                self.navigationController?.popToRootViewController(animated: false)
+                JChatMainTabViewController.sharedInstance.selectedIndex = 0
+                NotificationCenter.default.post(name: Notification.Name(rawValue: kSkipToSingleChatViewState), object: self.user)
+              }
             }
+          })
+          return cell!
+        } else {
+          cell?.setClickAddFriendCallback {
+            let addFriendVC = JChatAddFriendViewController()
+            addFriendVC.username = self.user.username
+            self.navigationController?.pushViewController(addFriendVC, animated: true)
           }
+          return cell!
         }
-      })
-      return cell!
+      }
+      
+      if indexPath.row == 4 {
+        cell!.setClickDeleteCallback({
+          let alertView = UIAlertView(title: "删除好友", message: "确定要删除好友 \(self.user.displayName()) 吗？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "确定")
+          alertView.show()
+        })
+        return cell!
+      }
+      
+      
     }
     
     identify = "JChatAboutMeCell"
@@ -203,6 +237,24 @@ extension JChatFriendDetailViewController: UITableViewDelegate, UITableViewDataS
     return 57;
   }
 }
+
+extension JChatFriendDetailViewController: UIAlertViewDelegate {
+  
+  func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
+    if buttonIndex == 0 { return }
+    MBProgressHUD.showMessage("正在删除", toView: self.view)
+    JMSGFriendManager.removeFriend(withUsername: self.user.username, appKey: JMSSAGE_APPKEY, completionHandler: { (result, error) in
+      MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
+      if error != nil {
+        MBProgressHUD.showMessage("删除好友失败！", view: self.view)
+      }
+      NotificationCenter.default.post(name: Notification.Name(rawValue: kDeleteFriendNotificaion), object: self.user.username)
+      self.navigationController?.popViewController(animated: true)
+    })
+    
+  }
+}
+
 
 
 extension JChatFriendDetailViewController: UIGestureRecognizerDelegate {

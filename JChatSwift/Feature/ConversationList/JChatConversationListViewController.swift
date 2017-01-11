@@ -23,7 +23,6 @@ class JChatConversationListViewController: UIViewController {
     self.setupNavigation()
     self.layoutAllViews()
     self.addNotifications()
-    
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -65,6 +64,7 @@ class JChatConversationListViewController: UIViewController {
     self.conversationListTable.estimatedRowHeight = 60
     self.conversationListTable.rowHeight = UITableViewAutomaticDimension
     self.view.addSubview(self.conversationListTable)
+
     self.conversationListTable.snp.makeConstraints { (make) -> Void in
       make.top.right.left.bottom.equalTo(self.view)
     }
@@ -221,33 +221,44 @@ extension JChatConversationListViewController: UIGestureRecognizerDelegate {
 
 extension JChatConversationListViewController: JChatBubbleAlertViewDelegate {
   func clickBubbleFristBtn() {
-    MBProgressHUD.showMessage("正在创建群组", toView: self.view)
-    JMSGGroup.createGroup(withName: JMSGUser.myInfo().displayName(), desc: "", memberArray: nil) { (group, error) -> Void in
-      MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
-      if error == nil {
-        JMSGConversation.createGroupConversation(withGroupId: (group as! JMSGGroup).gid, completionHandler: { (groupConversation, error) -> Void in
+    JChatAlertViewManager.sharedInstance.hidenAll()
+    
+    let selectFriendVC = JChatContactsViewController(isSelect: true) { (usernames) in
+      if usernames == nil { return}
+      let usernameArr = usernames as! [String]
+      if usernameArr.count == 0 { return }
+      
+      MBProgressHUD.showMessage("正在创建群组", toView: self.view)
+      JMSGGroup.createGroup(withName: "和 \(usernameArr[0]) 等人的群聊", desc: "", memberArray: usernameArr, completionHandler: { (group, error) in
+        MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
+        if error == nil {
+          JMSGConversation.createGroupConversation(withGroupId: (group as! JMSGGroup).gid, completionHandler: { (groupConversation, error) -> Void in
+            
+            if error == nil {
+              let conversationVC = JChatChattingViewController()
+              conversationVC.conversation = groupConversation as! JMSGConversation
+              conversationVC.hidesBottomBarWhenPushed = true
+              self.navigationController?.pushViewController(conversationVC, animated: true)
+            } else {
+              print("createGroup error with \(NSString.errorAlert(error as! NSError))")
+            }
+          })
           
-          if error == nil {
-            let conversationVC = JChatChattingViewController()
-            conversationVC.conversation = groupConversation as! JMSGConversation
-            conversationVC.hidesBottomBarWhenPushed = true
-            self.navigationController?.pushViewController(conversationVC, animated: true)
-          } else {
-            print("createGroup error with \(NSString.errorAlert(error as! NSError))")
-          }
-        })
-
-      } else {
-        print("createGroup error with \(NSString.errorAlert(error as! NSError))")
-      }
-
+        } else {
+          print("createGroup error with \(NSString.errorAlert(error as! NSError))")
+        }
+      })
     }
+    selectFriendVC.hidesBottomBarWhenPushed = true
+    self.navigationController?.pushViewController(selectFriendVC, animated: true)
   }
   
   func clickBubbleSecondBtn() {
-    let alertView = UIAlertView(title: "添加好友", message: "输入好友用户名!", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "确定")
-    alertView.alertViewStyle = .plainTextInput
-    alertView.show()
+    JChatAlertViewManager.sharedInstance.hidenAll()
+    
+    let friendVC = JChatContactsViewController()
+    friendVC.hidesBottomBarWhenPushed = true
+    self.navigationController?.pushViewController(friendVC, animated: true)
   }
 }
 

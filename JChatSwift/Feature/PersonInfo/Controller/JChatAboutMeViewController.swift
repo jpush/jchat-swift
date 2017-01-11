@@ -40,7 +40,7 @@ class JChatAboutMeViewController: UIViewController {
     self.getData()
     self.setAvatar()
     
-    NotificationCenter.default.addObserver(self, selector: #selector(self.updateAvatar), name: NSNotification.Name(rawValue: kupdateUserInfo), object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.updateAvatar), name: NSNotification.Name(rawValue: kAccountChangeNotification), object: nil)
   }
 
   func getData() {

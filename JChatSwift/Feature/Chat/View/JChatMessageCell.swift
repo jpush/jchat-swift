@@ -192,7 +192,7 @@ class JChatMessageCell: UITableViewCell {
 //      self.messageBubble?.image = locationImg
 //        let locationMng = JChatLocationManager.getlo
       JChatLocationManager.getLocationImage(message: model.message, size: locationImageSizeDefault, callback: { (image) in
-        self.messageBubble?.image = image
+        self.messageBubble?.image = (image as! UIImage)
       })
       break
     default:

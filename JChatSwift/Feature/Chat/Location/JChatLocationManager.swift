@@ -16,9 +16,6 @@ protocol JChatLocationDelegate:NSObjectProtocol {
   func locationImageCallBack(location: CLLocation,image:UIImage?)
 }
 
-typealias CompletionBlock = (_ result: UIImage) -> Void
-
-
 class JChatLocationManager: NSObject {
   var locationManager:CLLocationManager!
   weak var locationDelegate:JChatLocationDelegate!
@@ -77,10 +74,9 @@ class JChatLocationManager: NSObject {
     } else {
       let content = message.content as! JMSGLocationContent
       let location = CLLocation(latitude: CLLocationDegrees(content.latitude), longitude: CLLocationDegrees(content.longitude))
-//      JChatLocationManager.getLocationImageCallBack(location: location, size: size, callback: )
       JChatLocationManager.getLocationImageCallBack(location: location, size: size, callback: { (image) in
-        JChatFileManage.sharedInstance.writeImage(name: "\(message.msgId).png", image: image)
-        callback(image)
+        JChatFileManage.sharedInstance.writeImage(name: "\(message.msgId).png", image: (image as! UIImage))
+        callback((image as! UIImage))
       })
     }
   }

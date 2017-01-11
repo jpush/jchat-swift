@@ -44,7 +44,7 @@ class JChatAlreadyLoginViewController: UIViewController {
       
       if error == nil {
         MBProgressHUD.showMessage("登录成功", view: self.view)
-        NotificationCenter.default.post(name: Notification.Name(rawValue: kupdateUserInfo), object: nil)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: kAccountChangeNotification), object: nil)
         let appDelegate = UIApplication.shared.delegate
         appDelegate!.window!!.rootViewController = JChatMainTabViewController.sharedInstance
         

@@ -9,6 +9,7 @@
 import UIKit
 import FMDB
 
+
 class JChatDataBaseManager: NSObject {
   
   static let sharedInstance = JChatDataBaseManager()
@@ -23,7 +24,7 @@ class JChatDataBaseManager: NSObject {
     let documentPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
     print("the document path \(documentPath)")
     let dataBasePath = documentPath.appending("/JChatDataBase.db")
-    print("thr database path \(dataBasePath)")
+    print("the database path \(dataBasePath)")
     
     self.db = FMDatabase(path: dataBasePath)
     
@@ -39,7 +40,12 @@ class JChatDataBaseManager: NSObject {
   }
   
   // MARK: CREATE TABLE
-  func createTable(username: String) -> Bool {
+  open func setupTable(username: String) -> Bool {
+    if username == "" {
+      print("username is nil error")
+      return false
+    }
+    
     if !createContactsTable(currentUser: username) {
       print("创建数据库联系人表失败")
       return false
@@ -54,7 +60,7 @@ class JChatDataBaseManager: NSObject {
   }
   
   func createContactsTable(currentUser: String) -> Bool {
-    let sql = "CREATE TABLE IF NOT EXISTS T_Contacts( \n" +
+    let sql = "CREATE TABLE IF NOT EXISTS \(currentUser)_Contacts( \n" +
                   "id INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
                   "username TEXT UNIQUE\n" +
               ");"
@@ -63,16 +69,23 @@ class JChatDataBaseManager: NSObject {
   }
   
   func createInvitationTable(currentUser: String) -> Bool {
-    let sql = "CREATE TABLE IF NOT EXISTS T_Invitation( \n" +
+    let sql = "CREATE TABLE IF NOT EXISTS \(currentUser)_Invitation( \n" +
                       "id INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
-                      "username TEXT UNIQUE \n" +
-              ");"
+                      "username TEXT UNIQUE, \n" +
+                      "reason TEXT, \n" +
+                      "invitation_type INTEGER \n" +
+              ");" // invitation_type  1:已添加   2:好友请求已发送等待验证 3:对方拒绝 4:好友邀请已接受待验证
     return db!.executeUpdate(sql, withVAList: nil)
   }
   
   // MARK: CONTACTS
   open func removeContact(currentUser: String, with username: String) -> Bool {
-    let sql = "DELETE FROM T_Contacts WHERE username = \(username);"
+    if currentUser == "" {
+      print("username is nil error")
+      return false
+    }
+    
+    let sql = "DELETE FROM \(currentUser)_Contacts WHERE username = '\(username)';"
     do {
       return self.db.executeUpdate(sql, withVAList: nil)
     } catch let error as NSError {
@@ -83,14 +96,19 @@ class JChatDataBaseManager: NSObject {
   }
   
   open func addContactList(currentUser: String,contactUsernameArr: Array<JMSGUser>) -> Bool {
+    if currentUser == "" {
+      print("username is nil error")
+      return false
+    }
+    
     do {
 
       self.db.beginTransaction()
       // delete all contact
-      var sql = "DELETE FROM T_Contacts;"
+      var sql = "DELETE FROM \(currentUser)_Contacts;"
       self.db.executeUpdate(sql, withVAList: nil)
       
-      sql = "INSERT INTO T_Contacts(username) values (?)"
+      sql = "INSERT INTO \(currentUser)_Contacts(username) values (?)"
       for contact in contactUsernameArr {
         try self.db.executeUpdate(sql, values: [contact.username])
       }
@@ -105,9 +123,13 @@ class JChatDataBaseManager: NSObject {
   }
   
   open func addContact(currentUser: String,with username:String) -> Bool {
+    if currentUser == "" {
+      print("username is nil error")
+      return false
+    }
     
     do {
-      let sql = "INSERT INTO T_Contacts(username) values (?)"
+      let sql = "INSERT INTO \(currentUser)_Contacts(username) values (?)"
       try self.db.executeUpdate(sql, values: [username])
       return true
 
@@ -118,14 +140,12 @@ class JChatDataBaseManager: NSObject {
   }
 
   open func selectAllContact(currentUser: String) -> Array<String> {
-    
-    let currentUsername = JMSGUser.myInfo().username
-    if currentUsername == nil {
-      print("当前没有用户登录")
+    if currentUser == "" {
+      print("username is nil error")
       return []
     }
     
-    let sql = "SELECT * FROM T_Contacts;"
+    let sql = "SELECT * FROM \(currentUser)_Contacts;"
     do {
       let contactArr = NSMutableArray()
       let rs = try self.db.executeQuery(sql, values: nil)
@@ -141,13 +161,38 @@ class JChatDataBaseManager: NSObject {
     }
   }
   
+  open func selectContact(currentUser: String, user: JMSGUser) -> String {
+    if currentUser == "" {
+      print("username is nil error")
+      return ""
+    }
+    
+    var username = ""
+    let sql = "SELECT * FROM \(currentUser)_Contacts WHERE username = '\(user.username)';"
+    do {
+      let rs = try self.db.executeQuery(sql, values: nil)
+      while rs.next() {
+        username = rs.string(forColumnIndex: 1)
+      }
+    } catch let error as NSError {
+      print("error")
+    }
+    return username
+  }
   
   // MARK: INVITATION
-  open func addInvitation(currentUser: String, with username:String) -> Bool {
+  open func addInvitation(currentUser: String, with username:String, reason: String, invitationType: NSInteger) -> Bool {
+    if currentUser == "" {
+      print("username is nil error")
+      return false
+    }
+    
     do {
+      var sql = "DELETE FROM \(currentUser)_Invitation WHERE username = '\(username)';"
+      self.db.executeUpdate(sql, withVAList: nil)
       
-      let sql = "INSERT INTO T_Invitation(username) values (?)"
-      try self.db.executeUpdate(sql, values: [username])
+      sql = "INSERT INTO \(currentUser)_Invitation(username,reason,invitation_type) values (?,?,?)"
+      try self.db.executeUpdate(sql, values: [username,reason,invitationType])
       return true
       
     } catch let error as NSError {
@@ -157,7 +202,27 @@ class JChatDataBaseManager: NSObject {
   }
   
   open func deleteInvitation(currentUser: String,with username: String) -> Bool{
-    let sql = "DELETE FROM T_Invitation WHERE username = \(username);"
+    if currentUser == "" {
+      print("username is nil error")
+      return false
+    }
+    
+    let sql = "DELETE FROM \(currentUser)_Invitation WHERE username = '\(username)';"
+    do {
+      return self.db.executeUpdate(sql, withVAList: nil)
+    } catch let error as NSError {
+      print("delete contact fail \(error)")
+      return false
+    }
+  }
+  
+  open func deleteAllInvitation(currentUser: String) -> Bool {
+    if currentUser == "" {
+      print("username is nil error")
+      return false
+    }
+    
+    let sql = "DELETE FROM \(currentUser)_Invitation;"
     do {
       return self.db.executeUpdate(sql, withVAList: nil)
     } catch let error as NSError {
@@ -166,21 +231,40 @@ class JChatDataBaseManager: NSObject {
     }
   }
 
-  open func selectInvitation(currentUser: String) -> Array<String> {
+  open func selectInvitation(currentUser: String, callback:@escaping CompletionBlock) {
+    if currentUser == "" {
+      print("username is nil error")
+      callback([])
+    }
     
-    let sql = "SELECT * FROM T_Invitation;"
+    let sql = "SELECT * FROM \(currentUser)_Invitation;"
     do {
       let contactArr = NSMutableArray()
+      let contactDic = NSMutableDictionary()
+      
       let rs = try self.db.executeQuery(sql, values: nil)
       while rs.next() {
         print("\(rs.string(forColumnIndex: 1))")
-        contactArr.add(rs.string(forColumnIndex: 1))
+        let friendModel = JChatInvitationModel()
+        let username = rs.string(forColumn: "username")
+        let reason = rs.string(forColumn: "reason")
+        let type = rs.int(forColumn: "invitation_type")
+        friendModel.setData(reason!, type: JChatFriendEventNotificationType(rawValue: NSInteger(type))!)
+        contactDic[username] = friendModel
+        contactArr.add(username)
       }
-      return NSArray(array: contactArr) as! Array<String>
       
+      JMSGUser.userInfoArray(withUsernameArray: (contactArr as! [String]), completionHandler: { (result, error) in
+        if error != nil { return }
+        for user in (result as! Array<JMSGUser>) {
+            (contactDic[user.username] as! JChatInvitationModel).user = user
+        }
+        callback(contactDic.allValues)
+      })
+
     } catch let error as NSError {
       print("get all contact fail \(error)")
-      return []
+      callback([])
     }
   }
 }

@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     self.window = UIWindow(frame: UIScreen.main.bounds)
     self.setupRootView()
     self.window?.makeKeyAndVisible()
-    
+    print("info \(JMSGUser.myInfo().username))")
     return true
   }
   
