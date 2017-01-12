@@ -2,22 +2,29 @@ PODS:
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
   - FMDB/standard (2.6.2)
-  - JMessage (2.2.4)
+  - JCore (1.1.0)
+  - JMessage (3.0.0):
+    - JCore (~> 1.1.0)
+  - JPush (3.0.1):
+    - JCore (~> 1.1.0)
   - MBProgressHUD (0.9.2)
   - SnapKit (3.0.1)
 
 DEPENDENCIES:
   - FMDB (~> 2.6.2)
-  - JMessage (~> 2.2.4)
+  - JMessage (~> 3.0.0)
+  - JPush (~> 3.0.1)
   - MBProgressHUD (~> 0.9)
   - SnapKit (~> 3.0.0)
 
 SPEC CHECKSUMS:
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
-  JMessage: f520035ab695306629ef8261923d9ee60fd69dc6
+  JCore: 7382f2c62e6fcf08305b735e91f0fb771f448d3d
+  JMessage: d35ffb1cd366176b61edf478cd07b9090024d60e
+  JPush: 427daa60236d0faa9f379cd5bbeb923103162058
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   SnapKit: f818b8326d45b4e1c777d0ab27b5c0a3624bfdeb
 
-PODFILE CHECKSUM: 3f7e6d03601904b2d14a10a4dd0c81ac6c888348
+PODFILE CHECKSUM: e340562ea01c871cfce61fa2ad0a66c38297936a
 
 COCOAPODS: 1.2.0.beta.1

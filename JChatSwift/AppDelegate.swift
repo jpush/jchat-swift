@@ -80,12 +80,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   
   func registerJPushStatusNotification() {
     let defaultCenter = NotificationCenter.default
-    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidSetup(_:)), name: NSNotification.Name.jpfNetworkDidSetup, object: nil)
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidSetup(_:)), name: NSNotification.Name.jmsgNetworkDidSetup, object: nil)
     defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkIsConnecting(_:)), name: NSNotification.Name.jpfNetworkIsConnecting, object: nil)
-    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidClose(_:)), name: NSNotification.Name.jpfNetworkDidClose, object: nil)
-    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidRegister(_:)), name: NSNotification.Name.jpfNetworkDidRegister, object: nil)
-    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidLogin(_:)), name: NSNotification.Name.jpfNetworkDidLogin, object: nil)
-    defaultCenter.addObserver(self, selector: #selector(AppDelegate.receivePushMessage(_:)), name: NSNotification.Name.jpfNetworkDidReceiveMessage, object: nil)
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidClose(_:)), name: NSNotification.Name.jmsgNetworkDidClose, object: nil)
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidRegister(_:)), name: NSNotification.Name.jmsgNetworkDidRegister, object: nil)
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.networkDidLogin(_:)), name: NSNotification.Name.jmsgNetworkDidLogin, object: nil)
+    defaultCenter.addObserver(self, selector: #selector(AppDelegate.receivePushMessage(_:)), name: NSNotification.Name.jmsgNetworkDidReceiveMessage, object: nil)
   }
   
   // notification from JPush

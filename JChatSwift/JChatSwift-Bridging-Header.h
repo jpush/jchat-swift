@@ -11,3 +11,4 @@
 #import "UIAppearance+Swift.h"
 
   
+#import <JPush/JPUSHService.h>

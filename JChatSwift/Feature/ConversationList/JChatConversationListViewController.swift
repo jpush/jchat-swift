@@ -84,13 +84,13 @@ class JChatConversationListViewController: UIViewController {
   
   func addNotifications() {
 
-    NotificationCenter.default.addObserver(self, selector: #selector(self.netWorkConnectClose), name: NSNotification.Name.jpfNetworkDidClose, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.netWorkConnectClose), name: NSNotification.Name.jmsgNetworkDidClose, object: nil)
 
-    NotificationCenter.default.addObserver(self, selector: #selector(self.netWorkConnectSetup), name: NSNotification.Name.jpfNetworkDidSetup, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.netWorkConnectSetup), name: NSNotification.Name.jmsgNetworkDidSetup, object: nil)
 
-    NotificationCenter.default.addObserver(self, selector: #selector(self.connectSucceed), name: NSNotification.Name.jpfNetworkDidClose, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.connectSucceed), name: NSNotification.Name.jmsgNetworkDidClose, object: nil)
 
-    NotificationCenter.default.addObserver(self, selector: #selector(self.isConnecting), name: NSNotification.Name.jpfNetworkIsConnecting, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.isConnecting), name: NSNotification.Name.jmsgNetworkIsConnecting, object: nil)
 
     NotificationCenter.default.addObserver(self, selector: #selector(self.dBMigrateFinish), name: NSNotification.Name(rawValue: kDBMigrateFinishNotification), object: nil)
 
@@ -98,7 +98,7 @@ class JChatConversationListViewController: UIViewController {
     
     NotificationCenter.default.addObserver(self, selector: #selector(self.skipToSingleChat(_:)), name: NSNotification.Name(rawValue: kSkipToSingleChatViewState), object: nil)
     
-    NotificationCenter.default.addObserver(self, selector: #selector(self.didLoginJpush), name: NSNotification.Name.jpfNetworkDidLogin, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.didLoginJpush), name: NSNotification.Name.jmsgNetworkDidLogin, object: nil)
   }
   
   func skipToSingleChat(_ notification:Notification) {
