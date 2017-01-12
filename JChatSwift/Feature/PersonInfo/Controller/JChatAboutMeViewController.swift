@@ -214,7 +214,7 @@ extension JChatAboutMeViewController: UIAlertViewDelegate {
       let appDelegate = UIApplication.shared.delegate
       appDelegate!.window!!.rootViewController = loginNC
       UserDefaults.standard.removeObject(forKey: kuserName)
-      
+//      NotificationCenter.default.post(name: Notification.Name(rawValue: kAccountChangeNotification), object: nil)
       return
     }
   }

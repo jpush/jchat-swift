@@ -313,11 +313,12 @@ extension JChatContactsViewController: UISearchBarDelegate {
   }
   
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-    let filterArr = JChatContatctsDataSource.sharedInstance.filterFriends(with: searchText)
-    print(filterArr)
-    self.filtContactViewCtr.filterContactArr = filterArr
+//    let filterArr = JChatContatctsDataSource.sharedInstance.filterFriends(with: searchText)
+    JChatContatctsDataSource.sharedInstance.filterFriends(with: searchText) { (userArr) in
+      let filterArr = userArr as! [JMSGUser]
+      self.filtContactViewCtr.filterContactArr = filterArr
+    }
   }
-  
 }
 
 extension JChatContactsViewController: JMessageDelegate {

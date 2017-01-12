@@ -137,20 +137,31 @@ class JChatContatctsDataSource: NSObject {
     return outputString as NSString?
   }
   
-  open func filterFriends(with string:String) -> [JMSGUser] {
+  open func filterFriends(with string:String, callBack:@escaping CompletionBlock) {
 
     let arrArr = self.allFriendArr
     if arrArr == nil {
-      return []
-    }
-    let inputStringPinyin = (self.convertToPinyin(string: string as NSString) as! String)
-    let upInputString = inputStringPinyin.uppercased()
-    let filterArr = arrArr?.filter { (friend) -> Bool in
-      let namePinyin = self.getPinYinName(user: friend as! JMSGUser)
-      return namePinyin.contains(upInputString)
+      DispatchQueue.main.async {
+        callBack([])
+      }
       
     }
-    return filterArr as! [JMSGUser]
+    let queue = DispatchQueue(label: "com.jiguang.jchat")
+    
+    queue.async {
+      let inputStringPinyin = (self.convertToPinyin(string: string as NSString) as! String)
+      let upInputString = inputStringPinyin.uppercased()
+      let filterArr = arrArr?.filter { (friend) -> Bool in
+        var namePinyin = self.getPinYinName(user: friend as! JMSGUser)
+        namePinyin = namePinyin.uppercased as NSString
+        return namePinyin.contains(upInputString)
+      }
+      DispatchQueue.main.async {
+        callBack(filterArr as! [JMSGUser])
+      }
+      
+    }
+
   }
   
   open func addUser(with username:String) {
