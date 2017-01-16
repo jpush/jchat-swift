@@ -230,7 +230,21 @@ class JChatDataBaseManager: NSObject {
       return false
     }
   }
-
+  
+  open func updateInvitation(currentUser: String, with username:String, invitationType: NSInteger) -> Bool {
+    if currentUser == "" {
+      print("username is nil error")
+      return false
+    }
+    let sql = "UPDATE Invitation_\(currentUser) set invitation_type = '\(invitationType)' where username = '\(username)';"
+    do {
+      return try self.db.executeUpdate(sql, withArgumentsIn: nil)
+    } catch let error as NSError {
+      print("update fail \(error)")
+      return false
+    }
+  }
+  
   open func selectInvitation(currentUser: String, callback:@escaping CompletionBlock) {
     if currentUser == "" {
       print("username is nil error")
