@@ -74,7 +74,7 @@ class JChatConversationListViewController: UIViewController {
     JMSGConversation.allConversations({ (resultObject, error) -> Void in
       if error == nil {
         self.conversationArr.removeAllObjects()
-        self.conversationArr.addObjects(from: (resultObject as! [AnyObject]).reversed())
+        self.conversationArr.addObjects(from: (resultObject as! [AnyObject]))
       } else {
         self.conversationArr.removeAllObjects()
       }

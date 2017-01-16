@@ -87,7 +87,7 @@ class JChatFriendDetailViewController: UIViewController {
     }
     self.infoTable.tableHeaderView = tableHeadView
   }
-
+  
   func loadUserInfoData() {
     if JChatDataBaseManager.sharedInstance.selectContact(currentUser: JMSGUser.myInfo().username, user: self.user) == "" {
       self.isMyFriend = false
@@ -131,6 +131,10 @@ class JChatFriendDetailViewController: UIViewController {
       if error == nil {
         let user = ((resultObject as! Array<JMSGUser>)[0] as! JMSGUser)
         self.user = user
+        self.nameLabel.text = user.displayName()
+        let friendModel = JChatContatctsDataSource.sharedInstance.contactUser(with: user.username)
+        friendModel?.user = user
+        
         user.thumbAvatarData({ (data, objId, error) -> Void in
           if error == nil {
             if data != nil {

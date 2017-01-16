@@ -251,9 +251,10 @@ extension JChatContactsViewController: UITableViewDelegate, UITableViewDataSourc
     
     let nameLetter = JChatContatctsDataSource.sharedInstance.friendsLetterArr[indexPath.section]
     let nameLetterArr = JChatContatctsDataSource.sharedInstance.friendsDic[nameLetter] as! NSMutableArray
-    let friend = nameLetterArr[indexPath.row]
+    let friendUsername = nameLetterArr[indexPath.row]
+    let friend = JChatContatctsDataSource.sharedInstance.contactUser(with: (friendUsername as! String))
     
-    cell?.setupData(model: friend as! JChatFriendModel, isSelectModel: self.isSelectMode, selectDefaults: self.defaulSelectedArr, selectCallBack: {[weak weakSelf = self] (user) in
+    cell?.setupData(model: friend!, isSelectModel: self.isSelectMode, selectDefaults: self.defaulSelectedArr, selectCallBack: {[weak weakSelf = self] (user) in
       if user == nil { return }
       
       JChatContatctsDataSource.sharedInstance.addSelectedUser(with: user as! JChatFriendModel)
@@ -284,8 +285,10 @@ extension JChatContactsViewController: UITableViewDelegate, UITableViewDataSourc
       
       let nameLetter = JChatContatctsDataSource.sharedInstance.friendsLetterArr[indexPath.section]
       let nameLetterArr = JChatContatctsDataSource.sharedInstance.friendsDic[nameLetter] as! NSMutableArray
-      let friend = nameLetterArr[indexPath.row]
-      userDetailVC.user = (friend as! JChatFriendModel).user
+      let friendusername = nameLetterArr[indexPath.row]
+      let friend = JChatContatctsDataSource.sharedInstance.contactUser(with: friendusername as! String)
+      
+      userDetailVC.user = friend?.user
       self.navigationController?.pushViewController(userDetailVC, animated: true)
     }
   }

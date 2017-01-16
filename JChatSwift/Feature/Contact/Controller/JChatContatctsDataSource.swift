@@ -198,7 +198,7 @@ class JChatContatctsDataSource: NSObject {
         self.friendsLetterArr.add(nameLetter)
       }
       
-      letterArr?.add(userModel)
+      letterArr?.add(username)
       
       NotificationCenter.default.post(name: Notification.Name(rawValue: kContactDataReadyNotification), object: nil)
     })
@@ -237,7 +237,8 @@ class JChatContatctsDataSource: NSObject {
     return usernameArr as NSArray as! [String]
   }
   
-  func userArr(with usernameArr:[String]) ->[JChatFriendModel] {
-    
+  func contactUser(with username:String) -> JChatFriendModel? {
+    let friendModel = self.contactsMapDic.object(forKey: username)
+    return friendModel as! JChatFriendModel?
   }
 }
