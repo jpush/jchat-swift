@@ -19,6 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    
+    JMessage.add(self, with: nil)
+    
     JMessage.setupJMessage(launchOptions, appKey: JMSSAGE_APPKEY, channel: CHANNEL, apsForProduction: false, category: nil)
     if #available(iOS 8, *) {
       // 可以自定义 categories
@@ -137,3 +140,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 }
 
+extension AppDelegate: JMessageDelegate {
+  func onReceive(_ event: JMSGNotificationEvent!) {
+    switch event.eventType {
+    case .loginKicked:
+      UserDefaults.standard.removeObject(forKey: kuserName)
+      UserDefaults.standard.synchronize()
+      
+      let alertView = UIAlertView(title: "登录状态出错", message: "", delegate: self, cancelButtonTitle: "确定")
+      alertView.show()
+      break
+    default:
+      break
+    }
+    
+  }
+}
+
+extension AppDelegate: UIAlertViewDelegate {
+  func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
+    let loginVC = JChatAlreadyLoginViewController()
+    loginVC.hidesBottomBarWhenPushed = true
+    let loginNVC = UINavigationController(rootViewController: loginVC)
+    self.window?.rootViewController = loginNVC
+  }
+}

@@ -58,7 +58,6 @@ class JCHATSetDetailViewController: UIViewController {
     
     JMSGUser.updateMyInfo(withParameter: nickName!, userFieldType: .fieldsNickname) { (resultObject, error) -> Void in
       UIApplication.shared.delegate?.window!!.rootViewController = JChatMainTabViewController.sharedInstance
-      NotificationCenter.default.post(name: Notification.Name(rawValue: kAccountChangeNotification), object: nil)
     }
   }
   

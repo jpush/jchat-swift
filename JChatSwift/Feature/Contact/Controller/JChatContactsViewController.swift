@@ -93,9 +93,6 @@ class JChatContactsViewController: UITabBarController {
     self.contactsList.reloadData()
   }
   
-  
-
-  
   func setupNavigation() {
     self.title = "通讯录"
     self.navigationController?.navigationBar.isTranslucent = false
@@ -324,22 +321,30 @@ extension JChatContactsViewController: UISearchBarDelegate {
 extension JChatContactsViewController: JMessageDelegate {
   
   func onReceive(_ event: JMSGNotificationEvent!) {
+    
     switch event.eventType {
     case .acceptedFriendInvitation:
       let fromeUser = (event as! JMSGFriendNotificationEvent).getFromUser()
       JChatDataBaseManager.sharedInstance.addContact(currentUser: JMSGUser.myInfo().username, with: (fromeUser?.username)!)
       JChatContatctsDataSource.sharedInstance.addUser(with: (fromeUser?.username)!)
-      fallthrough
+      
+      let friendEvent = (event as! JMSGFriendNotificationEvent)
+      JChatDataBaseManager.sharedInstance.addInvitation(currentUser: JMSGUser.myInfo().username, with: fromeUser!.username, reason: friendEvent.getReason()!, invitationType: JChatFriendEventNotificationType.acceptedFriendInvitation.rawValue)
+      break
     case .receiveFriendInvitation:
-      fallthrough
-    case .declinedFriendInvitation:
       let fromeUser = (event as! JMSGFriendNotificationEvent).getFromUser()
       let friendEvent = (event as! JMSGFriendNotificationEvent)
       JChatDataBaseManager.sharedInstance.addInvitation(currentUser: JMSGUser.myInfo().username, with: fromeUser!.username, reason: friendEvent.getReason()!, invitationType: JChatFriendEventNotificationType.receiveFriendInvitation.rawValue)
+      break
+    case .declinedFriendInvitation:
+      let fromeUser = (event as! JMSGFriendNotificationEvent).getFromUser()
+      let friendEvent = (event as! JMSGFriendNotificationEvent)
+      JChatDataBaseManager.sharedInstance.addInvitation(currentUser: JMSGUser.myInfo().username, with: fromeUser!.username, reason: friendEvent.getReason()!, invitationType: JChatFriendEventNotificationType.declinedFriendInvitation.rawValue)
       
       break
     case .deletedFriend:
       let fromeUser = (event as! JMSGFriendNotificationEvent).getFromUser()
+      
       let friendEvent = (event as! JMSGFriendNotificationEvent)
       JChatDataBaseManager.sharedInstance.deleteInvitation(currentUser: JMSGUser.myInfo().username, with: fromeUser!.username)
       JChatContatctsDataSource.sharedInstance.deleteUser(with: (fromeUser?.username)!)
@@ -350,6 +355,7 @@ extension JChatContactsViewController: JMessageDelegate {
       break
     }
   }
+  
 
 }
 

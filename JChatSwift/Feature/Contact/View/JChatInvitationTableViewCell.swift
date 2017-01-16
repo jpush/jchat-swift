@@ -46,18 +46,23 @@ class JChatInvitationTableViewCell: UITableViewCell {
     
     switch model.type! {
     case .waitingVerification:
-      self.layoutToWaitingFriendVertification(with: model)
+      self.layoutToWaitingFriendVertification()
       break
     case .receiveFriendInvitation:
-      self.layoutToReceiveInvitation(with: model)
+      self.layoutToReceiveInvitation()
       break
     case .acceptedFriendInvitation:
-      self.layoutToacceptedInvitation(with: model)
+      self.layoutToAcceptedInvitation()
       break
     case .declinedFriendInvitation:
-      self.layoutTodelinedInvitation(with: model)
+      self.layoutToDelinedInvitation()
       break
-    default:
+    case .accptedOtherFriendInvitation:
+      self.layoutToAccepteOtherInvitation()
+      break
+      
+    case .rejectedOtherFriendInvitation:
+      self.layoutToRejectOtherInvitation()
       break
     }
     
@@ -73,31 +78,45 @@ class JChatInvitationTableViewCell: UITableViewCell {
     })
   }
   
-  func layoutToWaitingFriendVertification(with model: JChatInvitationModel) {
+  func layoutToWaitingFriendVertification() {
     self.acceptBtn.isHidden = true
     self.rejectBtn.isHidden = true
     self.invitationTypeLabel.isHidden = false
     self.invitationTypeLabel.text = "等待确认"
   }
   
-  func layoutToReceiveInvitation(with model: JChatInvitationModel) {
+  func layoutToReceiveInvitation() {
     self.acceptBtn.isHidden = false
     self.rejectBtn.isHidden = false
     self.invitationTypeLabel.isHidden = true
   }
 
-  func layoutToacceptedInvitation(with model: JChatInvitationModel) {
+  func layoutToAcceptedInvitation() {
     self.acceptBtn.isHidden = true
     self.rejectBtn.isHidden = true
     self.invitationTypeLabel.isHidden = false
     self.invitationTypeLabel.text = "对方已接受你的好友请求"
   }
   
-  func layoutTodelinedInvitation(with model: JChatInvitationModel) {
+  func layoutToDelinedInvitation() {
     self.acceptBtn.isHidden = true
     self.rejectBtn.isHidden = true
     self.invitationTypeLabel.isHidden = false
     self.invitationTypeLabel.text = "对方已拒绝你的好友邀请"
+  }
+  
+  func layoutToAccepteOtherInvitation() {
+    self.acceptBtn.isHidden = true
+    self.rejectBtn.isHidden = true
+    self.invitationTypeLabel.isHidden = false
+    self.invitationTypeLabel.text = "您已接受对方好友请求"
+  }
+  
+  func layoutToRejectOtherInvitation() {
+    self.acceptBtn.isHidden = true
+    self.rejectBtn.isHidden = true
+    self.invitationTypeLabel.isHidden = false
+    self.invitationTypeLabel.text = "您已拒绝对方好友请求"
   }
   
   
@@ -105,21 +124,20 @@ class JChatInvitationTableViewCell: UITableViewCell {
     JMSGFriendManager.acceptInvitation(withUsername: self.invitationModel.user?.username, appKey: JMSSAGE_APPKEY) { (user, error) in
 //      if error != nil { return }
       
-      JChatDataBaseManager.sharedInstance.addInvitation(currentUser: JMSGUser.myInfo().username, with: (self.invitationModel.user?.username)!, reason: "", invitationType: JChatFriendEventNotificationType.acceptedFriendInvitation.rawValue)
-    // TODO: update model and UI
-      self.invitationModel.type = JChatFriendEventNotificationType.acceptedFriendInvitation
-      self.layoutToacceptedInvitation(with: self.invitationModel)
+      JChatDataBaseManager.sharedInstance.addInvitation(currentUser: JMSGUser.myInfo().username, with: (self.invitationModel.user?.username)!, reason: "", invitationType: JChatFriendEventNotificationType.accptedOtherFriendInvitation.rawValue)
+      self.invitationModel.type = JChatFriendEventNotificationType.accptedOtherFriendInvitation
+      self.layoutToAcceptedInvitation()
       self.clickAcceptCallback!(self.invitationModel.user?.username)
     }
   }
   
   @IBAction func clickToDeclinedInvitation(_ sender: Any) {
-    // TODO: add reason
     JMSGFriendManager.rejectInvitation(withUsername: self.invitationModel.user?.username, appKey: JMSSAGE_APPKEY, reason:"") { (user, error) in
 //      if error != nil { return }
       
-      JChatDataBaseManager.sharedInstance.addInvitation(currentUser: JMSGUser.myInfo().username, with: (self.invitationModel.user?.username)!, reason: "", invitationType: JChatFriendEventNotificationType.declinedFriendInvitation.rawValue)
-      self.invitationModel.type = JChatFriendEventNotificationType.declinedFriendInvitation
+      JChatDataBaseManager.sharedInstance.addInvitation(currentUser: JMSGUser.myInfo().username, with: (self.invitationModel.user?.username)!, reason: "", invitationType: JChatFriendEventNotificationType.rejectedOtherFriendInvitation.rawValue)
+      self.invitationModel.type = JChatFriendEventNotificationType.rejectedOtherFriendInvitation
+      self.layoutToRejectOtherInvitation()
       self.clickRejectCallback!(self.invitationModel.user?.username)
     }
   }
@@ -127,7 +145,6 @@ class JChatInvitationTableViewCell: UITableViewCell {
   override func setSelected(_ selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
     
-    // Configure the view for the selected state
   }
   
 }

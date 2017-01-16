@@ -39,8 +39,7 @@ class JChatAboutMeViewController: UIViewController {
     
     self.getData()
     self.setAvatar()
-    
-    NotificationCenter.default.addObserver(self, selector: #selector(self.updateAvatar), name: NSNotification.Name(rawValue: kAccountChangeNotification), object: nil)
+    JMessage.add(self, with: nil)
   }
 
   func getData() {
@@ -214,7 +213,6 @@ extension JChatAboutMeViewController: UIAlertViewDelegate {
       let appDelegate = UIApplication.shared.delegate
       appDelegate!.window!!.rootViewController = loginNC
       UserDefaults.standard.removeObject(forKey: kuserName)
-//      NotificationCenter.default.post(name: Notification.Name(rawValue: kAccountChangeNotification), object: nil)
       return
     }
   }
@@ -247,5 +245,17 @@ extension JChatAboutMeViewController: UIImagePickerControllerDelegate, UINavigat
       })
     }
     self.dismiss(animated: true, completion: nil)
+  }
+}
+
+extension JChatAboutMeViewController: JMessageDelegate {
+  func onReceive(_ event: JMSGNotificationEvent!) {
+    switch event.eventType {
+    case .currentUserInfoChange:
+      self.updateAvatar()
+      break
+    default:
+      break
+    }
   }
 }

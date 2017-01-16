@@ -13,11 +13,11 @@ class JChatContatctsDataSource: NSObject {
   
   static var sharedInstance = JChatContatctsDataSource()
   
-  var friendsDic = NSMutableDictionary() //  Dictionary< Arr<JChatFriendModel> >
+  var friendsDic = NSMutableDictionary() //  Dictionary< Arr<JChatFriendModel> >  key-> 首字母
   var friendsLetterArr = NSMutableArray()
   var allFriendArr:NSMutableArray!
   var selectedContact = NSMutableArray()
-  
+  var contactsMapDic = NSMutableDictionary()
   
   override init() {
     super.init()
@@ -25,7 +25,7 @@ class JChatContatctsDataSource: NSObject {
     JChatDataBaseManager.sharedInstance.setupTable(username: JMSGUser.myInfo().username)
     let usernameArr = JChatDataBaseManager.sharedInstance.selectAllContact(currentUser: JMSGUser.myInfo().username)
     
-    let queue = DispatchQueue(label: "com.jiguang.jchat")
+    let queue = DispatchQueue(label: "com.jiguang.jchat.thread")
     
     if usernameArr.count == 0 {
       JMSGFriendManager.getFriendList { (friendList, error) in
@@ -61,6 +61,9 @@ class JChatContatctsDataSource: NSObject {
     for friend in friends as! [JMSGUser] {
       let friendModel = JChatFriendModel()
       friendModel.setData(friend)
+      
+      self.contactsMapDic.setObject(friendModel, forKey: friendModel.user?.username as! NSCopying)
+      
       var pinyinName = self.getPinYinName(user: friend)
       pinyinName = pinyinName.uppercased as NSString
       let fristChart = pinyinName.character(at: 1)
@@ -70,16 +73,16 @@ class JChatContatctsDataSource: NSObject {
         let nameLetter = pinyinName.substring(to: 1)
         if self.friendsDic[nameLetter] != nil {
           let letterArr = self.friendsDic[nameLetter] as! NSMutableArray
-          letterArr.add(friendModel)
+          letterArr.add(friendModel.user?.username)
         } else {
           let letterArr = NSMutableArray()
           self.friendsDic[nameLetter] = letterArr
-          letterArr.add(friendModel)
+          letterArr.add(friendModel.user?.username)
         }
       } else {
         if self.friendsDic["#"] != nil {
           let letterArr = self.friendsDic["#"] as! NSMutableArray
-          letterArr.add(friendModel)
+          letterArr.add(friendModel.user?.username)
         } else {
           self.friendsDic["#"] = NSMutableArray()
         }
@@ -175,7 +178,7 @@ class JChatContatctsDataSource: NSObject {
       let userModel = JChatFriendModel()
       userModel.setData(user)
       
-      var pinyinName = self.convertToPinyin(string: username as NSString)
+      var pinyinName = self.convertToPinyin(string: user.displayName() as NSString)
       pinyinName = pinyinName?.uppercased as! NSString
       let fristChart = pinyinName!.character(at: 1)
       
@@ -192,23 +195,37 @@ class JChatContatctsDataSource: NSObject {
       if letterArr == nil {
         letterArr = NSMutableArray()
         self.friendsDic[nameLetter] = letterArr
+        self.friendsLetterArr.add(nameLetter)
       }
       
       letterArr?.add(userModel)
+      
+      NotificationCenter.default.post(name: Notification.Name(rawValue: kContactDataReadyNotification), object: nil)
     })
   }
   
   open func deleteUser(with username:String) {
     self.allFriendArr.remove(username)
     
-    var pinyinName = self.convertToPinyin(string: username as NSString)
-    pinyinName = pinyinName?.uppercased as! NSString
-    let nameLetter = pinyinName?.substring(to: 1)
-    let letterArr = self.friendsDic[nameLetter] as! NSMutableArray
-    for userModel in letterArr {
-      if (userModel as! JChatFriendModel).user?.username == username {
-        letterArr.remove(userModel)
+    JMSGUser.userInfoArray(withUsernameArray: [username]) { (users, error) in
+      if error != nil {
+        return
       }
+      let user = (users as! NSArray)[0] as! JMSGUser
+      var pinyinName = self.convertToPinyin(string: user.displayName() as NSString)
+      pinyinName = pinyinName?.uppercased as! NSString
+      let nameLetter = pinyinName?.substring(to: 1)
+      let letterArr = self.friendsDic[nameLetter] as! NSMutableArray
+      for userModel in letterArr {
+        if (userModel as! JChatFriendModel).user?.username == username {
+          letterArr.remove(userModel)
+        }
+      }
+      if letterArr.count == 0 {
+        self.friendsDic.removeObject(forKey: nameLetter)
+        self.friendsLetterArr.remove(nameLetter)
+      }
+      NotificationCenter.default.post(name: Notification.Name(rawValue: kContactDataReadyNotification), object: nil)
     }
   }
   
@@ -218,5 +235,9 @@ class JChatContatctsDataSource: NSObject {
       usernameArr.add(user.user?.username)
     }
     return usernameArr as NSArray as! [String]
+  }
+  
+  func userArr(with usernameArr:[String]) ->[JChatFriendModel] {
+    
   }
 }

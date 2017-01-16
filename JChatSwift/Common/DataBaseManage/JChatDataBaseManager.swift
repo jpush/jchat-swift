@@ -65,7 +65,7 @@ class JChatDataBaseManager: NSObject {
                   "username TEXT UNIQUE\n" +
               ");"
 
-    return db!.executeUpdate(sql, withVAList: nil)// arr  db.executeUpdate(sql, withArgumentsInArray: ["zs", 30])
+    return self.db.executeUpdate(sql, withArgumentsIn: nil)
   }
   
   func createInvitationTable(currentUser: String) -> Bool {
@@ -75,7 +75,7 @@ class JChatDataBaseManager: NSObject {
                       "reason TEXT, \n" +
                       "invitation_type INTEGER \n" +
               ");" // invitation_type  1:已添加   2:好友请求已发送等待验证 3:对方拒绝 4:好友邀请已接受待验证
-    return db!.executeUpdate(sql, withVAList: nil)
+    return db!.executeUpdate(sql, withArgumentsIn: nil)
   }
   
   // MARK: CONTACTS
@@ -87,7 +87,7 @@ class JChatDataBaseManager: NSObject {
     
     let sql = "DELETE FROM Contacts_\(currentUser) WHERE username = '\(username)';"
     do {
-      return self.db.executeUpdate(sql, withVAList: nil)
+      return self.db.executeUpdate(sql, withArgumentsIn: nil)
     } catch let error as NSError {
       print("delete contact fail \(error)")
       return false
@@ -106,7 +106,7 @@ class JChatDataBaseManager: NSObject {
       self.db.beginTransaction()
       // delete all contact
       var sql = "DELETE FROM Contacts_\(currentUser);"
-      self.db.executeUpdate(sql, withVAList: nil)
+      self.db.executeUpdate(sql, withArgumentsIn: nil)
       
       sql = "INSERT INTO Contacts_\(currentUser)(username) values (?)"
       for contact in contactUsernameArr {
@@ -189,7 +189,7 @@ class JChatDataBaseManager: NSObject {
     
     do {
       var sql = "DELETE FROM Invitation_\(currentUser) WHERE username = '\(username)';"
-      self.db.executeUpdate(sql, withVAList: nil)
+      self.db.executeUpdate(sql, withArgumentsIn: nil)
       
       sql = "INSERT INTO Invitation_\(currentUser)(username,reason,invitation_type) values (?,?,?)"
       try self.db.executeUpdate(sql, values: [username,reason,invitationType])
@@ -209,7 +209,7 @@ class JChatDataBaseManager: NSObject {
     
     let sql = "DELETE FROM Invitation_\(currentUser) WHERE username = '\(username)';"
     do {
-      return self.db.executeUpdate(sql, withVAList: nil)
+      return self.db.executeUpdate(sql, withArgumentsIn: nil)
     } catch let error as NSError {
       print("delete contact fail \(error)")
       return false
@@ -224,7 +224,7 @@ class JChatDataBaseManager: NSObject {
     
     let sql = "DELETE FROM Invitation_\(currentUser);"
     do {
-      return self.db.executeUpdate(sql, withVAList: nil)
+      return self.db.executeUpdate(sql, withArgumentsIn: nil)
     } catch let error as NSError {
       print("delete contact fail \(error)")
       return false

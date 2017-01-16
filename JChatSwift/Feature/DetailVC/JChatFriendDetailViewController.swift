@@ -130,6 +130,7 @@ class JChatFriendDetailViewController: UIViewController {
       _ = MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
       if error == nil {
         let user = ((resultObject as! Array<JMSGUser>)[0] as! JMSGUser)
+        self.user = user
         user.thumbAvatarData({ (data, objId, error) -> Void in
           if error == nil {
             if data != nil {

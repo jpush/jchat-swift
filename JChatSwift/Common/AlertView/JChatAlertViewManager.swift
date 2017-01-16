@@ -61,7 +61,7 @@ class JChatAlertViewManager: NSObject {
     let secondBtn = UIButton()
     self.alertView.addSubview(secondBtn)
     secondBtn.setBackgroundColor(UIColor(netHex: 0x4880d7), forState: .highlighted)
-    secondBtn.setTitle("添加朋友", for: UIControlState())
+    secondBtn.setTitle("创建单聊", for: UIControlState())
     secondBtn.snp.makeConstraints { (make) -> Void in
       make.left.equalTo(self.alertView).offset(10)
       make.right.equalTo(self.alertView).offset(-10)
