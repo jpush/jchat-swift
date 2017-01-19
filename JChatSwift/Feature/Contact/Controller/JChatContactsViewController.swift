@@ -53,12 +53,15 @@ class JChatContactsViewController: UITabBarController {
     self.setupNavigation()
 
     self.setupAllView()
-
+    
     JMessage.add(self, with: nil)
     JChatContatctsDataSource.sharedInstance.resetSelected()
     self.addAllNotification()
   }
   
+  override func viewDidLayoutSubviews() {
+
+  }
   func addAllNotification() {
     NotificationCenter.default.addObserver(self, selector: #selector(self.deleteFriend(_:)), name: NSNotification.Name(rawValue: kDeleteFriendNotificaion), object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(self.acceptFriend(_:)), name: NSNotification.Name(rawValue: kAcceptFriendNotification), object: nil)
@@ -119,6 +122,10 @@ class JChatContactsViewController: UITabBarController {
       var selectArr = NSArray(array: JChatContatctsDataSource.sharedInstance.selectedContact) as! [JChatFriendModel]
       var selectUserNameArr = JChatContatctsDataSource.sharedInstance.usernameArr(with: selectArr)
       selectUserNameArr += self.defaulSelectedArr
+      if selectArr.count == 0 {
+        self.navigationController?.popViewController(animated: true)
+        return
+      }
       MBProgressHUD.showMessage("正在创建群聊", toView: self.view)
       self.callBack?(selectArr)
     } else {
@@ -131,7 +138,13 @@ class JChatContactsViewController: UITabBarController {
   
   func setupAllView() {
     
-    self.filtContactViewCtr = JChatSearchFriendViewController()
+    self.filtContactViewCtr = JChatSearchFriendViewController(callBack: { (user) in
+      let userDetailVC = JChatFriendDetailViewController()
+      userDetailVC.hidesBottomBarWhenPushed = true
+      userDetailVC.isGroupFlag = false
+      userDetailVC.user = user as! JMSGUser
+      self.navigationController?.pushViewController(userDetailVC, animated: true)
+    })
   
     self.contactsList = UITableView()
     self.contactsList.backgroundColor = kcontactColor

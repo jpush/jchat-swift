@@ -23,12 +23,15 @@ class JChatShowTimeCell: UITableViewCell {
     self.timeLable.textColor = UIColor.gray
     self.textLabel?.font = UIFont.systemFont(ofSize: 14)
     self.textLabel?.textAlignment = .center
+    self.timeLable.numberOfLines = 0
+    self.timeLable.font = UIFont.systemFont(ofSize: 13)
+    self.timeLable.textAlignment = .center
     self.timeLable.snp.makeConstraints { (make) -> Void in
       make.center.equalTo(self.contentView)
-      make.height.equalTo(15)
-      make.height.lessThanOrEqualTo(22)
-      make.top.equalTo(self.contentView).offset(2)
-      make.bottom.equalTo(self.contentView).offset(-2)
+      make.top.equalTo(self.contentView).offset(0)
+      make.bottom.equalTo(self.contentView).offset(0)
+      make.right.equalTo(self.contentView).offset(-20)
+      make.left.equalTo(self.contentView).offset(20)
     }
   }
 

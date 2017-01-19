@@ -211,7 +211,7 @@ extension NSString {
       }
     }
     
-    if error.code < 600 {
+    if error.code >= 898000 {
       let errorcode = JMSGHttpErrorCode(rawValue: UInt(error.code))
       switch errorcode! {
         case .errorHttpServerInternal:

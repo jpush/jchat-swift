@@ -259,7 +259,9 @@ extension JChatConversationListViewController: JChatBubbleAlertViewDelegate {
   func clickBubbleSecondBtn() {
     JChatAlertViewManager.sharedInstance.hidenAll()
     
-    let friendVC = JChatContactsViewController()
+    let friendVC = JChatContactsViewController(isSelect: false) { (reuslt) in
+      
+    }
     friendVC.hidesBottomBarWhenPushed = true
     self.navigationController?.pushViewController(friendVC, animated: true)
   }

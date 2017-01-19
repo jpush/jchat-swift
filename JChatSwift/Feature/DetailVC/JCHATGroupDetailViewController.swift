@@ -328,9 +328,15 @@ extension JCHATGroupDetailViewController: UICollectionViewDelegate, UICollection
             self.deleteMemberWithUserName(beDeletedUser.username)
           } else {
             if user.username == JMSGUser.myInfo().username {
-              // TODO: push to JCHATPersonViewController
+              // TODO: push to JC HATPersonViewController
+//              let mydetailVC = jchatper
+              let mydetailVC = JChatUserInfoViewController()
+              self.navigationController?.pushViewController(mydetailVC, animated: true)
             } else {
-              // TODO: push to JCHATFriendDetailViewController
+              let friendDetail = JChatFriendDetailViewController()
+              friendDetail.user = user
+              friendDetail.isGroupFlag = true
+              self.navigationController?.pushViewController(friendDetail, animated: true)
             }
           }
         }

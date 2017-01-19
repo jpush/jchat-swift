@@ -41,11 +41,14 @@ class JChatLocationManager: NSObject {
   
   func getLocationImage(location:CLLocation, size:CGSize) {
     
-    
-    
     let region = MKCoordinateRegion(center: location.coordinate, span: MKCoordinateSpan())
     let options = MKMapSnapshotOptions()
-    
+    let center = region.center
+    if center.latitude > 90.0 || center.latitude < -90.0 || center.longitude > 180.0 || center.longitude < -180.0{
+      let faillocation_image = UIImage(named: "location_fail")
+      self.locationDelegate.locationImageCallBack(location: location, image: faillocation_image)
+      return
+    }
     options.region = region
     options.size = size
     options.scale = UIScreen.main.scale
@@ -84,8 +87,14 @@ class JChatLocationManager: NSObject {
   class func getLocationImageCallBack(location:CLLocation, size:CGSize, callback:@escaping CompletionBlock) {
     
     let region = MKCoordinateRegion(center: location.coordinate, span: MKCoordinateSpan())
+    let center = region.center
+    if center.latitude > 90.0 || center.latitude < -90.0 || center.longitude > 180.0 || center.longitude < -180.0{
+      let faillocation_image = UIImage(named: "location_fail")
+      callback(faillocation_image)
+      return
+    }
     
-    let options = MKMapSnapshotOptions()
+    var options = MKMapSnapshotOptions()
     options.region = region
     options.size = size
     options.scale = UIScreen.main.scale
@@ -103,9 +112,7 @@ class JChatLocationManager: NSObject {
       image.draw(at: CGPoint(x: 0, y: 0))
       pinImage?.draw(at: CGPoint(x: finalImageRect.size.width/2, y: finalImageRect.size.height/2))
       let finalImage = UIGraphicsGetImageFromCurrentImageContext()
-//      self.locationDelegate.locationImageCallBack(location: location,image: finalImage)
-      
-//       writeimage
+
       if finalImage != nil {
         callback(finalImage!)
       }

@@ -74,6 +74,7 @@ class JChatDataBaseManager: NSObject {
                       "username TEXT UNIQUE, \n" +
                       "reason TEXT, \n" +
                       "invitation_type INTEGER \n" +
+                      "read_status INTEGER \n" +
               ");" // invitation_type  1:已添加   2:好友请求已发送等待验证 3:对方拒绝 4:好友邀请已接受待验证
     return db!.executeUpdate(sql, withArgumentsIn: nil)
   }

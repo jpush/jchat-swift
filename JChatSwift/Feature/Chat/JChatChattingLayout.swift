@@ -7,6 +7,7 @@
 //
 
 import UIKit
+
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
@@ -53,7 +54,7 @@ class JChatChattingLayout: NSObject {
 
   func appendTableViewCellAtLastIndex(_ index:NSInteger) {
     let path:IndexPath = IndexPath(row: index - 1, section: 0)
-    DispatchQueue.main.async {
+    //DispatchQueue.main.async {
       self.messageListTable?.beginUpdates()
       self.messageListTable?.insertRows(at: [path], with: .none)
       self.messageListTable?.endUpdates()
@@ -62,7 +63,7 @@ class JChatChattingLayout: NSObject {
       UIView.animate(withDuration: 0.25, animations: { () -> Void in
         self.messageListTable?.scrollToRow(at: path, at: .bottom, animated: false)
       })
-    }
+    //}
 //    self.messageTableScrollToBottom(true)
     DispatchQueue.main.async { () -> Void in
     }

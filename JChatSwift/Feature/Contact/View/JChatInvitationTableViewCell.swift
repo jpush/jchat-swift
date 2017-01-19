@@ -124,7 +124,6 @@ class JChatInvitationTableViewCell: UITableViewCell {
     JMSGFriendManager.acceptInvitation(withUsername: self.invitationModel.user?.username, appKey: JMSSAGE_APPKEY) { (user, error) in
 //      if error != nil { return }
       
-      //JChatDataBaseManager.sharedInstance.addInvitation(currentUser: JMSGUser.myInfo().username, with: (self.invitationModel.user?.username)!, reason: "", invitationType: JChatFriendEventNotificationType.accptedOtherFriendInvitation.rawValue)
       JChatDataBaseManager.sharedInstance.updateInvitation(currentUser: JMSGUser.myInfo().username, with: (self.invitationModel.user?.username)!, invitationType: JChatFriendEventNotificationType.accptedOtherFriendInvitation.rawValue)
       self.invitationModel.type = JChatFriendEventNotificationType.accptedOtherFriendInvitation
       self.layoutToAcceptedInvitation()
@@ -136,7 +135,6 @@ class JChatInvitationTableViewCell: UITableViewCell {
     JMSGFriendManager.rejectInvitation(withUsername: self.invitationModel.user?.username, appKey: JMSSAGE_APPKEY, reason:"") { (user, error) in
 //      if error != nil { return }
       
-      //JChatDataBaseManager.sharedInstance.addInvitation(currentUser: JMSGUser.myInfo().username, with: (self.invitationModel.user?.username)!, reason: "", invitationType: JChatFriendEventNotificationType.rejectedOtherFriendInvitation.rawValue)
       JChatDataBaseManager.sharedInstance.updateInvitation(currentUser: JMSGUser.myInfo().username, with: (self.invitationModel.user?.username)!, invitationType: JChatFriendEventNotificationType.rejectedOtherFriendInvitation.rawValue)
       self.invitationModel.type = JChatFriendEventNotificationType.rejectedOtherFriendInvitation
       self.layoutToRejectOtherInvitation()

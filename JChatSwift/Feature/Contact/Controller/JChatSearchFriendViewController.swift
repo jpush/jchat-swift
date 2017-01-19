@@ -10,8 +10,22 @@ import UIKit
 
 class JChatSearchFriendViewController: UIViewController {
   
+  var callBack:CompletionBlock?
+  convenience init() {
+    self.init(callBack: nil)
+  }
+  
+  init(callBack: CompletionBlock?) {
+    self.callBack = callBack
+    super.init(nibName: nil, bundle: nil)
+  }
+  
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
   open var filterContactArr:[JMSGUser] = [JMSGUser]() {
-    didSet { self.filterContactTable.reloadData() }
+    didSet { self.filterContactTable?.reloadData() }
   }
 
   var filterContactTable:UITableView!
@@ -24,6 +38,7 @@ class JChatSearchFriendViewController: UIViewController {
     self.view.addSubview(self.filterContactTable)
     self.filterContactTable.delegate = self
     self.filterContactTable.dataSource = self
+    self.filterContactTable.backgroundColor = UIColor.clear
     self.filterContactTable.snp.makeConstraints { (make) in
       make.bottom.equalToSuperview()
       make.top.equalToSuperview()
@@ -55,10 +70,6 @@ extension JChatSearchFriendViewController: UITableViewDelegate, UITableViewDataS
     return self.filterContactArr.count
   }
   
-//  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//    return 21
-//  }
-  
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     return 56;
   }
@@ -79,12 +90,9 @@ extension JChatSearchFriendViewController: UITableViewDelegate, UITableViewDataS
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let cell = tableView.cellForRow(at: indexPath)
     cell?.isSelected = false
-    
-    if indexPath.section == 0 {
-      
-    } else {
-      
-    }
+    let friend = self.filterContactArr[indexPath.row] as! JMSGUser
+    self.callBack!(friend)
+
   }
   
 }

@@ -134,7 +134,7 @@ class JChatFriendDetailViewController: UIViewController {
         self.nameLabel.text = user.displayName()
         let friendModel = JChatContatctsDataSource.sharedInstance.contactUser(with: user.username)
         friendModel?.user = user
-        
+        self.headView.image = UIImage(named: "headDefalt")
         user.thumbAvatarData({ (data, objId, error) -> Void in
           if error == nil {
             if data != nil {

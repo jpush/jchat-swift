@@ -288,8 +288,8 @@ extension JChatChattingViewController:JChatInputDelegate {
   }
   
   func appendMessage(_ model:JChatMessageModel) {
-    self.messageDataSource.appendMessage(model)
-    self.perform(#selector(JChatChattingViewController.appendMessageCell), with: nil, afterDelay: 0.01);
+      self.messageDataSource.appendMessage(model)
+      self.appendMessageCell()
   }
   
   func appendMessageCell() {
@@ -356,7 +356,6 @@ extension JChatChattingViewController:JChatInputDelegate {
     if messageId == "" { return }
     
     let indexPath = self.messageDataSource.tableIndexPathWithMessageId(messageId)
-
     let messageCell = self.messageTable.cellForRow(at: indexPath) as? JChatMessageCell
     messageCell?.layoutAllViews()
   }

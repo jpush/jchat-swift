@@ -90,6 +90,8 @@ class JCHATRegisterViewController: UIViewController {
             }
           })
         } else {
+          JMSGHttpErrorCode.errorHttpUserExist.rawValue
+          print("")
           print("login fail error \(NSString.errorAlert(error as! NSError))")
           MBProgressHUD.showMessage(NSString.errorAlert(error as! NSError), view: self.view)
         }
