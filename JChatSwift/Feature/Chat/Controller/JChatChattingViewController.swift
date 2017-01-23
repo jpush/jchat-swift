@@ -288,6 +288,7 @@ extension JChatChattingViewController:JChatInputDelegate {
   }
   
   func appendMessage(_ model:JChatMessageModel) {
+    
       self.messageDataSource.appendMessage(model)
       self.appendMessageCell()
   }
@@ -356,6 +357,7 @@ extension JChatChattingViewController:JChatInputDelegate {
     if messageId == "" { return }
     
     let indexPath = self.messageDataSource.tableIndexPathWithMessageId(messageId)
+
     let messageCell = self.messageTable.cellForRow(at: indexPath) as? JChatMessageCell
     messageCell?.layoutAllViews()
   }
@@ -504,7 +506,6 @@ extension JChatChattingViewController: JMessageDelegate {
     if message.contentType == .location {
       let locationContent = message.content! as! JMSGLocationContent
       let location = CLLocation(latitude: CLLocationDegrees(locationContent.latitude), longitude: CLLocationDegrees(locationContent.longitude))
-//      let locationImgGetter = JChatLocationManager()//!
       
       JChatLocationManager.getLocationImageCallBack(location: location, size: locationImageSizeDefault, callback: { (locationImage) in
         JChatFileManage.sharedInstance.writeImage(name: "\(message.msgId).png", image: (locationImage as! UIImage))

@@ -315,7 +315,10 @@ extension JCHATGroupDetailViewController: UICollectionViewDelegate, UICollection
       default:  // 点击群成员头像
 
         if self.conversation.conversationType == .single {
-          // TODO: add push to my JChatPersonViewController
+          let friendDetail = JChatFriendDetailViewController()
+          friendDetail.user = self.conversation.target as! JMSGUser
+          friendDetail.isGroupFlag = true
+          self.navigationController?.pushViewController(friendDetail, animated: true)
           
         } else {
           let user = self.memberArr[(indexPath as NSIndexPath).item] as! JMSGUser
@@ -328,8 +331,6 @@ extension JCHATGroupDetailViewController: UICollectionViewDelegate, UICollection
             self.deleteMemberWithUserName(beDeletedUser.username)
           } else {
             if user.username == JMSGUser.myInfo().username {
-              // TODO: push to JC HATPersonViewController
-//              let mydetailVC = jchatper
               let mydetailVC = JChatUserInfoViewController()
               self.navigationController?.pushViewController(mydetailVC, animated: true)
             } else {
@@ -340,7 +341,6 @@ extension JCHATGroupDetailViewController: UICollectionViewDelegate, UICollection
             }
           }
         }
-
         break
       }
       
