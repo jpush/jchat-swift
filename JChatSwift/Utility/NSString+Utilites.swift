@@ -113,7 +113,10 @@ extension NSString {
       case .jmsgErrorSDKNetworkDownloadFailed:
         errorAlert = "下载失败"
         break
-      
+      case .jmsgErrorSDKNetworkOtherError:
+        break
+      case .jmsgErrorSDKNetworkTokenFailed:
+        break
       case .jmsgErrorSDKNetworkUploadFailed:
         errorAlert = "上传资源文件失败"
         break
@@ -122,6 +125,12 @@ extension NSString {
         break
       case .jmsgErrorSDKNetworkUploadTokenGetFailed:
         errorAlert = "获取服务器Token失败"
+        break
+      case .jmsgErrorSDKNetworkResultUnexpected:
+        errorAlert = "服务器返回错误"
+        break
+      case .jmsgErrorSDKNetworkDataFormatInvalid:
+        errorAlert = "服务器返回数据格式错误"
         break
       case .jmsgErrorSDKDBDeleteFailed:
         errorAlert = "数据库删除失败"
@@ -135,8 +144,17 @@ extension NSString {
       case .jmsgErrorSDKDBInsertFailed:
         errorAlert = "数据库插入失败"
         break
+      case .jmsgErrorSDKDBMigrateFailed:
+        errorAlert = "数据库迁移失败"
+        break
       case .jmsgErrorSDKParamAppkeyInvalid:
         errorAlert = "appkey不合法"
+        break
+      case .jmsgErrorSDKParamInternalInvalid:
+        errorAlert = "内部方法参数错误"
+        break
+      case .jmsgQiniuTokenInvalid:
+        errorAlert = "七牛错误"
         break
       case .jmsgErrorSDKParamUsernameInvalid:
         errorAlert = "用户名不合法"
@@ -146,6 +164,21 @@ extension NSString {
         break
       case .jmsgErrorSDKUserNotLogin:
         errorAlert = "用户没有登录"
+        break
+      case .jmsgErrorSDKUserNumberOverflow:
+        errorAlert = "请求用户数量超出限制"
+        break
+      case .jmsgErrorSDKUserInvalidState:
+        errorAlert = "用户登录异常"
+        break
+      case .jmsgErrorSDKUserLogoutingState:
+        errorAlert = "用户正在登出"
+        break
+      case .jmsgErrorSDKUserAddFriendFailState:
+        errorAlert = "添加好友失败"
+        break
+      case .jmsgErrorSDKUserDeleteFriendFailState:
+        errorAlert = "删除好友失败"
         break
       case .jmsgErrorSDKNotMediaMessage:
         errorAlert = "这不是一条媒体消息"
@@ -161,6 +194,12 @@ extension NSString {
         break
       case .jmsgErrorSDKMediaUploadEmptyFile:
         errorAlert = "上传媒体文件时, 发现文件不存在"
+        break
+      case .jmsgErrorSDKMediaHashCodeIllegal:
+        errorAlert = "媒体 Hash 码无效"
+        break
+      case .jmsgErrorSDKMediaHashVerifyFailed:
+        errorAlert = "媒体 hash 码校验失败"
         break
       case .jmsgErrorSDKParamContentInvalid:
         errorAlert = "无效的消息内容"
@@ -189,10 +228,23 @@ extension NSString {
       case .jmsgErrorSDKMessageNotInGroup:
         errorAlert = "你已不在该群，无法发送消息"
         break
-        //      case 810009:
-        //      errorAlert = "超出群上限"
-        //      break
+      case .jmsgErrorSDKMessageProtocolInvalidJsonFormat:
+        errorAlert = "无法解析 json 格式"
+        break
+      case .jmsgErrorSDKMessageProtocolLackFields:
+        errorAlert = "消息协议错误缺少字段"
+        break
+      case .jmsgErrorSDKMessageProtocolInvalidFieldValue:
+        errorAlert = "消息协议错误非法字段"
+        break
+      case .jmsgErrorSDKMessageProtocolUpgradeNeeded:
+        errorAlert = "收到新版本的消息"
+        break
+      case .jmsgErrorSDKMessageProtocolContentTypeNotSupport:
+        errorAlert = "收到不支持的消息类型"
+        break
       default:
+        errorAlert = "未知错误"
         break
       }
     }
@@ -200,13 +252,62 @@ extension NSString {
     if error.code > 800000 && error.code < 820000  {
       let errorcode = JMSGTcpErrorCode(rawValue: UInt(error.code))
       switch errorcode! {
-      case .errorTcpUserNotRegistered:
-        errorAlert = "用户名还没有被注册过"
+        
+      /// appKey 未被注册
+      case .errorTcpAppkeyNotRegistered:
         break
+      /// 服务器端内部错误
+      case .errorTcpServerInternalError:
+        errorAlert = "appKey 未被注册"
+        break
+      /// 用户在登出状态
+      case .errorTcpUserLogoutState:
+        errorAlert = "用户在登出状态"
+        break
+      /// 用户在离线状态
+      case .errorTcpUserOfflineState:
+        errorAlert = "用户在离线状态"
+        break
+        
+      /// 发起请求的用户设备不匹配
+      case .errorTcpUserDeviceNotMatch:
+        errorAlert = "发起请求的用户设备不匹配"
+        break
+        
+      /// 用户未注册
+      case .errorTcpUserNotRegistered:
+        errorAlert = "用户未注册"
+        break
+        
+      /// 用户密码错误
       case .errorTcpUserPasswordError:
-        errorAlert = "密码错误"
+        errorAlert = "用户密码错误"
+        break
+        
+      /// 用户不在群组里
+      case .errorTcpUserNotInGroup:
+        errorAlert = "用户不在群组里"
+        break
+        
+      /// 用户在黒名单里
+      case .errorTcpUserInBlacklist:
+        errorAlert = "用户在黒名单里"
+        break
+        
+      /// 内容不合法
+      case .errorTcpContentIsIllegal:
+        errorAlert = "内容不合法"
+        break
+      /// 群组成员列表为空
+      case .errorTcpGroupMembersEmpty:
+        errorAlert = "群组成员列表为空"
+        break
+      /// 群组成员重复
+      case .errorTcpGroupMembersDuplicated:
+        errorAlert = "群组成员重复"
         break
       default:
+        errorAlert = "未知错误"
         break
       }
     }
@@ -214,42 +315,44 @@ extension NSString {
     if error.code >= 898000 {
       let errorcode = JMSGHttpErrorCode(rawValue: UInt(error.code))
       switch errorcode! {
-        case .errorHttpServerInternal:
-          errorAlert = "服务器端内部错误"
-          break
-        case .errorHttpUserExist:
-          errorAlert = "用户已经存在"
-          break
-        case .errorHttpUserNotExist:
-          errorAlert = "用户不存在"
-          break
-        case .errorHttpPrameterInvalid:
-          errorAlert = "参数无效"
-          break
-        case .errorHttpPasswordError:
-          errorAlert = "密码错误"
-          break
-        case .errorHttpUidInvalid:
-          errorAlert = "内部UID 无效"
-          break
-        case .errorHttpMissingAuthenInfo:
-          errorAlert = "Http 请求没有验证信息"
-          break
-        case .errorHttpAuthenticationFailed:
-          errorAlert = "Http 请求验证失败"
-          break
-        case .errorHttpAppkeyNotExist:
-          errorAlert = "Appkey 不存在"
-          break
-        case .errorHttpTokenExpired:
-          errorAlert = "Http 请求 token 过期"
-          break
-        case .errorHttpServerResponseTimeout:
-          errorAlert = "服务器端响应超时"
-          break
-        default:
-          break
-        }
+      case .errorHttpServerInternal:
+        errorAlert = "服务器端内部错误"
+        break
+      case .errorHttpUserExist:
+        errorAlert = "用户已经存在"
+        break
+      case .errorHttpUserNotExist:
+        errorAlert = "用户不存在"
+        break
+      case .errorHttpPrameterInvalid:
+        errorAlert = "参数无效"
+        break
+      case .errorHttpPasswordError:
+        errorAlert = "密码错误"
+        break
+      case .errorHttpUidInvalid:
+        errorAlert = "内部UID 无效"
+        break
+      case .errorHttpMissingAuthenInfo:
+        errorAlert = "Http 请求没有验证信息"
+        break
+      case .errorHttpAuthenticationFailed:
+        errorAlert = "Http 请求验证失败"
+        break
+      case .errorHttpAppkeyNotExist:
+        errorAlert = "Appkey 不存在"
+        break
+      case .errorHttpTokenExpired:
+        errorAlert = "Http 请求 token 过期"
+        break
+      case .errorHttpServerResponseTimeout:
+        errorAlert = "服务器端响应超时"
+        break
+        
+      default:
+        errorAlert = "未知错误"
+        break
+      }
     }
     
     if errorAlert == "" {
