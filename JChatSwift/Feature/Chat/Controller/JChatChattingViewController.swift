@@ -309,6 +309,7 @@ extension JChatChattingViewController:JChatInputDelegate {
     let textModel:JChatMessageModel = JChatMessageModel()
     textModel.setChatModel(textMessage, conversation: self.conversation)
     self.appendMessage(textModel)
+    self.appendMessage(textModel)
   }
   
   func SendMessageWithVoice(_ voicePath:String, durationTime:Double) {
