@@ -60,7 +60,8 @@ class JChatRecordVoiceHelper: NSObject {
     if self.recorder == nil { return }
     self.currentTimeInterval = self.recorder?.currentTime
 
-    self.recordProgress = self.recorder?.peakPower(forChannel: 0)
+    self.recorder?.updateMeters()
+    self.recordProgress = self.recorder?.averagePower(forChannel: 0)
     self.updateMeterDelegate?.setPeakPower(self.recordProgress!)
     
     if self.currentTimeInterval > maxRecordTime {

@@ -142,25 +142,25 @@ class JChatRecordingView: UIView {
   func configRecordingHUDImageWithPeakPower(_ peakPower:Float) {
     var imageName = "RecordingSignal00"
     switch peakPower {
-    case peakPower where peakPower > 0 && peakPower <= 0.1:
+    case peakPower where peakPower > 40 && peakPower <= 160:
       imageName += "1"
       break
-    case peakPower where peakPower > 0.1 && peakPower < 0.3:
+    case peakPower where peakPower > 35 && peakPower <= 40:
       imageName += "2"
       break
-    case peakPower where peakPower > 0 && peakPower < 0.4:
+    case peakPower where peakPower > 30 && peakPower <= 35:
       imageName += "3"
       break
-    case peakPower where peakPower > 0 && peakPower < 0.5:
+    case peakPower where peakPower > 25 && peakPower <= 30 :
       imageName += "4"
       break
-    case peakPower where peakPower > 0 && peakPower < 0.6:
+    case peakPower where peakPower > 20 && peakPower <= 25:
       imageName += "5"
       break
-    case peakPower where peakPower > 0 && peakPower < 0.7:
+    case peakPower where peakPower > 15 && peakPower <= 20:
       imageName += "6"
       break
-    case peakPower where peakPower > 0 && peakPower < 0.8:
+    case peakPower where peakPower > 10 && peakPower <= 15:
       imageName += "7"
       break
     default:
@@ -173,7 +173,7 @@ class JChatRecordingView: UIView {
 
   func setPeakPower(_ peakPower:Float) {
     self.peakPower = peakPower
-    self.configRecordingHUDImageWithPeakPower(peakPower)
+    self.configRecordingHUDImageWithPeakPower(abs(peakPower))
   }
 
 

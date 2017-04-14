@@ -96,6 +96,7 @@
 		0D26ACDA08165C90C94A551187792958 /* SnapKit-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SnapKit-dummy.m"; sourceTree = "<group>"; };
 		0DC266FDEA98BDC3F39ECFF2237E466B /* FMDatabaseQueue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabaseQueue.h; path = src/fmdb/FMDatabaseQueue.h; sourceTree = "<group>"; };
 		0E614CFCB8E9360AD5E348F7DB9CAB73 /* FMDB-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FMDB-umbrella.h"; sourceTree = "<group>"; };
+		1085DE74AA6E4BB2839E4898A77F29E1 /* libjpush-ios-3.0.3.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; path = "libjpush-ios-3.0.3.a"; sourceTree = "<group>"; };
 		11326E033ED47200EE7C92B7F4F26557 /* JMessage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JMessage.framework; sourceTree = "<group>"; };
 		1A4DBADD4C2C3E974A9C2DD4837D8B3C /* ConstraintMakerRelatable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintMakerRelatable.swift; path = Source/ConstraintMakerRelatable.swift; sourceTree = "<group>"; };
 		210A803ABCE82190FEACD0596905587D /* Debugging.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Debugging.swift; path = Source/Debugging.swift; sourceTree = "<group>"; };
@@ -103,7 +104,6 @@
 		2B9BC44C88C9DF97E2D94A143E453D2D /* FMDB.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FMDB.xcconfig; sourceTree = "<group>"; };
 		2CAE283F4D0ED795CE62C8E10989AE85 /* FMDB.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = FMDB.modulemap; sourceTree = "<group>"; };
 		2DD3031472461963ED4DCA78F83CBBBB /* FMDatabase.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = src/fmdb/FMDatabase.m; sourceTree = "<group>"; };
-		2F58A12F6FD08845E2CD11805E097CD5 /* libjpush-ios-3.0.2.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; path = "libjpush-ios-3.0.2.a"; sourceTree = "<group>"; };
 		31543359F45D73F3DF8781E26A6AD478 /* Pods-JChatSwift-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-JChatSwift-umbrella.h"; sourceTree = "<group>"; };
 		354F24B22FBB52C289C977A2210232A6 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseAdditions.m; path = src/fmdb/FMDatabaseAdditions.m; sourceTree = "<group>"; };
 		379E2D7B36BD8F3BF2EF2D4A4581CB72 /* Pods-JChatSwift-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-JChatSwift-frameworks.sh"; sourceTree = "<group>"; };
@@ -149,7 +149,6 @@
 		AEB4ED78D02BCA057274054B9F03B2AD /* FMDatabasePool.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabasePool.m; path = src/fmdb/FMDatabasePool.m; sourceTree = "<group>"; };
 		B03E80C9FC967165F4A33747D27B8CFC /* Pods-JChatSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-JChatSwift.debug.xcconfig"; sourceTree = "<group>"; };
 		B136E46CCD077F0BD2148C0067877BC7 /* FMDB-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FMDB-prefix.pch"; sourceTree = "<group>"; };
-		B47C47398DF4B83AE6FFB5B876B1C69C /* libjcore-ios-1.1.1.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; path = "libjcore-ios-1.1.1.a"; sourceTree = "<group>"; };
 		B53EC5696AD443AE9E1531196698C988 /* SnapKit.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SnapKit.xcconfig; sourceTree = "<group>"; };
 		B83AD46DEE8B1829F5082126E53A9EEB /* ConstraintConstantTarget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintConstantTarget.swift; path = Source/ConstraintConstantTarget.swift; sourceTree = "<group>"; };
 		B9AB4B4D2A7C7C8651C0C6168CD81419 /* ConstraintLayoutGuide.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintLayoutGuide.swift; path = Source/ConstraintLayoutGuide.swift; sourceTree = "<group>"; };
@@ -160,6 +159,7 @@
 		C1E945DB2A7F4F4E4922D84AF79013FA /* FMResultSet.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = src/fmdb/FMResultSet.h; sourceTree = "<group>"; };
 		C3F04049D0876D3345C770E680AF507B /* MBProgressHUD.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		C958B55CB5149CB39E01924A962ABF5D /* Pods-JChatSwift.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-JChatSwift.modulemap"; sourceTree = "<group>"; };
+		CE85F279E76AC3F2D16B8B5AE5228CBA /* libjcore-ios-1.1.2.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; path = "libjcore-ios-1.1.2.a"; sourceTree = "<group>"; };
 		D1C46CBCA7A4F4E7069684904983B588 /* FMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FMDB.framework; path = FMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2034B34DF663033F9E6A7BCC1D74DB2 /* ConstraintMakerFinalizable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintMakerFinalizable.swift; path = Source/ConstraintMakerFinalizable.swift; sourceTree = "<group>"; };
 		D236706595D5E530784244C8BA0741E6 /* ConstraintMakerPriortizable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintMakerPriortizable.swift; path = Source/ConstraintMakerPriortizable.swift; sourceTree = "<group>"; };
@@ -387,6 +387,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9072B50DD2926D693A028EC1987BD43A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CE85F279E76AC3F2D16B8B5AE5228CBA /* libjcore-ios-1.1.2.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		9ADDA4B304BC7E448A536BDB2E10DE32 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -396,22 +404,6 @@
 				ABDEB493E13FC25F89663BA858D3982E /* SnapKit.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		9D4744BE469D14BA56BCEF730F6352FF /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				B47C47398DF4B83AE6FFB5B876B1C69C /* libjcore-ios-1.1.1.a */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		AA22FC60F7B2FB2C75B935BECC55F70E /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				2F58A12F6FD08845E2CD11805E097CD5 /* libjpush-ios-3.0.2.a */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		AC5CD495AA6525A10C64CB51511758E3 /* FMDB */ = {
@@ -427,7 +419,7 @@
 		BD32C0D7331E7EFC57DBBFEF64B5F61A /* JCore */ = {
 			isa = PBXGroup;
 			children = (
-				9D4744BE469D14BA56BCEF730F6352FF /* Frameworks */,
+				9072B50DD2926D693A028EC1987BD43A /* Frameworks */,
 			);
 			name = JCore;
 			path = JCore;
@@ -458,10 +450,18 @@
 			isa = PBXGroup;
 			children = (
 				D7FC990F2F1F94279E10F930E861E710 /* JPUSHService.h */,
-				AA22FC60F7B2FB2C75B935BECC55F70E /* Frameworks */,
+				FE8691C1AE7580E4B030E7651D8DF744 /* Frameworks */,
 			);
 			name = JPush;
 			path = JPush;
+			sourceTree = "<group>";
+		};
+		FE8691C1AE7580E4B030E7651D8DF744 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1085DE74AA6E4BB2839E4898A77F29E1 /* libjpush-ios-3.0.3.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
