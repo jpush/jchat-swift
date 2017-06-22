@@ -26,11 +26,7 @@ JChat 同时具备好友模式和无好友模式：
 
 ### 应用截图
 
-<figure class="third">
-    <img src="Images/Conversation-1.png">&nbsp&nbsp
-    <img src="Images/contacts.png">&nbsp&nbsp
-    <img src="Images/my.png">
-</figure>
+![image](Images/2.jpg)
 
 ### 环境配置
 
