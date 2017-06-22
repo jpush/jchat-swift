@@ -1,0 +1,108 @@
+//
+//  JCGroupNameViewController.swift
+//  JChat
+//
+//  Created by deng on 2017/5/16.
+//  Copyright © 2017年 HXHG. All rights reserved.
+//
+
+import UIKit
+import JMessage
+
+class JCGroupNameViewController: UIViewController {
+
+    var group: JMSGGroup!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        _init()
+        groupName = group.displayName()
+        groupNameTextField.text = groupName
+        var count = 20 - groupName.characters.count
+        count = count < 0 ? 0 : count
+        tipLabel.text = "\(count)"
+        groupNameTextField.becomeFirstResponder()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
+    private lazy var navRightButton: UIBarButtonItem = UIBarButtonItem(title: "完成", style: .plain, target: self, action: #selector(_saveNickname))
+    fileprivate lazy var groupNameTextField: UITextField = UITextField(frame: CGRect(x: 0, y: 64, width: self.view.width, height: 45))
+    fileprivate lazy var tipLabel:  UILabel = UILabel(frame: CGRect(x: self.view.width - 15 - 50, y: 64 + 21, width: 28, height: 12))
+    
+    private var groupName = ""
+    
+    //MARK: - private func
+    private func _init() {
+        self.title = "群组名称"
+        self.automaticallyAdjustsScrollViewInsets = false
+        view.backgroundColor = UIColor(netHex: 0xe8edf3)
+        
+        groupNameTextField.backgroundColor = .white
+        groupNameTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
+        groupNameTextField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 27, height: 0))
+        groupNameTextField.leftViewMode = .always
+        groupNameTextField.rightViewMode = .always
+        groupNameTextField.addTarget(self, action: #selector(textFieldDidChanged(_ :)), for: .editingChanged)
+        view.addSubview(groupNameTextField)
+        
+        tipLabel.textColor = UIColor(netHex: 0x999999)
+        tipLabel.font = UIFont.systemFont(ofSize: 12)
+        tipLabel.textAlignment = .right
+        view.addSubview(tipLabel)
+        _setupNavigation()
+    }
+    
+    private func _setupNavigation() {
+        self.navigationItem.rightBarButtonItem =  navRightButton
+    }
+    
+    func textFieldDidChanged(_ textField: UITextField) {
+        if textField.markedTextRange == nil {
+            let text = textField.text!
+            if text.characters.count > 20 {
+                let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 20))
+                
+                let subText = text.substring(with: range)
+                textField.text = subText
+            }
+            let count = 20 - (textField.text?.characters.count)!
+            tipLabel.text = "\(count)"
+        }
+    }
+    
+    //MARK: - click func
+    func _saveNickname() {
+        groupNameTextField.resignFirstResponder()
+        let groupName = groupNameTextField.text
+        MBProgressHUD_JChat.showMessage(message: "修改中...", toView: self.view)
+        JMSGGroup.updateGroupInfo(withGroupId: group.gid, name: groupName!, desc: group.desc ?? "") { (result, error) in
+            MBProgressHUD_JChat.hide(forView: self.view, animated: true)
+            if error == nil {
+//                for vc in (self.navigationController?.viewControllers)! {
+//                    if let groupVC = vc as? JCGroupSettingViewController {
+//                        NotificationCenter.default.post(name: Notification.Name(rawValue: kUpdateGroupInfo), object: nil)
+//                        let conv = JMSGConversation.groupConversation(withGroupId: self.group.gid)
+//                        let group = conv?.target as! JMSGGroup
+//                        groupVC.group = group
+//                        self.navigationController?.popToViewController(vc, animated: true)
+//                    }
+//                }
+                let conv = JMSGConversation.groupConversation(withGroupId: self.group.gid)
+                let group = conv?.target as! JMSGGroup
+                print(group)
+                print(group.displayName())
+                NotificationCenter.default.post(name: Notification.Name(rawValue: kUpdateGroupInfo), object: nil)
+                self.navigationController?.popViewController(animated: true)
+            } else {
+                MBProgressHUD_JChat.show(text: "\(String.errorAlert(error! as NSError))", view: self.view)
+            }
+        }
+    }
+}

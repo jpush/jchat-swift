@@ -1,168 +1,71 @@
-# jchat-swift
+# JChat-Swift
 
-## 应用快照
-![image](https://github.com/jpush/jchat-swift/blob/master/READMEREC/chattingIMG.gif)
-### 介绍
+[![Support](https://img.shields.io/badge/support-iOS%208%2B%20-blue.svg?style=flat)](https://www.apple.com/nl/ios/)
+[![Language](http://img.shields.io/badge/language-swift-brightgreen.svg?style=flat
+		)](https://developer.apple.com/swift)
+[![License](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat
+		)](http://mit-license.org)
 
-JChatSwift 是用Swift实现的一个聊天 App。
+		
+### 简介
 
-JChat 具有完备的即时通讯功能。主要有：
+JChat 是基于 JMessage SDK 带有完整 UI 界面的即时通讯应用。 演示了完整的即时通讯功能，包括：
 
-- 基本的聊天类型：文本、语音、图片；
-- 单聊与群聊；
-- 用户属性，包括头像；
-- 黑名单；
-- 好友通讯录；
+* 单聊、群聊、会话列表、好友、通讯录；
+* 支持发送文本、图片、语音、表情、位置、小视频；
+* 提供用户管理、群组管理、黑名单、免打扰、消息漫游等功能；
 
-JChat 的功能基于 JMessage SDK 来开发。它是一个 JMessage SDK 的完备的 Demo，但不仅仅是 Demo。我们的预期与目标是，当你的业务需要一个企业级的聊天 App 时，可以基于这里提供的源代码，更换 Logo 与应用名称，就可以直接用上。
+JChat 同时具备好友模式和无好友模式：
 
-JChat 当前提供 Android 与 iOS 版本。稍后也将提供 Web 版本。
+* 无好友模式：无需将对方加为好友，通过搜索对方的用户名可直接发起聊天。
+* 好友模式：可申请将对方加为好友，对方会收到好友验证，验证通过则互为好友关系。
 
-- [JChat Android](https://github.com/jpush/jchat-android)
+目前已覆盖 [Android](https://github.com/jpush/jchat-android) 和 iOS 平台，之后将提供 web 版本，开发者可参照 JChat 快速打造自己的 APP，提高开发效率。
 
-### 运行
+![image](Images/1.gif)
 
-本源代码项目要编译运行跑起来，需要注意以下几个地方。
+### 应用截图
 
-##### 打开项目文件 JChatSwift.xcworkspace
+<figure class="third">
+    <img src="Images/Conversation-1.png">&nbsp&nbsp
+    <img src="Images/contacts.png">&nbsp&nbsp
+    <img src="Images/my.png">
+</figure>
 
-因为这是一个 [CocoaPods](https://cocoapods.org) 项目。打开 .xcodeproj 项目目录将缺少依赖。
+### 环境配置
 
+一、前提：安装 CocoaPods 
+
+在终端输入：
+
+```
+sudo gem install cocoapods
+```
+如果安装成功，会有提示：
+
+```
+Successfully installed cocoaPods
+```
+
+二、使用 CocoaPods 导入依赖库
+
+在当前工程文件（.xcodeproj）所在文件夹下，打开终端，并执行：
+
+```
+pod install（这个可能比较慢，请耐心等待……）
+```
+
+### 运行应用
+
+一、打开项目文件 JChat.xcworkspace
 	
-##### 配置运行的基本属性
+二、配置运行的基本属性
 
-- appKey：JPush appKey 是 JMessage SDK 运行的基本参数。请到 [JPush 官方网站](https://jpush.cn)登录控制台创建应用获取。
-- bundle_id：这是一个 iOS 应用的基本属性。你需要登录到 Apple 开发者网站去创建应用。
+1. 填写项目工程中的 Bundle Identifier
+2. 在 AppDelegate.swift 文件中，按提示填入你的 JPush AppKey。JPush AppKey 是 JMessage SDK 运行的基本参数，如示未获取到应的 AppKey，请到 [JPush 官方网站](https://jpush.cn) 登录控制台创建应用获取。
 
 ### JMessage 文档
 
-- [JMessage iOS 集成指南](https://docs.jiguang.cn/jmessage/client/jmessage_ios_guide/)
-- [JMessage iOS 说明](https://docs.jiguang.cn/jmessage/client/im_sdk_ios/)
-- [JMessage iOS API Docs](https://docs.jiguang.cn/jmessage/client/jmessage_ios_appledoc_html/)
-- [Swift 中调用 JMessage接口教程](http://dev.eltima.com/post/90770164170/using-third-party-objective-c-frameworks-in-swift) 添加如下代码到 xxx-Bridging-Header.h 文件中
-```
-#import <JMessage/JMessage.h>
-```
-
-### JMessage 升级
-
-JMessage 当前版本为 2.0.x。与之前 1.0.x 版本有比较大的变更。
-
-因为变更太大，所以这次变更有点不够友好，大部分 API 有调整，包括对象结构。这会导致集成 JMessage SDK 1.0.x 版本的 App 切换到新版本时，会编译不通过，某些 API 调用需要调整。调整的具体思路，可参考本项目 JChat iOS 源代码，以及 JMessage iOS 相关文档。
-
-## JChat 介绍
-
-## JChat 工程结构
-![如图](https://github.com/jpush/jchat-swift/blob/master/READMEREC/JChat流程图副本.png)
-
-## JChat 代码结构
-主要分为五个功能模块：用户详情 (UserInfo)，会话列表 (Conversation List)，会话 (Conversation) 登录 (Login) 和 设置 (Setting)。每个功能模块按照 MVC 模式划分，部分模块还有一些 Util 类。
-
-CustomUI
-自定义 View
-
-Category
-通用 Category
-
-Util
-通用辅助类
-
-## 主要功能索引
-### JMessage 初始化代码
-建议在 AppDelegate didFinishLaunchingWithOptions 方式初始化，如JChat 所示
-```
-  func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-    
-    JMessage.setupJMessage(launchOptions, appKey: JMSSAGE_APPKEY, channel: CHANNEL, apsForProduction: false, category: nil)
-    if #available(iOS 8, *) {
-      // 可以自定义 categories
-      JPUSHService.registerForRemoteNotificationTypes(
-        UIUserNotificationType.Badge.rawValue |
-        UIUserNotificationType.Sound.rawValue |
-        UIUserNotificationType.Alert.rawValue,
-        categories: nil)
-    } else {
-      JPUSHService.registerForRemoteNotificationTypes(
-        UIUserNotificationType.Badge.rawValue |
-        UIUserNotificationType.Sound.rawValue |
-        UIUserNotificationType.Alert.rawValue,
-        categories: nil)
-    }
-    self.registerJPushStatusNotification()
-    self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-    self.setupRootView()
-    self.window?.makeKeyAndVisible()
-    return true
-  }
-
-```
-
-注册SDK
-注册APNS
-成功获得APNS token 传入JPUSHService 如下代码所示
-```
-- (void)application:(UIApplication *)application
-  func application(application: UIApplication,
-                              didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-    JPUSHService.registerDeviceToken(deviceToken)
-  }
-```
-
-### 注册 登录
-首次使用JMessage 需要有JMessage 账户，通过如下代码注册一个新用户。JChat 项目在JCHATRegisterViewController 类中执行了注册操作，并且在注册完成回调执行登录操作(登录操作也可以移动到其它地方进行，具体看程序业务)。
-```
-@IBAction func clickToRegister(sender: AnyObject) {
-    print("Action - clickToRegister")
-    UIApplication.sharedApplication().sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, forEvent: nil)
-    if self.checkValidUsername(usernameTF.text!, password: passwordTF.text!) {
-      MBProgressHUD.showMessage("正在注册", view: self.view)
-      JMSGUser.registerWithUsername(usernameTF.text!, password: passwordTF.text!, completionHandler: { (resultObject, error) -> Void in
-        if error == nil {
-          MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
-          MBProgressHUD.showMessage("注册成功,正在自动登陆", view: self.view)
-          JMSGUser.loginWithUsername(self.usernameTF.text!, password: self.passwordTF.text!, completionHandler: { (resultObject, error) -> Void in
-              MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
-            if error == nil {
-
-              self.userLoginSave()
-
-              let detailVC = JCHATSetDetailViewController()
-              self.navigationController?.pushViewController(detailVC, animated: true)
-              
-            } else {
-              print("login fail error \(NSString.errorAlert(error))")
-              MBProgressHUD.showMessage(NSString.errorAlert(error), view: self.view)
-            }
-          })
-        }
-      })
-    }
-  }
-```
-注册完成会回调 handler ，如下代码。如果出现错误会返回的error 不为nil，注意resultOvject 不同接口会返回不同类型的值或者nil，详细信息可以关注 [JMessage 官方文档](http://docs.jpush.io/client/im_sdk_ios/#summary)
-```
-public typealias JMSGCompletionHandler = (AnyObject!, NSError!) -> Void
-```
-
-### 会话 (Conversation)
-会话是一个用户与用户之间聊天的载体，要有会话用户之间才能收发消息
-获得会话有两种方式 1. 创建会话 2. 获取历史会话
-#### 1.创建会话
-如下代码分别创建了 单聊会话，和群聊会话, JChatSwift 在JChatConversationListViewController类 实现创建会话操作
-```
-func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-    if buttonIndex == 0 { return }
-
-    if alertView.textFieldAtIndex(0)?.text == "" {
-      MBProgressHUD .showMessage("请输入用户名", view: self.view)
-      return
-    } else {
-      MBProgressHUD.showMessage("正在创建单聊", toView: self.view)
-      JMSGConversation.createSingleConversationWithUsername((alertView.textFieldAtIndex(0)?.text)!, completionHandler: { (singleConversation, error) -> Void in
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-          MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
-        })
-        
-        if error == nil {
-          let chattingVC = JChatChattingViewController()
-          chattingVC.hidesBottomBarWhenPushed 
+* [JMessage iOS 集成指南](https://docs.jiguang.cn/jmessage/client/jmessage_ios_guide/)
+* [JMessage iOS 开发指南](https://docs.jiguang.cn/jmessage/client/im_sdk_ios/)
+* [JMessage iOS API Docs](https://docs.jiguang.cn/jmessage/client/jmessage_ios_appledoc_html/)

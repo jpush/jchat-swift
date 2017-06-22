@@ -1,6 +1,0 @@
-framework module JMUICommon {
-  umbrella header "JMUICommon.h"
-
-  export *
-  module * { export * }
-}
