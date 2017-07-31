@@ -58,9 +58,6 @@ class JCNavigationController: UINavigationController {
         navBar.titleTextAttributes = attrs
         navBar.backIndicatorTransitionMaskImage = UIImage.loadImage("com_icon_back")
         navBar.backIndicatorImage = UIImage.loadImage("com_icon_back")
-//        navBar.backItem?.leftBarButtonItem?.customView?.backgroundColor = .red
-//        imageView.image = UIImage.loadImage("com_icon_back")
-//        navBar.backItem?.leftBarButtonItem?.customView = imageView
     }
 
 }

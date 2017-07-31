@@ -22,17 +22,33 @@ class JCConversationListViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if isConnecting {
+            self.titleTips.text = "连接中"
+            self.titleTips.isHidden = false
+        } else {
+            self.titleTips.isHidden = true
+        }
         _getConversations()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        titleTips.isHidden = true
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+    }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
+    
+    fileprivate var isConnecting = false
     
     private lazy var addButton = UIButton(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
     private lazy var searchController: JCSearchController = JCSearchController(searchResultsController: JCNavigationController(rootViewController: JCSearchResultViewController()))
@@ -62,13 +78,27 @@ class JCConversationListViewController: UIViewController {
         return view
     }()
     
-
+    fileprivate lazy var titleTips: UILabel = {
+        var tips = UILabel(frame: CGRect(x: self.view.width / 2 - 50, y: 20, width: 100, height: 44))
+        tips.font = UIFont.systemFont(ofSize: 18)
+        tips.textColor = UIColor.white
+        tips.textAlignment = .center
+        tips.backgroundColor = UIColor(netHex: 0x5AD4D3)
+        tips.isHidden = true
+        return tips
+    }()
+    
     //Mark: - private func
     private func _init() {
         view.backgroundColor = UIColor(netHex: 0xe8edf3)
         if #available(iOS 10.0, *) {
             navigationController?.tabBarItem.badgeColor = UIColor(netHex: 0xEB424C)
         }
+        
+        let appDelegate = UIApplication.shared.delegate
+        let window = appDelegate?.window!
+        window?.addSubview(titleTips)
+        
         _setupNavigation()
         JMessage.add(self, with: nil)
         let nav = searchController.searchResultsController as! JCNavigationController
@@ -81,18 +111,14 @@ class JCConversationListViewController: UIViewController {
         view.addSubview(tableview)
         view.addSubview(emptyView)
         
-//        showNetworkTips = JCNetworkManager.isNotReachable
-        
         NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(note:)), name: NSNotification.Name(rawValue: "kNetworkReachabilityChangedNotification"), object: nil)
 
         _getConversations()
         NotificationCenter.default.addObserver(self, selector: #selector(_getConversations), name: NSNotification.Name(rawValue: kUpdateConversation), object: nil)
         
-//        NotificationCenter.default.addObserver(self, selector: #selector(connectClose), name: NSNotification.Name.jmsgNetworkDidClose, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(connectSetup), name: NSNotification.Name.jmsgNetworkDidSetup, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(connectSucceed), name: NSNotification.Name.jmsgNetworkDidLogin, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(connecting), name: NSNotification.Name.jmsgNetworkIsConnecting, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(didLogined), name: NSNotification.Name.jmsgNetworkDidLogin, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(connectClose), name: NSNotification.Name.jmsgNetworkDidClose, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(connectSucceed), name: NSNotification.Name.jmsgNetworkDidLogin, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(connecting), name: NSNotification.Name.jmsgNetworkIsConnecting, object: nil)
     }
     
     func reachabilityChanged(note: NSNotification) {
@@ -100,9 +126,9 @@ class JCConversationListViewController: UIViewController {
             let status = curReach.currentReachabilityStatus()
             switch status {
             case NotReachable:
-                connectClose()
+                notReachable()
             default :
-                connectSucceed()
+                reachable()
             }
         }
     }
@@ -115,21 +141,7 @@ class JCConversationListViewController: UIViewController {
     }
     
     func _updateBadge() {
-        var count = 0
-        for item in datas {
-            if let group = item.target as? JMSGGroup {
-                // TODO: isNoDisturb 这个接口存在性能问题，如果大量离线会卡死
-                if group.isNoDisturb {
-                    continue
-                }
-            }
-            if let user = item.target as? JMSGUser {
-                if user.isNoDisturb {
-                    continue
-                }
-            }
-            count += item.unreadCount?.intValue ?? 0
-        }
+        let count = getAllConversation(datas)
         if count > 99 {
             navigationController?.tabBarItem.badgeValue = "99+"
         } else {
@@ -272,42 +284,46 @@ extension JCConversationListViewController: UITableViewDelegate, UITableViewData
         return true
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle{
-        return .delete
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let action1 = UITableViewRowAction(style: .destructive, title: "删除") { (action, indexPath) in
+            self._delete(indexPath)
+        }
+        let action2 = UITableViewRowAction(style: .normal, title: "顶置") { (action, indexPath) in
+
+        }
+        return [action1, action2]
+    }
+
+    private func _delete(_ indexPath: IndexPath) {
+        let conversation = datas[indexPath.row]
+        let tager = conversation.target
+        JCDraft.update(text: nil, conversation: conversation)
+        if conversation.isGroup {
+            guard let group = tager as? JMSGGroup else {
+                return
+            }
+            JMSGConversation.deleteGroupConversation(withGroupId: group.gid)
+        } else {
+            guard let user = tager as? JMSGUser else {
+                return
+            }
+            JMSGConversation.deleteSingleConversation(withUsername: user.username, appKey: user.appKey!)
+        }
+        datas.remove(at: indexPath.row)
+        if self.datas.count == 0 {
+            self.emptyView.isHidden = false
+        } else {
+            self.emptyView.isHidden = true
+        }
+        self.tableview.reloadData()
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath){
-        if editingStyle == .delete {
-            let conversation = datas[indexPath.row]
-            let tager = conversation.target
-            JCDraft.update(text: nil, conversation: conversation)
-            if conversation.conversationType == .group {
-                guard let group = tager as? JMSGGroup else {
-                    return
-                }
-                JMSGConversation.deleteGroupConversation(withGroupId: group.gid)
-            } else {
-                guard let user = tager as? JMSGUser else {
-                    return
-                }
-                JMSGConversation.deleteSingleConversation(withUsername: user.username, appKey: user.appKey!)
-            }
-            datas.remove(at: indexPath.row)
-            if self.datas.count == 0 {
-                self.emptyView.isHidden = false
-            } else {
-                self.emptyView.isHidden = true
-            }
-            tableView.reloadData()
-        }
-    }
 }
 
 extension JCConversationListViewController: JMessageDelegate {
     
     func onReceive(_ message: JMSGMessage!, error: Error!) {
         _getConversations()
-//        _updateBadge()
     }
     
     func onConversationChanged(_ conversation: JMSGConversation!) {
@@ -320,12 +336,10 @@ extension JCConversationListViewController: JMessageDelegate {
     
     func onSyncRoamingMessageConversation(_ conversation: JMSGConversation!) {
         _getConversations()
-//        _updateBadge()
     }
     
     func onSyncOfflineMessageConversation(_ conversation: JMSGConversation!, offlineMessages: [JMSGMessage]!) {
         _getConversations()
-//        _updateBadge()
     }
     
 }
@@ -357,7 +371,16 @@ extension JCConversationListViewController: UISearchControllerDelegate {
 
 // MARK: - network tips
 extension JCConversationListViewController {
-    func connectClose() {
+    
+    func reachable() {
+        if !showNetworkTips {
+            return
+        }
+        showNetworkTips = false
+        tableview.reloadData()
+    }
+    
+    func notReachable() {
         if showNetworkTips {
             return
         }
@@ -372,21 +395,59 @@ extension JCConversationListViewController {
         }
     }
     
-    func didLogined() {
-    }
-    
-    func connectSetup() {
+    func connectClose() {
+        isConnecting = false
+        self.titleTips.isHidden = true
     }
     
     func connectSucceed() {
-        if !showNetworkTips {
-            return
-        }
-        showNetworkTips = false
-        tableview.reloadData()
+        isConnecting = false
+        self.titleTips.isHidden = true
     }
     
     func connecting() {
+        _connectingSate()
     }
-   
+    
+    func _connectingSate() {
+        let window = UIApplication.shared.delegate?.window
+        if let window = window {
+            guard let rootViewController = window?.rootViewController as? JCMainTabBarController else {
+                return
+            }
+            guard let nav = rootViewController.selectedViewController as? JCNavigationController else {
+                return
+            }
+            guard let currentVC = nav.topViewController else {
+                return
+            }
+            if currentVC.isKind(of: JCConversationListViewController.self) {
+                isConnecting = true
+                self.titleTips.text = "连接中"
+                self.titleTips.isHidden = false
+            }
+        }
+    }
 }
+
+@inline(__always)
+internal func getAllConversation(_ conversations: [JMSGConversation]) -> Int {
+    var count = 0
+    for item in conversations {
+        if let group = item.target as? JMSGGroup {
+            // TODO: isNoDisturb 这个接口存在性能问题，如果大量离线会卡死
+            if group.isNoDisturb {
+                continue
+            }
+        }
+        if let user = item.target as? JMSGUser {
+            if user.isNoDisturb {
+                continue
+            }
+        }
+        count += item.unreadCount?.intValue ?? 0
+    }
+    return count
+}
+
+

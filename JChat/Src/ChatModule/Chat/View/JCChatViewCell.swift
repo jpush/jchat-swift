@@ -271,6 +271,11 @@ open class JCChatViewCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         return true
     }
     
+    func copyMessage(_ sender: Any) {}
+    func deleteMessage(_ sender: Any) {}
+    func forwardMessage(_ sender: Any) {}
+    func withdrawMessage(_ sender: Any) {}
+
     private dynamic func _handleMenuGesture(_ sender: UILongPressGestureRecognizer) {
         guard sender.state == .began else {
             return
@@ -287,6 +292,14 @@ open class JCChatViewCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         // set responder
         NSClassFromString("UICalloutBar")?.setValue(self, forKeyPath: "sharedCalloutBar.responderTarget")
         
+        
+        menuController.menuItems = [
+            UIMenuItem(title: "复制", action: #selector(copyMessage(_:))),
+            UIMenuItem(title: "转发", action: #selector(forwardMessage(_:))),
+            UIMenuItem(title: "撤回", action: #selector(withdrawMessage(_:))),
+            UIMenuItem(title: "删除", action: #selector(deleteMessage(_:)))
+        ]
+    
         // set menu display position
         menuController.setTargetRect(convert(rect, to: view), in: view)
         menuController.setMenuVisible(true, animated: true)

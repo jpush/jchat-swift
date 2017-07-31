@@ -17,7 +17,7 @@ class JCGroupMembersViewController: UIViewController {
         super.viewDidLoad()
         _init()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -35,6 +35,7 @@ class JCGroupMembersViewController: UIViewController {
     private func _init() {
         self.title = "群成员"
         self.view.backgroundColor = .white
+        self.definesPresentationContext = true
         
         users = group.memberArray()
         filteredUsersArray = users
@@ -69,17 +70,8 @@ class JCGroupMembersViewController: UIViewController {
             collectionView.reloadData()
             return
         }
-        let searchString = searchString.uppercased()
-        filteredUsersArray = users.filter( { (user: JMSGUser) -> Bool in
-            let notename = user.noteName?.uppercased().contains(searchString) ?? false
-            let nickname = user.nickname?.uppercased().contains(searchString) ?? false
-            let username = user.username.uppercased().contains(searchString)
-            if notename || nickname || username {
-                return true
-            } else {
-                return false
-            }
-        })
+        
+        filteredUsersArray = _JCFilterUsers(users: users, string: searchString)
         collectionView.reloadData()
     }
 

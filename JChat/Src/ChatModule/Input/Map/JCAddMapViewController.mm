@@ -136,14 +136,14 @@
     [mapView removeGestureRecognizer:mapViewPan];
 }
 // 当地图停止拖动时显示周边信息
-- (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+- (void)mapView:(BMKMapView *)view regionDidChangeAnimated:(BOOL)animated {
     
     if (!mapPanGestureRecognizer) {
         return;
     }
     
     // 把停止拖动时地图的中心点转换成大头针的经纬度
-    BMKCoordinateRegion region = (BMKCoordinateRegion)mapView.region;
+    BMKCoordinateRegion region = (BMKCoordinateRegion)view.region;
     
     //——————————初始化反地理编码类————————————
     //注意：必须先初始化地理编码类

@@ -43,7 +43,7 @@ class JCDraft: NSObject {
         if me.username.isEmpty {
             return ""
         }
-        if conversation.conversationType == .group {
+        if conversation.isGroup {
             guard let group = conversation.target as? JMSGGroup else {
                 return ""
             }

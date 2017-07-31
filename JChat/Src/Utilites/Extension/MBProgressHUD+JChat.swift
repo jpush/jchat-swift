@@ -21,6 +21,7 @@ class MBProgressHUD_JChat: MBProgressHUD {
             hud.label.text = message
             hud.label.textColor = UIColor(white: 1, alpha: 0.7)
             hud.bezelView.color = .black
+            hud.activityIndicatorColor = UIColor(netHex: 0x9B9B9B)
             hud.removeFromSuperViewOnHide = true
         }
     }

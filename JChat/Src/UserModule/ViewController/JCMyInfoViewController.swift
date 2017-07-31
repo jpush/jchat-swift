@@ -265,7 +265,9 @@ extension JCMyInfoViewController: UINavigationControllerDelegate, UIImagePickerC
         if image != nil {
             MBProgressHUD_JChat.showMessage(message: "正在上传", toView: self.view)
             
-            let imageData = UIImagePNGRepresentation(image!)!
+            guard let imageData = UIImageJPEGRepresentation(image!, 0.8) else {
+                return
+            }
             
             JMSGUser.updateMyInfo(withParameter: imageData, userFieldType: .fieldsAvatar) { (resultObject, error) -> Void in
                 DispatchQueue.main.async(execute: { () -> Void in

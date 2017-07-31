@@ -21,7 +21,7 @@ let D_DAY = 86400.0
 let D_WEEK = 604800.0
 let D_YEAR = 31556926.0
 
-internal let componentFlags:NSCalendar.Unit = [.year, .month, .day, .weekday, .hour, .minute, .second, .weekdayOrdinal]
+internal let componentFlags: NSCalendar.Unit = [.year, .month, .day, .weekday, .hour, .minute, .second, .weekdayOrdinal]
 
 extension Date {
     static func currentCalendar() -> Calendar{

@@ -56,5 +56,22 @@ extension UIImage {
         image = UIImage(cgImage: cgImage!)
         return image
     }
+    
+    static func getMyAvator() -> UIImage? {
+        if let data = UserDefaults.standard.object(forKey: kLastUserAvator) as? Data {
+            let avatorData = NSKeyedUnarchiver.unarchiveObject(with: data) as! Data
+            return UIImage(data: avatorData)
+        }
+        return nil
+    }
+    
+    func resizeImage(image: UIImage, newSize: CGSize) -> UIImage {
+        UIGraphicsBeginImageContext(newSize)
+        image.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
+    }
+    
 
 }

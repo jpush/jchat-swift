@@ -1,65 +1,45 @@
 //
-//  JCContactsViewController.swift
+//  JCForwardViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/2/16.
+//  Created by deng on 2017/7/17.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
 import UIKit
-import JMessage
-import YHPopupView
 
-class JCContactsViewController: UIViewController {
+class JCForwardViewController: UIViewController {
     
-    public required init() {
-        super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(_updateBadge), name: NSNotification.Name(rawValue: kUpdateVerification), object: nil)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    var message: JMSGMessage?
 
-    //MARK: - life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         _init()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        _updateBadge()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
+    private lazy var cancelButton = UIButton(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
     
-    private lazy var addButton = UIButton(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
     fileprivate var contacterView: UITableView = UITableView(frame: .zero, style: .grouped)
     private lazy var searchController: JCSearchController = JCSearchController(searchResultsController: JCNavigationController(rootViewController: JCSearchResultViewController()))
     private lazy var searchView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.width, height: 31))
     fileprivate var badgeCount = 0
     
-    fileprivate lazy var tagArray = ["验证消息", "群组"]
+    fileprivate lazy var tagArray = ["群组"]
     fileprivate lazy var users: [JMSGUser] = []
     
     fileprivate lazy var keys: [String] = []
     fileprivate lazy var data: Dictionary<String, [JMSGUser]> = Dictionary()
     
-    //MARK: - private func
+    fileprivate var selectUser: JMSGUser!
+
     private func _init() {
-        self.title = "通讯录"
+        self.title = "转发"
         self.view.backgroundColor = UIColor(netHex: 0xe8edf3)
-        
-        if #available(iOS 10.0, *) {
-            navigationController?.tabBarItem.badgeColor = UIColor(netHex: 0xEB424C)
-        }
+        _setupNavigation()
         
         let nav = searchController.searchResultsController as! JCNavigationController
         let vc = nav.topViewController as! JCSearchResultViewController
@@ -77,19 +57,19 @@ class JCContactsViewController: UIViewController {
         contacterView.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
         view.addSubview(contacterView)
         
-        _setupNavigation()
         _getFriends()
-        _updateBadge()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(_updateUserInfo), name: NSNotification.Name(rawValue: kUpdateFriendInfo), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(_getFriends), name: NSNotification.Name(rawValue: kUpdateFriendList), object: nil)
     }
     
     private func _setupNavigation() {
-        addButton.addTarget(self, action: #selector(_clickNavRightButton(_:)), for: .touchUpInside)
-        addButton.setImage(UIImage.loadImage("com_icon_friend_add"), for: .normal)
-        let item = UIBarButtonItem(customView: addButton)
-        self.navigationItem.rightBarButtonItem =  item
+        cancelButton.addTarget(self, action: #selector(_clickNavleftButton), for: .touchUpInside)
+        cancelButton.setTitle("取消", for: .normal)
+        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        let item = UIBarButtonItem(customView: cancelButton)
+        self.navigationItem.leftBarButtonItem = item
+    }
+    
+    func _clickNavleftButton() {
+        self.dismiss(animated: true, completion: nil)
     }
     
     func _updateUserInfo() {
@@ -130,30 +110,11 @@ class JCContactsViewController: UIViewController {
             }
         }
     }
-        
-    //MARK: - click func
-    func _clickNavRightButton(_ sender: UIButton) {
-        self.navigationController?.pushViewController(JCSearchFriendViewController(), animated: true)
-    }
-    
-    func _updateBadge() {
-        if UserDefaults.standard.object(forKey: kUnreadInvitationCount) != nil {
-            badgeCount = UserDefaults.standard.object(forKey: kUnreadInvitationCount) as! Int
-        } else {
-            badgeCount = 0
-        }
-        if badgeCount > 99 {
-            navigationController?.tabBarItem.badgeValue = "99+"
-        } else {
-            navigationController?.tabBarItem.badgeValue = badgeCount == 0 ? nil : "\(badgeCount)"
-        }
-        contacterView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
-    }
-    
+
 }
 
 //Mark: -
-extension JCContactsViewController: UITableViewDelegate, UITableViewDataSource {
+extension JCForwardViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         if users.count > 0 {
@@ -190,8 +151,8 @@ extension JCContactsViewController: UITableViewDelegate, UITableViewDataSource {
         }
         return 10
     }
-
-
+    
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         return tableView.dequeueReusableCell(withIdentifier: "JCContacterCell", for: indexPath)
     }
@@ -203,17 +164,13 @@ extension JCContactsViewController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.section == 0 {
             switch indexPath.row {
             case 0:
-                cell.title = "验证消息"
-                cell.icon = UIImage.loadImage("com_icon_friend_tip")
-                cell.isShowBadge = badgeCount > 0 ? true : false
-            case 1:
                 cell.title = "群组"
                 cell.icon = UIImage.loadImage("com_icon_group_36")
                 cell.isShowBadge = false
             default:
                 break
             }
-            return 
+            return
         }
         let user = self.data[keys[indexPath.section - 1]]?[indexPath.row]
         cell.isShowBadge = false
@@ -223,48 +180,79 @@ extension JCContactsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 {
-            switch indexPath.row {
-            case 0:
-                self.navigationController?.pushViewController(JCIdentityVerificationViewController(), animated: true)
-            case 1:
-                self.navigationController?.pushViewController(JCGroupListViewController(), animated: true)
-            default:
-                break
-            }
+            self.navigationController?.pushViewController(JCGroupListViewController(), animated: true)
             return
         }
-        let vc = JCUserInfoViewController()
-        let user = self.data[keys[indexPath.section - 1]]?[indexPath.row]
-        vc.user = user
-        self.navigationController?.pushViewController(vc, animated: true)
+        selectUser = self.data[keys[indexPath.section - 1]]?[indexPath.row]
+        forwardMessage(message!)
+    }
+    
+    func forwardMessage(_ message: JMSGMessage) {
+        switch(message.contentType) {
+        case .text:
+            let content = message.content as! JMSGTextContent
+            JCAlertView.bulid().setTitle("发送给：\(selectUser.displayName())")
+                .setMessage(content.text)
+                .setDelegate(self)
+                .addCancelButton("取消")
+                .addButton("确定")
+                .setTag(10001)
+                .show()
+
+        case .image:
+            let content = message.content as! JMSGImageContent
+            guard let image = UIImage(contentsOfFile: content.originMediaLocalPath) else {
+                return
+            }
+            JCAlertView.bulid().setTitle("发送给：\(selectUser.displayName())")
+                .setDelegate(self)
+                .addCancelButton("取消")
+                .addButton("确定")
+                .setTag(10002)
+                .addImage(image)
+                .show()
+        case .file:
+            break
+        default :
+            break
+        }
     }
 }
 
-extension JCContactsViewController: UISearchControllerDelegate {
+extension JCForwardViewController: UISearchControllerDelegate {
     func willPresentSearchController(_ searchController: UISearchController) {
         self.contacterView.isHidden = true
-        self.navigationController?.tabBarController?.tabBar.isHidden = true
     }
     func willDismissSearchController(_ searchController: UISearchController) {
         self.contacterView.isHidden = false
         let nav = searchController.searchResultsController as! JCNavigationController
         nav.isNavigationBarHidden = true
         nav.popToRootViewController(animated: false)
-        self.navigationController?.tabBarController?.tabBar.isHidden = false
     }
 }
 
-@inline(__always)
-internal func _JCSortKeys(_ keys: [String]) -> [String] {
-    var array = keys.sorted(by: { (str1, str2) -> Bool in
-        return str1 < str2
-    })
-    if let first = array.first {
-        if first == "#" {
-            array.removeFirst()
-            array.append(first)
+extension JCForwardViewController: UIAlertViewDelegate {
+    func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
+        if buttonIndex != 1 {
+            return
+        }
+        switch alertView.tag {
+        case 10001:
+            let content = message?.content as! JMSGTextContent
+            JMSGMessage.sendSingleTextMessage(content.text, toUser: selectUser.username)
+//        case 10002:
+//            let content = message?.content as! JMSGImageContent
+//            guard let image = UIImage(contentsOfFile: content.originMediaLocalPath) else {
+//                return
+//            }
+        default:
+            break
+        }
+        MBProgressHUD_JChat.show(text: "已经发送", view: view, 2)
+        weak var weakSelf = self
+        let time: TimeInterval = 2
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + time) {
+            weakSelf?.dismiss(animated: true, completion: nil)
         }
     }
-    return array
 }
-

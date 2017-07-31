@@ -12,12 +12,12 @@ import AVKit
 
 class JCVideoManager: NSObject {
     
-    static func playVideo(data: Data, currentViewController: UIViewController) {
+    static func playVideo(data: Data, _ fileType: String = "MOV", currentViewController: UIViewController) {
         let  playVC = AVPlayerViewController()
         
-        let filePath = "\(NSHomeDirectory())/Documents/abcd.MOV"
+        let filePath = "\(NSHomeDirectory())/Documents/abcd." + fileType
         
-        if JCVideoManager.saveFileToLocal(data: data, savaPath: filePath) {
+        if JCFileManager.saveFileToLocal(data: data, savaPath: filePath) {
             let url = URL(fileURLWithPath: filePath)
             let player = AVPlayer(url: url)
             playVC.player = player
@@ -25,9 +25,17 @@ class JCVideoManager: NSObject {
         }
     }
     
+    static func playVideo(path: String, currentViewController: UIViewController) {
+        let  playVC = AVPlayerViewController()
+        let url = URL(fileURLWithPath: path)
+        let player = AVPlayer(url: url)
+        playVC.player = player
+        currentViewController.present(playVC, animated: true, completion: nil)
+    }
+    
     static func getFristImage(data: Data) -> UIImage? {
         let filePath = "\(NSHomeDirectory())/Documents/getImage.MOV"
-        if !JCVideoManager.saveFileToLocal(data: data, savaPath: filePath) {
+        if !JCFileManager.saveFileToLocal(data: data, savaPath: filePath) {
             return nil
         }
         let videoURL = URL(fileURLWithPath: filePath)
@@ -43,18 +51,6 @@ class JCVideoManager: NSObject {
         } catch {
             return UIImage.createImage(color: .gray, size: CGSize(width: 160, height: 120))
         }
-    }
-    
-    static func saveFileToLocal(data: Data, savaPath: String) -> Bool {
-        let fileManager = FileManager.default
-        let exist = fileManager.fileExists(atPath: savaPath)
-        if exist {
-            try! fileManager.removeItem(atPath: savaPath)
-        }
-        if !fileManager.createFile(atPath: savaPath, contents: data, attributes: nil) {
-            return false
-        }
-        return true
     }
 
 }

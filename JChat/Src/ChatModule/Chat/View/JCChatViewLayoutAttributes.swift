@@ -31,8 +31,6 @@ import UIKit
         return new
     }
     
-    
-    
     open var message: JCMessageType? {
         return info?.message
     }

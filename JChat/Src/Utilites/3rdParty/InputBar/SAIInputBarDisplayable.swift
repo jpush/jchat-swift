@@ -98,7 +98,7 @@ internal extension SAIInputBarDisplayable {
             let minY = -edg.top
             let maxY = scrollView.contentSize.height - scrollView.frame.height + (edg.bottom + ty)
             
-            scrollView.contentOffset = CGPoint(x: pt.x, y: max(min(ny, maxY), minY))
+            scrollView.contentOffset = CGPoint(x: pt.x, y: max(max(ny, maxY), minY))
             scrollView.layoutSubviews()
         }
     }

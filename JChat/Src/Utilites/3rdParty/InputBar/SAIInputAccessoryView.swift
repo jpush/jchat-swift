@@ -9,13 +9,11 @@
 import UIKit
 
 internal protocol SAIInputAccessoryViewDelegate: class {
-
     func inputAccessoryView(touchDown recordButton: UIButton)
     func inputAccessoryView(touchUpInside recordButton: UIButton)
     func inputAccessoryView(touchUpOutside recordButton: UIButton)
     func inputAccessoryView(dragOutside recordButton: UIButton)
     func inputAccessoryView(dragInside recordButton: UIButton)
-    
 }
 
 internal class SAIInputAccessoryView: UIView {
@@ -324,6 +322,8 @@ internal class SAIInputAccessoryView: UIView {
         _recordButton.layer.borderWidth = 0.5
         _recordButton.layer.borderColor = UIColor.gray.cgColor
         _recordButton.layer.masksToBounds = true
+        _recordButton.setTitleColor(UIColor(netHex: 0x5A5A5A), for: .normal)
+        _recordButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         _recordButton.translatesAutoresizingMaskIntoConstraints = false
         _recordButton.setTitle("按住 说话", for: .normal)
         _recordButton.setTitle("松开 发送", for: .highlighted)

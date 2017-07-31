@@ -23,13 +23,8 @@ class JCLoginViewController: UIViewController {
             lastUserName = UserDefaults.standard.object(forKey: kLastUserName) as? String
             userNameTextField.text = lastUserName
         }
-        
-        if UserDefaults.standard.object(forKey: kLastUserAvator) != nil {
-            let data = UserDefaults.standard.object(forKey: kLastUserAvator) as! Data
-            let avatorData = NSKeyedUnarchiver.unarchiveObject(with: data) as! Data
-            avator = UIImage(data: avatorData)
-            self.avatorView.image = avator
-        }
+        avator = UIImage.getMyAvator()
+        self.avatorView.image = avator
         _updateLoginButton()
     }
 
