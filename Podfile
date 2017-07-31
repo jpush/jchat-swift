@@ -10,7 +10,7 @@ target 'JChat' do
   pod 'MJRefresh', '~> 3.1.12'
   pod 'FMDB', '~> 2.6.2'
   pod 'BaiduMapKit', '~> 3.3.2'
-  pod 'JMessage', '~> 3.1.1'
+  pod 'JMessage', '~> 3.2.0’
 
   # Pods for JChat
 

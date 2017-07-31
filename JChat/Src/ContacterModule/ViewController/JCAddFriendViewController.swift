@@ -52,7 +52,12 @@ class JCAddFriendViewController: UIViewController {
                 let info = JCVerificationInfo.create(username: user.username, nickname: user.nickname, appkey: user.appKey!, resaon: self.textField.text, state: JCVerificationType.wait.rawValue)
                 JCVerificationInfoDB.shareInstance.insertData(info)
                 NotificationCenter.default.post(name: Notification.Name(rawValue: kUpdateVerification), object: nil)
-                self.navigationController?.popViewController(animated: true)
+                MBProgressHUD_JChat.show(text: "好友请求已发送", view: self.view, 2)
+                weak var weakSelf = self
+                let time: TimeInterval = 2
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + time) {
+                    weakSelf?.navigationController?.popViewController(animated: true)
+                }
             } else {
                 MBProgressHUD_JChat.show(text: "\(String.errorAlert(error! as NSError))", view: self.view)
             }

@@ -93,7 +93,12 @@ open class JCMessageVoiceContentView: UIView, JCMessageContentViewType {
     }
     
     func _clickCell() {
-        print("stop or play")
+        if let player = JChatAudioPlayerHelper.sharedInstance.player {
+            if player.isPlaying {
+                JChatAudioPlayerHelper.sharedInstance.stopAudio()
+                return
+            }
+        }
         JChatAudioPlayerHelper.sharedInstance.delegate = self
         JChatAudioPlayerHelper.sharedInstance.managerAudioWithData(_data!, toplay: true)
         _animationView.startAnimating()

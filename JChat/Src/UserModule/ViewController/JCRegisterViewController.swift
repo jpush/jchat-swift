@@ -231,7 +231,7 @@ class JCRegisterViewController: UIViewController {
         
         let url = URL(string: "https://api.im.jpush.cn/v1/users/\(username)")
         MBProgressHUD_JChat.showMessage(message: "用户名校验", toView: self.view)
-        JCAPIManager.searchUser(url!) { (data, response, error) in
+        JCAPIManager.sharedAPI.searchUser(url!) { (data, response, error) in
             let _ = DispatchQueue.main.sync {
                 MBProgressHUD_JChat.hide(forView: self.view, animated: true)
                 if error == nil {

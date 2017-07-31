@@ -39,6 +39,7 @@ class JCConversationCell: JCTableViewCell {
     //MARK: - public func
     open func bindConversation(_ conversation: JMSGConversation) {
         self.statueView.isHidden = true
+        let isGroup = conversation.isGroup
         if conversation.unreadCount != nil && (conversation.unreadCount?.intValue)! > 0 {
             self.redPoin.isHidden = false
             var text = ""
@@ -56,7 +57,7 @@ class JCConversationCell: JCTableViewCell {
             self.redPoin.text = text
             
             var isNoDisturb = false
-            if conversation.conversationType == .group {
+            if isGroup {
                 if let group = conversation.target as? JMSGGroup {
                     isNoDisturb = group.isNoDisturb
                 }
@@ -84,20 +85,41 @@ class JCConversationCell: JCTableViewCell {
             self.dateLabel.text = ""
         }
         
-        self.msgLabel.text = conversation.latestMessageContentText()
+        msgLabel.text = conversation.latestMessageContentText()
+        if isGroup {
+            let latestMessage = conversation.latestMessage
+            if let fromUser = latestMessage?.fromUser {
+                if !fromUser.isEqual(to: JMSGUser.myInfo()) {
+                    msgLabel.text = "\(fromUser.displayName()):\(msgLabel.text!)"
+                }
+            }
+            if conversation.unreadCount != nil && conversation.unreadCount!.intValue > 0 {
+                if let latestMessage = latestMessage {
+                
+                    if latestMessage.isAtMe() {
+                        msgLabel.attributedText = getAttributString(attributString: "[有人@我]", string: conversation.latestMessageContentText())
+                    }
+                    if latestMessage.isAtAll() {
+                        msgLabel.attributedText = getAttributString(attributString: "[@所有人]", string: conversation.latestMessageContentText())
+                    }
+                }
+            }
+            
+        }
         
         if let draft = JCDraft.getDraft(conversation) {
             if !draft.isEmpty {
-                self.msgLabel.text = "[草稿]\(draft)"
+                msgLabel.attributedText = getAttributString(attributString: "[草稿]", string: draft)
             }
         }
         
-        if conversation.conversationType == .single {
-            self.avatorView.image = userDefaultIcon
+        
+        if !isGroup {
             let user = conversation.target as? JMSGUser
             self.titleLabel.text = user?.displayName() ?? ""
             user?.thumbAvatarData { (data, username, error) in
                 guard let imageData = data else {
+                    self.avatorView.image = self.userDefaultIcon
                     return
                 }
                 let image = UIImage(data: imageData)
@@ -115,6 +137,15 @@ class JCConversationCell: JCTableViewCell {
         }
     }
     
+    func getAttributString(attributString: String, string: String) -> NSMutableAttributedString {
+        let attr = NSMutableAttributedString(string: "")
+        var attrSearchString: NSAttributedString!
+        attrSearchString = NSAttributedString(string: attributString, attributes: [ NSForegroundColorAttributeName : UIColor(netHex: 0xEB424C), NSFontAttributeName : UIFont.boldSystemFont(ofSize: 14.0)])
+        attr.append(attrSearchString)
+        attr.append(NSAttributedString(string: string))
+        return attr
+    }
+    
     private lazy var groupDefaultIcon = UIImage.loadImage("com_icon_group_50")
     private lazy var userDefaultIcon = UIImage.loadImage("com_icon_user_50")
     
@@ -122,6 +153,7 @@ class JCConversationCell: JCTableViewCell {
     private func _init() {
         avatorView.contentMode = .scaleToFill
         avatorView.translatesAutoresizingMaskIntoConstraints = false
+        avatorView.image = userDefaultIcon
         
         statueView.image = UIImage.loadImage("com_icon_shield")
         statueView.translatesAutoresizingMaskIntoConstraints = false

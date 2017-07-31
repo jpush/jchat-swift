@@ -19,6 +19,18 @@ class JCUpdateMemberViewController: UIViewController {
         super.viewDidLoad()
         _init()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if selectUsers.count == 0 {
+            confirm.alpha = 0.5
+            navigationController?.navigationItem.rightBarButtonItem?.isEnabled = false
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -28,7 +40,7 @@ class JCUpdateMemberViewController: UIViewController {
     fileprivate var tableView: UITableView = UITableView(frame: .zero, style: .grouped)
     fileprivate var collectionView: UICollectionView!
     fileprivate lazy var searchView: UISearchBar = UISearchBar()
-    fileprivate lazy var delButton = UIButton(frame: CGRect(x: 0, y: 0, width: 120, height: 28))
+    fileprivate lazy var confirm = UIButton(frame: CGRect(x: 0, y: 0, width: 120, height: 28))
     
     fileprivate lazy var users: [JMSGUser] = []
     fileprivate lazy var keys: [String] = []
@@ -38,6 +50,19 @@ class JCUpdateMemberViewController: UIViewController {
     fileprivate lazy var selectUsers: [JMSGUser] = []
     fileprivate var searchUser: JMSGUser?
     fileprivate var members: [JMSGUser]?
+    
+    fileprivate lazy var tipsView: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 64 + 31 + 5, width: self.view.width, height: self.view.height - 31 - 64 - 5))
+        view.backgroundColor = .white
+        let tips = UILabel(frame: CGRect(x: 0, y: 0, width: view.width, height: 50))
+        tips.font = UIFont.systemFont(ofSize: 16)
+        tips.textColor = UIColor(netHex: 0x999999)
+        tips.textAlignment = .center
+        tips.text = "未搜索到用户"
+        view.addSubview(tips)
+        view.isHidden = true
+        return view
+    }()
     
     private func _init() {
         self.view.backgroundColor = .white
@@ -59,6 +84,8 @@ class JCUpdateMemberViewController: UIViewController {
         tableView.register(JCSelectMemberCell.self, forCellReuseIdentifier: "JCSelectMemberCell")
         tableView.frame = CGRect(x: 0, y: 31 + 64, width: view.width, height: view.height - 31 - 64)
         view.addSubview(tableView)
+        
+        view.addSubview(tipsView)
         
         _classify([], isFrist: true)
         
@@ -91,16 +118,20 @@ class JCUpdateMemberViewController: UIViewController {
     }
     
     private func _setupNavigation() {
-        delButton.addTarget(self, action: #selector(_clickNavRightButton(_:)), for: .touchUpInside)
-        delButton.setTitle("确定", for: .normal)
-        delButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        delButton.contentHorizontalAlignment = .right
-        let item = UIBarButtonItem(customView: delButton)
+        confirm.addTarget(self, action: #selector(_clickNavRightButton(_:)), for: .touchUpInside)
+        confirm.setTitle("确定", for: .normal)
+        confirm.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        confirm.contentHorizontalAlignment = .right
+        let item = UIBarButtonItem(customView: confirm)
         navigationItem.rightBarButtonItem =  item
-        navigationController?.navigationItem.rightBarButtonItem?.isEnabled = false
     }
     
     fileprivate func _classify(_ users: [JMSGUser], isFrist: Bool = false) {
+        
+        if users.count > 0 {
+            self.tipsView.isHidden = true
+        }
+        
         if isFrist {
             JMSGFriendManager.getFriendList { (result, error) in
                 if error == nil {
@@ -114,7 +145,10 @@ class JCUpdateMemberViewController: UIViewController {
                             }
                         }
                         self.users.append(item)
-                        let key = item.displayName().firstCharacter()
+                        var key = item.displayName().firstCharacter()
+                        if !key.isLetterOrNum() {
+                            key = "#"
+                        }
                         var array = self.data[key]
                         if array == nil {
                             array = [item]
@@ -128,9 +162,7 @@ class JCUpdateMemberViewController: UIViewController {
                         self.data[key] = array
                     }
                     self.filteredUsersArray = self.users
-                    self.keys = self.keys.sorted(by: { (str1, str2) -> Bool in
-                        return str1 < str2
-                    })
+                    self.keys = _JCSortKeys(self.keys)
                     self.tableView.reloadData()
                     self.collectionView.reloadData()
                 }
@@ -140,7 +172,10 @@ class JCUpdateMemberViewController: UIViewController {
             self.keys.removeAll()
             self.data.removeAll()
             for item in users {
-                let key = item.displayName().firstCharacter()
+                var key = item.displayName().firstCharacter()
+                if !key.isLetterOrNum() {
+                    key = "#"
+                }
                 var array = self.data[key]
                 if array == nil {
                     array = [item]
@@ -153,9 +188,7 @@ class JCUpdateMemberViewController: UIViewController {
                 
                 self.data[key] = array
             }
-            self.keys = self.keys.sorted(by: { (str1, str2) -> Bool in
-                return str1 < str2
-            })
+            self.keys = _JCSortKeys(self.keys)
             self.tableView.reloadData()
             self.collectionView.reloadData()
         }
@@ -177,12 +210,12 @@ class JCUpdateMemberViewController: UIViewController {
     
     fileprivate func _reloadCollectionView() {
         if selectUsers.count > 0 {
-            delButton.alpha = 1.0
-            delButton.setTitle("确定(\(selectUsers.count))", for: .normal)
+            confirm.alpha = 1.0
+            confirm.setTitle("确定(\(selectUsers.count))", for: .normal)
             navigationController?.navigationItem.rightBarButtonItem?.isEnabled = true
         } else {
-            delButton.alpha = 0.5
-            delButton.setTitle("确定", for: .normal)
+            confirm.alpha = 0.5
+            confirm.setTitle("确定", for: .normal)
             navigationController?.navigationItem.rightBarButtonItem?.isEnabled = false
         }
         switch selectUsers.count {
@@ -191,11 +224,13 @@ class JCUpdateMemberViewController: UIViewController {
             searchView.frame = CGRect(x: 15, y: 0, width: toolView.width - 30, height: 31)
             toolView.frame = CGRect(x: 0, y: 64, width: toolView.width, height: 31)
             tableView.frame = CGRect(x: tableView.x, y: 64 + 31, width: tableView.width, height: view.height - 64 - 31)
+            tipsView.frame = CGRect(x: 0, y: 64 + 31 + 5, width: self.view.width, height: self.view.height - 31 - 64 - 5)
         case 1:
             collectionView.frame = CGRect(x: 10, y: 0, width: 46, height: 55)
             searchView.frame = CGRect(x: 5 + 46, y: 0, width: toolView.width - 5 - 46, height: 55)
             toolView.frame = CGRect(x: 0, y: 64, width: toolView.width, height: 55)
             tableView.frame = CGRect(x: tableView.x, y: 64 + 55, width: tableView.width, height: view.height - 64 - 55)
+            tipsView.frame = CGRect(x: 0, y: 64 + 31 + 5 + 24, width: self.view.width, height: self.view.height - 31 - 40 - 5)
         case 2:
             collectionView.frame = CGRect(x: 10, y: 0, width: 92, height: 55)
             searchView.frame = CGRect(x: 5 + 46 * 2, y: 0, width: toolView.width - 5 - 46 * 2, height: 55)
@@ -213,6 +248,9 @@ class JCUpdateMemberViewController: UIViewController {
     }
     
     func _clickNavRightButton(_ sender: UIButton) {
+        if selectUsers.count == 0 {
+            return
+        }
         var userNames: [String] = []
         for item in selectUsers {
             userNames.append(item.username)
@@ -262,16 +300,7 @@ class JCUpdateMemberViewController: UIViewController {
             return
         }
         let searchString = searchString.uppercased()
-        filteredUsersArray = users.filter( { (user: JMSGUser) -> Bool in
-            let notename = user.noteName?.uppercased().contains(searchString) ?? false
-            let nickname = user.nickname?.uppercased().contains(searchString) ?? false
-            let username = user.username.uppercased().contains(searchString)
-            if notename || nickname || username {
-                return true
-            } else {
-                return false
-            }
-        })
+        filteredUsersArray = _JCFilterUsers(users: users, string: searchString)
         _classify(filteredUsersArray)
     }
 }
@@ -417,8 +446,10 @@ extension JCUpdateMemberViewController: UISearchBarDelegate {
                 let users = result as! [JMSGUser]
                 self.searchUser = users.first
                 self._classify([self.searchUser!])
+                self.tipsView.isHidden = true
             } else {
                 // 未查询到该用户的信息
+                self.tipsView.isHidden = false
             }
         }
     }

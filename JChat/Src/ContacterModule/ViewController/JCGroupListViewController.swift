@@ -21,11 +21,11 @@ class JCGroupListViewController: UITableViewController {
     }
     
     var groupList: [JMSGGroup] = []
+    private lazy var defaultImage: UIImage = UIImage.loadImage("com_icon_group_36")
     
     // MARK: - private func
     private func _init() {
         self.title = "群组"
-//        self.automaticallyAdjustsScrollViewInsets = false
         self.view.backgroundColor = .white
         self.tableView.separatorStyle = .none
         self.tableView.register(JCTableViewCell.self, forCellReuseIdentifier: "JCGroupListCell")
@@ -77,7 +77,7 @@ class JCGroupListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let group = groupList[indexPath.row]
         cell.textLabel?.text = group.displayName()
-        cell.imageView?.image = UIImage.loadImage("com_icon_group_36")
+        cell.imageView?.image = defaultImage
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

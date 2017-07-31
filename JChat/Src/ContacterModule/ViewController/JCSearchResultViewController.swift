@@ -136,26 +136,8 @@ class JCSearchResultViewController: UIViewController {
         if searchString.isEmpty || searchString == "" {
             return
         }
-        let string = searchString.uppercased()
-        filteredUsersArray = users.filter( { (user: JMSGUser) -> Bool in
-            let notename = user.noteName?.uppercased().contains(string) ?? false
-            let nickname = user.nickname?.uppercased().contains(string) ?? false
-            let username = user.username.uppercased().contains(string)
-            if notename || nickname || username {
-                return true
-            } else {
-                return false
-            }
-        })
-        
-        filteredGroupsArray = groups.filter( { (group: JMSGGroup) -> Bool in
-            if group.name?.uppercased().contains(string) ?? false ||
-                group.gid.uppercased().contains(string) {
-                return true
-            } else {
-                return false
-            }
-        })
+        filteredUsersArray = _JCFilterUsers(users: users, string: searchString)
+        filteredGroupsArray = _JCFilterGroups(groups: groups, string: searchString)
         
         if filteredUsersArray.count == 0 && filteredGroupsArray.count == 0 {
             tableView.isHidden = true
@@ -318,4 +300,34 @@ extension JCSearchResultViewController: UISearchResultsUpdating {
         searchString = searchController.searchBar.text!
         filter(searchString)
     }
+}
+
+@inline(__always)
+internal func _JCFilterUsers(users: [JMSGUser], string: String) -> [JMSGUser] {
+    let filteredUsersArray = users.filter( { (user: JMSGUser) -> Bool in
+        let str = string.uppercased()
+        let notename = user.noteName?.uppercased().contains(str) ?? false
+        let nickname = user.nickname?.uppercased().contains(str) ?? false
+        let username = user.username.uppercased().contains(str)
+        if notename || nickname || username {
+            return true
+        } else {
+            return false
+        }
+    })
+    return filteredUsersArray
+}
+
+@inline(__always)
+internal func _JCFilterGroups(groups: [JMSGGroup], string: String) -> [JMSGGroup] {
+    let filteredGroupsArray = groups.filter( { (group: JMSGGroup) -> Bool in
+        let str = string.uppercased()
+        if group.name?.uppercased().contains(str) ?? false ||
+            group.gid.uppercased().contains(str) {
+            return true
+        } else {
+            return false
+        }
+    })
+    return filteredGroupsArray
 }

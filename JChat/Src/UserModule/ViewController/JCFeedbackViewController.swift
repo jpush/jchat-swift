@@ -97,7 +97,8 @@ extension JCFeedbackViewController: JCPhotoBarDelegate {
     private func _pushToSelectPhotos() {
         let photoPicker = YHPhotoPickerViewController()
         photoPicker.pickerDelegate = self
-        photoPicker.maxPhotosCount = 4 - images.count
+        let count = 4 - images.count
+        photoPicker.maxPhotosCount = Int32(count)
         self.present(photoPicker, animated: true)
     }
     
@@ -193,10 +194,7 @@ extension JCFeedbackViewController: UITextViewDelegate {
 extension JCFeedbackViewController: UIAlertViewDelegate {
     func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
         if buttonIndex == 1 {
-            let url = URL(string: UIApplicationOpenSettingsURLString)
-            if UIApplication.shared.canOpenURL(url!) {
-                UIApplication.shared.openURL(url!)
-            }
+            JCAppManager.openAppSetter()
         }
     }
 }

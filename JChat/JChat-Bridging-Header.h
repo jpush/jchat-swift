@@ -18,5 +18,6 @@
 #import "JCAddMapViewController.h"
 #import <JMessage/JMessage.h>
 #import "Reachability.h"
+#import "KILabel.h"
 
 #endif /* JChat_Bridging_Header_h */

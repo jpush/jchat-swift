@@ -8,8 +8,8 @@
 
 import UIKit
 
-open class JCMessageTextContentView: UILabel, JCMessageContentViewType {
-    
+open class JCMessageTextContentView: KILabel, JCMessageContentViewType {
+
     public override init(frame: CGRect) {
         super.init(frame: frame)
         _commonInit()
@@ -18,7 +18,7 @@ open class JCMessageTextContentView: UILabel, JCMessageContentViewType {
         super.init(coder: aDecoder)
         _commonInit()
     }
-    
+//
     open override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         return super.canPerformAction(action, withSender: sender)
     }
@@ -28,17 +28,17 @@ open class JCMessageTextContentView: UILabel, JCMessageContentViewType {
             return
         }
         self.attributedText = content.text
-        textColor = UIColor(netHex: 0x0B1816)
+        self.linkDetectionTypes = KILinkTypeOption.URL
+        self.urlLinkTapHandler = { label, url, range in
+            if let Url = URL(string: url) {
+                UIApplication.shared.openURL(Url)
+            }
+        }
     }
     
     private func _commonInit() {
-        self.isUserInteractionEnabled = true
-        let tapGR = UITapGestureRecognizer(target: self, action: #selector(_tapHandler))
-        self.addGestureRecognizer(tapGR)
-        numberOfLines = 0
-    }
-    
-    func _tapHandler(sender:UITapGestureRecognizer) {
-        
+        self.numberOfLines = 0
     }
 }
+
+

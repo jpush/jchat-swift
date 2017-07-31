@@ -7,7 +7,14 @@
 //
 
 import UIKit
-import JMessage
+
+public enum JCFileFormat: Int {
+    case document
+    case video
+    case voice
+    case photo
+    case other
+}
 
 extension String {
     static func getTodayYesterdayString(_ theDate:Date) -> String {
@@ -92,7 +99,7 @@ extension String {
     
     static func conversationIdWithConversation(_ conversation:JMSGConversation) -> String {
         var conversationId = ""
-        if conversation.conversationType == .single {
+        if !conversation.isGroup {
             let user = conversation.target as! JMSGUser
             conversationId = "\(user.username)_0"
         } else {
@@ -317,6 +324,15 @@ extension String {
         return String(describing: py.characters.first!).uppercased()
     }
     
+    public func isLetterOrNum() -> Bool {
+        if let value = UnicodeScalar(self)?.value {
+            if value >= 65 && value <= 90 {
+                return true
+            }
+        }
+        return false
+    }
+    
     static func getRecorderPath() -> String {
         var recorderPath:String? = nil
         let now:Date = Date()
@@ -327,6 +343,26 @@ extension String {
         dateFormatter.dateFormat = "yyyy-MM-dd-hh-mm-ss"
         recorderPath?.append("\(dateFormatter.string(from: now))-MySound.ilbc")
         return recorderPath!
+    }
+    
+    func fileFormat() -> JCFileFormat {
+        let docFormat = ["ppt", "pptx", "doc", "docx", "pdf", "xls", "xlsx", "txt", "wps"]
+        let videoFormat = ["mp4", "mov", "rm", "rmvb", "wmv", "avi", "3gp", "mkv"]
+        let voiceFormat = ["wav", "mp3", "wma", "midi"]
+        let photoFormat = ["jpg", "jpeg", "png", "bmp", "gif"]
+        if docFormat.contains(self) {
+            return .document
+        }
+        if videoFormat.contains(self) {
+            return .video
+        }
+        if voiceFormat.contains(self) {
+            return .voice
+        }
+        if photoFormat.contains(self) {
+            return .photo
+        }
+        return .other
     }
 
 }

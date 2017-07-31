@@ -61,6 +61,7 @@ class JCGroupSettingViewController: UIViewController {
                     return
                 }
                 self.group = group
+                self.isNeedUpdate = true
                 self._updateGroupInfo()
             }
         }
@@ -69,8 +70,10 @@ class JCGroupSettingViewController: UIViewController {
     }
     
     func _updateGroupInfo() {
-        let conv = JMSGConversation.groupConversation(withGroupId: group.gid)
-        group = conv?.target as! JMSGGroup
+        if !isNeedUpdate {
+            let conv = JMSGConversation.groupConversation(withGroupId: group.gid)
+            group = conv?.target as! JMSGGroup
+        }
         if group.memberArray().count != self.memberCount {
             isNeedUpdate = true
             memberCount = group.memberArray().count
@@ -300,12 +303,12 @@ extension JCGroupSettingViewController: JCMineInfoCellDelegate {
                 if group.isNoDisturb == button.isOn {
                     return
                 }
-                MBProgressHUD_JChat.showMessage(message: "修改中", toView: self.view)
+//                MBProgressHUD_JChat.showMessage(message: "修改中", toView: self.view)
                 // 消息免打扰
                 group.setIsNoDisturb(button.isOn, handler: { (result, error) in
                     MBProgressHUD_JChat.hide(forView: self.view, animated: true)
                     if error == nil {
-                        MBProgressHUD_JChat.show(text: "修改成功", view: self.view)
+//                        MBProgressHUD_JChat.show(text: "修改成功", view: self.view)
                     } else {
                         button.isOn = !button.isOn
                         MBProgressHUD_JChat.show(text: "\(String.errorAlert(error! as NSError))", view: self.view)
@@ -315,12 +318,12 @@ extension JCGroupSettingViewController: JCMineInfoCellDelegate {
                 if group.isShieldMessage == button.isOn {
                     return
                 }
-                MBProgressHUD_JChat.showMessage(message: "修改中", toView: self.view)
+//                MBProgressHUD_JChat.showMessage(message: "修改中", toView: self.view)
                 // 消息屏蔽
                 group.setIsShield(button.isOn, handler: { (result, error) in
                     MBProgressHUD_JChat.hide(forView: self.view, animated: true)
                     if error == nil {
-                        MBProgressHUD_JChat.show(text: "修改成功", view: self.view)
+//                        MBProgressHUD_JChat.show(text: "修改成功", view: self.view)
                     } else {
                         button.isOn = !button.isOn
                         MBProgressHUD_JChat.show(text: "\(String.errorAlert(error! as NSError))", view: self.view)

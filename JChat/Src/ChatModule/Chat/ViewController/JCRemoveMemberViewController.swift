@@ -200,17 +200,7 @@ class JCRemoveMemberViewController: UIViewController {
             _classify(users)
             return
         }
-        let searchString = searchString.uppercased()
-        filteredUsersArray = users.filter( { (user: JMSGUser) -> Bool in
-            let notename = user.noteName?.uppercased().contains(searchString) ?? false
-            let nickname = user.nickname?.uppercased().contains(searchString) ?? false
-            let username = user.username.uppercased().contains(searchString)
-            if notename || nickname || username {
-                return true
-            } else {
-                return false
-            }
-        })
+        filteredUsersArray = _JCFilterUsers(users: users, string: searchString)
         _classify(filteredUsersArray)
     }
 }

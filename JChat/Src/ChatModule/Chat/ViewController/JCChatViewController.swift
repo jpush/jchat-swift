@@ -12,7 +12,6 @@ import YHPhotoKit
 import MobileCoreServices
 import AVKit
 import AVFoundation
-import MJRefresh
 
 class JCChatViewController: UIViewController {
     
@@ -52,12 +51,12 @@ class JCChatViewController: UIViewController {
             draft = nil
         }
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameChanged(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
@@ -84,6 +83,8 @@ class JCChatViewController: UIViewController {
     fileprivate weak var _inputItem: SAIInputItem?
     var chatViewLayout: JCChatViewLayout = .init()
     var chatView: JCChatView!
+    fileprivate lazy var reminds: [JCRemind] = []
+    fileprivate lazy var documentInteractionController = UIDocumentInteractionController()
     
     fileprivate lazy var imagePicker: UIImagePickerController = {
         var picker = UIImagePickerController()
@@ -103,7 +104,16 @@ class JCChatViewController: UIViewController {
         return picker
     }()
     
-    fileprivate lazy var _emoticonGroups: [JCCEmoticonGroup] = []
+    fileprivate lazy var _emoticonGroups: [JCCEmoticonGroup] = {
+        var groups: [JCCEmoticonGroup] = []
+        if let group = JCCEmoticonGroup(identifier: "com.apple.emoji") {
+            groups.append(group)
+        }
+        if let group = JCCEmoticonGroup(identifier: "cn.jchat.guangguang") {
+            groups.append(group)
+        }
+        return groups
+    }()
     fileprivate lazy var _emoticonSendBtn: UIButton = {
         var button = UIButton()
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
@@ -142,44 +152,48 @@ class JCChatViewController: UIViewController {
     fileprivate let currentUser = JMSGUser.myInfo()
     fileprivate var messagePage = 0
     fileprivate var currentMessage: JCMessageType!
-    fileprivate var currentIndexPath: IndexPath?
     fileprivate var maxTime = 0
     fileprivate var minTime = 0
     fileprivate var isFristLaunch = true
     fileprivate var recordingHub: JChatRecordingView!
     fileprivate lazy var recordHelper: JChatRecordVoiceHelper = {
         let recordHelper = JChatRecordVoiceHelper()
+        recordHelper.delegate = self
         return recordHelper
     }()
     
+    fileprivate lazy var leftButton = UIButton(frame: CGRect(x: 0, y: 0, width: 90, height: 65 / 3))
+    
     private func _init() {
-        
-        if UserDefaults.standard.object(forKey: kLastUserAvator) != nil {
-            let data = UserDefaults.standard.object(forKey: kLastUserAvator) as! Data
-            let avatorData = NSKeyedUnarchiver.unarchiveObject(with: data) as! Data
-            myAvator = UIImage(data: avatorData)
-        }
-        
-        isGroup = conversation.conversationType == .group ?  true : false
+        myAvator = UIImage.getMyAvator()
+        isGroup = conversation.isGroup
         _updateTitle()
         view.backgroundColor = .white
         JMessage.add(self, with: conversation)
         _setupNavigation()
-        recordHelper.delegate = self
         
-        if let group = JCCEmoticonGroup(identifier: "com.apple.emoji") {
-            _emoticonGroups.append(group)
-        }
-        if let group = JCCEmoticonGroup(identifier: "cn.jchat.guangguang") {
-            _emoticonGroups.append(group)
-        }
         _loadMessage(messagePage)
         let tap = UITapGestureRecognizer(target: self, action: #selector(_tapView))
+        tap.delegate = self
         chatView.addGestureRecognizer(tap)
         view.addSubview(chatView)
         
+        _updateBadge()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameChanged(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(_removeAllMessage), name: NSNotification.Name(rawValue: kDeleteAllMessage), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(_updateFileMessage(_:)), name: NSNotification.Name(rawValue: kUpdateFileMessage), object: nil)
+    }
+    
+    func _updateFileMessage(_ notification: Notification) {
+        let userInfo = notification.userInfo
+        let msgId = userInfo?[kUpdateFileMessage] as! String
+        let message = conversation.message(withMessageId: msgId)!
+        let content = message.content as! JMSGFileContent
+        let url = URL(fileURLWithPath: content.originMediaLocalPath)
+        let data = try! Data(contentsOf: url)
+        updateFileMessage(message, data: data)
     }
     
     private func _updateTitle() {
@@ -192,7 +206,7 @@ class JCChatViewController: UIViewController {
     }
     
     func _removeAllMessage() {
-        self.messages.removeAll()
+        messages.removeAll()
         chatView.removeAll()
     }
     
@@ -210,9 +224,23 @@ class JCChatViewController: UIViewController {
             navButton.setImage(UIImage.loadImage("com_icon_user_w"), for: .normal)
             navButton.addTarget(self, action: #selector(_getSingleInfo), for: .touchUpInside)
         }
-    
         let item1 = UIBarButtonItem(customView: navButton)
-        self.navigationItem.rightBarButtonItems =  [item1]
+        navigationItem.rightBarButtonItems =  [item1]
+        
+        leftButton.setImage(UIImage.loadImage("com_icon_back"), for: .normal)
+        leftButton.setImage(UIImage.loadImage("com_icon_back"), for: .highlighted)
+        leftButton.addTarget(self, action: #selector(_back), for: .touchUpInside)
+        leftButton.setTitle("会话", for: .normal)
+        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        leftButton.contentHorizontalAlignment = .left
+        let item2 = UIBarButtonItem(customView: leftButton)
+        navigationItem.leftBarButtonItems =  [item2]
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+    
+    func _back() {
+        navigationController?.popViewController(animated: true)
     }
     
     fileprivate func _loadMessage(_ page: Int) {
@@ -236,16 +264,8 @@ class JCChatViewController: UIViewController {
             self.chatView.insert(contentsOf: msgs, at: 0)
         } else {
             self.chatView.append(contentsOf: msgs)
-//            self.scrollToLast(animated: false)
         }
         self.messages.insert(contentsOf: msgs, at: 0)
-    }
-    
-    fileprivate func scrollToLast(animated: Bool) {
-        let count = self.chatView._chatContainerView.numberOfItems(inSection: 0)
-        if count > 0 {
-            self.chatView._chatContainerView.scrollToItem(at: IndexPath(row: count - 1, section: 0), at: .bottom, animated: animated)
-        }
     }
     
     private func isNeedInsertTimeLine(_ time: Int) -> Bool {
@@ -264,32 +284,20 @@ class JCChatViewController: UIViewController {
         }
         return false
     }
-
+    
+    // MARK: - parse message
     fileprivate func _parseMessage(_ message: JMSGMessage) -> JCMessage? {
         var msg: JCMessage!
         let fromUser = message.fromUser
         let currentUser = JMSGUser.myInfo()
         let isCurrent = fromUser.isEqual(to: currentUser)
+        let state = message.state
         
-        var state: JCMessageState!
-        switch message.status {
-        case .sendFailed:
-            state = .sendError
-        case .sending:
-            state = .sending
-        case .sendUploadFailed:
-            state = .sendError
-        default:
-            state = .sendSucceed
-        }
-    
         switch(message.contentType) {
         case .text:
             let content = message.content as! JMSGTextContent
             msg = JCMessage(content: JCMessageTextContent(text: content.text))
-            msg.options.alignment = isCurrent ? .right : .left
         case .image:
-            
             let model = JChatMessageModel()
             model.setChatModel(message, conversation: self.conversation)
             imageMessageArr.add(model)
@@ -297,15 +305,8 @@ class JCChatViewController: UIViewController {
             let content = message.content as! JMSGImageContent
             let imageContent = JCMessageImageContent()
             imageContent.imageSize = content.imageSize
-            if let extras = content.extras {
-                if extras.values.contains(where: { (value) -> Bool in
-                    if let value = value as? String {
-                        return value == kLargeEmoticon
-                    }
-                    return false
-                }) {
-                    imageContent.imageSize = CGSize(width: content.imageSize.width / 3, height: content.imageSize.height / 3)
-                }
+            if message.isLargeEmoticon {
+                imageContent.imageSize = CGSize(width: content.imageSize.width / 3, height: content.imageSize.height / 3)
             }
             
             if state == .sending {
@@ -315,7 +316,6 @@ class JCChatViewController: UIViewController {
             }
             imageContent.delegate = self
             msg = JCMessage(content: imageContent)
-            msg.options.alignment = isCurrent ? .right : .left
             content.thumbImageData({ (data, id, error) in
                 if data != nil {
                     imageContent.image = UIImage(data: data!)
@@ -326,7 +326,6 @@ class JCChatViewController: UIViewController {
             let content = message.content as! JMSGEventContent
             let noticeContent = JCMessageNoticeContent(text: content.showEventNotification())
             msg = JCMessage(content: noticeContent)
-            msg.options.alignment = .center
             
         case .voice:
             let content = message.content as! JMSGVoiceContent
@@ -338,21 +337,38 @@ class JCChatViewController: UIViewController {
                     voidContent.data = data
                 }
             })
-            msg.options.alignment = isCurrent ? .right : .left
         case .file:
             let content = message.content as! JMSGFileContent
-            let videoContent = JCMessageVideoContent()
-            videoContent.delegate = self
-            msg = JCMessage(content: videoContent)
             weak var weakSelf = self
-            content.fileData({ (data, id, error) in
-                if data != nil {
-                    videoContent.data = data
-                    weakSelf?.updateVideoMessage(message, data: data!)
+            if message.isShortVideo {
+                let videoContent = JCMessageVideoContent()
+                videoContent.delegate = self
+                msg = JCMessage(content: videoContent)
+                content.fileData({ (data, id, error) in
+                    if data != nil {
+                        videoContent.data = data
+                        weakSelf?.updateFileMessage(message, data: data!)
+                    }
+                })
+                videoContent.fileContent = content
+            } else {
+                let fileContent = JCMessageFileContent()
+                fileContent.delegate = self
+                fileContent.fileName = content.fileName
+                fileContent.fileType = message.fileType
+                fileContent.fileSize = message.fileSize
+                // 为什么要判断文件是否存在呢，这个是由于sdk bug导致的，sdk修复后可以去除
+                if !content.originMediaLocalPath.isEmpty && JCFileManager.fileExists(atPath: content.originMediaLocalPath) {
+                    content.fileData({ (data, id, error) in
+                        if data != nil {
+                            fileContent.data = data
+                            weakSelf?.updateFileMessage(message, data: data!)
+                        }
+                    })
                 }
-            })
-            videoContent.fileContent = content
-            msg.options.alignment = isCurrent ? .right : .left
+                msg = JCMessage(content: fileContent)
+            }
+            
         case .location:
             let content = message.content as! JMSGLocationContent
             let locationContent = JCMessageLocationContent()
@@ -361,12 +377,20 @@ class JCChatViewController: UIViewController {
             locationContent.lon = content.longitude.doubleValue
             locationContent.delegate = self
             msg = JCMessage(content: locationContent)
-            msg.options.alignment = isCurrent ? .right : .left
+            
+        case .prompt:
+            let content = message.content as! JMSGPromptContent
+            let noticeContent = JCMessageNoticeContent(text: content.promptText)
+            msg = JCMessage(content: noticeContent)
+            
         default:
             msg = JCMessage(content: JCMessageNoticeContent.unsupport)
         }
-        if isGroup && msg.options.alignment != .center {
-            msg.options.showsCard = !isCurrent
+        if msg.options.alignment != .center {
+            msg.options.alignment = isCurrent ? .right : .left
+            if isGroup {
+                msg.options.showsCard = !isCurrent
+            }
         }
         msg.msgId = message.msgId
         msg.options.state = state
@@ -378,32 +402,32 @@ class JCChatViewController: UIViewController {
         return msg
     }
     
+    
+    // MARK: - send message
     func send(_ message: JCMessage, _ jmessage: JMSGMessage) {
-        
         if isNeedInsertTimeLine(jmessage.timestamp.intValue) {
             let timeContent = JCMessageTimeLineContent(date: Date(timeIntervalSince1970: TimeInterval(jmessage.timestamp.intValue / 1000)))
             let m = JCMessage(content: timeContent)
             messages.append(m)
             chatView.append(m)
         }
-        
+        message.msgId = jmessage.msgId
         message.name = currentUser.displayName()
         message.senderAvator = myAvator
         message.sender = currentUser
         message.options.alignment = .right
+        message.options.state = .sending
+        
         chatView.append(message)
-        self.messages.append(message)
-        self.scrollToLast(animated: false)
+        messages.append(message)
+        chatView.scrollToLast(animated: false)
+        conversation.send(jmessage)
     }
     
     func send(forText text: NSAttributedString) {
         let message = JCMessage(content: JCMessageTextContent(attributedText: text))
-        
         let content = JMSGTextContent(text: text.string)
-        let msg = _createMessage(content)
-        self.conversation.send(msg)
-        message.msgId = msg.msgId
-        message.options.state = .sending
+        let msg = JMSGMessage.createMessage(conversation, content, reminds)
         send(message, msg)
     }
     
@@ -417,30 +441,22 @@ class JCChatViewController: UIViewController {
         let message = JCMessage(content: messageContent)
         
         let content = JMSGImageContent(imageData: UIImagePNGRepresentation(image)!)
-        content?.addStringExtra(kLargeEmoticon, forKey: kLargeEmoticon)
-        let msg = _createMessage(content!)
-        
-        self.conversation.send(msg)
-        message.msgId = msg.msgId
-        message.options.state = .sending
+        let msg = JMSGMessage.createMessage(conversation, content!, nil)
+        msg.isLargeEmoticon = true
         message.options.showsTips = true
         send(message, msg)
     }
     
     func send(forImage image: UIImage) {
         let content = JMSGImageContent(imageData: UIImagePNGRepresentation(image)!)
-        let message = _createMessage(content!)
-        self.conversation.send(message)
+        let message = JMSGMessage.createMessage(conversation, content!, nil)
         let imageContent = JCMessageImageContent()
         imageContent.delegate = self
         imageContent.image = image
         content?.uploadHandler = {  (percent:Float, msgId:(String?)) -> Void in
             imageContent.upload?(percent)
         }
-        
         let msg = JCMessage(content: imageContent)
-        msg.msgId = message.msgId
-        msg.options.state = .sending
         send(msg, message)
     }
     
@@ -450,12 +466,9 @@ class JCChatViewController: UIViewController {
         voiceContent.duration = duration
         
         let content = JMSGVoiceContent(voiceData: voiceData, voiceDuration: NSNumber(value: duration))
-        let message = _createMessage(content)
-        conversation.send(message)
+        let message = JMSGMessage.createMessage(conversation, content, nil)
         
         let msg = JCMessage(content: voiceContent)
-        msg.msgId = message.msgId
-        msg.options.state = .sending
         send(msg, message)
     }
     
@@ -464,13 +477,10 @@ class JCChatViewController: UIViewController {
         videoContent.data = fileData
         videoContent.delegate = self
         
-        let content = JMSGFileContent(fileData: fileData, fileName: "短视频")
-        let message = _createMessage(content)
-        conversation.send(message)
-        
+        let content = JMSGFileContent(fileData: fileData, fileName: "小视频")
+        let message = JMSGMessage.createMessage(conversation, content, nil)
+        message.isShortVideo = true
         let msg = JCMessage(content: videoContent)
-        msg.msgId = message.msgId
-        msg.options.state = .sending
         send(msg, message)
     }
     
@@ -484,39 +494,26 @@ class JCChatViewController: UIViewController {
         
         let content = JMSGLocationContent(latitude: lat, longitude: lon, scale: NSNumber(value: 1), address: address)
         
-        let message = _createMessage(content)
-        self.conversation.send(message)
+        let message = JMSGMessage.createMessage(conversation, content, nil)
         let msg = JCMessage(content: locationContent)
-        msg.msgId = message.msgId
-        msg.options.state = .sending
         send(msg, message)
     }
     
-    func _createMessage(_ content: JMSGAbstractContent) -> JMSGMessage {
-        let message: JMSGMessage!
-        if isGroup {
-            let group = self.conversation.target as! JMSGGroup
-            message = JMSGMessage.createGroupMessage(with: content, groupId: group.gid)
-        } else {
-            message = JMSGMessage.createSingleMessage(with: content, username: currentUser.username)
-        }
-        
-        return message
-    }
-    
     func keyboardFrameChanged(_ notification: Notification) {
-
+        
         let dic = NSDictionary(dictionary: (notification as NSNotification).userInfo!)
         let keyboardValue = dic.object(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
         let bottomDistance = UIScreen.main.bounds.size.height - keyboardValue.cgRectValue.origin.y
         let duration = Double(dic.object(forKey: UIKeyboardAnimationDurationUserInfoKey) as! NSNumber)
- 
+        
         UIView.animate(withDuration: duration, animations: {
         }) { (finish) in
             if (bottomDistance == 0 || bottomDistance == self._toolbar.height) && !self.isFristLaunch {
                 return
             }
-            self.scrollToLast(animated: false)
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()) {
+                self.chatView.scrollToLast(animated: false)
+            }
             self.isFristLaunch = false
         }
     }
@@ -531,125 +528,137 @@ class JCChatViewController: UIViewController {
     
     func _getSingleInfo() {
         let vc = JCSingleSettingViewController()
-        vc.user = self.conversation.target as! JMSGUser
-        self.navigationController?.pushViewController(vc, animated: true)
+        vc.user = conversation.target as! JMSGUser
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func _getGroupInfo() {
         let vc = JCGroupSettingViewController()
-        let group = self.conversation.target as! JMSGGroup
+        let group = conversation.target as! JMSGGroup
         vc.group = group
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
 //MARK: - JMSGMessage Delegate
 extension JCChatViewController: JMessageDelegate {
     
-    fileprivate func updateVideoMessage(_ message: JMSGMessage, data: Data) {
-        if messages.count <= 0 {
-            return
+    fileprivate func updateFileMessage(_ message: JMSGMessage, data: Data) {
+        let index = messages.index { (m) -> Bool in
+            return m.msgId == message.msgId
         }
-        for index in 0..<self.messages.count {
-            let msg = self.messages[self.messages.count - index - 1]
-            if msg.msgId == message.msgId {
+        if let index = index {
+            let msg = messages[index]
+            if message.isShortVideo {
                 let videoContent = msg.content as! JCMessageVideoContent
                 videoContent.data = data
+                videoContent.delegate = self
                 msg.content = videoContent
-                msg.updateSizeIfNeeded = true
-                self.chatView.update(msg, at: self.messages.count - index - 1)
-                msg.updateSizeIfNeeded = false
-                self.chatView.update(msg, at: self.messages.count - index - 1)
-                self.messages[self.messages.count - index - 1] = msg
-                break
+            } else {
+                let fileContent = msg.content as! JCMessageFileContent
+                fileContent.data = data
+                fileContent.delegate = self
+                msg.content = fileContent
+            }
+            msg.updateSizeIfNeeded = true
+            chatView.update(msg, at: index)
+            msg.updateSizeIfNeeded = false
+            chatView.update(msg, at: index)
+            messages[index] = msg
+        }
+    }
+    
+    func _updateBadge() {
+        JMSGConversation.allConversations { (result, error) in
+            guard let conversations = result as? [JMSGConversation] else {
+                return
+            }
+            let count = getAllConversation(conversations)
+            if count == 0 {
+                self.leftButton.setTitle("会话", for: .normal)
+            } else {
+                self.leftButton.setTitle("会话(\(count))", for: .normal)
             }
         }
     }
     
     func onReceive(_ message: JMSGMessage!, error: Error!) {
-        if error == nil {
-            let message = self._parseMessage(message)
-
-            // TODO: 这个判断是sdk bug导致的，暂时只能这么改
-            if self.messages.contains(where: { (m) -> Bool in
-                return m.msgId == message?.msgId
-            }) {
-                let indexs = chatView._chatContainerView.indexPathsForVisibleItems
-                for index in indexs {
-                    var m = self.messages[index.row]
-                    if !m.msgId.isEmpty {
-                        m = self._parseMessage(self.conversation.message(withMessageId: m.msgId)!)!
-                        self.chatView.update(m, at: index.row)
-                    }
-                }
-                return
-            }
-            
-            if message != nil {
-                self.messages.append(message!)
-                chatView.append(message!)
-            }
-            self.conversation.clearUnreadCount()
-            
-            if !self.chatView._chatContainerView.isDragging &&
-                !self.chatView._chatContainerView.isDecelerating {
-                self.scrollToLast(animated: true)
-            }
+        if error != nil {
+            return
         }
+        let message = _parseMessage(message)
+        // TODO: 这个判断是sdk bug导致的，暂时只能这么改
+        if self.messages.contains(where: { (m) -> Bool in
+            return m.msgId == message?.msgId
+        }) {
+            let indexs = chatView.indexPathsForVisibleItems
+            for index in indexs {
+                var m = self.messages[index.row]
+                if !m.msgId.isEmpty {
+                    m = self._parseMessage(self.conversation.message(withMessageId: m.msgId)!)!
+                    self.chatView.update(m, at: index.row)
+                }
+            }
+            return
+        }
+        
+        if let message = message {
+            self.messages.append(message)
+            chatView.append(message)
+        }
+        self.conversation.clearUnreadCount()
+        if !self.chatView.isRoll {
+            chatView.scrollToLast(animated: true)
+        }
+        _updateBadge()
     }
     
     func onSendMessageResponse(_ message: JMSGMessage!, error: Error!) {
-        print(message)
-        if self.messages.count > 0 {
-            for index in 0..<self.messages.count {
-                let msg = self.messages[self.messages.count - index - 1]
-                if msg.msgId == message.msgId {
-                    var state: JCMessageState!
-                    switch message.status {
-                    case .sendFailed:
-                        state = .sendError
-                    case .sending:
-                        state = .sending
-                    case .sendUploadFailed:
-                        state = .sendError
-                    default:
-                        state = .sendSucceed
-                    }
-                    msg.options.state = state
-                    self.messages[self.messages.count - index - 1] = msg
-                    self.chatView.update(msg, at: self.messages.count - index - 1)
-                    break
-                }
+        if let error = error as NSError? {
+            if error.code == 803009 {
+                MBProgressHUD_JChat.show(text: "发送失败，此次消息包含敏感词", view: view)
+            }
+        }
+        let index = messages.index { (m) -> Bool in
+            return m.msgId == message.msgId
+        }
+        if let index = index {
+            let msg = self.messages[index]
+            msg.options.state = message.state
+            self.messages[index] = msg
+            self.chatView.update(msg, at: index)
+        }
+    }
+    
+    func onReceive(_ retractEvent: JMSGMessageRetractEvent!) {
+        let index = messages.index { (m) -> Bool in
+            return m.msgId == retractEvent.retractMessage.msgId
+        }
+        if let index = index {
+            if let msg = _parseMessage(retractEvent.retractMessage) {
+                self.messages[index] = msg
+                self.chatView.update(msg, at: index)
             }
         }
     }
     
-    func onReceiveMessageDownloadFailed(_ message: JMSGMessage!) {
-        
-    }
-    
-//    func onSyncRoamingMessageConversation(_ conversation: JMSGConversation!) {
-//        
-//    }
-//    
     func onSyncOfflineMessageConversation(_ conversation: JMSGConversation!, offlineMessages: [JMSGMessage]!) {
         let messages = offlineMessages.sorted(by: { (m1, m2) -> Bool in
             return m1.timestamp.intValue < m2.timestamp.intValue
         })
         for item in messages {
             let message = self._parseMessage(item)
-            if message != nil {
-                self.messages.append(message!)
-                chatView.append(message!)
+            if let message = message {
+                self.messages.append(message)
+                chatView.append(message)
             }
             self.conversation.clearUnreadCount()
-            if !self.chatView._chatContainerView.isDragging &&
-                !self.chatView._chatContainerView.isDecelerating {
-                self.scrollToLast(animated: true)
+            if !chatView.isRoll {
+                chatView.scrollToLast(animated: true)
             }
         }
+        _updateBadge()
     }
-
 }
 
 // MARK: - JCEmoticonInputViewDataSource & JCEmoticonInputViewDelegate
@@ -689,7 +698,7 @@ extension JCChatViewController: JCEmoticonInputViewDataSource, JCEmoticonInputVi
             _toolbar.deleteBackward()
             return
         }
-
+        
         if let emoticon = item as? JCCEmoticonLarge {
             send(forLargeEmoticon: emoticon)
             return
@@ -712,7 +721,7 @@ extension JCChatViewController: JCEmoticonInputViewDataSource, JCEmoticonInputVi
         return false
     }
     open func emoticon(_ emoticon: JCEmoticonInputView, didPreviewFor item: JCEmoticon?) {
-
+        
     }
 }
 
@@ -732,11 +741,9 @@ extension JCChatViewController: SAIToolboxInputViewDataSource, SAIToolboxInputVi
     open func toolbox(_ toolbox: SAIToolboxInputView, numberOfColumnsForSectionAt index: Int) -> Int {
         return 4
     }
-    
     open func toolbox(_ toolbox: SAIToolboxInputView, insetForSectionAt index: Int) -> UIEdgeInsets {
         return UIEdgeInsetsMake(12, 10, 12, 10)
     }
-    
     open func toolbox(_ toolbox: SAIToolboxInputView, shouldSelectFor item: SAIToolboxItem) -> Bool {
         return true
     }
@@ -754,9 +761,7 @@ extension JCChatViewController: SAIToolboxInputViewDataSource, SAIToolboxInputVi
                 PHPhotoLibrary.requestAuthorization({ (status) in
                     DispatchQueue.main.sync {
                         if status != .authorized {
-                            let alertView = UIAlertView(title: "无权限访问照片", message: "请在设备的设置-极光 IM中允许访问照片。", delegate: self, cancelButtonTitle: "好的", otherButtonTitles: "去设置")
-                            alertView.tag = 10001
-                            alertView.show()
+                            JCAlertView.bulid().setTitle("无权限访问照片").setMessage("请在设备的设置-极光 IM中允许访问照片。").setDelegate(self).addCancelButton("好的").addButton("去设置").setTag(10001).show()
                         } else {
                             self._pushToSelectPhotos()
                         }
@@ -795,7 +800,7 @@ extension JCChatViewController: YHPhotoPickerViewControllerDelegate, UINavigatio
     func selectedPhotoBeyondLimit(_ count: Int32, currentView view: UIView!) {
         MBProgressHUD_JChat.show(text: "最多选择\(count)张图片", view: nil)
     }
-
+    
     func yhPhotoPickerViewController(_ PhotoPickerViewController: YHSelectPhotoViewController!, selectedPhotos photos: [Any]!) {
         for item in photos {
             guard let photo = item as? UIImage else {
@@ -816,7 +821,6 @@ extension JCChatViewController: YHPhotoPickerViewControllerDelegate, UINavigatio
         if image != nil {
             send(forImage: image!)
         }
-        
         let videoUrl = info[UIImagePickerControllerMediaURL] as! URL?
         if videoUrl != nil {
             let data = try! Data(contentsOf: videoUrl!)
@@ -827,8 +831,8 @@ extension JCChatViewController: YHPhotoPickerViewControllerDelegate, UINavigatio
 
 extension JCChatViewController: JCMessageDelegate {
     func message(videoData data: Data?) {
-        if data != nil {
-            JCVideoManager.playVideo(data: data!, currentViewController: self)
+        if let data = data {
+            JCVideoManager.playVideo(data: data, currentViewController: self)
         }
     }
     
@@ -842,19 +846,54 @@ extension JCChatViewController: JCMessageDelegate {
     
     func message(image: UIImage?, indexPath: IndexPath?) {
         let browserImageVC = JChatImageBrowserViewController()
-//        let tmpImageArr = self.imageMessageArr
+        //        let tmpImageArr = self.imageMessageArr
         browserImageVC.imageArr = [image!]
         browserImageVC.imgCurrentIndex = 0
-        self.present(browserImageVC, animated: true) {
-            
+        self.present(browserImageVC, animated: true) {}
+    }
+    
+    func message(message: JCMessageType, fileData data: Data?, fileName: String?, fileType: String?) {
+        if data == nil {
+            let vc = JCFileDownloadViewController()
+            vc.title = fileName
+            let msg = conversation.message(withMessageId: message.msgId)
+            vc.fileSize = msg?.fileSize
+            vc.message = msg
+            navigationController?.pushViewController(vc, animated: true)
+        } else {
+            guard let fileType = fileType else {
+                return
+            }
+            let msg = conversation.message(withMessageId: message.msgId)!
+            let content = msg.content as! JMSGFileContent
+            switch fileType.fileFormat() {
+            case .document:
+                let vc = JCDocumentViewController()
+                vc.title = fileName
+                vc.fileData = data
+                vc.filePath = content.originMediaLocalPath
+                vc.fileType = fileType
+                self.navigationController?.pushViewController(vc, animated: true)
+            case .video, .voice:
+                let url = URL(fileURLWithPath: content.originMediaLocalPath)
+                try! JCVideoManager.playVideo(data: Data(contentsOf: url), fileType, currentViewController: self)
+            case .photo:
+                let browserImageVC = JChatImageBrowserViewController()
+                let image = UIImage(contentsOfFile: content.originMediaLocalPath)
+                browserImageVC.imageArr = [image!]
+                browserImageVC.imgCurrentIndex = 0
+                self.present(browserImageVC, animated: true) {}
+            default:
+                let url = URL(fileURLWithPath: content.originMediaLocalPath)
+                documentInteractionController.url = url
+                documentInteractionController.presentOptionsMenu(from: .zero, in: self.view, animated: true)
+            }
         }
     }
     
     func clickTips(message: JCMessageType, indexPath: IndexPath?) {
         self.currentMessage = message
-        self.currentIndexPath = indexPath
         let alertView = UIAlertView(title: "重新发送", message: "是否重新发送该消息？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "发送")
-        alertView.resignFirstResponder()
         alertView.show()
     }
     
@@ -879,6 +918,41 @@ extension JCChatViewController: JCChatViewDelegate {
     
     func deleteMessage(message: JCMessageType) {
         conversation.deleteMessage(withMessageId: message.msgId)
+        if let index = messages.index(where: { (m) -> Bool in
+            m.msgId == message.msgId
+        }) {
+            messages.remove(at: index)
+        }
+    }
+    
+    //    func forwardMessage(message: JCMessageType) {
+    //        if let message = conversation.message(withMessageId: message.msgId) {
+    //            let vc = JCForwardViewController()
+    //            vc.message = message
+    //            let nav = JCNavigationController(rootViewController: vc)
+    //            self.present(nav, animated: true)
+    //        }
+    //    }
+    
+    func withdrawMessage(message: JCMessageType) {
+        guard let message = conversation.message(withMessageId: message.msgId) else {
+            return
+        }
+        JMSGMessage.retractMessage(message, completionHandler: { (result, error) in
+            if error == nil {
+                let index = self.messages.index { (m) -> Bool in
+                    return m.msgId == message.msgId
+                }
+                if let index = index {
+                    if let msg = self._parseMessage(self.conversation.message(withMessageId: message.msgId)!) {
+                        self.messages[index] = msg
+                        self.chatView.update(msg, at: index)
+                    }
+                }
+            } else {
+                MBProgressHUD_JChat.show(text: "消息发送超过3分钟，不能撤回", view: self.view)
+            }
+        })
     }
 }
 
@@ -886,10 +960,7 @@ extension JCChatViewController: UIAlertViewDelegate {
     func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
         if alertView.tag == 10001 {
             if buttonIndex == 1 {
-                let url = URL(string: UIApplicationOpenSettingsURLString)
-                if UIApplication.shared.canOpenURL(url!) {
-                    UIApplication.shared.openURL(url!)
-                }
+                JCAppManager.openAppSetter()
             }
             return
         }
@@ -900,12 +971,12 @@ extension JCChatViewController: UIAlertViewDelegate {
             }) {
                 self.messages.remove(at: index)
                 self.chatView.remove(at: index)
-                let msg = self.conversation.message(withMessageId: currentMessage.msgId)
+                let msg = conversation.message(withMessageId: currentMessage.msgId)
                 currentMessage.options.state = .sending
-                self.messages.append(currentMessage as! JCMessage)
-                self.chatView.append(currentMessage)
-                self.conversation.send(msg!)
-                self.scrollToLast(animated: true)
+                messages.append(currentMessage as! JCMessage)
+                chatView.append(currentMessage)
+                conversation.send(msg!)
+                chatView.scrollToLast(animated: true)
             }
         default:
             break
@@ -925,7 +996,7 @@ extension JCChatViewController: SAIInputBarDelegate, SAIInputBarDisplayable {
     open override var canBecomeFirstResponder: Bool {
         return true
     }
-
+    
     open func inputView(with item: SAIInputItem) -> UIView? {
         if let view = _inputViews[item.identifier] {
             return view
@@ -949,11 +1020,10 @@ extension JCChatViewController: SAIInputBarDelegate, SAIInputBarDisplayable {
             return nil
         }
     }
- 
+    
     open func inputViewContentSize(_ inputView: UIView) -> CGSize {
         return CGSize(width: view.frame.width, height: 216)
     }
-    
     
     func inputBar(_ inputBar: SAIInputBar, shouldDeselectFor item: SAIInputItem) -> Bool {
         return true
@@ -968,7 +1038,6 @@ extension JCChatViewController: SAIInputBarDelegate, SAIInputBarDisplayable {
         return true
     }
     open func inputBar(_ inputBar: SAIInputBar, didSelectFor item: SAIInputItem) {
-        
         _inputItem = item
         
         if item.identifier == "kb:audio" {
@@ -979,7 +1048,6 @@ extension JCChatViewController: SAIInputBarDelegate, SAIInputBarDisplayable {
             inputBar.setInputMode(.selecting(kb), animated: true)
         }
     }
-    
     open func inputBar(didChangeMode inputBar: SAIInputBar) {
         if _inputItem?.identifier == "kb:audio" {
             return
@@ -1002,6 +1070,114 @@ extension JCChatViewController: SAIInputBarDelegate, SAIInputBarDisplayable {
         return false
     }
     
+    func inputBar(_ inputBar: SAIInputBar, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        let currentIndex = range.location
+        if !isGroup {
+            return true
+        }
+        if string == "@" {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()) {
+                let vc = JCRemindListViewController()
+                vc.finish = { (user, isAtAll, length) in
+                    let text = inputBar.text!
+                    var displayName = "所有成员"
+                    if let user = user {
+                        displayName = user.displayName()
+                    }
+                    let remind = JCRemind(user, currentIndex, currentIndex + 2 + displayName.length, displayName.length + 2, isAtAll)
+                    if text.length == currentIndex + 1 {
+                        inputBar.text = text + displayName + " "
+                    } else {
+                        let index1 = text.index(text.endIndex, offsetBy: currentIndex - text.length + 1)
+                        let prefix = text.substring(with: Range<String.Index>(text.startIndex..<index1))
+                        let index2 = text.index(text.startIndex, offsetBy: currentIndex + 1)
+                        let suffix = text.substring(with: Range<String.Index>(index2..<text.endIndex))
+                        inputBar.text = prefix + displayName + " " + suffix
+                        let _ = self.updateRemids(inputBar, "@" + displayName + " ", range, currentIndex)
+                    }
+                    self.reminds.append(remind)
+                    self.reminds.sort(by: { (r1, r2) -> Bool in
+                        return r1.startIndex < r2.startIndex
+                    })
+                }
+                vc.group = self.conversation.target as! JMSGGroup
+                let nav = JCNavigationController(rootViewController: vc)
+                self.present(nav, animated: true, completion: {
+                    
+                })
+            }
+        } else {
+            return updateRemids(inputBar, string, range, currentIndex)
+        }
+        return true
+    }
+    
+    func updateRemids(_ inputBar: SAIInputBar, _ string: String, _ range: NSRange, _ currentIndex: Int) -> Bool {
+        for index in 0..<reminds.count {
+            let remind = reminds[index]
+            let length = remind.length
+            let startIndex = remind.startIndex
+            let endIndex = remind.endIndex
+            // Delete
+            if currentIndex == endIndex - 1 && string.length == 0 {
+                for _ in 0..<length {
+                    inputBar.deleteBackward()
+                }
+                // Move Other Index
+                for subIndex in (index + 1)..<reminds.count {
+                    let subTemp = reminds[subIndex]
+                    subTemp.startIndex -= length
+                    subTemp.endIndex -= length
+                }
+                reminds.remove(at: index)
+                return false;
+            } else if currentIndex > startIndex && currentIndex < endIndex {
+                // Delete Content
+                if string.length == 0 {
+                    for subIndex in (index + 1)..<reminds.count {
+                        let subTemp = reminds[subIndex]
+                        subTemp.startIndex -= 1
+                        subTemp.endIndex -= 1
+                    }
+                    reminds.remove(at: index)
+                    return true
+                }
+                // Add Content
+                else {
+                    for subIndex in (index + 1)..<reminds.count {
+                        let subTemp = reminds[subIndex]
+                        subTemp.startIndex += string.length
+                        subTemp.endIndex += string.length
+                    }
+                    reminds.remove(at: index)
+                    return true
+                }
+            }
+        }
+        for index in 0..<reminds.count {
+            let tempDic = reminds[index]
+            let startIndex = tempDic.startIndex
+            if currentIndex <= startIndex {
+                if string.characters.count == 0 {
+                    for subIndex in index..<reminds.count {
+                        let subTemp = reminds[subIndex]
+                        subTemp.startIndex -= 1
+                        subTemp.endIndex -= 1
+                    }
+                    return true
+                } else {
+                    for subIndex in index..<reminds.count {
+                        let subTemp = reminds[subIndex]
+                        subTemp.startIndex += string.length
+                        subTemp.endIndex += string.length
+                    }
+                    return true
+                }
+            }
+        }
+        return true
+    }
+    
     func inputBar(touchDown recordButton: UIButton, inputBar: SAIInputBar) {
         if self.recordingHub != nil {
             self.recordingHub.removeFromSuperview()
@@ -1015,7 +1191,7 @@ extension JCChatViewController: SAIInputBarDelegate, SAIInputBarDisplayable {
     }
     
     func inputBar(dragInside recordButton: UIButton, inputBar: SAIInputBar) {
-         self.recordingHub.pauseRecord()
+        self.recordingHub.pauseRecord()
     }
     
     func inputBar(dragOutside recordButton: UIButton, inputBar: SAIInputBar) {
@@ -1055,5 +1231,29 @@ extension JCChatViewController: JChatRecordVoiceHelperDelegate {
         self.recordingHub.removeFromSuperview()
         let data = try! Data(contentsOf: URL(fileURLWithPath: self.recordHelper.recordPath!))
         send(voiceData: data, duration: Double(self.recordHelper.recordDuration!)!)
+    }
+}
+
+extension JCChatViewController: UIGestureRecognizerDelegate {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        guard let view = touch.view else {
+            return true
+        }
+        if view.isKind(of: JCMessageTextContentView.self) {
+            return false
+        }
+        return true
+    }
+}
+
+extension JCChatViewController: UIDocumentInteractionControllerDelegate {
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        return self
+    }
+    func documentInteractionControllerViewForPreview(_ controller: UIDocumentInteractionController) -> UIView? {
+        return self.view
+    }
+    func documentInteractionControllerRectForPreview(_ controller: UIDocumentInteractionController) -> CGRect {
+        return self.view.frame
     }
 }

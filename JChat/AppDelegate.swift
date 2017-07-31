@@ -105,11 +105,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //MARK: - JMessage Delegate
 extension AppDelegate: JMessageDelegate {
     func onDBMigrateStart() {
-        print("db migrate start")
+        MBProgressHUD_JChat.showMessage(message: "数据库升级中", toView: nil)
     }
     
     func onDBMigrateFinishedWithError(_ error: Error!) {
-        print("db migrate finished")
+        MBProgressHUD_JChat.hide(forView: nil, animated: true)
+        MBProgressHUD_JChat.show(text: "数据库升级完成", view: nil)
     }
     
     func onReceive(_ event: JMSGNotificationEvent!) {
@@ -156,7 +157,7 @@ extension AppDelegate: JMessageDelegate {
     func _logout() {
         JCVerificationInfoDB.shareInstance.queue = nil
         UserDefaults.standard.removeObject(forKey: kCurrentUserName)
-        let alertView = UIAlertView(title: "该用户在其它设备上登录", message: "您的账号在其它设备上登录", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "重新登录")
+        let alertView = UIAlertView(title: "您的账号在其它设备上登录", message: "", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "重新登录")
         alertView.show()
     }
 }
@@ -192,6 +193,3 @@ extension AppDelegate: UIAlertViewDelegate {
         }
     }
 }
-
-
-

@@ -24,7 +24,11 @@ public protocol JCChatViewDataSource: class {
     @objc optional func chatView(_ chatView: JCChatView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?)
     @objc optional func refershChatView( chatView: JCChatView)
     @objc optional func tapImageMessage(image: UIImage?, indexPath: IndexPath)
+    
     @objc optional func deleteMessage(message: JCMessageType)
+    @objc optional func copyMessage(message: JCMessageType)
+    @objc optional func forwardMessage(message: JCMessageType)
+    @objc optional func withdrawMessage(message: JCMessageType)
 }
 
 
@@ -161,7 +165,7 @@ public protocol JCChatViewDataSource: class {
     fileprivate var _chatViewData: JCChatViewData
     
     fileprivate var _chatViewLayout: JCChatViewLayout
-    var _chatContainerView: JCChatContainerView
+    fileprivate var _chatContainerView: JCChatContainerView
     
     fileprivate lazy var _chatContainerRegistedTypes: Set<String> = []
     
@@ -170,6 +174,13 @@ public protocol JCChatViewDataSource: class {
     }
     func stopRefresh() {
         self._chatContainerView.mj_header.endRefreshing()
+    }
+    
+    func scrollToLast(animated: Bool) {
+        let count = _chatContainerView.numberOfItems(inSection: 0)
+        if count > 0 {
+            _chatContainerView.scrollToItem(at: IndexPath(row: count - 1, section: 0), at: .bottom, animated: animated)
+        }
     }
 }
 
@@ -255,6 +266,16 @@ internal class JCChatContainerView: UICollectionView {
 
 extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
     
+    open var isRoll: Bool {
+        get { return _chatContainerView.isDragging || _chatContainerView.isDecelerating}
+    }
+    
+    open var indexPathsForVisibleItems: [IndexPath] {
+        get {
+            return _chatContainerView.indexPathsForVisibleItems
+        }
+    }
+    
     open dynamic var contentSize: CGSize {
         set { return _chatContainerView.contentSize = newValue }
         get { return _chatContainerView.contentSize }
@@ -279,7 +300,7 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let message = _chatViewData[indexPath.item]
         
-        let options = (message.options.showsCard.hashValue << 0) | (message.options.showsAvatar.hashValue << 1)
+//        let options = (message.options.showsCard.hashValue << 0) | (message.options.showsAvatar.hashValue << 1)
         let alignment = message.options.alignment.rawValue
         let identifier = NSStringFromClass(type(of: message.content)) + ".\(alignment)"
         
@@ -341,12 +362,12 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
             // +----10----+
             return .init(top: 10, left: 20, bottom: 10, right: 20)
             
-        default:
-            // default edg
-            // +----10----+
-            // 10         10
-            // +----10----+
-            return .init(top: 10, left: 10, bottom: 10, right: 10)
+//        default:
+//            // default edg
+//            // +----10----+
+//            // 10         10
+//            // +----10----+
+//            return .init(top: 10, left: 10, bottom: 10, right: 10)
         }
     }
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForItemCardOf style: JCMessageStyle) -> UIEdgeInsets {
@@ -384,35 +405,66 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
     open func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
         return true
     }
+    
     open func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
         let message = _chatViewData[indexPath.item]
+        if message.content is JCMessageNoticeContent || message.content is JCMessageTimeLineContent  {
+            return false
+        }
         if let _ = message.content as? JCMessageTextContent {
-            if action == #selector(copy(_:)) {
+            if action == #selector(copyMessage(_:)) {
                 return true
             }
         }
-//        if action == #selector(paste(_:)) {
-//            return true
-//        }
-        if action == #selector(delete(_:)) {
+        if action == #selector(deleteMessage(_:)) {
             return true
         }
+        
+//        if action == #selector(forwardMessage(_:)) {
+//            if message.content is JCMessageVoiceContent || message.content is JCMessageLocationContent  {
+//                return false
+//            }
+//            return true
+//        }
+        
+        if action == #selector(withdrawMessage(_:)) {
+            if let sender = message.sender {
+                if sender.isEqual(to: JMSGUser.myInfo()) {
+                    return true
+                }
+            }
+            return false
+        }
+ 
         return false
     }
+    
+    func copyMessage(_ sender: Any) {}
+    func deleteMessage(_ sender: Any) {}
+    func forwardMessage(_ sender: Any) {}
+    func withdrawMessage(_ sender: Any) {}
+    
     open func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
         let message = _chatViewData[indexPath.item]
-        if action == #selector(copy(_:)) {
+        if action == #selector(copyMessage(_:)) {
             if let content = message.content as? JCMessageTextContent {
                 let pas = UIPasteboard.general
                 pas.string = content.text.string
             }
         }
-        if action == #selector(delete(_:)) {
+        if action == #selector(deleteMessage(_:)) {
             remove(at: indexPath.item)
             delegate?.deleteMessage?(message: message)
         }
-        if action == #selector(paste(_:)) {
-            move(at: indexPath.item, to: _chatViewData.count - 1)
+//        if action == #selector(paste(_:)) {
+//            move(at: indexPath.item, to: _chatViewData.count - 1)
+//        }
+        if action == #selector(forwardMessage(_:)) {
+            delegate?.forwardMessage?(message: message)
+        }
+        
+        if action == #selector(withdrawMessage(_:)) {
+            delegate?.withdrawMessage?(message: message)
         }
     }
 }

@@ -211,8 +211,6 @@ class JChatRecordVoiceHelper: NSObject {
             print("get AVAudioPlayer is fail \(error)")
         }
     }
-    
-    
 }
 
 extension JChatRecordVoiceHelper : AVAudioPlayerDelegate {
@@ -231,6 +229,3 @@ extension JChatRecordVoiceHelper : AVAudioPlayerDelegate {
 extension JChatRecordVoiceHelper : AVAudioRecorderDelegate {
     
 }
-
-
-
