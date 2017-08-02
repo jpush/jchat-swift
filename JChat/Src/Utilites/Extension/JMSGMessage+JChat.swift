@@ -107,9 +107,10 @@ extension JMSGMessage {
         get {
             if let content = self.content as? JMSGImageContent {
                 if let extras = content.extras {
-                    if extras.values.contains(where: { (value) -> Bool in
-                        if let value = value as? String {
-                            return value == kLargeEmoticon
+                    if extras.keys.contains(where: { (key) -> Bool in
+                        if let key = key as? String {
+                            // android 的扩展字段：jiguang
+                            return key == kLargeEmoticon || key == "jiguang"
                         }
                         return false
                     }) {

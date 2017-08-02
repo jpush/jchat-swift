@@ -17,11 +17,7 @@ class JCGroupMembersViewController: UIViewController {
         super.viewDidLoad()
         _init()
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
+
     fileprivate lazy var searchController: JCSearchController = JCSearchController(searchResultsController: nil)
     fileprivate lazy var searchView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.width, height: 36))
     private var collectionView: UICollectionView!
@@ -119,7 +115,7 @@ extension JCGroupMembersViewController: UICollectionViewDelegate, UICollectionVi
         vc.user = user
         searchController.isActive = false
         filter("")
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

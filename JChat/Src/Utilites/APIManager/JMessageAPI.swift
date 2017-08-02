@@ -10,6 +10,6 @@ import UIKit
 
 protocol JMessageAPI {
     
-    func searchUser(_ url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> ())
+    func searchUser(_ userName: String, completionHandler: @escaping (Data?, URLResponse?, Error?) -> ())
 
 }

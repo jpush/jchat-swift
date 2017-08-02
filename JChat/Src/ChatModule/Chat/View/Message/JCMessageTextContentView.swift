@@ -18,7 +18,7 @@ open class JCMessageTextContentView: KILabel, JCMessageContentViewType {
         super.init(coder: aDecoder)
         _commonInit()
     }
-//
+
     open override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         return super.canPerformAction(action, withSender: sender)
     }
@@ -31,7 +31,12 @@ open class JCMessageTextContentView: KILabel, JCMessageContentViewType {
         self.linkDetectionTypes = KILinkTypeOption.URL
         self.urlLinkTapHandler = { label, url, range in
             if let Url = URL(string: url) {
-                UIApplication.shared.openURL(Url)
+                if UIApplication.shared.canOpenURL(Url) {
+                    UIApplication.shared.openURL(Url)
+                } else {
+                    let newUrl = URL(string: "https://" + url)
+                    UIApplication.shared.openURL(newUrl!)
+                }
             }
         }
     }

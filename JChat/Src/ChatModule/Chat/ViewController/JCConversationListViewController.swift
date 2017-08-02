@@ -28,10 +28,10 @@ class JCConversationListViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if isConnecting {
-            self.titleTips.text = "连接中"
-            self.titleTips.isHidden = false
+            titleTips.text = "连接中"
+            titleTips.isHidden = false
         } else {
-            self.titleTips.isHidden = true
+            titleTips.isHidden = true
         }
         _getConversations()
     }
@@ -137,7 +137,7 @@ class JCConversationListViewController: UIViewController {
         addButton.addTarget(self, action: #selector(_clickNavRightButton(_:)), for: .touchUpInside)
         addButton.setImage(UIImage.loadImage("com_icon_add"), for: .normal)
         let item = UIBarButtonItem(customView: addButton)
-        self.navigationItem.rightBarButtonItem =  item
+        navigationItem.rightBarButtonItem =  item
     }
     
     func _updateBadge() {
@@ -171,26 +171,26 @@ class JCConversationListViewController: UIViewController {
     }
     
     func _addFriend() {
-        self.dismissPopupView()
-        self.navigationController?.pushViewController(JCSearchFriendViewController(), animated: true)
+        dismissPopupView()
+        navigationController?.pushViewController(JCSearchFriendViewController(), animated: true)
     }
     
     func _addSingle() {
-        self.dismissPopupView()
+        dismissPopupView()
         let vc = JCSearchFriendViewController()
         vc.isSearchUser = true
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func _addGroup() {
-        self.dismissPopupView()
+        dismissPopupView()
         let vc = JCUpdateMemberViewController()
         vc.isAddMember = false
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     private func _setupPopView() {
-        self.presentPopupView(self.selectView)
+        presentPopupView(selectView)
     }
     
     fileprivate lazy var selectView: YHPopupView = {
@@ -277,7 +277,7 @@ extension JCConversationListViewController: UITableViewDelegate, UITableViewData
         }
         cell.bindConversation(conversation)
         let vc = JCChatViewController(conversation: conversation)
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -288,10 +288,10 @@ extension JCConversationListViewController: UITableViewDelegate, UITableViewData
         let action1 = UITableViewRowAction(style: .destructive, title: "删除") { (action, indexPath) in
             self._delete(indexPath)
         }
-        let action2 = UITableViewRowAction(style: .normal, title: "顶置") { (action, indexPath) in
-
-        }
-        return [action1, action2]
+//        let action2 = UITableViewRowAction(style: .normal, title: "顶置") { (action, indexPath) in
+//
+//        }
+        return [action1]
     }
 
     private func _delete(_ indexPath: IndexPath) {
@@ -310,12 +310,12 @@ extension JCConversationListViewController: UITableViewDelegate, UITableViewData
             JMSGConversation.deleteSingleConversation(withUsername: user.username, appKey: user.appKey!)
         }
         datas.remove(at: indexPath.row)
-        if self.datas.count == 0 {
-            self.emptyView.isHidden = false
+        if datas.count == 0 {
+            emptyView.isHidden = false
         } else {
-            self.emptyView.isHidden = true
+            emptyView.isHidden = true
         }
-        self.tableview.reloadData()
+        tableview.reloadData()
     }
     
 }
@@ -342,6 +342,10 @@ extension JCConversationListViewController: JMessageDelegate {
         _getConversations()
     }
     
+    func onReceive(_ retractEvent: JMSGMessageRetractEvent!) {
+        _getConversations()
+    }
+    
 }
 
 extension JCConversationListViewController: UISearchControllerDelegate {
@@ -358,14 +362,14 @@ extension JCConversationListViewController: UISearchControllerDelegate {
         UIView.animate(withDuration: 0.35) {
             self.emptyView.frame = CGRect(x: 0, y: 64 + 36, width: self.view.width, height: self.view.height - 64 - 36)
         }
-        self.tableview.isHidden = false
-        if self.datas.count == 0 {
+        tableview.isHidden = false
+        if datas.count == 0 {
             emptyView.isHidden = false
         }
         let nav = searchController.searchResultsController as! JCNavigationController
         nav.isNavigationBarHidden = true
         nav.popToRootViewController(animated: false)
-        self.navigationController?.tabBarController?.tabBar.isHidden = false
+        navigationController?.tabBarController?.tabBar.isHidden = false
     }
 }
 
@@ -385,7 +389,7 @@ extension JCConversationListViewController {
             return
         }
         showNetworkTips = true
-        if self.datas.count > 0 {
+        if datas.count > 0 {
             let indexPath = IndexPath(row: 0, section: 0)
             tableview.beginUpdates()
             tableview.insertRows(at: [indexPath], with: .automatic)
@@ -397,12 +401,12 @@ extension JCConversationListViewController {
     
     func connectClose() {
         isConnecting = false
-        self.titleTips.isHidden = true
+        titleTips.isHidden = true
     }
     
     func connectSucceed() {
         isConnecting = false
-        self.titleTips.isHidden = true
+        titleTips.isHidden = true
     }
     
     func connecting() {
@@ -423,8 +427,8 @@ extension JCConversationListViewController {
             }
             if currentVC.isKind(of: JCConversationListViewController.self) {
                 isConnecting = true
-                self.titleTips.text = "连接中"
-                self.titleTips.isHidden = false
+                titleTips.text = "连接中"
+                titleTips.isHidden = false
             }
         }
     }

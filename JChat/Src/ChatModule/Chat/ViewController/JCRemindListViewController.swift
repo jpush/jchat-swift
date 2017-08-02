@@ -58,6 +58,9 @@ class JCRemindListViewController: UIViewController {
     fileprivate lazy var keys: [String] = []
     fileprivate lazy var data: Dictionary<String, [JMSGUser]> = Dictionary()
     
+    fileprivate lazy var defaultGroupIcon = UIImage.loadImage("com_icon_group_36")
+    fileprivate var isSearching = false
+    
     private func _init() {
         self.title = "选择提醒的人"
         self.view.backgroundColor = .white
@@ -84,6 +87,9 @@ class JCRemindListViewController: UIViewController {
         self.keys.removeAll()
         self.data.removeAll()
         for item in users {
+            if item.username == JMSGUser.myInfo().username {
+                continue
+            }
             var key = item.displayName().firstCharacter()
             if !key.isLetterOrNum() {
                 key = "#"
@@ -105,10 +111,12 @@ class JCRemindListViewController: UIViewController {
     
     fileprivate func filter(_ searchString: String) {
         if searchString.isEmpty || searchString == "" {
+            isSearching = false
             _classify(users)
             tableView.reloadData()
             return
         }
+        isSearching = true
         let filteredUsersArray = _JCFilterUsers(users: users, string: searchString)
         _classify(filteredUsersArray)
         tableView.reloadData()
@@ -119,6 +127,9 @@ class JCRemindListViewController: UIViewController {
 extension JCRemindListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        if isSearching {
+            return keys.count
+        }
         if users.count > 0 {
             return keys.count + 1
         }
@@ -126,13 +137,16 @@ extension JCRemindListViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
+        if section == 0 && !isSearching {
             return tagArray.count
         }
-        return self.data[keys[section - 1]]!.count
+        return isSearching ? self.data[keys[section]]!.count : self.data[keys[section - 1]]!.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if isSearching {
+            return keys[section]
+        }
         if section == 0 {
             return ""
         }
@@ -163,28 +177,28 @@ extension JCRemindListViewController: UITableViewDelegate, UITableViewDataSource
         guard let cell = cell as? JCContacterCell else {
             return
         }
-        if indexPath.section == 0 {
+        if indexPath.section == 0 && !isSearching {
             switch indexPath.row {
             case 0:
                 cell.title = tagArray[indexPath.row]
-                cell.icon = UIImage.loadImage("com_icon_group_36")
+                cell.icon = defaultGroupIcon
             default:
                 break
             }
             return
         }
-        let user = self.data[keys[indexPath.section - 1]]?[indexPath.row]
+        let user = isSearching ? self.data[keys[indexPath.section]]?[indexPath.row] : self.data[keys[indexPath.section - 1]]?[indexPath.row]
         cell.bindDate(user!)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.section == 0 {
+        if indexPath.section == 0 && !isSearching {
             finish(nil, true, 4)
             self.dismiss(animated: true, completion: nil)
             return
         }
-        if let user = self.data[keys[indexPath.section - 1]]?[indexPath.row]  {
+        if let user = isSearching ? self.data[keys[indexPath.section]]?[indexPath.row] : self.data[keys[indexPath.section - 1]]?[indexPath.row]  {
             finish(user, false, user.displayName().length)
         }
         self.dismiss(animated: true, completion: nil)

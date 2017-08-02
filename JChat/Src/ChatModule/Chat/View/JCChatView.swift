@@ -267,13 +267,11 @@ internal class JCChatContainerView: UICollectionView {
 extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
     
     open var isRoll: Bool {
-        get { return _chatContainerView.isDragging || _chatContainerView.isDecelerating}
+        return _chatContainerView.isDragging || _chatContainerView.isDecelerating
     }
     
     open var indexPathsForVisibleItems: [IndexPath] {
-        get {
-            return _chatContainerView.indexPathsForVisibleItems
-        }
+        return _chatContainerView.indexPathsForVisibleItems
     }
     
     open dynamic var contentSize: CGSize {

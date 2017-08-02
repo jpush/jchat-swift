@@ -85,20 +85,17 @@ class JCMessageFileContentView: UIView, JCMessageContentViewType {
         _fileNameLabel.numberOfLines = 0
         _fileNameLabel.font = UIFont.systemFont(ofSize: 16)
         _fileNameLabel.textColor = UIColor(netHex: 0x5a5a5a)
-        _fileNameLabel.text = "极光IM帮助文档.docx"
         self.addSubview(_fileNameLabel)
         
         _fileStatusLabel.frame = CGRect(x: 103, y: 75, width: 85, height: 20)
         _fileStatusLabel.textAlignment = .right
-        _fileStatusLabel.font = UIFont.systemFont(ofSize: 10)
+        _fileStatusLabel.font = UIFont.systemFont(ofSize: 12)
         _fileStatusLabel.textColor = UIColor(netHex: 0x989898)
-        _fileStatusLabel.text = "未下载"
         self.addSubview(_fileStatusLabel)
         
         _fileSizeLabel.frame = CGRect(x: 12, y: 75, width: 85, height: 20)
-        _fileSizeLabel.font = UIFont.systemFont(ofSize: 10)
+        _fileSizeLabel.font = UIFont.systemFont(ofSize: 12)
         _fileSizeLabel.textColor = UIColor(netHex: 0x989898)
-        _fileSizeLabel.text = "100K"
         self.addSubview(_fileSizeLabel)
         
         _line.frame = CGRect(x: 12, y: 74, width: 176, height: 1)

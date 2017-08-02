@@ -11,42 +11,31 @@ import UIKit
 extension UIView {
 
     var x: CGFloat {
-        get {
-            return self.frame.origin.x
-        }
+        return self.frame.origin.x
     }
+    
     var y: CGFloat {
-        get {
-            return self.frame.origin.y
-        }
+        return self.frame.origin.y
     }
+    
     var width: CGFloat {
-        get {
-            return self.frame.size.width
-        }
+        return self.frame.size.width
     }
+    
     var height: CGFloat {
-        get {
-            return self.frame.size.height
-        }
+        return self.frame.size.height
     }
     
     var size: CGSize {
-        get {
-            return self.frame.size
-        }
+        return self.frame.size
     }
     
     var origin: CGPoint {
-        get {
-            return self.frame.origin
-        }
+        return self.frame.origin
     }
     
     var centerX: CGFloat {
-        get {
-            return (self.frame.origin.x + self.frame.size.width) / 2
-        }
+        return (self.frame.origin.x + self.frame.size.width) / 2
     }
     
     var centerY: CGFloat {

@@ -460,17 +460,25 @@ NSString * const KILabelLinkKey = @"link";
 
 - (NSArray *)getRangesForURLs:(NSAttributedString *)text
 {
+    
+    NSError *error;
+    
+    NSString *regulaStr =@"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
+    
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regulaStr
+                                  
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                  
+                                                                             error:&error];
+    
+    NSArray *matches = [regex matchesInString:text.string options:0 range:NSMakeRange(0, [text.string length])];
+    
+    
     NSMutableArray *rangesForURLs = [[NSMutableArray alloc] init];;
     
     // Use a data detector to find urls in the text
-    NSError *error = nil;
-    NSDataDetector *detector = [[NSDataDetector alloc] initWithTypes:NSTextCheckingTypeLink error:&error];
     
     NSString *plainText = text.string;
-    
-    NSArray *matches = [detector matchesInString:plainText
-                                         options:0
-                                           range:NSMakeRange(0, text.length)];
     
     // Add a range entry for every url we found
     for (NSTextCheckingResult *match in matches)
@@ -478,19 +486,15 @@ NSString * const KILabelLinkKey = @"link";
         NSRange matchRange = [match range];
         
         // If there's a link embedded in the attributes, use that instead of the raw text
-        NSString *realURL = [text attribute:NSLinkAttributeName atIndex:matchRange.location effectiveRange:nil];
-        if (realURL == nil)
-            realURL = [plainText substringWithRange:matchRange];
+        NSString *realURL = [plainText substringWithRange:matchRange];
         
         if (![self ignoreMatch:realURL])
         {
-            if ([match resultType] == NSTextCheckingTypeLink)
-            {
-                [rangesForURLs addObject:@{KILabelLinkTypeKey : @(KILinkTypeURL),
-                                           KILabelRangeKey : [NSValue valueWithRange:matchRange],
-                                           KILabelLinkKey : realURL,
-                                        }];
-            }
+            
+            [rangesForURLs addObject:@{KILabelLinkTypeKey : @(KILinkTypeURL),
+                                       KILabelRangeKey : [NSValue valueWithRange:matchRange],
+                                       KILabelLinkKey : realURL,
+                                    }];
         }
     }
     

@@ -13,28 +13,28 @@ class JCSelectMemberCell: UITableViewCell {
 
     var icon: UIImage? {
         get {
-            return self.avatorView.image
+            return avatorView.image
         }
         set {
-            self.avatorView.image = newValue
+            avatorView.image = newValue
         }
     }
     
     var selectIcon: UIImage? {
         get {
-            return self.selectIconView.image
+            return selectIconView.image
         }
         set {
-            self.selectIconView.image = newValue
+            selectIconView.image = newValue
         }
     }
     
     var title: String? {
         get {
-            return self.usernameLabel.text
+            return usernameLabel.text
         }
         set {
-            self.usernameLabel.text = newValue
+            usernameLabel.text = newValue
         }
     }
     
@@ -62,8 +62,8 @@ class JCSelectMemberCell: UITableViewCell {
     private lazy var selectIconView: UIImageView = UIImageView()
     
     public func bindDate(_ user : JMSGUser) {
-        self.title = user.displayName()
-        self.icon = UIImage.loadImage("com_icon_user_36")
+        title = user.displayName()
+        icon = UIImage.loadImage("com_icon_user_36")
         user.thumbAvatarData({ (data, name, error) in
             if data != nil {
                 let image = UIImage(data: data!)

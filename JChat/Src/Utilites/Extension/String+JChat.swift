@@ -217,7 +217,7 @@ extension String {
             default:
                 break
             }
-            if error.code == 809002 {
+            if error.code == 809002 || error.code == 812002 {
                 errorAlert = "你已不在该群"
             }
         }
@@ -274,31 +274,25 @@ extension String {
 
 extension String {
     var length: Int {
-        get {
-            return self.characters.count
-        }
+        return self.characters.count
     }
     
     var isContainsChinese: Bool {
-        get {
-            let chineseRegex = "^(.*)[\\u4E00-\\u9FA5\\uF900-\\uFA2D]+(.*)$"
-            let chinesePredicate = NSPredicate(format: "SELF MATCHES %@", chineseRegex)
-            if chinesePredicate.evaluate(with: self) {
-                return true
-            }
-            return false
+        let chineseRegex = "^(.*)[\\u4E00-\\u9FA5\\uF900-\\uFA2D]+(.*)$"
+        let chinesePredicate = NSPredicate(format: "SELF MATCHES %@", chineseRegex)
+        if chinesePredicate.evaluate(with: self) {
+            return true
         }
+        return false
     }
     
     var isExpectations: Bool {
-        get {
-            let regularExpression = "^([a-zA-Z0-9])[a-zA-Z0-9@_\\-\\.]+$"
-            let predicate = NSPredicate(format: "SELF MATCHES %@", regularExpression)
-            if predicate.evaluate(with: self) {
-                return true
-            }
-            return false
+        let regularExpression = "^([a-zA-Z0-9])[a-zA-Z0-9@_\\-\\.]+$"
+        let predicate = NSPredicate(format: "SELF MATCHES %@", regularExpression)
+        if predicate.evaluate(with: self) {
+            return true
         }
+        return false
     }
 
     

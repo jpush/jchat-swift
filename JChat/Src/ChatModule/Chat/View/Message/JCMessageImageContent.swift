@@ -13,7 +13,6 @@ open class JCMessageImageContent: NSObject, JCMessageContentType {
 
     public weak var delegate: JCMessageDelegate?
     var upload: uploadHandle?
-    var indexPath: IndexPath?
     var imageSize: CGSize?
     open var image: UIImage?
     open var layoutMargins: UIEdgeInsets = .zero

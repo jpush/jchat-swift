@@ -30,10 +30,11 @@ class JCUpdateMemberCell: UICollectionViewCell {
     }
     
     private var avatorView: UIImageView = UIImageView()
+    private lazy var defaultUserIcon = UIImage.loadImage("com_icon_user_36")
     
     private func _init() {
         
-        avatorView.image = UIImage.loadImage("com_icon_user_36")
+        avatorView.image = defaultUserIcon
         avatorView.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(avatorView)
@@ -46,11 +47,12 @@ class JCUpdateMemberCell: UICollectionViewCell {
     }
     
     func bindDate(user: JMSGUser) {
-        avatorView.image = UIImage.loadImage("com_icon_user_36")
         user.thumbAvatarData { (data, id, error) in
             if data != nil {
                 let image = UIImage(data: data!)
                 self.avatorView.image = image
+            } else {
+                self.avatorView.image = self.defaultUserIcon
             }
         }
     }

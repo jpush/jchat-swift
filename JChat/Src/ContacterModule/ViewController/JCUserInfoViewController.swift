@@ -238,7 +238,7 @@ extension JCUserInfoViewController: JCUserAvatorCellDelegate {
         guard let image = image else {
             return
         }
-        let browserImageVC = JChatImageBrowserViewController()
+        let browserImageVC = JCImageBrowserViewController()
         browserImageVC.imageArr = [image]
         browserImageVC.imgCurrentIndex = 0
         self.present(browserImageVC, animated: true) {

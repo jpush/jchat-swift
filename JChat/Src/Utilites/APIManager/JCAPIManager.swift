@@ -8,11 +8,14 @@
 
 import UIKit
 
-class JCAPIManager: JMessageAPI {
+final class JCAPIManager: JMessageAPI {
     
     static let sharedAPI = JCAPIManager()
     
     private init() {}
+    
+    let host = "https://api.im.jpush.cn/v1"
+    let userPath = "/users/"
     
     private lazy var request: NSMutableURLRequest = {
         let request = NSMutableURLRequest()
@@ -23,7 +26,8 @@ class JCAPIManager: JMessageAPI {
         return request
     }()
 
-    func searchUser(_ url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> ()) {
+    func searchUser(_ userName: String, completionHandler: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        let url = URL(string: host + userPath + userName)
         request.url = url
         let session = URLSession.shared
         let dataTask = session.dataTask(with: request as URLRequest) { (data, response, error) -> Void in

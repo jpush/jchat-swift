@@ -59,7 +59,7 @@ class JCGroupMemberCell: UICollectionViewCell {
     }
     
     func bindDate(user: JMSGUser) {
-        self.nickname.text = user.displayName()
+        nickname.text = user.displayName()
         avatorView.image = UIImage.loadImage("com_icon_user_50")
         user.thumbAvatarData { (data, id, error) in
             if data != nil {

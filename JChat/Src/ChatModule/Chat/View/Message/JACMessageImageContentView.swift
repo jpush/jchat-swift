@@ -28,13 +28,13 @@ open class JCMessageImageContentView: UIImageView, JCMessageContentViewType {
     }
 
     open func apply(_ message: JCMessageType, _ indexPath: IndexPath?) {
+        _message = message
         weak var weakSelf = self
         guard let content = message.content as? JCMessageImageContent else {
             return
         } 
         image = content.image
         _delegate = content.delegate
-        _indexPath = content.indexPath
         percentLabel.frame = CGRect(x: 0, y: 0, width: self.width, height: self.height)
         if message.options.state == .sending {
             percentLabel.backgroundColor = UIColor.black.withAlphaComponent(0.3)
@@ -57,7 +57,7 @@ open class JCMessageImageContentView: UIImageView, JCMessageContentViewType {
     }
     
     private weak var _delegate: JCMessageDelegate?
-    private var _indexPath: IndexPath!
+    private var _message: JCMessageType!
     
     private lazy var percentLabel: UILabel = {
         var percentLabel = UILabel(frame: CGRect(x: 20, y: 40, width: 50, height: 20))
@@ -78,6 +78,6 @@ open class JCMessageImageContentView: UIImageView, JCMessageContentViewType {
     }
     
     func _tapHandler(sender:UITapGestureRecognizer) {
-        _delegate?.message?(image: self.image, indexPath: _indexPath)
+        _delegate?.message?(message: _message, image: image)
     }
 }

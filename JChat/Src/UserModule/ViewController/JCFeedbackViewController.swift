@@ -120,8 +120,8 @@ extension JCFeedbackViewController: JCPhotoBarDelegate {
     }
     
     func photoBarClickImage(index: Int) {
-        let browserImageVC = JChatImageBrowserViewController()
-        browserImageVC.imageArr = images as NSArray
+        let browserImageVC = JCImageBrowserViewController()
+        browserImageVC.imageArr = images
         browserImageVC.imgCurrentIndex = index
         
         self.present(browserImageVC, animated: true) {

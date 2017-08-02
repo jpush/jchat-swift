@@ -32,6 +32,8 @@ class JCGroupSettingViewController: UIViewController {
     fileprivate var isMyGroup = false
     fileprivate var isNeedUpdate = false
     
+    fileprivate lazy var leftButton = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 65 / 3))
+    
     //MARK: - private func
     private func _init() {
         self.view.backgroundColor = .white
@@ -55,6 +57,8 @@ class JCGroupSettingViewController: UIViewController {
         tableView.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
         view.addSubview(tableView)
         
+        _setupNavigation()
+        
         JMSGGroup.groupInfo(withGroupId: group.gid) { (result, error) in
             if error == nil {
                 guard let group = result as? JMSGGroup else {
@@ -67,6 +71,23 @@ class JCGroupSettingViewController: UIViewController {
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(_updateGroupInfo), name: NSNotification.Name(rawValue: kUpdateGroupInfo), object: nil)
+    }
+    
+    private func _setupNavigation() {
+        leftButton.setImage(UIImage.loadImage("com_icon_back"), for: .normal)
+        leftButton.setImage(UIImage.loadImage("com_icon_back"), for: .highlighted)
+        leftButton.addTarget(self, action: #selector(_back), for: .touchUpInside)
+        leftButton.setTitle("返回", for: .normal)
+        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        leftButton.contentHorizontalAlignment = .left
+        let item = UIBarButtonItem(customView: leftButton)
+        navigationItem.leftBarButtonItems =  [item]
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+    
+    func _back() {
+        navigationController?.popViewController(animated: true)
     }
     
     func _updateGroupInfo() {
@@ -390,5 +411,10 @@ extension JCGroupSettingViewController: UIActionSheetDelegate {
             }
         }
     }
-    
+}
+
+extension JCGroupSettingViewController: UIGestureRecognizerDelegate {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        return true
+    }
 }

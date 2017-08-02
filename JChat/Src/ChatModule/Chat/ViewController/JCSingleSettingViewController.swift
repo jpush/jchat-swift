@@ -18,10 +18,6 @@ class JCSingleSettingViewController: UIViewController {
         _init()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     private lazy var tableView: UITableView = {
         var tableView = UITableView(frame: CGRect(x: 0, y: 0, width: self.view.width, height: self.view.height), style: .grouped)
         tableView.separatorStyle = .none
@@ -35,11 +31,31 @@ class JCSingleSettingViewController: UIViewController {
         return tableView
     }()
     
+    fileprivate lazy var leftButton = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 65 / 3))
+    
     //MARK: - private func 
     private func _init() {
         self.view.backgroundColor = .white
         self.title = "聊天设置"
         view.addSubview(tableView)
+        _setupNavigation()
+    }
+    
+    private func _setupNavigation() {
+        leftButton.setImage(UIImage.loadImage("com_icon_back"), for: .normal)
+        leftButton.setImage(UIImage.loadImage("com_icon_back"), for: .highlighted)
+        leftButton.addTarget(self, action: #selector(_back), for: .touchUpInside)
+        leftButton.setTitle("返回", for: .normal)
+        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        leftButton.contentHorizontalAlignment = .left
+        let item = UIBarButtonItem(customView: leftButton)
+        navigationItem.leftBarButtonItems =  [item]
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+    
+    func _back() {
+        navigationController?.popViewController(animated: true)
     }
 }
 
@@ -203,7 +219,7 @@ extension JCSingleSettingViewController: JCButtonCellDelegate {
         } else {
             let vc = JCAddFriendViewController()
             vc.user = user
-            self.navigationController?.pushViewController(vc, animated: true)
+            navigationController?.pushViewController(vc, animated: true)
         }
         
     }
@@ -240,6 +256,12 @@ extension JCSingleSettingViewController: JCSingleSettingCellDelegate {
         let vc = JCUserInfoViewController()
         vc.user = user
         vc.isOnConversation = true
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+extension JCSingleSettingViewController: UIGestureRecognizerDelegate {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        return true
     }
 }

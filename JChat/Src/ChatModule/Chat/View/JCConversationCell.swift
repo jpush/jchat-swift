@@ -10,7 +10,7 @@ import UIKit
 import JMessage
 
 class JCConversationCell: JCTableViewCell {
-
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
@@ -28,7 +28,7 @@ class JCConversationCell: JCTableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-
+    
     private lazy var avatorView: UIImageView = UIImageView()
     private lazy var statueView: UIImageView = UIImageView()
     private lazy var titleLabel: UILabel = UILabel()
@@ -66,7 +66,7 @@ class JCConversationCell: JCTableViewCell {
                     isNoDisturb = user.isNoDisturb
                 }
             }
-
+            
             if isNoDisturb {
                 redPoin.layer.cornerRadius = 4.0
                 redPoin.layer.masksToBounds = true
@@ -87,24 +87,22 @@ class JCConversationCell: JCTableViewCell {
         
         msgLabel.text = conversation.latestMessageContentText()
         if isGroup {
-            let latestMessage = conversation.latestMessage
-            if let fromUser = latestMessage?.fromUser {
-                if !fromUser.isEqual(to: JMSGUser.myInfo()) {
+            
+            if let latestMessage = conversation.latestMessage {
+                let fromUser = latestMessage.fromUser
+                if !fromUser.isEqual(to: JMSGUser.myInfo()) &&
+                    latestMessage.contentType != .eventNotification {
                     msgLabel.text = "\(fromUser.displayName()):\(msgLabel.text!)"
                 }
-            }
-            if conversation.unreadCount != nil && conversation.unreadCount!.intValue > 0 {
-                if let latestMessage = latestMessage {
-                
-                    if latestMessage.isAtMe() {
-                        msgLabel.attributedText = getAttributString(attributString: "[有人@我]", string: conversation.latestMessageContentText())
-                    }
+                if conversation.unreadCount != nil && conversation.unreadCount!.intValue > 0 {
+                    
                     if latestMessage.isAtAll() {
-                        msgLabel.attributedText = getAttributString(attributString: "[@所有人]", string: conversation.latestMessageContentText())
+                        msgLabel.attributedText = getAttributString(attributString: "[@所有人]", string: msgLabel.text!)
+                    } else if latestMessage.isAtMe() {
+                        msgLabel.attributedText = getAttributString(attributString: "[有人@我]", string: msgLabel.text!)
                     }
                 }
             }
-            
         }
         
         if let draft = JCDraft.getDraft(conversation) {
@@ -175,7 +173,7 @@ class JCConversationCell: JCTableViewCell {
         redPoin.textColor = .white
         redPoin.layer.backgroundColor = UIColor(netHex: 0xEB424C).cgColor
         redPoin.textAlignment = .center
-
+        
         contentView.addSubview(avatorView)
         contentView.addSubview(statueView)
         contentView.addSubview(titleLabel)
@@ -208,5 +206,5 @@ class JCConversationCell: JCTableViewCell {
         addConstraint(_JCLayoutConstraintMake(statueView, .height, .equal, nil, .notAnAttribute, 12))
         addConstraint(_JCLayoutConstraintMake(statueView, .width, .equal, nil, .notAnAttribute, 12))
     }
-
+    
 }

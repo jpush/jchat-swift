@@ -165,38 +165,10 @@ open class JCChatViewCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         }
         // update bubble view layout
         if let view = _bubbleView {
-//            var frame = layoutInfo.layoutedRect(with: .bubble)
-//            if frame.size.height.isNaN {
-//                frame.size.height = 0
-//            }
-//            if frame.size.width.isNaN {
-//                frame.size.width = 0
-//            }
-//            if frame.origin.x.isNaN {
-//                frame.origin.x = 0
-//            }
-//            if frame.origin.y.isNaN {
-//                frame.origin.y = 0
-//            }
-//            view.frame = frame
             view.frame = layoutInfo.layoutedRect(with: .bubble)
         }
         // update visit card view layout
         if let view = _cardView as? UIView {
-//            var frame = layoutInfo.layoutedRect(with: .card)
-//            if frame.size.height.isNaN {
-//                frame.size.height = 0
-//            }
-//            if frame.size.width.isNaN {
-//                frame.size.width = 0
-//            }
-//            if frame.origin.x.isNaN {
-//                frame.origin.x = 0
-//            }
-//            if frame.origin.y.isNaN {
-//                frame.origin.y = 0
-//            }
-//            view.frame = frame
             view.frame = layoutInfo.layoutedRect(with: .card)
         }
         if let view = _tipsView as? UIView {
@@ -205,20 +177,6 @@ open class JCChatViewCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         }
         // update avatar view layout
         if let view = _avatarView as? UIView {
-//            var frame = layoutInfo.layoutedRect(with: .avatar)
-//            if frame.size.height.isNaN {
-//                frame.size.height = 0
-//            }
-//            if frame.size.width.isNaN {
-//                frame.size.width = 0
-//            }
-//            if frame.origin.x.isNaN {
-//                frame.origin.x = 0
-//            }
-//            if frame.origin.y.isNaN {
-//                frame.origin.y = 0
-//            }
-//            view.frame = frame
             view.frame = layoutInfo.layoutedRect(with: .avatar)
         }
         

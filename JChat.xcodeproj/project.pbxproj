@@ -126,13 +126,12 @@
 		B46DF5231EC30F88009A3FF9 /* JCGroupMembersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46DF5221EC30F88009A3FF9 /* JCGroupMembersViewController.swift */; };
 		B47B3C7E1F1C604600AB3759 /* JCForwardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47B3C7D1F1C604600AB3759 /* JCForwardViewController.swift */; };
 		B47EB71F1F00E0090086EC6B /* JCRemindListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47EB71E1F00E0090086EC6B /* JCRemindListViewController.swift */; };
-		B47FEA611EA4B3CE00AF1732 /* JChatImageBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47FEA5E1EA4B3CE00AF1732 /* JChatImageBrowserViewController.swift */; };
-		B47FEA621EA4B3CE00AF1732 /* JChatMessageImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47FEA5F1EA4B3CE00AF1732 /* JChatMessageImageCollectionViewCell.swift */; };
-		B47FEA631EA4B3CE00AF1732 /* JChatMessageImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B47FEA601EA4B3CE00AF1732 /* JChatMessageImageCollectionViewCell.xib */; };
+		B47FEA611EA4B3CE00AF1732 /* JCImageBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47FEA5E1EA4B3CE00AF1732 /* JCImageBrowserViewController.swift */; };
+		B47FEA621EA4B3CE00AF1732 /* JCMessageImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47FEA5F1EA4B3CE00AF1732 /* JCMessageImageCollectionViewCell.swift */; };
+		B47FEA631EA4B3CE00AF1732 /* JCMessageImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B47FEA601EA4B3CE00AF1732 /* JCMessageImageCollectionViewCell.xib */; };
 		B47FEA681EA4B86D00AF1732 /* JChatAudioPlayerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47FEA651EA4B86D00AF1732 /* JChatAudioPlayerHelper.swift */; };
 		B47FEA691EA4B86D00AF1732 /* JChatRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47FEA661EA4B86D00AF1732 /* JChatRecordingView.swift */; };
 		B47FEA6A1EA4B86D00AF1732 /* JChatRecordVoiceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47FEA671EA4B86D00AF1732 /* JChatRecordVoiceHelper.swift */; };
-		B47FEA6C1EA4B8D400AF1732 /* JChatMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47FEA6B1EA4B8D400AF1732 /* JChatMessageModel.swift */; };
 		B480C9891E9DF12B00187D9B /* SAIInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B480C97F1E9DF12B00187D9B /* SAIInputAccessoryView.swift */; };
 		B480C98A1E9DF12B00187D9B /* SAIInputAccessoryViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B480C9801E9DF12B00187D9B /* SAIInputAccessoryViewLayout.swift */; };
 		B480C98B1E9DF12B00187D9B /* SAIInputBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B480C9811E9DF12B00187D9B /* SAIInputBackgroundView.swift */; };
@@ -350,13 +349,12 @@
 		B46DF5221EC30F88009A3FF9 /* JCGroupMembersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCGroupMembersViewController.swift; sourceTree = "<group>"; };
 		B47B3C7D1F1C604600AB3759 /* JCForwardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCForwardViewController.swift; sourceTree = "<group>"; };
 		B47EB71E1F00E0090086EC6B /* JCRemindListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCRemindListViewController.swift; sourceTree = "<group>"; };
-		B47FEA5E1EA4B3CE00AF1732 /* JChatImageBrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatImageBrowserViewController.swift; sourceTree = "<group>"; };
-		B47FEA5F1EA4B3CE00AF1732 /* JChatMessageImageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatMessageImageCollectionViewCell.swift; sourceTree = "<group>"; };
-		B47FEA601EA4B3CE00AF1732 /* JChatMessageImageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JChatMessageImageCollectionViewCell.xib; sourceTree = "<group>"; };
+		B47FEA5E1EA4B3CE00AF1732 /* JCImageBrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCImageBrowserViewController.swift; sourceTree = "<group>"; };
+		B47FEA5F1EA4B3CE00AF1732 /* JCMessageImageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCMessageImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		B47FEA601EA4B3CE00AF1732 /* JCMessageImageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JCMessageImageCollectionViewCell.xib; sourceTree = "<group>"; };
 		B47FEA651EA4B86D00AF1732 /* JChatAudioPlayerHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatAudioPlayerHelper.swift; sourceTree = "<group>"; };
 		B47FEA661EA4B86D00AF1732 /* JChatRecordingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatRecordingView.swift; sourceTree = "<group>"; };
 		B47FEA671EA4B86D00AF1732 /* JChatRecordVoiceHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatRecordVoiceHelper.swift; sourceTree = "<group>"; };
-		B47FEA6B1EA4B8D400AF1732 /* JChatMessageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatMessageModel.swift; sourceTree = "<group>"; };
 		B480C97F1E9DF12B00187D9B /* SAIInputAccessoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAIInputAccessoryView.swift; sourceTree = "<group>"; };
 		B480C9801E9DF12B00187D9B /* SAIInputAccessoryViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAIInputAccessoryViewLayout.swift; sourceTree = "<group>"; };
 		B480C9811E9DF12B00187D9B /* SAIInputBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAIInputBackgroundView.swift; sourceTree = "<group>"; };
@@ -934,10 +932,9 @@
 		B47FEA5D1EA4B3CE00AF1732 /* ImageBrowser */ = {
 			isa = PBXGroup;
 			children = (
-				B47FEA6B1EA4B8D400AF1732 /* JChatMessageModel.swift */,
-				B47FEA5E1EA4B3CE00AF1732 /* JChatImageBrowserViewController.swift */,
-				B47FEA5F1EA4B3CE00AF1732 /* JChatMessageImageCollectionViewCell.swift */,
-				B47FEA601EA4B3CE00AF1732 /* JChatMessageImageCollectionViewCell.xib */,
+				B47FEA5E1EA4B3CE00AF1732 /* JCImageBrowserViewController.swift */,
+				B47FEA5F1EA4B3CE00AF1732 /* JCMessageImageCollectionViewCell.swift */,
+				B47FEA601EA4B3CE00AF1732 /* JCMessageImageCollectionViewCell.xib */,
 			);
 			path = ImageBrowser;
 			sourceTree = "<group>";
@@ -1170,7 +1167,7 @@
 			files = (
 				B43F704D1EA883DA0076D5AF /* 定位2.png in Resources */,
 				B43F704B1EA883DA0076D5AF /* jiantou2@2x.png in Resources */,
-				B47FEA631EA4B3CE00AF1732 /* JChatMessageImageCollectionViewCell.xib in Resources */,
+				B47FEA631EA4B3CE00AF1732 /* JCMessageImageCollectionViewCell.xib in Resources */,
 				B43F704A1EA883DA0076D5AF /* icon_baidu_marker.png in Resources */,
 				B4DB28BF1E9F7B6C0024AB65 /* yh_image_no_picked@3x.png in Resources */,
 				B4DB28BE1E9F7B6C0024AB65 /* yh_image_no_picked@2x.png in Resources */,
@@ -1360,7 +1357,6 @@
 				B43BA3FA1E8A2FF500565DB3 /* JCChatViewCell.swift in Sources */,
 				B4AC7BD51F258F2300EDA7B4 /* JCFileDownloadViewController.swift in Sources */,
 				B488D6041EA075C800568B2B /* JCVerificationInfo.swift in Sources */,
-				B47FEA6C1EA4B8D400AF1732 /* JChatMessageModel.swift in Sources */,
 				B4B583441F209D2D0044A6AD /* JCMessageFileContentView.swift in Sources */,
 				B4D85CDB1F21DE2700DF1A1B /* JMSGConversation+JChat.swift in Sources */,
 				B480C98F1E9DF12B00187D9B /* SAIInputItemView.swift in Sources */,
@@ -1429,7 +1425,7 @@
 				B440125B1EC5A5180049C5D8 /* JCRegisterInfoViewController.swift in Sources */,
 				B4DF21281E9B5065005E62AA /* JACMessageImageContentView.swift in Sources */,
 				B401970F1EF3B34C006B9F2D /* JCNetworkManager.swift in Sources */,
-				B47FEA621EA4B3CE00AF1732 /* JChatMessageImageCollectionViewCell.swift in Sources */,
+				B47FEA621EA4B3CE00AF1732 /* JCMessageImageCollectionViewCell.swift in Sources */,
 				B43BA3F61E8A2FF500565DB3 /* JCCEmoticonGroup.swift in Sources */,
 				B47B3C7E1F1C604600AB3759 /* JCForwardViewController.swift in Sources */,
 				B4583FBA1E948F410097FB4D /* JCSingleSettingViewController.swift in Sources */,
@@ -1462,7 +1458,7 @@
 				B43BA3FB1E8A2FF500565DB3 /* JCChatViewLayout.swift in Sources */,
 				B45223511EFCC0D700BE9409 /* JCAppManager.swift in Sources */,
 				B4DF213A1E9B54AF005E62AA /* JCMessage.swift in Sources */,
-				B47FEA611EA4B3CE00AF1732 /* JChatImageBrowserViewController.swift in Sources */,
+				B47FEA611EA4B3CE00AF1732 /* JCImageBrowserViewController.swift in Sources */,
 				B43BA4181E8A2FF500565DB3 /* JCLoginViewController.swift in Sources */,
 				B43BA4131E8A2FF500565DB3 /* JCMainTabBarController.swift in Sources */,
 				B43BA40C1E8A2FF500565DB3 /* JCContacterCell.swift in Sources */,

@@ -131,7 +131,7 @@ class JCFileDownloadViewController: UIViewController {
                 let url = URL(fileURLWithPath: content.originMediaLocalPath)
                 try! JCVideoManager.playVideo(data: Data(contentsOf: url), fileType, currentViewController: self)
             case .photo:
-                let browserImageVC = JChatImageBrowserViewController()
+                let browserImageVC = JCImageBrowserViewController()
                 let image = UIImage(contentsOfFile: content.originMediaLocalPath)
                 browserImageVC.imageArr = [image!]
                 browserImageVC.imgCurrentIndex = 0
