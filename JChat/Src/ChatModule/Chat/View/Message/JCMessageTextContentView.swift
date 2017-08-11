@@ -23,7 +23,7 @@ open class JCMessageTextContentView: KILabel, JCMessageContentViewType {
         return super.canPerformAction(action, withSender: sender)
     }
     
-    open func apply(_ message: JCMessageType, _ indexPath: IndexPath?) {
+    open func apply(_ message: JCMessageType) {
         guard let content = message.content as? JCMessageTextContent else {
             return
         }

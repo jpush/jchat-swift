@@ -8,7 +8,7 @@
 
 import UIKit
 
-class JCAppManager: NSObject {
+class JCAppManager {
     
     static func openAppSetter() {
         let url = URL(string: UIApplicationOpenSettingsURLString)

@@ -61,13 +61,10 @@ class JCMyInfoCell: JCTableViewCell {
     private lazy var detailLabel: UILabel = UILabel()
     
     private func _init() {
-        iconView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.systemFont(ofSize: 16)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         detailLabel.textAlignment = .right
         detailLabel.font = UIFont.systemFont(ofSize: 14)
         detailLabel.textColor = UIColor(netHex: 0x999999)
-        detailLabel.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(iconView)
         addSubview(titleLabel)

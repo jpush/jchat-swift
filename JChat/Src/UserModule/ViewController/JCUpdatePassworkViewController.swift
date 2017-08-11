@@ -16,10 +16,6 @@ class JCUpdatePassworkViewController: UIViewController {
         _init()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     private lazy var oldPasswordTextField: UITextField = {
         var textField = UITextField()
         textField.placeholder = "请输入原始密码"
@@ -86,19 +82,8 @@ class JCUpdatePassworkViewController: UIViewController {
     private func _init() {
         self.title = "修改密码"
         view.backgroundColor = UIColor(netHex: 0xe8edf3)
-        
-        bgView.translatesAutoresizingMaskIntoConstraints = false
-        oldPasswordLabel.translatesAutoresizingMaskIntoConstraints = false
-        newPasswordLabel.translatesAutoresizingMaskIntoConstraints = false
-        checkPasswordLabel.translatesAutoresizingMaskIntoConstraints = false
-        oldPasswordTextField.translatesAutoresizingMaskIntoConstraints = false
-        newPasswordTextField.translatesAutoresizingMaskIntoConstraints = false
-        checkPasswordTextField.translatesAutoresizingMaskIntoConstraints = false
-        line1.translatesAutoresizingMaskIntoConstraints = false
-        line2.translatesAutoresizingMaskIntoConstraints = false
-        
+
         updateButton.setBackgroundImage(UIImage.createImage(color: UIColor(netHex: 0x2dd0cf), size: CGSize(width: view.width - 30, height: 40)), for: .normal)
-        updateButton.translatesAutoresizingMaskIntoConstraints = false
         
         bgView.backgroundColor = .white
         view.addSubview(bgView)
@@ -170,11 +155,11 @@ class JCUpdatePassworkViewController: UIViewController {
         let newPassword = newPasswordTextField.text!
         let checkPassword = checkPasswordTextField.text!
         if oldPassword.isEmpty || newPassword.isEmpty || checkPassword.isEmpty {
-            MBProgressHUD_JChat.show(text: "所有信息不能为空", view: self.view)
+            MBProgressHUD_JChat.show(text: "所有信息不能为空", view: view)
             return
         }
         if newPassword != checkPassword {
-            MBProgressHUD_JChat.show(text: "新密码和确认密码不一致", view: self.view)
+            MBProgressHUD_JChat.show(text: "新密码和确认密码不一致", view: view)
             return
         }
         

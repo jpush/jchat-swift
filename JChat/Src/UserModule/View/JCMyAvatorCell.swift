@@ -40,11 +40,9 @@ class JCMyAvatorCell: UITableViewCell {
         avatorView.contentMode = .scaleAspectFill
         avatorView.clipsToBounds = true
         avatorView.image = defaultAvator
-        avatorView.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.textAlignment = .center
         nameLabel.font = UIFont.systemFont(ofSize: 14)
         nameLabel.textColor = UIColor(netHex: 0x999999)
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(avatorView)
         contentView.addSubview(nameLabel)

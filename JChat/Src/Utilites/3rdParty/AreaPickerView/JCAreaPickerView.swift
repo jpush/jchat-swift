@@ -63,20 +63,20 @@ public class JCAreaPickerView: UIView {
         pickerView.dataSource = self
         addSubview(pickerView)
         
-        self.cities = self.provinces[0][citiesKey] as! [[String : AnyObject]]!
-        if let province = self.provinces[0][stateKey] as? String {
-            self.locate.province = province
+        cities = provinces[0][citiesKey] as! [[String : AnyObject]]!
+        if let province = provinces[0][stateKey] as? String {
+            locate.province = province
         }
         
-        if let city = self.cities[0][cityKey] as? String {
-            self.locate.city = city
+        if let city = cities[0][cityKey] as? String {
+            locate.city = city
         }
         
-        self.areas = self.cities[0][areasKey] as! [String]!
-        if self.areas.count > 0 {
-            self.locate.area = self.areas[0]
+        areas = cities[0][areasKey] as! [String]!
+        if areas.count > 0 {
+            locate.area = areas[0]
         } else {
-            self.locate.area = ""
+            locate.area = ""
         }
     }
     
@@ -89,7 +89,7 @@ public class JCAreaPickerView: UIView {
     }
     
     func _areaPickerSure(_ sender: UIButton) {
-        delegate?.areaPickerView?(self, didSelect: sender, selectLocate: self.locate)
+        delegate?.areaPickerView?(self, didSelect: sender, selectLocate: locate)
     }
 
     

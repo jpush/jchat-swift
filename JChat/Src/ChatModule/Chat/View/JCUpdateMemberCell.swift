@@ -35,7 +35,6 @@ class JCUpdateMemberCell: UICollectionViewCell {
     private func _init() {
         
         avatorView.image = defaultUserIcon
-        avatorView.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(avatorView)
         
@@ -48,8 +47,8 @@ class JCUpdateMemberCell: UICollectionViewCell {
     
     func bindDate(user: JMSGUser) {
         user.thumbAvatarData { (data, id, error) in
-            if data != nil {
-                let image = UIImage(data: data!)
+            if let data = data {
+                let image = UIImage(data: data)
                 self.avatorView.image = image
             } else {
                 self.avatorView.image = self.defaultUserIcon

@@ -20,10 +20,6 @@ class JCUpdateMemberViewController: UIViewController {
         _init()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if selectUsers.count == 0 {
@@ -32,10 +28,6 @@ class JCUpdateMemberViewController: UIViewController {
         }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     fileprivate lazy var toolView: UIView = UIView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: 55))
     fileprivate var tableView: UITableView = UITableView(frame: .zero, style: .grouped)
     fileprivate var collectionView: UICollectionView!
@@ -65,8 +57,8 @@ class JCUpdateMemberViewController: UIViewController {
     }()
     
     private func _init() {
-        self.view.backgroundColor = .white
-        self.automaticallyAdjustsScrollViewInsets = false
+        view.backgroundColor = .white
+        automaticallyAdjustsScrollViewInsets = false
         if isAddMember {
             self.title = "添加成员"
             members = group?.memberArray()
@@ -129,7 +121,7 @@ class JCUpdateMemberViewController: UIViewController {
     fileprivate func _classify(_ users: [JMSGUser], isFrist: Bool = false) {
         
         if users.count > 0 {
-            self.tipsView.isHidden = true
+            tipsView.isHidden = true
         }
         
         if isFrist {
@@ -139,8 +131,8 @@ class JCUpdateMemberViewController: UIViewController {
                     self.keys.removeAll()
                     self.data.removeAll()
                     for item in result as! [JMSGUser] {
-                        if self.currentUser != nil {
-                            if item.username == (self.currentUser?.username)! {
+                        if let currentUser = self.currentUser {
+                            if item.username == currentUser.username {
                                 continue
                             }
                         }
@@ -169,41 +161,35 @@ class JCUpdateMemberViewController: UIViewController {
             }
         } else {
             filteredUsersArray = users
-            self.keys.removeAll()
-            self.data.removeAll()
+            keys.removeAll()
+            data.removeAll()
             for item in users {
                 var key = item.displayName().firstCharacter()
                 if !key.isLetterOrNum() {
                     key = "#"
                 }
-                var array = self.data[key]
+                var array = data[key]
                 if array == nil {
                     array = [item]
                 } else {
                     array?.append(item)
                 }
-                if !self.keys.contains(key) {
-                    self.keys.append(key)
+                if !keys.contains(key) {
+                    keys.append(key)
                 }
                 
-                self.data[key] = array
+                data[key] = array
             }
-            self.keys = _JCSortKeys(self.keys)
-            self.tableView.reloadData()
-            self.collectionView.reloadData()
+            keys = _JCSortKeys(keys)
+            tableView.reloadData()
+            collectionView.reloadData()
         }
     }
     
     fileprivate func _removeUser(_ user: JMSGUser) {
-        var index = -1
-        for ind in 0..<selectUsers.count {
-            let item = selectUsers[ind]
-            if item.username == user.username && item.appKey == user.appKey {
-                index = ind
-                break
-            }
-        }
-        if index != -1 {
+        if let index = selectUsers.index(where: { (u) -> Bool in
+            u.username == user.username && u.appKey == user.appKey
+        }) {
             selectUsers.remove(at: index)
         }
     }
@@ -244,7 +230,7 @@ class JCUpdateMemberViewController: UIViewController {
             collectionView.frame = CGRect(x: 10, y: 0, width: 230, height: 55)
             searchView.frame = CGRect(x: 5 + 46 * 5, y: 0, width: toolView.width - 5 - 46 * 5, height: 55)
         }
-        self.collectionView.reloadData()
+        collectionView.reloadData()
     }
     
     func _clickNavRightButton(_ sender: UIButton) {
@@ -256,7 +242,7 @@ class JCUpdateMemberViewController: UIViewController {
             userNames.append(item.username)
         }
         if isAddMember {
-            MBProgressHUD_JChat.showMessage(message: "添加中...", toView: self.view)
+            MBProgressHUD_JChat.showMessage(message: "添加中...", toView: view)
             group?.addMembers(withUsernameArray: userNames, completionHandler: { (result, error) in
                 MBProgressHUD_JChat.hide(forView: self.view, animated: true)
                 if error == nil {
@@ -271,7 +257,7 @@ class JCUpdateMemberViewController: UIViewController {
             if currentUser != nil {
                 userNames.insert((currentUser?.username)!, at: 0)
             }
-            MBProgressHUD_JChat.showMessage(message: "创建中...", toView: self.view)
+            MBProgressHUD_JChat.showMessage(message: "创建中...", toView: view)
             JMSGGroup.createGroup(withName: nil, desc: nil, memberArray: userNames, completionHandler: { (result, error) in
                 MBProgressHUD_JChat.hide(forView: self.view, animated: true)
                 if error == nil {
@@ -316,7 +302,7 @@ extension JCUpdateMemberViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.data[keys[section]]!.count
+        return data[keys[section]]!.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -324,7 +310,7 @@ extension JCUpdateMemberViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return self.keys
+        return keys
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -348,7 +334,7 @@ extension JCUpdateMemberViewController: UITableViewDelegate, UITableViewDataSour
         guard let cell = cell as? JCSelectMemberCell else {
             return
         }
-        let user = self.data[keys[indexPath.section]]?[indexPath.row]
+        let user = data[keys[indexPath.section]]?[indexPath.row]
         cell.bindDate(user!)
         if let members = members {
             if members.contains(where: { (u) -> Bool in
@@ -372,7 +358,7 @@ extension JCUpdateMemberViewController: UITableViewDelegate, UITableViewDataSour
         guard let cell = tableView.cellForRow(at: indexPath) as? JCSelectMemberCell else {
             return
         }
-        let user = self.data[keys[indexPath.section]]?[indexPath.row]
+        let user = data[keys[indexPath.section]]?[indexPath.row]
         if members != nil {
             if (members?.contains(where: { (u) -> Bool in
                 return u.username == user?.username && u.appKey == user?.appKey
@@ -385,7 +371,7 @@ extension JCUpdateMemberViewController: UITableViewDelegate, UITableViewDataSour
         })  {
             // remove
             cell.selectIcon = UIImage.loadImage("com_icon_unselect")
-            self._removeUser(user!)
+            _removeUser(user!)
             _reloadCollectionView()
         } else {
             selectUsers.append(user!)
@@ -393,7 +379,7 @@ extension JCUpdateMemberViewController: UITableViewDelegate, UITableViewDataSour
             _reloadCollectionView()
         }
         if selectUsers.count > 0 {
-            self.collectionView.scrollToItem(at: IndexPath(row: selectUsers.count - 1, section: 0), at: .right, animated: false)
+            collectionView.scrollToItem(at: IndexPath(row: selectUsers.count - 1, section: 0), at: .right, animated: false)
         }
     }
 }
@@ -427,8 +413,8 @@ extension JCUpdateMemberViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.selectUsers.remove(at: indexPath.row)
-        self.tableView.reloadData()
+        selectUsers.remove(at: indexPath.row)
+        tableView.reloadData()
         _reloadCollectionView()
     }
 }

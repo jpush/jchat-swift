@@ -1,5 +1,5 @@
 //
-//  JChatAudioPlayerHelper.swift
+//  JCAudioPlayerHelper.swift
 //  JChatSwift
 //
 //  Created by oshumini on 16/2/26.
@@ -9,28 +9,27 @@
 import UIKit
 import AVFoundation
 
-protocol JChatAudioPlayerHelperDelegate:NSObjectProtocol {
-    func didAudioPlayerBeginPlay(_ AudioPlayer:AVAudioPlayer)
-    func didAudioPlayerStopPlay(_ AudioPlayer:AVAudioPlayer)
-    func didAudioPlayerPausePlay(_ AudioPlayer:AVAudioPlayer)
+protocol JCAudioPlayerHelperDelegate: NSObjectProtocol {
+    func didAudioPlayerBeginPlay(_ AudioPlayer: AVAudioPlayer)
+    func didAudioPlayerStopPlay(_ AudioPlayer: AVAudioPlayer)
+    func didAudioPlayerPausePlay(_ AudioPlayer: AVAudioPlayer)
 }
 
-class JChatAudioPlayerHelper: NSObject {
+final class JCAudioPlayerHelper: NSObject {
     
     var player: AVAudioPlayer!
-    weak var delegate: JChatAudioPlayerHelperDelegate?
-    static let sharedInstance = JChatAudioPlayerHelper()
+    weak var delegate: JCAudioPlayerHelperDelegate?
+    static let sharedInstance = JCAudioPlayerHelper()
     
-    override init() {
+    private override init() {
         super.init()
-        
     }
     
     func managerAudioWithData(_ data:Data, toplay:Bool) {
         if toplay {
-            self.playAudioWithData(data)
+            playAudioWithData(data)
         } else {
-            self.pausePlayingAudio()
+            pausePlayingAudio()
         }
     }
     
@@ -41,16 +40,16 @@ class JChatAudioPlayerHelper: NSObject {
             print("set category fail \(error)")
         }
         
-        if self.player != nil {
-            self.player.stop()
-            self.player = nil
+        if player != nil {
+            player.stop()
+            player = nil
         }
         
         do {
-            let pl:AVAudioPlayer = try AVAudioPlayer(data: voiceData)
+            let pl: AVAudioPlayer = try AVAudioPlayer(data: voiceData)
             pl.delegate = self
             pl.play()
-            self.player = pl
+            player = pl
         } catch let error as NSError {
             print("alloc AVAudioPlayer with voice data fail with error \(error)")
         }
@@ -59,22 +58,21 @@ class JChatAudioPlayerHelper: NSObject {
     }
     
     func pausePlayingAudio() {
-        self.player?.pause()
+        player?.pause()
     }
     
     func stopAudio() {
         if player != nil && player.isPlaying {
             player.stop()
         }
-        
         UIDevice.current.isProximityMonitoringEnabled = false
-        self.delegate?.didAudioPlayerStopPlay(self.player)
+        delegate?.didAudioPlayerStopPlay(player)
     }
 }
 
 
-extension JChatAudioPlayerHelper:AVAudioPlayerDelegate {
+extension JCAudioPlayerHelper: AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        self.stopAudio()
+        stopAudio()
     }
 }

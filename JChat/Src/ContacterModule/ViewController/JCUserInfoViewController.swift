@@ -20,10 +20,6 @@ class JCUserInfoViewController: UIViewController {
         _init()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

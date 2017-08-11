@@ -22,10 +22,6 @@ class JCSignatureViewController: UIViewController {
         tipLabel.text = "\(count)"
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     private lazy var saveButton: UIButton = {
         var saveButton = UIButton()
         saveButton.setTitle("提交", for: .normal)
@@ -46,7 +42,6 @@ class JCSignatureViewController: UIViewController {
         view.backgroundColor = UIColor(netHex: 0xe8edf3)
         
         
-        saveButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(saveButton)
         
         bgView.backgroundColor = .white

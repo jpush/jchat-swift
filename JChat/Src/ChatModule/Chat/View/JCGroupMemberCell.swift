@@ -13,11 +13,11 @@ class JCGroupMemberCell: UICollectionViewCell {
     
     var avator: UIImage? {
         get {
-            return self.avatorView.image
+            return avatorView.image
         }
         set {
-            self.nickname.text = ""
-            self.avatorView.image = newValue
+            nickname.text = ""
+            avatorView.image = newValue
         }
     }
     
@@ -33,15 +33,13 @@ class JCGroupMemberCell: UICollectionViewCell {
     
     private var avatorView: UIImageView = UIImageView()
     private var nickname: UILabel = UILabel()
+    private lazy var userDefaultIcon = UIImage.loadImage("com_icon_user_50")
     
     private func _init() {
         
-        avatorView.image = UIImage.loadImage("com_icon_user_50")
-        
-        avatorView.translatesAutoresizingMaskIntoConstraints = false
+        avatorView.image = userDefaultIcon
         nickname.font = UIFont.systemFont(ofSize: 12)
         nickname.textAlignment = .center
-        nickname.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(avatorView)
         addSubview(nickname)
@@ -60,10 +58,10 @@ class JCGroupMemberCell: UICollectionViewCell {
     
     func bindDate(user: JMSGUser) {
         nickname.text = user.displayName()
-        avatorView.image = UIImage.loadImage("com_icon_user_50")
+        avatorView.image = userDefaultIcon
         user.thumbAvatarData { (data, id, error) in
-            if data != nil {
-                let image = UIImage(data: data!)
+            if let data = data {
+                let image = UIImage(data: data)
                 self.avatorView.image = image
             }
         }

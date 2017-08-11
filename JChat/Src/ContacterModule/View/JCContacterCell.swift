@@ -65,8 +65,8 @@ class JCContacterCell: JCTableViewCell {
         self.title = user.displayName()
         self.icon = UIImage.loadImage("com_icon_user_36")
         user.thumbAvatarData({ (data, name, error) in
-            if data != nil {
-                let image = UIImage(data: data!)
+            if let data = data {
+                let image = UIImage(data: data)
                 self.icon = image
             }
         })
@@ -80,11 +80,8 @@ class JCContacterCell: JCTableViewCell {
     //MARK: - private func
     private func _init() {
         
-        avatorView.translatesAutoresizingMaskIntoConstraints = false
-        
         usernameLabel.textColor = UIColor(netHex: 0x2c2c2c)
         usernameLabel.font = UIFont.systemFont(ofSize: 14)
-        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
 
         redPoin.textAlignment = .center
         redPoin.text = ""
@@ -92,7 +89,6 @@ class JCContacterCell: JCTableViewCell {
         redPoin.layer.masksToBounds = true
         redPoin.isHidden = true
         redPoin.layer.backgroundColor = UIColor.red.cgColor
-        redPoin.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(avatorView)
         contentView.addSubview(usernameLabel)

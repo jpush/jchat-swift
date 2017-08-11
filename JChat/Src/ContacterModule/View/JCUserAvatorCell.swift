@@ -30,16 +30,11 @@ class JCUserAvatorCell: JCTableViewCell {
         super.awakeFromNib()
         _init()
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-    }
-    
+
     private lazy var avatorView: UIImageView = UIImageView()
     private lazy var nameLabel: UILabel = UILabel()
     private lazy var signatureLabel: UILabel = UILabel()
-    
+
     private lazy var defaultAvator = UIImage.loadImage("com_icon_user_80")
     
     //MARK: - private func
@@ -51,14 +46,11 @@ class JCUserAvatorCell: JCTableViewCell {
         avatorView.image = defaultAvator
         avatorView.contentMode = .scaleAspectFill
         avatorView.clipsToBounds = true
-        avatorView.translatesAutoresizingMaskIntoConstraints = false
         
         nameLabel.textAlignment = .center
         nameLabel.font = UIFont.systemFont(ofSize: 16)
         nameLabel.textColor = UIColor(netHex: 0x2C2C2C)
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        signatureLabel.translatesAutoresizingMaskIntoConstraints = false
         signatureLabel.textAlignment = .center
         signatureLabel.font = UIFont.systemFont(ofSize: 13)
         signatureLabel.textColor = UIColor(netHex: 0x999999)

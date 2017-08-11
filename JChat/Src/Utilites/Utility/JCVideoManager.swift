@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import AVKit
 
-class JCVideoManager: NSObject {
+class JCVideoManager {
     
     static func playVideo(data: Data, _ fileType: String = "MOV", currentViewController: UIViewController) {
         let  playVC = AVPlayerViewController()

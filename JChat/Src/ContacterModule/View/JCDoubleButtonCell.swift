@@ -87,7 +87,6 @@ class JCDoubleButtonCell: UITableViewCell {
         leftButton.backgroundColor = .white
         leftButton.layer.cornerRadius = 3.0
         leftButton.layer.masksToBounds = true
-        leftButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(leftButton)
         
         rightButton.addTarget(self, action: #selector(_clickRightButton(_:)), for: .touchUpInside)
@@ -95,7 +94,6 @@ class JCDoubleButtonCell: UITableViewCell {
         rightButton.layer.cornerRadius = 3.0
         rightButton.layer.masksToBounds = true
         rightButton.backgroundColor = color
-        rightButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(rightButton)
         
         addConstraint(_JCLayoutConstraintMake(leftButton, .left, .equal, contentView, .left, 15))

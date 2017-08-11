@@ -29,7 +29,7 @@ open class JCMessageAvatarView: UIImageView, JCMessageContentViewType {
         _commonInit()
     }
     
-    open func apply(_ message: JCMessageType, _ indexPath: IndexPath?) {
+    open func apply(_ message: JCMessageType) {
         self.message = message
         if message.senderAvator != nil {
             self.image = message.senderAvator
@@ -38,8 +38,8 @@ open class JCMessageAvatarView: UIImageView, JCMessageContentViewType {
         self.image = userDefaultIcon
         weak var weakSelf = self
         message.sender?.thumbAvatarData({ (data, id, error) in
-            if data != nil {
-                weakSelf?.image = UIImage(data: data!)
+            if let data = data {
+                weakSelf?.image = UIImage(data: data)
             }
         })
     }

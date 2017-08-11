@@ -56,9 +56,7 @@ class JCSingleSettingCell: UITableViewCell {
         avatorButton.setBackgroundImage(UIImage.loadImage("com_icon_user_50"), for: .normal)
         
         avatorButton.addTarget(self, action: #selector(_clickAvator), for: .touchUpInside)
-        avatorButton.translatesAutoresizingMaskIntoConstraints = false
         
-        nickname.translatesAutoresizingMaskIntoConstraints = false
         nickname.font = UIFont.systemFont(ofSize: 12)
         nickname.textAlignment = .center
         nickname.textColor = UIColor(netHex: 0x2C2C2C)
@@ -66,7 +64,6 @@ class JCSingleSettingCell: UITableViewCell {
         addButton.setBackgroundImage(UIImage.loadImage("com_icon_single_add"), for: .normal)
         addButton.setBackgroundImage(UIImage.loadImage("com_icon_single_add_per"), for: .highlighted)
         addButton.addTarget(self, action: #selector(_clickAdd), for: .touchUpInside)
-        addButton.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(avatorButton)
         contentView.addSubview(addButton)
@@ -90,11 +87,11 @@ class JCSingleSettingCell: UITableViewCell {
     }
     
     func _clickAvator() {
-        delegate?.singleSettingCell?(clickAvatorButton: self.avatorButton)
+        delegate?.singleSettingCell?(clickAvatorButton: avatorButton)
     }
     
     func _clickAdd() {
-        delegate?.singleSettingCell?(clickAddButton: self.addButton)
+        delegate?.singleSettingCell?(clickAddButton: addButton)
     }
 
 }

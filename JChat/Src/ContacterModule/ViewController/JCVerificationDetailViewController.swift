@@ -16,11 +16,7 @@ class JCVerificationDetailViewController: UIViewController {
         super.viewDidLoad()
         _init()
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
+
     fileprivate lazy var tableview: UITableView = UITableView(frame: .zero, style: .grouped)
     fileprivate var user: JMSGUser?
     

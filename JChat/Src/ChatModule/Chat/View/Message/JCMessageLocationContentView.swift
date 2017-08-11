@@ -26,7 +26,7 @@ class JCMessageLocationContentView: UIImageView, JCMessageContentViewType {
         _commonInit()
     }
     
-    open func apply(_ message: JCMessageType, _ indexPath: IndexPath?) {
+    open func apply(_ message: JCMessageType) {
         guard let content = message.content as? JCMessageLocationContent else {
             return
         }
@@ -46,11 +46,11 @@ class JCMessageLocationContentView: UIImageView, JCMessageContentViewType {
     private func _commonInit() {
         _addressLabel.font = UIFont.systemFont(ofSize: 13)
         _addressLabel.numberOfLines = 2
-        self.addSubview(_addressLabel)
-        self.isUserInteractionEnabled = true
+        addSubview(_addressLabel)
+        isUserInteractionEnabled = true
         layer.cornerRadius = 2
         layer.masksToBounds = true
-        self.image = UIImage.loadImage("location_address")
+        image = UIImage.loadImage("location_address")
         _tapGesture()
     }
     
@@ -58,7 +58,7 @@ class JCMessageLocationContentView: UIImageView, JCMessageContentViewType {
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(_clickCell))
         tap.numberOfTapsRequired = 1
-        self.addGestureRecognizer(tap)
+        addGestureRecognizer(tap)
     }
     
     func _clickCell() {

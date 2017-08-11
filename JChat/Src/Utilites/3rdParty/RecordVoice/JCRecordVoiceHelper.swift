@@ -1,5 +1,5 @@
 //
-//  JChatRecordVoiceHelper.swift
+//  JCRecordVoiceHelper.swift
 //  JChatSwift
 //
 //  Created by oshumini on 16/2/22.
@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-@objc public protocol JChatRecordVoiceHelperDelegate: NSObjectProtocol {
+@objc public protocol JCRecordVoiceHelperDelegate: NSObjectProtocol {
     @objc optional func beyondLimit(_ time: TimeInterval)
     
 }
@@ -39,9 +39,9 @@ let maxRecordTime = 60.0
 
 typealias CompletionCallBack = () -> Void
 
-class JChatRecordVoiceHelper: NSObject {
+class JCRecordVoiceHelper: NSObject {
     
-    weak var delegate: JChatRecordVoiceHelperDelegate?
+    weak var delegate: JCRecordVoiceHelperDelegate?
     
     var stopRecordCompletion: CompletionCallBack?
     var startRecordCompleted: CompletionCallBack?
@@ -55,32 +55,32 @@ class JChatRecordVoiceHelper: NSObject {
     var theTimer: Timer?
     var currentTimeInterval: TimeInterval?
     
-    weak var updateMeterDelegate: JChatRecordingView?
+    weak var updateMeterDelegate: JCRecordingView?
     
     override init() {
         super.init()
     }
     
     deinit {
-        self.stopRecord()
-        self.recordPath = nil
+        stopRecord()
+        recordPath = nil
     }
     
     func updateMeters() {
-        if self.recorder == nil {
+        if recorder == nil {
             return
         }
-        self.currentTimeInterval = self.recorder?.currentTime
+        currentTimeInterval = recorder?.currentTime
         
-        self.recordProgress = self.recorder?.peakPower(forChannel: 0)
-        self.updateMeterDelegate?.setPeakPower(self.recordProgress!)
-        self.updateMeterDelegate?.setTime(currentTimeInterval!)
+        recordProgress = recorder?.peakPower(forChannel: 0)
+        updateMeterDelegate?.setPeakPower(recordProgress!)
+        updateMeterDelegate?.setTime(currentTimeInterval!)
         
-        if self.currentTimeInterval > maxRecordTime {
-            self.stopRecord()
+        if currentTimeInterval > maxRecordTime {
+            stopRecord()
             delegate?.beyondLimit?(currentTimeInterval!)
             if self.stopRecordCompletion != nil {
-                DispatchQueue.main.async(execute: self.stopRecordCompletion!)
+                DispatchQueue.main.async(execute: stopRecordCompletion!)
                 self.recorder?.updateMeters()
             }
         }
@@ -159,7 +159,7 @@ class JChatRecordVoiceHelper: NSObject {
         
         if ((self.recorder?.record()) != false) {
             self.resetTimer()
-            self.theTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(JChatRecordVoiceHelper.updateMeters), userInfo: nil, repeats: true)
+            self.theTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(JCRecordVoiceHelper.updateMeters), userInfo: nil, repeats: true)
         } else {
             print("fail record")
         }
@@ -213,7 +213,7 @@ class JChatRecordVoiceHelper: NSObject {
     }
 }
 
-extension JChatRecordVoiceHelper : AVAudioPlayerDelegate {
+extension JCRecordVoiceHelper : AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         print("finished playing \(flag)")
         
@@ -226,6 +226,6 @@ extension JChatRecordVoiceHelper : AVAudioPlayerDelegate {
     }
 }
 
-extension JChatRecordVoiceHelper : AVAudioRecorderDelegate {
+extension JCRecordVoiceHelper : AVAudioRecorderDelegate {
     
 }

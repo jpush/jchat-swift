@@ -16,10 +16,6 @@ class JCFeedbackViewController: UIViewController {
         _init()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     fileprivate lazy var images: [UIImage] = []
     
     private lazy  var bgView: UIView = UIView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: 180))
@@ -82,8 +78,9 @@ class JCFeedbackViewController: UIViewController {
         images.forEach { (image) in
             JMSGMessage.sendSingleImageMessage(UIImageJPEGRepresentation(image, 1.0)!, toUser: "feedback_ios")
         }
-        MBProgressHUD_JChat.show(text: "反馈成功", view: view)
-        navigationController?.popViewController(animated: true)
+//        MBProgressHUD_JChat.show(text: "反馈成功", view: view)
+        view.endEditing(true)
+        JCAlertView.bulid().setDelegate(self).setTitle("提交成功").setMessage("感谢您的反馈，我们将持续为您改进").addButton("确定").setTag(1001).show()
     }
     
     func _tapView() {
@@ -99,7 +96,7 @@ extension JCFeedbackViewController: JCPhotoBarDelegate {
         photoPicker.pickerDelegate = self
         let count = 4 - images.count
         photoPicker.maxPhotosCount = Int32(count)
-        self.present(photoPicker, animated: true)
+        present(photoPicker, animated: true)
     }
     
     func photoBarAddImage() {
@@ -193,6 +190,10 @@ extension JCFeedbackViewController: UITextViewDelegate {
 
 extension JCFeedbackViewController: UIAlertViewDelegate {
     func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
+        if alertView.tag == 1001 {
+            navigationController?.popViewController(animated: true)
+            return
+        }
         if buttonIndex == 1 {
             JCAppManager.openAppSetter()
         }

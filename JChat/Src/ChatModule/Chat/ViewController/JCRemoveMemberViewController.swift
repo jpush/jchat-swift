@@ -17,11 +17,7 @@ class JCRemoveMemberViewController: UIViewController {
         super.viewDidLoad()
         _init()
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
+
     fileprivate lazy var toolView: UIView = UIView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: 55))
     fileprivate var tableView: UITableView = UITableView(frame: .zero, style: .grouped)
     fileprivate var collectionView: UICollectionView!
@@ -126,17 +122,11 @@ class JCRemoveMemberViewController: UIViewController {
     }
     
     fileprivate func _removeUser(_ users: [JMSGUser], _ user: JMSGUser) ->  [JMSGUser]{
-        var index = -1
-        for ind in 0..<users.count {
-            let item = users[ind]
-            if item.username == user.username && item.appKey == user.appKey {
-                index = ind
-                break
-            }
-        }
         var arr = users
-        if index != -1 {
-            arr.remove(at: index)
+        if let index = users.index(where: { (u) -> Bool in
+            u.username == user.username && u.appKey == user.appKey
+        }) {
+             arr.remove(at: index)
         }
         return arr
     }
@@ -216,7 +206,7 @@ extension JCRemoveMemberViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.data[keys[section]]!.count
+        return data[keys[section]]!.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -224,7 +214,7 @@ extension JCRemoveMemberViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return self.keys
+        return keys
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -319,15 +309,6 @@ extension JCRemoveMemberViewController: UICollectionViewDelegate, UICollectionVi
 
 extension JCRemoveMemberViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print("textDidChange")
         filter(searchText)
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        print("searchBarCancelButtonClicked")
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("searchBarSearchButtonClicked")
     }
 }

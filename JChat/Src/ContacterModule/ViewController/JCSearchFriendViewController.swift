@@ -32,11 +32,7 @@ class JCSearchFriendViewController: UIViewController {
             isActive = true
         }
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

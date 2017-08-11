@@ -17,11 +17,7 @@ class JCFriendSettingViewController: UIViewController {
         super.viewDidLoad()
         _init()
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

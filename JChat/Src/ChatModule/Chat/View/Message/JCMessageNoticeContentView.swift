@@ -20,7 +20,7 @@ open class JCMessageNoticeContentView: UILabel, JCMessageContentViewType {
     }
 
     
-    open func apply(_ message: JCMessageType, _ indexPath: IndexPath?) {
+    open func apply(_ message: JCMessageType) {
         guard let content = message.content as? JCMessageNoticeContent else {
             return
         }

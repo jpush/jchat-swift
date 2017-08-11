@@ -37,11 +37,9 @@ class JCNetworkTipsCell: UITableViewCell {
         self.backgroundColor = UIColor(netHex: 0xFFDFE0)
 
         statueView.image = UIImage.loadImage("com_icon_send_error")
-        statueView.translatesAutoresizingMaskIntoConstraints = false
         
         tipsLabel.text = "当前网络不可用，请检查您的网络设置"
         tipsLabel.font = UIFont.systemFont(ofSize: 14)
-        tipsLabel.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(statueView)
         contentView.addSubview(tipsLabel)

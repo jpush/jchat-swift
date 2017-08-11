@@ -150,23 +150,18 @@ class JCConversationCell: JCTableViewCell {
     //MARK: - private func
     private func _init() {
         avatorView.contentMode = .scaleToFill
-        avatorView.translatesAutoresizingMaskIntoConstraints = false
         avatorView.image = userDefaultIcon
         
         statueView.image = UIImage.loadImage("com_icon_shield")
-        statueView.translatesAutoresizingMaskIntoConstraints = false
         
         titleLabel.font = UIFont.systemFont(ofSize: 16)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         msgLabel.textColor = UIColor(netHex: 0x808080)
         msgLabel.font = UIFont.systemFont(ofSize: 14)
-        msgLabel.translatesAutoresizingMaskIntoConstraints = false
         
         dateLabel.textAlignment = .right
         dateLabel.font = UIFont.systemFont(ofSize: 12)
         dateLabel.textColor = UIColor(netHex: 0xB3B3B3)
-        dateLabel.translatesAutoresizingMaskIntoConstraints = false
         
         redPoin.textAlignment = .center
         redPoin.font = UIFont.systemFont(ofSize: 11)

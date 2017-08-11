@@ -29,10 +29,6 @@ class JCSearchResultViewController: UIViewController {
         self.navigationController?.isNavigationBarHidden = false
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

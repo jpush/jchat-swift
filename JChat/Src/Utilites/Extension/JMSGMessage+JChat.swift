@@ -69,7 +69,7 @@ extension JMSGMessage {
             }
             if let size = extras[kFileSize] as? Int {
                 if size > 1024 * 1024 {
-                    return String(format: "%.1f", Double(size) / 1024.0 / 1024.0) + "M"
+                    return String(format: "%.1fM", Double(size) / 1024.0 / 1024.0)
                 }
                 if size > 1024 {
                     return "\(size / 1024)K"

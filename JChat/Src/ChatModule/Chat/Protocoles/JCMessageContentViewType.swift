@@ -22,7 +22,7 @@ import UIKit
 @objc public protocol JCMessageContentViewType: class {
     
     init()
-    func apply(_ message: JCMessageType, _ indexPath: IndexPath?)
+    func apply(_ message: JCMessageType)
 }
 
 

@@ -32,18 +32,12 @@ class JCResaonCell: JCTableViewCell {
         super.awakeFromNib()
         _init()
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-    }
-    
+
     private lazy var titleLabel: UILabel = UILabel()
     
     private func _init() {
         titleLabel.font = UIFont.systemFont(ofSize: 14)
         titleLabel.textColor = UIColor(netHex: 0x999999)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
     
         addSubview(titleLabel)
 

@@ -19,11 +19,7 @@ class JCIdentityVerificationViewController: UITableViewController {
         super.viewDidAppear(animated)
         UserDefaults.standard.set(0, forKey: kUnreadInvitationCount)
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -34,9 +30,9 @@ class JCIdentityVerificationViewController: UITableViewController {
     // MARK: - private func
     private func _init() {
         self.title = "验证信息"
-        self.view.backgroundColor = .white
-        self.tableView.separatorStyle = .none
-        self.tableView.register(JCVerificationCell.self, forCellReuseIdentifier: "JCVerificationCell")
+        view.backgroundColor = .white
+        tableView.separatorStyle = .none
+        tableView.register(JCVerificationCell.self, forCellReuseIdentifier: "JCVerificationCell")
         _getData()
         NotificationCenter.default.addObserver(self, selector: #selector(_getData), name: NSNotification.Name(rawValue: kUpdateVerification), object: nil)
     }

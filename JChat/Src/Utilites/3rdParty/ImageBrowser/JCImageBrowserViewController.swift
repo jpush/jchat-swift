@@ -64,24 +64,23 @@ class JCImageBrowserViewController: UIViewController {
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = 0
         imageBrowser = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
-        view.addSubview(self.imageBrowser)
-        imageBrowser.frame = self.view.frame
+        view.addSubview(imageBrowser)
+        imageBrowser.frame = view.frame
         
         imageBrowser.backgroundColor = UIColor.clear
         imageBrowser.delegate = self
         imageBrowser.dataSource = self
         imageBrowser.minimumZoomScale = 0
         imageBrowser.isPagingEnabled = true
-        imageBrowser.register(UINib(nibName: "JCMessageImageCollectionViewCell", bundle: nil),
-                                   forCellWithReuseIdentifier: CellIdentifier)
+        imageBrowser.register(UINib(nibName: "JCMessageImageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: CellIdentifier)
     }
     
     func singleTapImage(_ gestureRecognizer:UITapGestureRecognizer)  {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     func doubleTapImage(_ gestureRecognizer:UITapGestureRecognizer) {
-        let cell = imageBrowser.cellForItem(at: self.currentIndex()) as! JCMessageImageCollectionViewCell
+        let cell = imageBrowser.cellForItem(at: currentIndex()) as! JCMessageImageCollectionViewCell
         cell.adjustImageScale()
     }
     
@@ -131,5 +130,19 @@ extension JCImageBrowserViewController: UICollectionViewDelegate, UICollectionVi
 extension JCImageBrowserViewController: JCImageBrowserCellDelegate {
     func singleTap() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    func longTap() {
+        let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "保存到手机")
+        actionSheet.show(in: view)
+        SAIInputBarLoad()
+    }
+}
+
+extension JCImageBrowserViewController: UIActionSheetDelegate {
+    func actionSheet(_ actionSheet: UIActionSheet, clickedButtonAt buttonIndex: Int) {
+        if buttonIndex == 1 {
+            view.becomeFirstResponder()
+        }
     }
 }
