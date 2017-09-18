@@ -229,26 +229,23 @@ class JCRegisterViewController: UIViewController {
             return
         }
         
-        MBProgressHUD_JChat.showMessage(message: "用户名校验", toView: self.view)
-        JCAPIManager.sharedAPI.searchUser(username) { (data, response, error) in
-            let _ = DispatchQueue.main.sync {
+        MBProgressHUD_JChat.showMessage(message: "注册中", toView: self.view)
+
+        JMSGUser.register(withUsername: username, password: password) { (result, error) in
+            let _ = DispatchQueue.main.async {
                 MBProgressHUD_JChat.hide(forView: self.view, animated: true)
                 if error == nil {
-                    let result = try! JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-                    if result["username"] != nil {
-                        MBProgressHUD_JChat.show(text: "用户名重复", view: self.view)
-                    } else {
-                        let vc = JCRegisterInfoViewController()
-                        vc.username = username
-                        vc.password = password
-                        self.navigationController?.pushViewController(vc, animated: true)
-                    }
-                }
-                else {
-                    MBProgressHUD_JChat.show(text: "校验失败，请重试", view: self.view)
+                    let vc = JCRegisterInfoViewController()
+                    vc.username = username
+                    vc.password = password
+                    self.navigationController?.pushViewController(vc, animated: true)
+                } else {
+                    MBProgressHUD_JChat.show(text: String.errorAlert(error as! NSError), view: self.view)
                 }
             }
         }
+
+
     }
     
     func _clickLoginButton() {

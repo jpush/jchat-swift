@@ -82,6 +82,7 @@ class JCFeedbackViewController: UIViewController {
         images.forEach { (image) in
             JMSGMessage.sendSingleImageMessage(UIImageJPEGRepresentation(image, 1.0)!, toUser: "feedback_ios")
         }
+        JMSGConversation.deleteSingleConversation(withUsername: "feedback_ios")
         MBProgressHUD_JChat.show(text: "反馈成功", view: view)
         navigationController?.popViewController(animated: true)
     }

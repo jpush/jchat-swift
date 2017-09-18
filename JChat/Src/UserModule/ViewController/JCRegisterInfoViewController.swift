@@ -25,7 +25,6 @@ class JCRegisterInfoViewController: UIViewController {
         super.viewWillAppear(animated)
         UIApplication.shared.setStatusBarStyle(.lightContent, animated: false)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        _updateRegisterButton()
     }
     
     override func didReceiveMemoryWarning() {
@@ -36,7 +35,7 @@ class JCRegisterInfoViewController: UIViewController {
         var textField = UITextField()
         textField.addTarget(self, action: #selector(textFieldDidChanged(_ :)), for: .editingChanged)
         textField.clearButtonMode = .whileEditing
-        textField.placeholder = "请输入用户名"
+        textField.placeholder = "请输入昵称"
         textField.font = UIFont.systemFont(ofSize: 16)
         textField.frame = CGRect(x: 38 + 40 + 15, y: 64 + 40 + 80 + 40, width: self.view.width - 76 - 38, height: 40)
         return textField
@@ -56,7 +55,7 @@ class JCRegisterInfoViewController: UIViewController {
         var button = UIButton()
         button.backgroundColor = UIColor(netHex: 0x2DD0CF)
         button.frame = CGRect(x: 38, y: 64 + 40 + 80 + 40 + 40 + 38, width: self.view.width - 76, height: 40)
-        button.setTitle("注册", for: .normal)
+        button.setTitle("完成", for: .normal)
         button.layer.cornerRadius = 3.0
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(_userRegister), for: .touchUpInside)
@@ -111,7 +110,6 @@ class JCRegisterInfoViewController: UIViewController {
     }
     
     func textFieldDidChanged(_ textField: UITextField) {
-        _updateRegisterButton()
         if textField.markedTextRange == nil {
             let text = textField.text!
             if text.characters.count > 30 {
@@ -133,29 +131,11 @@ class JCRegisterInfoViewController: UIViewController {
         actionSheet.tag = 1001
         actionSheet.show(in: self.view)
     }
-    
-    func _updateRegisterButton() {
-        if (nicknameTextField.text?.isEmpty)! {
-            registerButton.isEnabled = false
-            registerButton.alpha = 0.7
-        } else {
-            registerButton.isEnabled = true
-            registerButton.alpha = 1.0
-        }
-    }
-    
+
     //MARK: - click event
     func _userRegister() {
-        MBProgressHUD_JChat.showMessage(message: "注册中", toView: self.view)
-        JMSGUser.register(withUsername: username, password: password) { (result, error) in
-            if error == nil {
-                self.userLogin(withUsername: self.username, password: self.password)
-            } else {
-                MBProgressHUD_JChat.hide(forView: self.view, animated: true)
-                MBProgressHUD_JChat.show(text: "注册失败", view: self.view)
-            }
-        }
-        
+        MBProgressHUD_JChat.showMessage(message: "保存中", toView: self.view)
+        userLogin(withUsername: self.username, password: self.password)
     }
     
     private func userLogin(withUsername: String, password: String) {
@@ -170,7 +150,7 @@ class JCRegisterInfoViewController: UIViewController {
                 let window = appDelegate?.window!
                 window?.rootViewController = JCMainTabBarController()
             } else {
-                MBProgressHUD_JChat.show(text: "注册成功，但登录失败", view: self.view)
+                MBProgressHUD_JChat.show(text: "登录失败", view: self.view)
             }
         }
     }
@@ -187,7 +167,7 @@ class JCRegisterInfoViewController: UIViewController {
     
     private func uploadImage() {
         if let image = image {
-            let imageData = UIImagePNGRepresentation(image)
+            let imageData = UIImageJPEGRepresentation(image, 0.8)
             JMSGUser.updateMyInfo(withParameter: imageData!, userFieldType: .fieldsAvatar, completionHandler: { (result, error) in
                 if error == nil {
                     let avatorData = NSKeyedArchiver.archivedData(withRootObject: imageData!)

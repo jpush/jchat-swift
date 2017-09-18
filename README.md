@@ -58,7 +58,7 @@ pod install（这个可能比较慢，请耐心等待……）
 二、配置运行的基本属性
 
 1. 填写项目工程中的 Bundle Identifier
-2. 在 AppDelegate.swift 文件中，按提示填入你的 JPush AppKey。JPush AppKey 是 JMessage SDK 运行的基本参数，如示未获取到应的 AppKey，请到 [JPush 官方网站](https://jpush.cn) 登录控制台创建应用获取。
+2. 在 AppDelegate.swift 文件中，按提示填入自己项目的 AppKey。AppKey 是 JMessage SDK 运行的基本参数，如示未获取到应的 AppKey，请到极 [极光官方网站](https://jpush.cn) 登录控制台创建应用获取。
 
 ### JMessage 文档
 

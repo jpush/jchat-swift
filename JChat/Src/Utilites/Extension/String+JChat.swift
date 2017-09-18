@@ -113,7 +113,7 @@ extension String {
 extension String {
     static func errorAlert(_ error: NSError) -> String {
         var errorAlert: String = ""
-        
+
         if error.code > 860000 {
             let  errorcode = JMSGSDKErrorCode(rawValue: Int(error.code))
             switch errorcode! as JMSGSDKErrorCode{
@@ -264,6 +264,9 @@ extension String {
         }
         if error.code == 869999 {
             errorAlert = "网络连接错误"
+        }
+        if error.code == 898001 {
+            errorAlert = "用户名已存在"
         }
         if errorAlert == "" {
             errorAlert = "未知错误"

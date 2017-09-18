@@ -12,7 +12,6 @@
 		B401970F1EF3B34C006B9F2D /* JCNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B401970E1EF3B34C006B9F2D /* JCNetworkManager.swift */; };
 		B401E5061E8B4A6C003ABE08 /* JCSignatureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B401E5051E8B4A6C003ABE08 /* JCSignatureViewController.swift */; };
 		B401E5081E8B7B9D003ABE08 /* JCNicknameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B401E5071E8B7B9D003ABE08 /* JCNicknameViewController.swift */; };
-		B403880B1EEE39D800F764A7 /* JCAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B403880A1EEE39D800F764A7 /* JCAPIManager.swift */; };
 		B403880D1EEE418100F764A7 /* JCNetworkTipsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B403880C1EEE418100F764A7 /* JCNetworkTipsCell.swift */; };
 		B40388131EEE767B00F764A7 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = B40388121EEE767B00F764A7 /* Reachability.m */; };
 		B403F4331EBAF24F00011630 /* addressCode in Resources */ = {isa = PBXBuildFile; fileRef = B403F42F1EBAF24F00011630 /* addressCode */; };
@@ -111,7 +110,6 @@
 		B446FDF51ED5276200F40A5A /* JCJChatInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B446FDF41ED5276200F40A5A /* JCJChatInfoCell.swift */; };
 		B44D6B7F1E8CAE6F0018E884 /* JCMyAvatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44D6B7E1E8CAE6F0018E884 /* JCMyAvatorCell.swift */; };
 		B44D6B841E8CFD180018E884 /* JCMyInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44D6B831E8CFD180018E884 /* JCMyInfoCell.swift */; };
-		B44FEC351F2ECEBB00C40304 /* JMessageAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44FEC341F2ECEBB00C40304 /* JMessageAPI.swift */; };
 		B450FF171F1F31F400F4BF41 /* JCRemind.swift in Sources */ = {isa = PBXBuildFile; fileRef = B450FF161F1F31F400F4BF41 /* JCRemind.swift */; };
 		B45223511EFCC0D700BE9409 /* JCAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45223501EFCC0D700BE9409 /* JCAppManager.swift */; };
 		B45223661EFCFFF600BE9409 /* JMSGMessage+JChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45223651EFCFFF600BE9409 /* JMSGMessage+JChat.swift */; };
@@ -225,7 +223,6 @@
 		B401970E1EF3B34C006B9F2D /* JCNetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCNetworkManager.swift; sourceTree = "<group>"; };
 		B401E5051E8B4A6C003ABE08 /* JCSignatureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCSignatureViewController.swift; sourceTree = "<group>"; };
 		B401E5071E8B7B9D003ABE08 /* JCNicknameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCNicknameViewController.swift; sourceTree = "<group>"; };
-		B403880A1EEE39D800F764A7 /* JCAPIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCAPIManager.swift; sourceTree = "<group>"; };
 		B403880C1EEE418100F764A7 /* JCNetworkTipsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCNetworkTipsCell.swift; sourceTree = "<group>"; };
 		B40388111EEE767B00F764A7 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		B40388121EEE767B00F764A7 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
@@ -334,7 +331,6 @@
 		B446FDF41ED5276200F40A5A /* JCJChatInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCJChatInfoCell.swift; sourceTree = "<group>"; };
 		B44D6B7E1E8CAE6F0018E884 /* JCMyAvatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCMyAvatorCell.swift; sourceTree = "<group>"; };
 		B44D6B831E8CFD180018E884 /* JCMyInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCMyInfoCell.swift; sourceTree = "<group>"; };
-		B44FEC341F2ECEBB00C40304 /* JMessageAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMessageAPI.swift; sourceTree = "<group>"; };
 		B450FF161F1F31F400F4BF41 /* JCRemind.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCRemind.swift; sourceTree = "<group>"; };
 		B45223501EFCC0D700BE9409 /* JCAppManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCAppManager.swift; sourceTree = "<group>"; };
 		B45223651EFCFFF600BE9409 /* JMSGMessage+JChat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "JMSGMessage+JChat.swift"; sourceTree = "<group>"; };
@@ -474,15 +470,6 @@
 				B401970E1EF3B34C006B9F2D /* JCNetworkManager.swift */,
 			);
 			path = NetworkManager;
-			sourceTree = "<group>";
-		};
-		B40388091EEE39AA00F764A7 /* APIManager */ = {
-			isa = PBXGroup;
-			children = (
-				B44FEC341F2ECEBB00C40304 /* JMessageAPI.swift */,
-				B403880A1EEE39D800F764A7 /* JCAPIManager.swift */,
-			);
-			path = APIManager;
 			sourceTree = "<group>";
 		};
 		B40388101EEE767B00F764A7 /* Reachability */ = {
@@ -838,7 +825,6 @@
 			children = (
 				B401970D1EF3B31D006B9F2D /* NetworkManager */,
 				B40388101EEE767B00F764A7 /* Reachability */,
-				B40388091EEE39AA00F764A7 /* APIManager */,
 				B43BA3E61E8A2FF500565DB3 /* 3rdParty */,
 				B43BA3E71E8A2FF500565DB3 /* Extension */,
 				B43BA3EE1E8A2FF500565DB3 /* ThemeManager */,
@@ -1221,9 +1207,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-JChat/Pods-JChat-resources.sh",
+				"${PODS_ROOT}/BaiduMapKit/BaiduMapKit/BaiduMapAPI_Map.framework/Resources/mapapi.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1251,9 +1240,20 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-JChat/Pods-JChat-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
+				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
+				"${BUILT_PRODUCTS_DIR}/YHPhotoKit/YHPhotoKit.framework",
+				"${BUILT_PRODUCTS_DIR}/YHPopupView/YHPopupView.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YHPhotoKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YHPopupView.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1296,13 +1296,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-JChat-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A1CA4E549E63FE8C93D41504 /* [CP] Check Pods Manifest.lock */ = {
@@ -1311,13 +1314,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-JChatTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AADD78A84D0D251530A7C48A /* [CP] Check Pods Manifest.lock */ = {
@@ -1326,13 +1332,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-JChatUITests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1353,7 +1362,6 @@
 				B4DF21081E9B4A4C005E62AA /* JCMessageAvatarView.swift in Sources */,
 				B480C98C1E9DF12B00187D9B /* SAIInputBar.swift in Sources */,
 				B46A91D01ED6BD83000321E6 /* JCResaonCell.swift in Sources */,
-				B403880B1EEE39D800F764A7 /* JCAPIManager.swift in Sources */,
 				B43BA3FA1E8A2FF500565DB3 /* JCChatViewCell.swift in Sources */,
 				B4AC7BD51F258F2300EDA7B4 /* JCFileDownloadViewController.swift in Sources */,
 				B488D6041EA075C800568B2B /* JCVerificationInfo.swift in Sources */,
@@ -1446,7 +1454,6 @@
 				B407D8B41EC400E5007B5F30 /* JCUpdateMemberViewController.swift in Sources */,
 				B40388131EEE767B00F764A7 /* Reachability.m in Sources */,
 				B4DF21041E9B33F1005E62AA /* JCChatViewLayoutAttributesInfo.swift in Sources */,
-				B44FEC351F2ECEBB00C40304 /* JMessageAPI.swift in Sources */,
 				B4A314CE1EC9FABC00486F5D /* JCNoteNameViewController.swift in Sources */,
 				B46BA5531E960CAE00A94B18 /* JCVerificationCell.swift in Sources */,
 				B4DF21061E9B4A25005E62AA /* JCMessageCardView.swift in Sources */,
