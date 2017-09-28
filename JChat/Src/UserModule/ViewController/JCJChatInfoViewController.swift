@@ -16,10 +16,6 @@ class JCJChatInfoViewController: UIViewController {
         _init()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     fileprivate lazy var tableview: UITableView = UITableView(frame: .zero, style: .grouped)
     fileprivate lazy var tagArray = ["JChat 版本", "SDK 版本", "官方网站"]
     fileprivate lazy var version: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
@@ -35,7 +31,6 @@ class JCJChatInfoViewController: UIViewController {
         tableview.backgroundColor = UIColor(netHex: 0xe8edf3)
         tableview.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
         tableview.register(JCJChatInfoCell.self, forCellReuseIdentifier: "JCJChatInfoCell")
-        tableview.translatesAutoresizingMaskIntoConstraints = false
         tableview.separatorStyle = .none
         view.addSubview(tableview)
     }

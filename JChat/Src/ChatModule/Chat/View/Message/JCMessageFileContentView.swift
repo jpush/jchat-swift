@@ -19,7 +19,7 @@ class JCMessageFileContentView: UIView, JCMessageContentViewType {
         _commonInit()
     }
     
-    open func apply(_ message: JCMessageType, _ indexPath: IndexPath?) {
+    open func apply(_ message: JCMessageType) {
         guard let content = message.content as? JCMessageFileContent else {
             return
         }

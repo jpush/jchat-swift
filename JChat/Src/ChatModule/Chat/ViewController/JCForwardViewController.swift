@@ -17,10 +17,6 @@ class JCForwardViewController: UIViewController {
         _init()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     private lazy var cancelButton = UIButton(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
     
     fileprivate var contacterView: UITableView = UITableView(frame: .zero, style: .grouped)

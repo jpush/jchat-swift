@@ -16,10 +16,6 @@ class JCMainTabBarController: UITabBarController {
         setupChildControllers()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-
     //MARK: - private func
     private func setupChildControllers() {
         // 会话

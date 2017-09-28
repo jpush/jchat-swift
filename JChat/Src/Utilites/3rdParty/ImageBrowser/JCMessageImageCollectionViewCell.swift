@@ -11,6 +11,7 @@ import JMessage
 
 @objc public protocol JCImageBrowserCellDelegate: NSObjectProtocol {
     @objc optional func singleTap()
+    @objc optional func longTap()
 }
 
 @objc(JCMessageImageCollectionViewCell)
@@ -19,7 +20,7 @@ class JCMessageImageCollectionViewCell: UICollectionViewCell {
     weak var delegate: JCImageBrowserCellDelegate?
     
     @IBOutlet weak var messageImageContent: UIScrollView!
-    var messageImage:UIImageView!
+    var messageImage: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,21 +37,32 @@ class JCMessageImageCollectionViewCell: UICollectionViewCell {
         
         let singleTapGesture = UITapGestureRecognizer(target: self, action: #selector(singleTapImage(_:)))
         singleTapGesture.numberOfTapsRequired = 1
-        self.addGestureRecognizer(singleTapGesture)
+        addGestureRecognizer(singleTapGesture)
         
-        let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(self.doubleTapImage(_:)))
+        let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(doubleTapImage(_:)))
         doubleTapGesture.numberOfTapsRequired = 2
-        self.addGestureRecognizer(doubleTapGesture)
-        
+        addGestureRecognizer(doubleTapGesture)
         singleTapGesture.require(toFail: doubleTapGesture)
         
+        let longTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(longTapImage(_:)))
+        longTapGesture.minimumPressDuration = 0.8
+        longTapGesture.numberOfTouchesRequired = 1
+        addGestureRecognizer(longTapGesture)
+        longTapGesture.require(toFail: singleTapGesture)
     }
     
-    func singleTapImage(_ gestureRecognizer:UITapGestureRecognizer)  {
+    func singleTapImage(_ gestureRecognizer: UITapGestureRecognizer)  {
         delegate?.singleTap?()
     }
-    func doubleTapImage(_ gestureRecognizer:UITapGestureRecognizer) {
-        self.adjustImageScale()
+    
+    func doubleTapImage(_ gestureRecognizer: UITapGestureRecognizer) {
+        adjustImageScale()
+    }
+    
+    func longTapImage(_ gestureRecognizer: UILongPressGestureRecognizer)  {
+        if gestureRecognizer.state == .began {
+            delegate?.longTap?()
+        }
     }
     
     func adjustImageScale() {
@@ -58,12 +70,11 @@ class JCMessageImageCollectionViewCell: UICollectionViewCell {
             messageImageContent.setZoomScale(1.0, animated: true)
         } else {
             messageImageContent.setZoomScale(2.0, animated: true)
-            
         }
     }
     
     func setImage(image: UIImage) {
-        self.messageImage.image = image
+        messageImage.image = image
     }
     
     func setMessage(_ message: JMSGMessage) {
@@ -75,9 +86,7 @@ class JCMessageImageCollectionViewCell: UICollectionViewCell {
                 self.messageImage.image = UIImage(data: data!)
             }
             
-            content.largeImageData(progress: { (percent, msgId) in
-                
-            }, completionHandler: { (data, msgId, error) in
+            content.largeImageData(progress: nil, completionHandler: { (data, msgId, error) in
                 if error == nil {
                     if msgId != message.msgId {
                         return

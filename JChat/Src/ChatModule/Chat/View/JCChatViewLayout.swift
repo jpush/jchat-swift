@@ -44,7 +44,7 @@ import UIKit
     }
     
     open func layoutAttributesInfoForItem(at indexPath: IndexPath) -> JCChatViewLayoutAttributesInfo? {
-        guard let collectionView = collectionView, let delegate = collectionView.delegate as? JCChatViewLayoutDelegate, let message = _message(at: indexPath) else {
+        guard let collectionView = collectionView, let _ = collectionView.delegate as? JCChatViewLayoutDelegate, let message = _message(at: indexPath) else {
             return nil
         }
         let size = CGSize(width: collectionView.frame.width, height: .greatestFiniteMagnitude)

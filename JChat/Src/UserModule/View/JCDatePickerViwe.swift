@@ -56,11 +56,7 @@ class JCDatePickerViwe: UIView {
     private func _init() {
         // 216 + 40
         self.backgroundColor = .white
-        
-        cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        finishButton.translatesAutoresizingMaskIntoConstraints = false
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
-        
+
         self.addSubview(finishButton)
         self.addSubview(cancelButton)
         self.addSubview(datePicker)

@@ -21,25 +21,24 @@ open class JCMessageTipsView: UIView, JCMessageContentViewType {
         _commonInit()
     }
     
-    open func apply(_ message: JCMessageType, _ indexPath: IndexPath?) {
-        self.indexPath = indexPath
+    open func apply(_ message: JCMessageType) {
         self.message = message
         switch message.options.state {
         case .sending:
-            self.errorInfoView.isHidden = true
-            self.activityView.startAnimating()
+            errorInfoView.isHidden = true
+            activityView.startAnimating()
         case .sendSucceed:
-            self.errorInfoView.isHidden = true
-            self.activityView.stopAnimating()
+            errorInfoView.isHidden = true
+            activityView.stopAnimating()
         case .sendError:
-            self.activityView.stopAnimating()
-            self.errorInfoView.isHidden = false
+            activityView.stopAnimating()
+            errorInfoView.isHidden = false
         default:
-            self.activityView.stopAnimating()
+            activityView.stopAnimating()
         }
         if message.content is JCMessageImageContent {
-            self.activityView.stopAnimating()
-            self.activityView.isHidden = true
+            activityView.stopAnimating()
+            activityView.isHidden = true
         }
     }
     
@@ -53,7 +52,7 @@ open class JCMessageTipsView: UIView, JCMessageContentViewType {
         activityView = UIActivityIndicatorView(frame: CGRect(x: 5, y: 5, width: 10, height: 10))
         activityView.activityIndicatorViewStyle = .gray
         activityView.isUserInteractionEnabled = false
-        self.addSubview(activityView)
+        addSubview(activityView)
         
         let image = UIImage.loadImage("com_icon_send_error")
         errorInfoView = UIImageView(frame: CGRect(x: 0, y: 0, width: 21, height: 21))
@@ -63,11 +62,10 @@ open class JCMessageTipsView: UIView, JCMessageContentViewType {
         errorInfoView.addGestureRecognizer(tapGR)
         
         errorInfoView.isHidden = true
-        self.addSubview(errorInfoView)
-        
+        addSubview(errorInfoView)
     }
     
     func _tapHandler(sender: UITapGestureRecognizer) {
-        delegate?.clickTips?(message: self.message, indexPath: self.indexPath)
+        delegate?.clickTips?(message: self.message)
     }
 }

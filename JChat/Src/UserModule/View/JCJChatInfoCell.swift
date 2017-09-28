@@ -36,14 +36,12 @@ class JCJChatInfoCell: UITableViewCell {
     private func _init() {
         
         avatorView.image = UIImage.loadImage("com_icon_about")
-        avatorView.translatesAutoresizingMaskIntoConstraints = false
         
         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
         nameLabel.textAlignment = .center
         nameLabel.text = "JChat v\(String(describing: version!))"
         nameLabel.font = UIFont.systemFont(ofSize: 15)
         nameLabel.textColor = UIColor(netHex: 0x999999)
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(avatorView)
         contentView.addSubview(nameLabel)

@@ -36,10 +36,6 @@ class JCMoreResultViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = false
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     deinit {
         self.searchResultView.removeObserver(self, forKeyPath: "filteredUsersArray")
         self.searchResultView.removeObserver(self, forKeyPath: "filteredGroupsArray")

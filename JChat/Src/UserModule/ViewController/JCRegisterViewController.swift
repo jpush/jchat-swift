@@ -20,19 +20,15 @@ class JCRegisterViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         UIApplication.shared.setStatusBarStyle(.default, animated: false)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(true, animated: false)
         _updateRegisterButton()
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
+
     fileprivate lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: -64, width: self.view.width, height: 64))
         view.backgroundColor = UIColor(netHex: 0x2DD0CF)
         let title = UILabel(frame: CGRect(x: self.view.centerX - 10, y: 20, width: 200, height: 44))
-        title.font = UIFont.systemFont(ofSize: 16)
+        title.font = UIFont.systemFont(ofSize: 18)
         title.textColor = .white
         title.text = "JChat"
         view.addSubview(title)
@@ -171,47 +167,6 @@ class JCRegisterViewController: UIViewController {
         _updateRegisterButton()
     }
     
-    func _isUserNameLegal(_ username: String) -> Bool {
-        if username.isEmpty {
-            MBProgressHUD_JChat.show(text: "用户名不能为空", view: view)
-            return false
-        }
-        if username.length < 4 || username.length > 128 {
-            MBProgressHUD_JChat.show(text: "用户名为4-128位字符", view: view)
-            return false
-        }
-        
-        let fristCharRegex = "^([a-zA-Z0-9])(.*)$"
-        let fristCharPredicate = NSPredicate(format: "SELF MATCHES %@", fristCharRegex)
-        if !fristCharPredicate.evaluate(with: username) {
-            MBProgressHUD_JChat.show(text: "用户名以字母或数字开头", view: view)
-            return false
-        }
-       
-        if username.isContainsChinese {
-            MBProgressHUD_JChat.show(text: "用户名不能包含中文字符", view: view)
-            return false
-        }
-        if username.isExpectations {
-            return true
-        }
-        
-        MBProgressHUD_JChat.show(text: "用户名包含非法字符", view: view)
-        return false
-    }
-    
-    func _isPasswordLegal(_ password: String) -> Bool {
-        if password.isEmpty {
-            MBProgressHUD_JChat.show(text: "密码不能为空", view: view)
-            return false
-        }
-        if password.length < 4 || password.length > 128 {
-            MBProgressHUD_JChat.show(text: "密码为4-128位字符", view: view)
-            return false
-        }
-        return true
-    }
-    
     func _tapView() {
         view.endEditing(true)
     }
@@ -222,10 +177,16 @@ class JCRegisterViewController: UIViewController {
         passwordTextField.resignFirstResponder()
         let username = userNameTextField.text!.trim()
         let password = passwordTextField.text!.trim()
-        if !_isUserNameLegal(username.trim()) {
+        
+        let validateUsername = UserDefaultValidationService.sharedValidationService.validateUsername(username)
+        if !(validateUsername == .ok) {
+            MBProgressHUD_JChat.show(text: validateUsername.description, view: view)
             return
         }
-        if !_isPasswordLegal(password.trim()) {
+        
+        let validatePassword = UserDefaultValidationService.sharedValidationService.validatePassword(password)
+        if !(validatePassword == .ok) {
+            MBProgressHUD_JChat.show(text: validatePassword.description, view: view)
             return
         }
         

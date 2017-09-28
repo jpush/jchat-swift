@@ -23,14 +23,6 @@ class JCNicknameViewController: UIViewController {
         nicknameTextField.becomeFirstResponder()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     private lazy var navRightButton: UIBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(_saveNickname))
     fileprivate lazy var nicknameTextField: UITextField = UITextField(frame: CGRect(x: 0, y: 64, width: self.view.width, height: 45))
     fileprivate lazy var tipLabel:  UILabel = UILabel(frame: CGRect(x: self.view.width - 15 - 28, y: 64 + 21, width: 28, height: 12))
@@ -46,7 +38,6 @@ class JCNicknameViewController: UIViewController {
         nicknameTextField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 27, height: 0))
         nicknameTextField.leftViewMode = .always
         nicknameTextField.rightViewMode = .always
-        nicknameTextField.delegate = self
         nicknameTextField.addTarget(self, action: #selector(textFieldDidChanged(_ :)), for: .editingChanged)
         view.addSubview(nicknameTextField)
         
@@ -90,8 +81,4 @@ class JCNicknameViewController: UIViewController {
             }
         }
     }
-}
-
-extension JCNicknameViewController: UITextFieldDelegate {
-    
 }

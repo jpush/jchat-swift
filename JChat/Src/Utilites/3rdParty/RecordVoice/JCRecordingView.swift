@@ -1,5 +1,5 @@
 //
-//  JChatRecordingView.swift
+//  JCRecordingView.swift
 //  JChatSwift
 //
 //  Created by oshumini on 16/2/19.
@@ -11,7 +11,7 @@ import UIKit
 internal let voiceRecordResaueString = "松开手指，取消发送"
 internal let voiceRecordPauseString = "手指上滑，取消发送"
 
-class JChatRecordingView: UIView {
+class JCRecordingView: UIView {
     
     var remiadeLable: UILabel!
     var cancelRecordImageView: UIImageView!
@@ -29,7 +29,7 @@ class JChatRecordingView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self._init()
+        _init()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -37,9 +37,9 @@ class JChatRecordingView: UIView {
     }
     
     func _init() {
-        self.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        self.layer.masksToBounds = true
-        self.layer.cornerRadius = 5
+        backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        layer.masksToBounds = true
+        layer.cornerRadius = 5
         
         remiadeLable = UILabel()
         remiadeLable.textColor = UIColor.white
@@ -48,7 +48,6 @@ class JChatRecordingView: UIView {
         remiadeLable.font = UIFont.systemFont(ofSize: 12)
         remiadeLable.text = voiceRecordPauseString
         remiadeLable.textAlignment = .center
-        remiadeLable.translatesAutoresizingMaskIntoConstraints = false
         addSubview(remiadeLable)
         
         timeLable = UILabel()
@@ -56,7 +55,6 @@ class JChatRecordingView: UIView {
         timeLable.font = UIFont.systemFont(ofSize: 12)
         timeLable.text = "······ 0.00 ······"
         timeLable.textAlignment = .center
-        timeLable.translatesAutoresizingMaskIntoConstraints = false
         addSubview(timeLable)
         
         tipsLable = UILabel()
@@ -64,24 +62,20 @@ class JChatRecordingView: UIView {
         tipsLable.font = UIFont.systemFont(ofSize: 62)
         tipsLable.textAlignment = .center
         tipsLable.isHidden = true
-        tipsLable.translatesAutoresizingMaskIntoConstraints = false
         addSubview(tipsLable)
         
         recordingHUDImageView = UIImageView()
         recordingHUDImageView.image = UIImage.loadImage("com_icon_record")
-        recordingHUDImageView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(recordingHUDImageView)
         
         errorTipsView = UIImageView()
         errorTipsView.image = UIImage.loadImage("com_icon_record_error")
         errorTipsView.isHidden = true
-        errorTipsView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(errorTipsView)
         
         cancelRecordImageView = UIImageView()
         cancelRecordImageView.image = UIImage.loadImage("com_icon_record_cancel")
         cancelRecordImageView.contentMode = .scaleToFill
-        cancelRecordImageView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(cancelRecordImageView)
         
         addConstraint(_JCLayoutConstraintMake(recordingHUDImageView, .centerX, .equal, self, .centerX))
@@ -118,7 +112,7 @@ class JChatRecordingView: UIView {
     func startRecordingHUDAtView(_ view:UIView) {
         view.addSubview(self)
         self.center = view.center
-        self.configRecoding(true)
+        configRecoding(true)
     }
     
     func pauseRecord() {
@@ -134,11 +128,11 @@ class JChatRecordingView: UIView {
     }
     
     func stopRecordCompleted(_ completed: (_ finish:Bool) -> Void) {
-        self.dismissCompled(completed)
+        dismissCompled(completed)
     }
     
     func cancelRecordCompleted(_ completed: (_ finish:Bool) -> Void) {
-        self.dismissCompled(completed)
+        dismissCompled(completed)
     }
     
     func dismissCompleted(_ completed:@escaping (_ finish:Bool) -> Void) {
@@ -173,9 +167,7 @@ class JChatRecordingView: UIView {
             } else {
                 cancelRecordImageView.isHidden = false
             }
-            
         }
-        
         if t >= 60 {
             timeLable.text = "······ 1.00 ······"
         } else if t > 9 {
@@ -183,7 +175,6 @@ class JChatRecordingView: UIView {
         } else {
             timeLable.text = "······ 0.0\(t) ······"
         }
-        
     }
     
     func setPeakPower(_ peakPower: Float) {

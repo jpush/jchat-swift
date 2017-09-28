@@ -10,7 +10,6 @@ import UIKit
 
 open class JCChatViewCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
-    var indexPath: IndexPath?
     weak var delegate: JCMessageDelegate?
     
     public override init(frame: CGRect) {
@@ -34,7 +33,7 @@ open class JCChatViewCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         guard let message = _layoutAttributes?.message else {
             return
         }
-        _tipsView?.apply(message, _layoutAttributes?.indexPath)
+        _tipsView?.apply(message)
         let tipsView = _tipsView as? JCMessageTipsView
         if tipsView != nil {
             tipsView?.delegate = self.delegate
@@ -44,7 +43,7 @@ open class JCChatViewCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         if avatarView != nil {
             avatarView?.delegate = self.delegate
         }
-        _contentView?.apply(message, _layoutAttributes?.indexPath)
+        _contentView?.apply(message)
     }
     
     
@@ -191,14 +190,14 @@ open class JCChatViewCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         }
         let options = message.options
         
-        _cardView?.apply(message, self.indexPath)
-        _tipsView?.apply(message, self.indexPath)
-        _avatarView?.apply(message, self.indexPath)
+        _cardView?.apply(message)
+        _tipsView?.apply(message)
+        _avatarView?.apply(message)
         let avatarView = _avatarView as? JCMessageAvatarView
         if avatarView != nil {
             avatarView?.delegate = self.delegate
         }
-        _contentView?.apply(message, self.indexPath)
+        _contentView?.apply(message)
         
         if let view = _bubbleView {
             switch options.alignment {

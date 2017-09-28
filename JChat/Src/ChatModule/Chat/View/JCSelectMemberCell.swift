@@ -78,12 +78,9 @@ class JCSelectMemberCell: UITableViewCell {
         let image = UIImage.loadImage("com_icon_unselect")
         
         selectIconView.image = image
-        selectIconView.translatesAutoresizingMaskIntoConstraints = false
-        avatorView.translatesAutoresizingMaskIntoConstraints = false
         
         usernameLabel.textColor = UIColor(netHex: 0x2c2c2c)
         usernameLabel.font = UIFont.systemFont(ofSize: 14)
-        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(selectIconView)
         contentView.addSubview(avatorView)

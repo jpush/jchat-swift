@@ -29,10 +29,6 @@ class JCNavigationController: UINavigationController {
         super.viewDidLoad()
         
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
     
     //MARK: - override func
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {

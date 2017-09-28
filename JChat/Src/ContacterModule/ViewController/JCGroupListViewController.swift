@@ -16,19 +16,15 @@ class JCGroupListViewController: UITableViewController {
         _init()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     var groupList: [JMSGGroup] = []
     private lazy var defaultImage: UIImage = UIImage.loadImage("com_icon_group_36")
     
     // MARK: - private func
     private func _init() {
         self.title = "群组"
-        self.view.backgroundColor = .white
-        self.tableView.separatorStyle = .none
-        self.tableView.register(JCTableViewCell.self, forCellReuseIdentifier: "JCGroupListCell")
+        view.backgroundColor = .white
+        tableView.separatorStyle = .none
+        tableView.register(JCTableViewCell.self, forCellReuseIdentifier: "JCGroupListCell")
         _getGroupList()
     }
     

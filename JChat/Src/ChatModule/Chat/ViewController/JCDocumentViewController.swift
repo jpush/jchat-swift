@@ -20,10 +20,6 @@ class JCDocumentViewController: UIViewController {
         _init()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     fileprivate lazy var webView: UIWebView = {
         var webView = UIWebView(frame: .zero)
         webView.delegate = self
@@ -39,7 +35,6 @@ class JCDocumentViewController: UIViewController {
     private func _init() {
         self.view.backgroundColor = .white
         self.automaticallyAdjustsScrollViewInsets = false
-        webView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(webView)
         
         _setupNavigation()
@@ -63,9 +58,7 @@ class JCDocumentViewController: UIViewController {
                 let request = URLRequest(url: fileUrl!)
                 webView.loadRequest(request)
             }
-            
         }
-        
     }
     
     private func _setupNavigation() {

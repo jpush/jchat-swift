@@ -48,6 +48,11 @@ class JCChatViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self._toolbar.isHidden = false
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
@@ -152,9 +157,9 @@ class JCChatViewController: UIViewController {
     fileprivate var maxTime = 0
     fileprivate var minTime = 0
     fileprivate var isFristLaunch = true
-    fileprivate var recordingHub: JChatRecordingView!
-    fileprivate lazy var recordHelper: JChatRecordVoiceHelper = {
-        let recordHelper = JChatRecordVoiceHelper()
+    fileprivate var recordingHub: JCRecordingView!
+    fileprivate lazy var recordHelper: JCRecordVoiceHelper = {
+        let recordHelper = JCRecordVoiceHelper()
         recordHelper.delegate = self
         return recordHelper
     }()
@@ -317,8 +322,8 @@ class JCChatViewController: UIViewController {
                 msg.content = imageContent
             } else {
                 content.thumbImageData({ (data, id, error) in
-                    if data != nil {
-                        weakSelf?.updateMediaMessage(message, data: data!)
+                    if let data = data {
+                        weakSelf?.updateMediaMessage(message, data: data)
                     }
                 })
             }
@@ -334,7 +339,7 @@ class JCChatViewController: UIViewController {
             voidContent.duration = TimeInterval(content.duration.intValue)
             msg = JCMessage(content: voidContent)
             content.voiceData({ (data, id, error) in
-                if data != nil {
+                if let data = data {
                     voidContent.data = data
                 }
             })
@@ -346,9 +351,9 @@ class JCChatViewController: UIViewController {
                 videoContent.delegate = self
                 msg = JCMessage(content: videoContent)
                 content.fileData({ (data, id, error) in
-                    if data != nil {
+                    if let data = data {
                         videoContent.data = data
-                        weakSelf?.updateMediaMessage(message, data: data!)
+                        weakSelf?.updateMediaMessage(message, data: data)
                     }
                 })
                 videoContent.fileContent = content
@@ -361,9 +366,9 @@ class JCChatViewController: UIViewController {
                 // 为什么要判断文件是否存在呢，这个是由于sdk bug导致的，sdk修复后可以去除
                 if !content.originMediaLocalPath.isEmpty && JCFileManager.fileExists(atPath: content.originMediaLocalPath) {
                     content.fileData({ (data, id, error) in
-                        if data != nil {
+                        if let data = data {
                             fileContent.data = data
-                            weakSelf?.updateMediaMessage(message, data: data!)
+                            weakSelf?.updateMediaMessage(message, data: data)
                         }
                     })
                 }
@@ -855,7 +860,9 @@ extension JCChatViewController: JCMessageDelegate {
         browserImageVC.messages = messages
         browserImageVC.conversation = conversation
         browserImageVC.currentMessage = message
-        present(browserImageVC, animated: true) {}
+        present(browserImageVC, animated: true) {
+            self._toolbar.isHidden = true
+        }
     }
 
     
@@ -898,7 +905,7 @@ extension JCChatViewController: JCMessageDelegate {
         }
     }
     
-    func clickTips(message: JCMessageType, indexPath: IndexPath?) {
+    func clickTips(message: JCMessageType) {
         currentMessage = message
         let alertView = UIAlertView(title: "重新发送", message: "是否重新发送该消息？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "发送")
         alertView.show()
@@ -957,7 +964,7 @@ extension JCChatViewController: JCChatViewDelegate {
                     }
                 }
             } else {
-                MBProgressHUD_JChat.show(text: "消息发送超过3分钟，不能撤回", view: self.view)
+                MBProgressHUD_JChat.show(text: "发送时间过长，不能撤回", view: self.view)
             }
         })
     }
@@ -1187,7 +1194,7 @@ extension JCChatViewController: SAIInputBarDelegate, SAIInputBarDisplayable {
         if recordingHub != nil {
             recordingHub.removeFromSuperview()
         }
-        recordingHub = JChatRecordingView(frame: CGRect.zero)
+        recordingHub = JCRecordingView(frame: CGRect.zero)
         recordHelper.updateMeterDelegate = self.recordingHub
         recordingHub.startRecordingHUDAtView(view)
         recordingHub.frame = CGRect(x: view.centerX - 70, y: view.centerY - 70, width: 136, height: 136)
@@ -1229,8 +1236,8 @@ extension JCChatViewController: SAIInputBarDelegate, SAIInputBarDisplayable {
     }
 }
 
-// MARK: - JChatRecordVoiceHelperDelegate
-extension JCChatViewController: JChatRecordVoiceHelperDelegate {
+// MARK: - JCRecordVoiceHelperDelegate
+extension JCChatViewController: JCRecordVoiceHelperDelegate {
     public func beyondLimit(_ time: TimeInterval) {
         recordHelper.finishRecordingCompletion()
         recordingHub.removeFromSuperview()

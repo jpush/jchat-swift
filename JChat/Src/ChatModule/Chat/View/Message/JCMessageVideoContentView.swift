@@ -29,7 +29,7 @@ open class JCMessageVideoContentView: UIImageView, JCMessageContentViewType {
         _commonInit()
     }
     
-    open func apply(_ message: JCMessageType, _ indexPath: IndexPath?) {
+    open func apply(_ message: JCMessageType) {
         guard let content = message.content as? JCMessageVideoContent else {
             return
         }
@@ -62,19 +62,19 @@ open class JCMessageVideoContentView: UIImageView, JCMessageContentViewType {
     private var _playImageView: UIImageView!
     
     private func _commonInit() {
-        self.isUserInteractionEnabled = true
+        isUserInteractionEnabled = true
         layer.cornerRadius = 2
         layer.masksToBounds = true
         _tapGesture()
         _playImageView = UIImageView(frame: CGRect(x: 0, y: 50, width: 41, height: 41))
         _playImageView.image = UIImage.loadImage("com_icon_play")
-        self.addSubview(_playImageView)
+        addSubview(_playImageView)
     }
     
     func _tapGesture() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(_clickCell))
         tap.numberOfTapsRequired = 1
-        self.addGestureRecognizer(tap)
+        addGestureRecognizer(tap)
     }
     
     func _clickCell() {

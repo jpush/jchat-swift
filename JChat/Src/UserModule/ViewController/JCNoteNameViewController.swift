@@ -23,10 +23,6 @@ class JCNoteNameViewController: UIViewController {
         noteNameTextField.becomeFirstResponder()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     private lazy var navRightButton: UIBarButtonItem = UIBarButtonItem(title: "完成", style: .plain, target: self, action: #selector(_saveNickname))
     fileprivate lazy var noteNameTextField: UITextField = UITextField()
     fileprivate lazy var tipLabel:  UILabel = UILabel(frame: CGRect(x: self.view.width - 15 - 28, y: 64 + 21, width: 28, height: 12))
@@ -39,7 +35,6 @@ class JCNoteNameViewController: UIViewController {
         self.automaticallyAdjustsScrollViewInsets = false
         view.backgroundColor = UIColor(netHex: 0xe8edf3)
         
-        noteNameTextField.translatesAutoresizingMaskIntoConstraints = false
         noteNameTextField.backgroundColor = .white
         noteNameTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         noteNameTextField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 27, height: 0))

@@ -68,10 +68,8 @@ public class JCGroupSettingCell: UITableViewCell {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(JCGroupMemberCell.self, forCellWithReuseIdentifier: "JCGroupMemberCell")
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         let showMore = isMyGroup ? count > 13 : count > 14
         if showMore {
-            moreButton.translatesAutoresizingMaskIntoConstraints = false
             moreButton.addTarget(self, action: #selector(_clickMore), for: .touchUpInside)
             moreButton.setTitleColor(UIColor(netHex: 0x999999), for: .normal)
             moreButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)

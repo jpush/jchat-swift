@@ -35,6 +35,6 @@ open class JCMessage: NSObject, JCMessageType {
     @objc optional func message(message: JCMessageType, fileData data: Data?, fileName: String?, fileType: String?)
     @objc optional func message(location address: String?, lat: Double, lon: Double)
     @objc optional func message(message: JCMessageType, image: UIImage?)
-    @objc optional func clickTips(message: JCMessageType, indexPath: IndexPath?)
+    @objc optional func clickTips(message: JCMessageType)
     @objc optional func tapAvatarView(message: JCMessageType)
 }

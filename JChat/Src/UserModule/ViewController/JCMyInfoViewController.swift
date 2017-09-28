@@ -17,10 +17,6 @@ class JCMyInfoViewController: UIViewController {
         _init()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -39,6 +35,7 @@ class JCMyInfoViewController: UIViewController {
         var picker = UIImagePickerController()
         picker.sourceType = .camera
         picker.cameraCaptureMode = .photo
+        picker.allowsEditing = true
         picker.delegate = self
         return picker
     }()
@@ -74,7 +71,7 @@ class JCMyInfoViewController: UIViewController {
     
     func _updateUserInfo() {
         user = JMSGUser.myInfo()
-        self.tableview.reloadData()
+        tableview.reloadData()
     }
 }
 
@@ -172,7 +169,7 @@ extension JCMyInfoViewController: UITableViewDataSource, UITableViewDelegate {
         if indexPath.section == 0 {
             let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "  从相册中选择", "拍照")
             actionSheet.tag = 1001
-            actionSheet.show(in: self.view)
+            actionSheet.show(in: view)
         }
         
         if indexPath.section == 1 {
@@ -180,19 +177,19 @@ extension JCMyInfoViewController: UITableViewDataSource, UITableViewDelegate {
             case 0:
                 let vc = JCNicknameViewController()
                 vc.nickName = user.nickname ?? ""
-                self.navigationController?.pushViewController(vc, animated: true)
+                navigationController?.pushViewController(vc, animated: true)
             case 1:
                 let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "男", "女", "保密")
                 actionSheet.tag = 1002
-                actionSheet.show(in: self.view)
+                actionSheet.show(in: view)
             case 2:
-                self.presentPopupView(datePickerPopupView)
+                presentPopupView(datePickerPopupView)
             case 3:
-                self.presentPopupView(areaPickerPopupView)
+                presentPopupView(areaPickerPopupView)
             case 4:
                 let vc = JCSignatureViewController()
                 vc.signature = user.signature ?? ""
-                self.navigationController?.pushViewController(vc, animated: true)
+                navigationController?.pushViewController(vc, animated: true)
             default:
                 break
             }
@@ -213,9 +210,9 @@ extension JCMyInfoViewController: UIActionSheetDelegate {
                 picker.sourceType = .photoLibrary
                 let temp_mediaType = UIImagePickerController.availableMediaTypes(for: picker.sourceType)
                 picker.mediaTypes = temp_mediaType!
+                picker.allowsEditing = true
                 picker.modalTransitionStyle = .coverVertical
-                self.present(picker, animated: true, completion: nil)
-                
+                present(picker, animated: true, completion: nil)
             case 2:
                 present(imagePicker, animated: true, completion: nil)
             default:
@@ -234,7 +231,7 @@ extension JCMyInfoViewController: UIActionSheetDelegate {
             if index == Int((user.gender.rawValue)) {
                 return
             }
-            MBProgressHUD_JChat.showMessage(message: "修改中", toView: self.view)
+            MBProgressHUD_JChat.showMessage(message: "修改中", toView: view)
             JMSGUser.updateMyInfo(withParameter: NSNumber(value: index), userFieldType: .fieldsGender, completionHandler: { (resultObject, error) -> Void in
                 DispatchQueue.main.async {
                     MBProgressHUD_JChat.hide(forView: self.view, animated: true)
@@ -260,10 +257,10 @@ extension JCMyInfoViewController: UINavigationControllerDelegate, UIImagePickerC
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
-        var image = info[UIImagePickerControllerOriginalImage] as! UIImage?
+        var image = info[UIImagePickerControllerEditedImage] as! UIImage?
         image = image?.fixOrientation()
         if image != nil {
-            MBProgressHUD_JChat.showMessage(message: "正在上传", toView: self.view)
+            MBProgressHUD_JChat.showMessage(message: "正在上传", toView: view)
             
             guard let imageData = UIImageJPEGRepresentation(image!, 0.8) else {
                 return
@@ -292,11 +289,11 @@ extension JCMyInfoViewController: UINavigationControllerDelegate, UIImagePickerC
 
 extension JCMyInfoViewController: JCDatePickerViweDelegate {
     func datePicker(cancel cancelButton: UIButton, date: Date) {
-        self.dismissPopupView()
+        dismissPopupView()
     }
     func datePicker(finish finishButton: UIButton, date: Date) {
-        self.dismissPopupView()
-        MBProgressHUD_JChat.showMessage(message: "修改中", toView: self.view)
+        dismissPopupView()
+        MBProgressHUD_JChat.showMessage(message: "修改中", toView: view)
         JMSGUser.updateMyInfo(withParameter: NSNumber(value: date.timeIntervalSince1970), userFieldType: .fieldsBirthday, completionHandler: { (resultObject, error) -> Void in
             DispatchQueue.main.async {
                 MBProgressHUD_JChat.hide(forView: self.view, animated: true)
@@ -313,8 +310,7 @@ extension JCMyInfoViewController: JCDatePickerViweDelegate {
 
 extension JCMyInfoViewController: JCAreaPickerViewDelegate {
     func areaPickerView(_ areaPickerView: JCAreaPickerView, didSelect button: UIButton, selectLocate locate: JCLocation) {
-        
-        self.dismissPopupView()
+        dismissPopupView()
         let region = locate.province + locate.city + locate.area
         
         JMSGUser.updateMyInfo(withParameter: region, userFieldType: .fieldsRegion, completionHandler: { (resultObject, error) -> Void in
@@ -331,6 +327,6 @@ extension JCMyInfoViewController: JCAreaPickerViewDelegate {
     }
     
     func areaPickerView(_ areaPickerView: JCAreaPickerView, cancleSelect button: UIButton) {
-        self.dismissPopupView()
+        dismissPopupView()
     }
 }

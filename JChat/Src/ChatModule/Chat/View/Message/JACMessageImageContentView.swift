@@ -27,7 +27,7 @@ open class JCMessageImageContentView: UIImageView, JCMessageContentViewType {
         _commonInit()
     }
 
-    open func apply(_ message: JCMessageType, _ indexPath: IndexPath?) {
+    open func apply(_ message: JCMessageType) {
         _message = message
         weak var weakSelf = self
         guard let content = message.content as? JCMessageImageContent else {
@@ -51,8 +51,8 @@ open class JCMessageImageContentView: UIImageView, JCMessageContentViewType {
                 }
             }
         } else {
-            self.percentLabel.textColor = .clear
-            self.percentLabel.backgroundColor = .clear
+            percentLabel.textColor = .clear
+            percentLabel.backgroundColor = .clear
         }
     }
     
@@ -70,11 +70,11 @@ open class JCMessageImageContentView: UIImageView, JCMessageContentViewType {
     
     private func _commonInit() {
         let tapGR = UITapGestureRecognizer(target: self, action: #selector(_tapHandler))
-        self.addGestureRecognizer(tapGR)
-        self.isUserInteractionEnabled = true
+        addGestureRecognizer(tapGR)
+        isUserInteractionEnabled = true
         layer.cornerRadius = 2
         layer.masksToBounds = true
-        self.addSubview(percentLabel)
+        addSubview(percentLabel)
     }
     
     func _tapHandler(sender:UITapGestureRecognizer) {

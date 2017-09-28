@@ -25,11 +25,6 @@ class JCVerificationCell: JCTableViewCell {
         _init()
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-    }
-    
     func bindData(_ info: JCVerificationInfo) {
         self.info = info
         if info.nickname.isEmpty {
@@ -60,8 +55,8 @@ class JCVerificationCell: JCTableViewCell {
                 let users = result as! [JMSGUser]
                 let user = users.first
                 user?.thumbAvatarData({ (data, id, error) in
-                    if data != nil {
-                        let image = UIImage(data: data!)
+                    if let data = data {
+                        let image = UIImage(data: data)
                         self.iconView.image = image
                     }
                 })
@@ -85,26 +80,19 @@ class JCVerificationCell: JCTableViewCell {
     
     private func _init() {
 
-        iconView.translatesAutoresizingMaskIntoConstraints = false
-
-        nickname.translatesAutoresizingMaskIntoConstraints = false
         nickname.font = UIFont.systemFont(ofSize: 16)
         nickname.textColor = UIColor(netHex: 0x2c2c2c)
         nickname.textAlignment = .left
         
-        reason.translatesAutoresizingMaskIntoConstraints = false
         reason.font = UIFont.systemFont(ofSize: 14)
         reason.textColor = UIColor(netHex: 0x999999)
         reason.textAlignment = .left
         
-        tipInfo.translatesAutoresizingMaskIntoConstraints = false
         tipInfo.font = UIFont.systemFont(ofSize: 14)
         tipInfo.textColor = UIColor(netHex: 0xb5b6b6)
         tipInfo.textAlignment = .right
         
-        acceptButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        acceptButton.translatesAutoresizingMaskIntoConstraints = false
-        
+        acceptButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)        
         
         addSubview(iconView)
         addSubview(nickname)

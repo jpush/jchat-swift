@@ -21,10 +21,6 @@ class JCRemindListViewController: UIViewController {
         _init()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     private lazy var cancel = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 36))
     fileprivate lazy var tableView: UITableView = {
         var tableView = UITableView(frame: .zero, style: .grouped)

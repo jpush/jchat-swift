@@ -66,7 +66,6 @@ class JCButtonCell: UITableViewCell {
         button.layer.cornerRadius = 3.0
         button.layer.masksToBounds = true
         button.setBackgroundImage(UIImage.createImage(color: color, size: CGSize(width: contentView.width - 30, height: contentView.height)), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(button)
         
         addConstraint(_JCLayoutConstraintMake(button, .left, .equal, contentView, .left, 15))

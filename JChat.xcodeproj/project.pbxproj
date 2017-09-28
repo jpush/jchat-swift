@@ -24,6 +24,8 @@
 		B407D8B81EC431A5007B5F30 /* JCUpdateMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B407D8B71EC431A5007B5F30 /* JCUpdateMemberCell.swift */; };
 		B40CF6591EB9D6F70037C154 /* JCDatePickerViwe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40CF6581EB9D6F70037C154 /* JCDatePickerViwe.swift */; };
 		B417BD191F25F416009E27CF /* JCFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B417BD181F25F416009E27CF /* JCFileManager.swift */; };
+		B43A5C431F3D8DF10050E8A0 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43A5C421F3D8DF10050E8A0 /* Protocols.swift */; };
+		B43A5C451F3D8E740050E8A0 /* UserDefaultValidationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43A5C441F3D8E740050E8A0 /* UserDefaultValidationService.swift */; };
 		B43BA3781E8A2F0000565DB3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43BA3771E8A2F0000565DB3 /* AppDelegate.swift */; };
 		B43BA37F1E8A2F0000565DB3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B43BA37E1E8A2F0000565DB3 /* Assets.xcassets */; };
 		B43BA38D1E8A2F0000565DB3 /* JChatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43BA38C1E8A2F0000565DB3 /* JChatTests.swift */; };
@@ -127,9 +129,9 @@
 		B47FEA611EA4B3CE00AF1732 /* JCImageBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47FEA5E1EA4B3CE00AF1732 /* JCImageBrowserViewController.swift */; };
 		B47FEA621EA4B3CE00AF1732 /* JCMessageImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47FEA5F1EA4B3CE00AF1732 /* JCMessageImageCollectionViewCell.swift */; };
 		B47FEA631EA4B3CE00AF1732 /* JCMessageImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B47FEA601EA4B3CE00AF1732 /* JCMessageImageCollectionViewCell.xib */; };
-		B47FEA681EA4B86D00AF1732 /* JChatAudioPlayerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47FEA651EA4B86D00AF1732 /* JChatAudioPlayerHelper.swift */; };
-		B47FEA691EA4B86D00AF1732 /* JChatRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47FEA661EA4B86D00AF1732 /* JChatRecordingView.swift */; };
-		B47FEA6A1EA4B86D00AF1732 /* JChatRecordVoiceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47FEA671EA4B86D00AF1732 /* JChatRecordVoiceHelper.swift */; };
+		B47FEA681EA4B86D00AF1732 /* JCAudioPlayerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47FEA651EA4B86D00AF1732 /* JCAudioPlayerHelper.swift */; };
+		B47FEA691EA4B86D00AF1732 /* JCRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47FEA661EA4B86D00AF1732 /* JCRecordingView.swift */; };
+		B47FEA6A1EA4B86D00AF1732 /* JCRecordVoiceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47FEA671EA4B86D00AF1732 /* JCRecordVoiceHelper.swift */; };
 		B480C9891E9DF12B00187D9B /* SAIInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B480C97F1E9DF12B00187D9B /* SAIInputAccessoryView.swift */; };
 		B480C98A1E9DF12B00187D9B /* SAIInputAccessoryViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B480C9801E9DF12B00187D9B /* SAIInputAccessoryViewLayout.swift */; };
 		B480C98B1E9DF12B00187D9B /* SAIInputBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B480C9811E9DF12B00187D9B /* SAIInputBackgroundView.swift */; };
@@ -153,7 +155,6 @@
 		B488597A1EA73ACB0038C1C0 /* JCMessageLocationContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48859791EA73ACB0038C1C0 /* JCMessageLocationContent.swift */; };
 		B488597C1EA73AF90038C1C0 /* JCMessageLocationContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B488597B1EA73AF90038C1C0 /* JCMessageLocationContentView.swift */; };
 		B488D6041EA075C800568B2B /* JCVerificationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B488D6031EA075C800568B2B /* JCVerificationInfo.swift */; };
-		B488D6061EA0A5EB00568B2B /* JCRecordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B488D6051EA0A5EB00568B2B /* JCRecordManager.swift */; };
 		B49C0D5D1E8E311600C61082 /* JCPhotoBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49C0D5C1E8E311600C61082 /* JCPhotoBar.swift */; };
 		B4A314CE1EC9FABC00486F5D /* JCNoteNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A314CD1EC9FABC00486F5D /* JCNoteNameViewController.swift */; };
 		B4AC7BD51F258F2300EDA7B4 /* JCFileDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AC7BD41F258F2300EDA7B4 /* JCFileDownloadViewController.swift */; };
@@ -236,6 +237,8 @@
 		B407D8B71EC431A5007B5F30 /* JCUpdateMemberCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCUpdateMemberCell.swift; sourceTree = "<group>"; };
 		B40CF6581EB9D6F70037C154 /* JCDatePickerViwe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCDatePickerViwe.swift; sourceTree = "<group>"; };
 		B417BD181F25F416009E27CF /* JCFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCFileManager.swift; sourceTree = "<group>"; };
+		B43A5C421F3D8DF10050E8A0 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		B43A5C441F3D8E740050E8A0 /* UserDefaultValidationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultValidationService.swift; sourceTree = "<group>"; };
 		B43BA3741E8A2F0000565DB3 /* JChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B43BA3771E8A2F0000565DB3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B43BA37E1E8A2F0000565DB3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -348,9 +351,9 @@
 		B47FEA5E1EA4B3CE00AF1732 /* JCImageBrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCImageBrowserViewController.swift; sourceTree = "<group>"; };
 		B47FEA5F1EA4B3CE00AF1732 /* JCMessageImageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCMessageImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		B47FEA601EA4B3CE00AF1732 /* JCMessageImageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JCMessageImageCollectionViewCell.xib; sourceTree = "<group>"; };
-		B47FEA651EA4B86D00AF1732 /* JChatAudioPlayerHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatAudioPlayerHelper.swift; sourceTree = "<group>"; };
-		B47FEA661EA4B86D00AF1732 /* JChatRecordingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatRecordingView.swift; sourceTree = "<group>"; };
-		B47FEA671EA4B86D00AF1732 /* JChatRecordVoiceHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JChatRecordVoiceHelper.swift; sourceTree = "<group>"; };
+		B47FEA651EA4B86D00AF1732 /* JCAudioPlayerHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCAudioPlayerHelper.swift; sourceTree = "<group>"; };
+		B47FEA661EA4B86D00AF1732 /* JCRecordingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCRecordingView.swift; sourceTree = "<group>"; };
+		B47FEA671EA4B86D00AF1732 /* JCRecordVoiceHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCRecordVoiceHelper.swift; sourceTree = "<group>"; };
 		B480C97F1E9DF12B00187D9B /* SAIInputAccessoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAIInputAccessoryView.swift; sourceTree = "<group>"; };
 		B480C9801E9DF12B00187D9B /* SAIInputAccessoryViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAIInputAccessoryViewLayout.swift; sourceTree = "<group>"; };
 		B480C9811E9DF12B00187D9B /* SAIInputBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAIInputBackgroundView.swift; sourceTree = "<group>"; };
@@ -374,7 +377,6 @@
 		B48859791EA73ACB0038C1C0 /* JCMessageLocationContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCMessageLocationContent.swift; sourceTree = "<group>"; };
 		B488597B1EA73AF90038C1C0 /* JCMessageLocationContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCMessageLocationContentView.swift; sourceTree = "<group>"; };
 		B488D6031EA075C800568B2B /* JCVerificationInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCVerificationInfo.swift; sourceTree = "<group>"; };
-		B488D6051EA0A5EB00568B2B /* JCRecordManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCRecordManager.swift; sourceTree = "<group>"; };
 		B49C0D5C1E8E311600C61082 /* JCPhotoBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCPhotoBar.swift; sourceTree = "<group>"; };
 		B4A314CD1EC9FABC00486F5D /* JCNoteNameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCNoteNameViewController.swift; sourceTree = "<group>"; };
 		B4AC7BD41F258F2300EDA7B4 /* JCFileDownloadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCFileDownloadViewController.swift; sourceTree = "<group>"; };
@@ -498,6 +500,22 @@
 				B403F43A1EBB0EF600011630 /* JCVerificationInfoDB.swift */,
 			);
 			path = DB;
+			sourceTree = "<group>";
+		};
+		B43A5C401F3D8D0F0050E8A0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B43A5C441F3D8E740050E8A0 /* UserDefaultValidationService.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B43A5C411F3D8D0F0050E8A0 /* Protocoles */ = {
+			isa = PBXGroup;
+			children = (
+				B43A5C421F3D8DF10050E8A0 /* Protocols.swift */,
+			);
+			path = Protocoles;
 			sourceTree = "<group>";
 		};
 		B43BA36B1E8A2F0000565DB3 = {
@@ -781,6 +799,8 @@
 		B43BA3DA1E8A2FF500565DB3 /* UserModule */ = {
 			isa = PBXGroup;
 			children = (
+				B43A5C411F3D8D0F0050E8A0 /* Protocoles */,
+				B43A5C401F3D8D0F0050E8A0 /* Model */,
 				B43BA3DB1E8A2FF500565DB3 /* View */,
 				B43BA3DC1E8A2FF500565DB3 /* ViewController */,
 			);
@@ -874,7 +894,6 @@
 			children = (
 				B43BA3F11E8A2FF500565DB3 /* JCConstants.swift */,
 				B43BA3F21E8A2FF500565DB3 /* JCFPSLabel.swift */,
-				B488D6051EA0A5EB00568B2B /* JCRecordManager.swift */,
 				B4823F5F1EB075070008A9CE /* JCVideoManager.swift */,
 				B45223501EFCC0D700BE9409 /* JCAppManager.swift */,
 				B4451B0D1F1DF86100C0E889 /* JCAlertView.swift */,
@@ -928,9 +947,9 @@
 		B47FEA641EA4B86D00AF1732 /* RecordVoice */ = {
 			isa = PBXGroup;
 			children = (
-				B47FEA651EA4B86D00AF1732 /* JChatAudioPlayerHelper.swift */,
-				B47FEA661EA4B86D00AF1732 /* JChatRecordingView.swift */,
-				B47FEA671EA4B86D00AF1732 /* JChatRecordVoiceHelper.swift */,
+				B47FEA651EA4B86D00AF1732 /* JCAudioPlayerHelper.swift */,
+				B47FEA661EA4B86D00AF1732 /* JCRecordingView.swift */,
+				B47FEA671EA4B86D00AF1732 /* JCRecordVoiceHelper.swift */,
 			);
 			path = RecordVoice;
 			sourceTree = "<group>";
@@ -1098,7 +1117,7 @@
 		B43BA36C1E8A2F0000565DB3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				CLASSPREFIX = JC;
+				CLASSPREFIX = "";
 				LastSwiftUpdateCheck = 0820;
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = HXHG;
@@ -1395,7 +1414,7 @@
 				B43BA41B1E8A2FF500565DB3 /* JCRegisterViewController.swift in Sources */,
 				B4583FBE1E94F4AC0097FB4D /* JCIdentityVerificationViewController.swift in Sources */,
 				B481D6351ECAA1FB00FDFE5B /* JCGroupNameViewController.swift in Sources */,
-				B47FEA691EA4B86D00AF1732 /* JChatRecordingView.swift in Sources */,
+				B47FEA691EA4B86D00AF1732 /* JCRecordingView.swift in Sources */,
 				B46DF5231EC30F88009A3FF9 /* JCGroupMembersViewController.swift in Sources */,
 				B4DF212E1E9B5065005E62AA /* JCMessageTimeLineContentView.swift in Sources */,
 				B43BA40E1E8A2FF500565DB3 /* JCUserInfoCell.swift in Sources */,
@@ -1427,6 +1446,7 @@
 				B4B583421F209D130044A6AD /* JCMessageFileContent.swift in Sources */,
 				B43BA3F71E8A2FF500565DB3 /* JCCEmoticonLarge.swift in Sources */,
 				B49C0D5D1E8E311600C61082 /* JCPhotoBar.swift in Sources */,
+				B43A5C451F3D8E740050E8A0 /* UserDefaultValidationService.swift in Sources */,
 				B488597C1EA73AF90038C1C0 /* JCMessageLocationContentView.swift in Sources */,
 				B43BA40B1E8A2FF500565DB3 /* JCEmoticonTabItemView.swift in Sources */,
 				B43BA4161E8A2FF500565DB3 /* JCJChatInfoViewController.swift in Sources */,
@@ -1475,7 +1495,7 @@
 				B4AC7BD71F25C5E100EDA7B4 /* JCDocumentViewController.swift in Sources */,
 				B43BA4431E8A42D400565DB3 /* JCButtonCell.swift in Sources */,
 				B43BFD9E1EE10F12004C83C1 /* JCDraft.swift in Sources */,
-				B47FEA6A1EA4B86D00AF1732 /* JChatRecordVoiceHelper.swift in Sources */,
+				B47FEA6A1EA4B86D00AF1732 /* JCRecordVoiceHelper.swift in Sources */,
 				B45223661EFCFFF600BE9409 /* JMSGMessage+JChat.swift in Sources */,
 				B4B9D71B1EB1C9C00075B83A /* JCGroupSettingCell.swift in Sources */,
 				B43BA3FE1E8A2FF500565DB3 /* JCChatViewController.swift in Sources */,
@@ -1484,6 +1504,7 @@
 				B43BA4231E8A2FF500565DB3 /* JCThemeManager.swift in Sources */,
 				B43BA41F1E8A2FF500565DB3 /* UIColor+JChat.swift in Sources */,
 				B450FF171F1F31F400F4BF41 /* JCRemind.swift in Sources */,
+				B43A5C431F3D8DF10050E8A0 /* Protocols.swift in Sources */,
 				B43BA4031E8A2FF500565DB3 /* JCEmoticonBackgroundView.swift in Sources */,
 				B480C99B1E9DFB9700187D9B /* SAIToolboxInputView.swift in Sources */,
 				B4DF21291E9B5065005E62AA /* JCMessageNoticeContent.swift in Sources */,
@@ -1494,7 +1515,7 @@
 				B480C9891E9DF12B00187D9B /* SAIInputAccessoryView.swift in Sources */,
 				B4B9D7191EB1B7CF0075B83A /* JCSingleSettingCell.swift in Sources */,
 				B43E581B1EBC7E52004B7D88 /* JCSearchResultViewController.swift in Sources */,
-				B47FEA681EA4B86D00AF1732 /* JChatAudioPlayerHelper.swift in Sources */,
+				B47FEA681EA4B86D00AF1732 /* JCAudioPlayerHelper.swift in Sources */,
 				B43BA4241E8A2FF500565DB3 /* JCConstants.swift in Sources */,
 				B43BA41E1E8A2FF500565DB3 /* String+JChat.swift in Sources */,
 				B46BA5511E9609F200A94B18 /* JCTableViewCell.swift in Sources */,
@@ -1502,7 +1523,6 @@
 				B43F70481EA883DA0076D5AF /* JCAddMapViewController.mm in Sources */,
 				B464C62D1EC05F9E00AE41B5 /* JCMoreResultViewController.swift in Sources */,
 				B43BA4081E8A2FF500565DB3 /* JCEmoticonPage.swift in Sources */,
-				B488D6061EA0A5EB00568B2B /* JCRecordManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

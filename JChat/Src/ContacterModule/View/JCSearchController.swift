@@ -10,7 +10,6 @@ import UIKit
 
 @objc public protocol JCSearchControllerDelegate: NSObjectProtocol {
     @objc optional func didEndEditing(_ searchBar: UISearchBar)
-    
 }
 
 class JCSearchController: UISearchController {
@@ -31,48 +30,42 @@ class JCSearchController: UISearchController {
         _init()
     }
     
-    
-    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         var frame = self.searchBar.frame
         frame.size.height = 31
-        self.searchBar.frame = frame
+        searchBar.frame = frame
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.searchBar.layer.borderColor = UIColor.white.cgColor
-        self.searchBar.layer.borderWidth = 1
-        self.searchBar.layer.masksToBounds = true
+        searchBar.layer.borderColor = UIColor.white.cgColor
+        searchBar.layer.borderWidth = 1
+        searchBar.layer.masksToBounds = true
         
         var frame = self.searchBar.frame
         frame.size.height = 31
-        self.searchBar.frame = frame
+        searchBar.frame = frame
     }
     
-    
     private func _init() {
-        self.dimsBackgroundDuringPresentation = false
-        self.hidesNavigationBarDuringPresentation = true
-        self.searchBar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 31)
-        self.searchBar.barStyle = .default
-        self.searchBar.backgroundColor = .white
-        self.searchBar.barTintColor = .white
-        self.searchBar.delegate = self
-        //取消首字母大写
-        self.searchBar.autocapitalizationType = .none
-//        self.searchBar.autocorrectionType = .no
-        self.searchBar.placeholder = "搜索"
-        self.searchBar.layer.borderColor = UIColor.white.cgColor
-        self.searchBar.layer.borderWidth = 1
-        self.searchBar.layer.masksToBounds = true
+        dimsBackgroundDuringPresentation = false
+        hidesNavigationBarDuringPresentation = true
+        searchBar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 31)
+        searchBar.barStyle = .default
+        searchBar.backgroundColor = .white
+        searchBar.barTintColor = .white
+        searchBar.delegate = self
+        searchBar.autocapitalizationType = .none
+        searchBar.placeholder = "搜索"
+        searchBar.layer.borderColor = UIColor.white.cgColor
+        searchBar.layer.borderWidth = 1
+        searchBar.layer.masksToBounds = true
     }
 
 }
 
 extension JCSearchController: UISearchBarDelegate {
-    
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchControllerDelegate?.didEndEditing?(searchBar)
@@ -88,10 +81,4 @@ extension JCSearchController: UISearchBarDelegate {
             }
         }
     }
-//
-//    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-//        var frame = self.searchBar.frame
-//        frame.size.height = 31
-//        self.searchBar.frame = frame
-//    }
 }

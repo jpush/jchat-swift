@@ -27,10 +27,6 @@ class JCRegisterInfoViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     private lazy var nicknameTextField: UITextField = {
         var textField = UITextField()
         textField.addTarget(self, action: #selector(textFieldDidChanged(_ :)), for: .editingChanged)

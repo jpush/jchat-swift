@@ -23,17 +23,11 @@ class JCTableViewCell: UITableViewCell {
         super.awakeFromNib()
         _init()
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-    }
-    
+
     private lazy var line: UILabel = UILabel()
     
     private func _init() {
         line.layer.backgroundColor = UIColor(netHex: 0xE8E8E8).cgColor
-        line.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(line)
         

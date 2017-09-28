@@ -307,13 +307,9 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
             _chatContainerView.register(JCChatViewCell.self, forCellWithReuseIdentifier: identifier)
         }
         let cell = _chatContainerView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! JCChatViewCell
-        cell.indexPath = indexPath
         cell.delegate = messageDelegate
         cell.updateView()
         return cell
-    }
-    
-    open func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
     }
     
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, itemAt indexPath: IndexPath) -> JCMessageType {

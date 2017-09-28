@@ -11,41 +11,34 @@ import UIKit
 extension UIView {
 
     var x: CGFloat {
-        return self.frame.origin.x
+        return frame.origin.x
     }
     
     var y: CGFloat {
-        return self.frame.origin.y
+        return frame.origin.y
     }
     
     var width: CGFloat {
-        return self.frame.size.width
+        return frame.size.width
     }
     
     var height: CGFloat {
-        return self.frame.size.height
+        return frame.size.height
     }
     
     var size: CGSize {
-        return self.frame.size
+        return frame.size
     }
     
     var origin: CGPoint {
-        return self.frame.origin
+        return frame.origin
     }
     
     var centerX: CGFloat {
-        return (self.frame.origin.x + self.frame.size.width) / 2
+        return (frame.origin.x + frame.size.width) / 2
     }
     
     var centerY: CGFloat {
-        return (self.frame.origin.y + self.frame.size.height) / 2
-    }
-    
-    // static func
-    func addPartingLine() {
-        let line = UILabel(frame: CGRect(x: 15, y: self.height - 0.5, width: self.width - 30, height: 0.5))
-        line.backgroundColor = .gray
-        self.addSubview(line)
+        return (frame.origin.y + frame.size.height) / 2
     }
 }

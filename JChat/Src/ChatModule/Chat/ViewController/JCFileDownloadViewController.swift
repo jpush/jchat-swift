@@ -18,20 +18,14 @@ class JCFileDownloadViewController: UIViewController {
         _init()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     private lazy var _imageView: UIImageView = {
         var _imageView = UIImageView()
-        _imageView.translatesAutoresizingMaskIntoConstraints = false
         _imageView.image = UIImage.loadImage("com_icon_file_file_75")
         return _imageView
     }()
     
     private lazy var _tipsLabel: UILabel = {
         var _tipsLabel = UILabel()
-        _tipsLabel.translatesAutoresizingMaskIntoConstraints = false
         _tipsLabel.font = UIFont.systemFont(ofSize: 12)
         _tipsLabel.textAlignment = .center
         _tipsLabel.textColor = UIColor(netHex: 0x999999)
@@ -41,7 +35,6 @@ class JCFileDownloadViewController: UIViewController {
     
     private lazy var _downloadButton: UIButton = {
         var _downloadButton = UIButton()
-        _downloadButton.translatesAutoresizingMaskIntoConstraints = false
         _downloadButton.setBackgroundImage(UIImage.createImage(color: UIColor(netHex: 0x2ECFCF), size: CGSize(width: 225, height: 40)), for: .normal)
         _downloadButton.addTarget(self, action: #selector(_downloadFile), for: .touchUpInside)
         _downloadButton.setTitle("下载(\(self.fileSize ?? "未知大小"))", for: .normal)
@@ -50,7 +43,6 @@ class JCFileDownloadViewController: UIViewController {
     
     private lazy var _openButton: UIButton = {
         var _openButton = UIButton()
-        _openButton.translatesAutoresizingMaskIntoConstraints = false
         _openButton.setBackgroundImage(UIImage.createImage(color: UIColor(netHex: 0x2ECFCF), size: CGSize(width: 225, height: 40)), for: .normal)
         _openButton.addTarget(self, action: #selector(_openFile), for: .touchUpInside)
         _openButton.setTitle("打开文件", for: .normal)
@@ -60,7 +52,6 @@ class JCFileDownloadViewController: UIViewController {
     
     private lazy var _fileNameLabel: UILabel = {
         var _fileNameLabel = UILabel()
-        _fileNameLabel.translatesAutoresizingMaskIntoConstraints = false
         _fileNameLabel.font = UIFont.systemFont(ofSize: 16)
         _fileNameLabel.numberOfLines = 0
         _fileNameLabel.textAlignment = .center
@@ -70,7 +61,6 @@ class JCFileDownloadViewController: UIViewController {
     
     private lazy var _progressView: UIProgressView = {
         var _progressView = UIProgressView(frame: .zero)
-        _progressView.translatesAutoresizingMaskIntoConstraints = false
         _progressView.backgroundColor = UIColor(netHex: 0x72D635)
         _progressView.isHidden = true
         return _progressView

@@ -19,11 +19,6 @@ class JCConversationListViewController: UIViewController {
         super.viewDidLoad()
         _init()
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -39,11 +34,7 @@ class JCConversationListViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         titleTips.isHidden = true
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -59,7 +50,6 @@ class JCConversationListViewController: UIViewController {
         tableview.dataSource = self
         tableview.backgroundColor = UIColor(netHex: 0xe8edf3)
         tableview.register(JCConversationCell.self, forCellReuseIdentifier: "JCConversationCell")
-        tableview.translatesAutoresizingMaskIntoConstraints = false
         tableview.separatorStyle = .none
         return tableview
     }()

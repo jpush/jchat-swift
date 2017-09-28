@@ -80,17 +80,14 @@ class JCMineInfoCell: JCTableViewCell {
     private func _init() {
         titleLabel.textAlignment = .left
         titleLabel.font = UIFont.systemFont(ofSize: 16)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
 
         switchButton.isHidden = true
         switchButton.addTarget(self, action: #selector(clickSwitch(_:)), for: .valueChanged)
-        switchButton.translatesAutoresizingMaskIntoConstraints = false
         
         detailLabel.textAlignment = .right
         detailLabel.font = UIFont.systemFont(ofSize: 14)
         detailLabel.isHidden = true
         detailLabel.textColor = UIColor(netHex: 0x999999)
-        detailLabel.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(switchButton)
         contentView.addSubview(titleLabel)

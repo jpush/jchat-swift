@@ -32,10 +32,6 @@ class JCContactsViewController: UIViewController {
         _updateBadge()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -89,37 +85,36 @@ class JCContactsViewController: UIViewController {
         addButton.addTarget(self, action: #selector(_clickNavRightButton(_:)), for: .touchUpInside)
         addButton.setImage(UIImage.loadImage("com_icon_friend_add"), for: .normal)
         let item = UIBarButtonItem(customView: addButton)
-        self.navigationItem.rightBarButtonItem =  item
+        navigationItem.rightBarButtonItem =  item
     }
     
     func _updateUserInfo() {
-        let users = self.users
         _classify(users)
-        self.contacterView.reloadData()
+        contacterView.reloadData()
     }
     
     func _classify(_ users: [JMSGUser]) {
         self.users = users
-        self.keys.removeAll()
-        self.data.removeAll()
+        keys.removeAll()
+        data.removeAll()
         for item in users {
             var key = item.displayName().firstCharacter()
             if !key.isLetterOrNum() {
                 key = "#"
             }
-            var array = self.data[key]
+            var array = data[key]
             if array == nil {
                 array = [item]
             } else {
                 array?.append(item)
             }
-            if !self.keys.contains(key) {
-                self.keys.append(key)
+            if !keys.contains(key) {
+                keys.append(key)
             }
             
-            self.data[key] = array
+            data[key] = array
         }
-        self.keys = _JCSortKeys(self.keys)
+        keys = _JCSortKeys(keys)
     }
     
     func _getFriends() {
@@ -133,7 +128,7 @@ class JCContactsViewController: UIViewController {
         
     //MARK: - click func
     func _clickNavRightButton(_ sender: UIButton) {
-        self.navigationController?.pushViewController(JCSearchFriendViewController(), animated: true)
+        navigationController?.pushViewController(JCSearchFriendViewController(), animated: true)
     }
     
     func _updateBadge() {
@@ -166,7 +161,7 @@ extension JCContactsViewController: UITableViewDelegate, UITableViewDataSource {
         if section == 0 {
             return tagArray.count
         }
-        return self.data[keys[section - 1]]!.count
+        return data[keys[section - 1]]!.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -177,7 +172,7 @@ extension JCContactsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return self.keys
+        return keys
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -215,7 +210,7 @@ extension JCContactsViewController: UITableViewDelegate, UITableViewDataSource {
             }
             return 
         }
-        let user = self.data[keys[indexPath.section - 1]]?[indexPath.row]
+        let user = data[keys[indexPath.section - 1]]?[indexPath.row]
         cell.isShowBadge = false
         cell.bindDate(user!)
     }
@@ -225,32 +220,32 @@ extension JCContactsViewController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.section == 0 {
             switch indexPath.row {
             case 0:
-                self.navigationController?.pushViewController(JCIdentityVerificationViewController(), animated: true)
+                navigationController?.pushViewController(JCIdentityVerificationViewController(), animated: true)
             case 1:
-                self.navigationController?.pushViewController(JCGroupListViewController(), animated: true)
+                navigationController?.pushViewController(JCGroupListViewController(), animated: true)
             default:
                 break
             }
             return
         }
         let vc = JCUserInfoViewController()
-        let user = self.data[keys[indexPath.section - 1]]?[indexPath.row]
+        let user = data[keys[indexPath.section - 1]]?[indexPath.row]
         vc.user = user
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
 extension JCContactsViewController: UISearchControllerDelegate {
     func willPresentSearchController(_ searchController: UISearchController) {
-        self.contacterView.isHidden = true
-        self.navigationController?.tabBarController?.tabBar.isHidden = true
+        contacterView.isHidden = true
+        navigationController?.tabBarController?.tabBar.isHidden = true
     }
     func willDismissSearchController(_ searchController: UISearchController) {
-        self.contacterView.isHidden = false
+        contacterView.isHidden = false
         let nav = searchController.searchResultsController as! JCNavigationController
         nav.isNavigationBarHidden = true
         nav.popToRootViewController(animated: false)
-        self.navigationController?.tabBarController?.tabBar.isHidden = false
+        navigationController?.tabBarController?.tabBar.isHidden = false
     }
 }
 

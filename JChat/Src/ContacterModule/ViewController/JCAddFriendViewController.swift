@@ -17,11 +17,7 @@ class JCAddFriendViewController: UIViewController {
         super.viewDidLoad()
         _init()
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
+
     private lazy var navRightButton: UIBarButtonItem = UIBarButtonItem(title: "发送", style: .plain, target: self, action: #selector(_addFriend))
     fileprivate lazy var textField: UITextField = UITextField(frame: CGRect(x: 0, y: 64, width: self.view.width, height: 45))
 

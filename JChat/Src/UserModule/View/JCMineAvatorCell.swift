@@ -51,13 +51,10 @@ class JCMineAvatorCell: UITableViewCell {
     private func _init() {
         iconView.contentMode = .scaleAspectFill
         iconView.clipsToBounds = true
-        iconView.translatesAutoresizingMaskIntoConstraints = false
         signature.font = UIFont.systemFont(ofSize: 14)
         signature.textColor = UIColor(netHex: 0x999999)
-        signature.translatesAutoresizingMaskIntoConstraints = false
         nickname.textColor = UIColor(netHex: 0x2c2c2c)
         nickname.font = UIFont.systemFont(ofSize: 16)
-        nickname.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(iconView)
         contentView.addSubview(signature)

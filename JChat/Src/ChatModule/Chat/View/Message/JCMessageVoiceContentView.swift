@@ -21,15 +21,14 @@ open class JCMessageVoiceContentView: UIView, JCMessageContentViewType {
     }
     
     deinit {
-        JChatAudioPlayerHelper.sharedInstance.stopAudio()
+        JCAudioPlayerHelper.sharedInstance.stopAudio()
     }
 
     
-    open func apply(_ message: JCMessageType, _ indexPath: IndexPath?) {
+    open func apply(_ message: JCMessageType) {
         guard let content = message.content as? JCMessageVoiceContent else {
             return
         }
-        
         _updateViewLayouts(message.options)
         _data = content.data
         _titleLabel.attributedText = content.attributedText
@@ -93,14 +92,14 @@ open class JCMessageVoiceContentView: UIView, JCMessageContentViewType {
     }
     
     func _clickCell() {
-        if let player = JChatAudioPlayerHelper.sharedInstance.player {
+        if let player = JCAudioPlayerHelper.sharedInstance.player {
             if player.isPlaying {
-                JChatAudioPlayerHelper.sharedInstance.stopAudio()
+                JCAudioPlayerHelper.sharedInstance.stopAudio()
                 return
             }
         }
-        JChatAudioPlayerHelper.sharedInstance.delegate = self
-        JChatAudioPlayerHelper.sharedInstance.managerAudioWithData(_data!, toplay: true)
+        JCAudioPlayerHelper.sharedInstance.delegate = self
+        JCAudioPlayerHelper.sharedInstance.managerAudioWithData(_data!, toplay: true)
         _animationView.startAnimating()
     }
     
@@ -111,14 +110,14 @@ open class JCMessageVoiceContentView: UIView, JCMessageContentViewType {
     private var _alignment: JCMessageAlignment = .center
 }
 
-extension JCMessageVoiceContentView: JChatAudioPlayerHelperDelegate {
+extension JCMessageVoiceContentView: JCAudioPlayerHelperDelegate {
     func didAudioPlayerStopPlay(_ AudioPlayer: AVAudioPlayer) {
-        self._animationView.stopAnimating()
+        _animationView.stopAnimating()
     }
     func didAudioPlayerBeginPlay(_ AudioPlayer: AVAudioPlayer) {
         
     }
     func didAudioPlayerPausePlay(_ AudioPlayer: AVAudioPlayer) {
-        self._animationView.stopAnimating()
+        _animationView.stopAnimating()
     }
 }

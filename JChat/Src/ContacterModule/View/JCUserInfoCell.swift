@@ -51,23 +51,15 @@ class JCUserInfoCell: JCTableViewCell {
         _init()
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-    }
-    
     private lazy var iconView: UIImageView = UIImageView()
     private lazy var titleLabel: UILabel = UILabel()
     private lazy var detailLabel: UILabel = UILabel()
     
     private func _init() {
-        iconView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.systemFont(ofSize: 16)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         detailLabel.textAlignment = .right
         detailLabel.textColor = UIColor(netHex: 0x999999)
         detailLabel.font = UIFont.systemFont(ofSize: 14)
-        detailLabel.translatesAutoresizingMaskIntoConstraints = false
      
         addSubview(iconView)
         addSubview(titleLabel)
