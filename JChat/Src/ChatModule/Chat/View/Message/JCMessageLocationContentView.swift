@@ -42,6 +42,7 @@ class JCMessageLocationContentView: UIImageView, JCMessageContentViewType {
     private var _lon: Double?
     private var _lat: Double?
     private var _addressLabel = UILabel(frame: CGRect(x: 10, y: 0, width: 113, height: 40))
+    private lazy var locationImage: UIImage? = UIImage.loadImage("location_address")
     
     private func _commonInit() {
         _addressLabel.font = UIFont.systemFont(ofSize: 13)
@@ -50,7 +51,7 @@ class JCMessageLocationContentView: UIImageView, JCMessageContentViewType {
         isUserInteractionEnabled = true
         layer.cornerRadius = 2
         layer.masksToBounds = true
-        image = UIImage.loadImage("location_address")
+        image = locationImage
         _tapGesture()
     }
     

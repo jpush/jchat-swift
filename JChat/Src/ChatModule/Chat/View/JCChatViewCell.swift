@@ -78,11 +78,11 @@ open class JCChatViewCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     }
     
     
-    private lazy var send_nor = UIImage.loadImage("chat_bubble_send_nor").resizableImage(withCapInsets: UIEdgeInsetsMake(25, 25, 25, 25))
-    private lazy var send_press = UIImage.loadImage("chat_bubble_send_press").resizableImage(withCapInsets: UIEdgeInsetsMake(25, 25, 25, 25))
+    private lazy var send_nor = UIImage.loadImage("chat_bubble_send_nor")!.resizableImage(withCapInsets: UIEdgeInsetsMake(25, 25, 25, 25))
+    private lazy var send_press = UIImage.loadImage("chat_bubble_send_press")!.resizableImage(withCapInsets: UIEdgeInsetsMake(25, 25, 25, 25))
     
-    private lazy var recive_nor = UIImage.loadImage("chat_bubble_recive_nor").resizableImage(withCapInsets: UIEdgeInsetsMake(25, 25, 25, 25))
-    private lazy var recive_press = UIImage.loadImage("chat_bubble_recive_press").resizableImage(withCapInsets: UIEdgeInsetsMake(25, 25, 25, 25))
+    private lazy var recive_nor = UIImage.loadImage("chat_bubble_recive_nor")!.resizableImage(withCapInsets: UIEdgeInsetsMake(25, 25, 25, 25))
+    private lazy var recive_press = UIImage.loadImage("chat_bubble_recive_press")!.resizableImage(withCapInsets: UIEdgeInsetsMake(25, 25, 25, 25))
     
     private func _updateViews() {
 

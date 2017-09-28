@@ -28,6 +28,9 @@ class JCUserInfoViewController: UIViewController {
         var tableview = UITableView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: self.view.height - 64), style: .grouped)
         tableview.delegate = self
         tableview.dataSource = self
+        tableview.estimatedRowHeight = 0
+        tableview.estimatedSectionFooterHeight = 0
+        tableview.estimatedSectionHeaderHeight = 0
         tableview.register(JCUserAvatorCell.self, forCellReuseIdentifier: "JCUserAvatorCell")
         tableview.register(JCUserInfoCell.self, forCellReuseIdentifier: "JCUserInfoCell")
         tableview.register(JCButtonCell.self, forCellReuseIdentifier: "JCButtonCell")
@@ -43,9 +46,7 @@ class JCUserInfoViewController: UIViewController {
         self.title = "详细信息"
         self.automaticallyAdjustsScrollViewInsets = false
         view.addSubview(tableview)
-        if user.isFriend {
-            _setupNavigation()
-        }
+        _setupNavigation()
         NotificationCenter.default.addObserver(self, selector: #selector(_updateUserInfo), name: NSNotification.Name(rawValue: kUpdateFriendInfo), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(_updateUserInfo), name: NSNotification.Name(rawValue: kUpdateUserInfo), object: nil)
     }
@@ -78,7 +79,7 @@ extension JCUserInfoViewController: UITableViewDataSource, UITableViewDelegate {
         if section == 1 {
             return 1
         }
-        return 5
+        return 6
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -90,7 +91,7 @@ extension JCUserInfoViewController: UITableViewDataSource, UITableViewDelegate {
         }
         return 45
     }
-    
+
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == 0 {
             return 15
@@ -154,10 +155,14 @@ extension JCUserInfoViewController: UITableViewDataSource, UITableViewDelegate {
             
             switch indexPath.row {
             case 1:
+                cell.title = "昵称"
+                cell.detail = user.nickname ?? ""
+                cell.icon = UIImage.loadImage("com_icon_nickname")
+            case 2:
                 cell.title = "用户名"
                 cell.detail = user.username
                 cell.icon = UIImage.loadImage("com_icon_username")
-            case 2:
+            case 3:
                 cell.title = "性别"
                 cell.icon = UIImage.loadImage("com_icon_gender")
                 switch user.gender {
@@ -168,11 +173,11 @@ extension JCUserInfoViewController: UITableViewDataSource, UITableViewDelegate {
                 case .unknown:
                     cell.detail = "保密"
                 }
-            case 3:
+            case 4:
                 cell.title = "生日"
                 cell.icon = UIImage.loadImage("com_icon_birthday")
                 cell.detail = user.birthday
-            case 4:
+            case 5:
                 cell.title = "地区"
                 cell.icon = UIImage.loadImage("com_icon_region")
                 cell.detail = user.region

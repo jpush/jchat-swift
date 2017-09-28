@@ -25,6 +25,9 @@ class JCMyInfoViewController: UIViewController {
         var tableview = UITableView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: self.view.height - 64), style: .grouped)
         tableview.delegate = self
         tableview.dataSource = self
+        tableview.estimatedRowHeight = 0
+        tableview.estimatedSectionFooterHeight = 0
+        tableview.estimatedSectionHeaderHeight = 0
         tableview.register(JCMyAvatorCell.self, forCellReuseIdentifier: "JCMyAvatorCell")
         tableview.register(JCMyInfoCell.self, forCellReuseIdentifier: "JCMyInfoCell")
         tableview.separatorStyle = .none
@@ -85,7 +88,7 @@ extension JCMyInfoViewController: UITableViewDataSource, UITableViewDelegate {
         if section == 0 || section == 2 {
             return 1
         }
-        return 5
+        return 6
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -137,6 +140,10 @@ extension JCMyInfoViewController: UITableViewDataSource, UITableViewDelegate {
                 cell.detail = user.nickname ?? ""
                 cell.icon = UIImage.loadImage("com_icon_nickname")
             case 1:
+                cell.title = "二维码"
+                cell.detail = "我的二维码"
+                cell.icon = UIImage.loadImage("com_icon_qrcode")
+            case 2:
                 cell.title = "性别"
                 cell.icon = UIImage.loadImage("com_icon_gender")
                 switch user.gender {
@@ -147,15 +154,15 @@ extension JCMyInfoViewController: UITableViewDataSource, UITableViewDelegate {
                 case .unknown:
                     cell.detail = "保密"
                 }
-            case 2:
+            case 3:
                 cell.title = "生日"
                 cell.icon = UIImage.loadImage("com_icon_birthday")
                 cell.detail = user.birthday
-            case 3:
+            case 4:
                 cell.title = "地区"
                 cell.icon = UIImage.loadImage("com_icon_region")
                 cell.detail = user.region
-            case 4:
+            case 5:
                 cell.title = "个性签名"
                 cell.icon = UIImage.loadImage("com_icon_signature")
                 cell.detail = user.signature
@@ -179,14 +186,16 @@ extension JCMyInfoViewController: UITableViewDataSource, UITableViewDelegate {
                 vc.nickName = user.nickname ?? ""
                 navigationController?.pushViewController(vc, animated: true)
             case 1:
+                navigationController?.pushViewController(MyQRCodeViewController(), animated: true)
+            case 2:
                 let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "男", "女", "保密")
                 actionSheet.tag = 1002
                 actionSheet.show(in: view)
-            case 2:
-                presentPopupView(datePickerPopupView)
             case 3:
-                presentPopupView(areaPickerPopupView)
+                presentPopupView(datePickerPopupView)
             case 4:
+                presentPopupView(areaPickerPopupView)
+            case 5:
                 let vc = JCSignatureViewController()
                 vc.signature = user.signature ?? ""
                 navigationController?.pushViewController(vc, animated: true)

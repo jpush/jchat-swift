@@ -14,6 +14,7 @@ class JCJChatInfoCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         _init()
@@ -23,12 +24,7 @@ class JCJChatInfoCell: UITableViewCell {
         super.awakeFromNib()
         _init()
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-    }
-    
+
     private lazy var avatorView: UIImageView = UIImageView()
     private lazy var nameLabel: UILabel = UILabel()
     

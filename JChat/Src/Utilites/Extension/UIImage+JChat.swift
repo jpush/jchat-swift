@@ -56,6 +56,21 @@ extension UIImage {
         image = UIImage(cgImage: cgImage!)
         return image
     }
+
+    static func createImage(color: UIColor, size: CGSize) -> UIImage? {
+
+        var rect = CGRect(origin: CGPoint.zero, size: size)
+        UIGraphicsBeginImageContext(size)
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        let context = UIGraphicsGetCurrentContext()
+        context?.setFillColor(color.cgColor)
+        context?.fill(rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        return image
+    }
+
     
     static func getMyAvator() -> UIImage? {
         if let data = UserDefaults.standard.object(forKey: kLastUserAvator) as? Data {
@@ -73,5 +88,20 @@ extension UIImage {
         return newImage!
     }
     
+    // iOS 9 以后，ImageView.image 设置圆角并不会触发离屏渲染了
+    // 可以异步绘制，再主线刷新
+    func imageCornerRadius(_ radius: CGFloat) -> UIImage? {
+        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        UIGraphicsBeginImageContextWithOptions(self.size, false, UIScreen.main.scale);
+        guard let ctx = UIGraphicsGetCurrentContext() else {
+            return nil
+        }
+        ctx.addPath(UIBezierPath(roundedRect: rect, cornerRadius: radius).cgPath)
+        ctx.clip()
+        draw(in: rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
+    }
 
 }

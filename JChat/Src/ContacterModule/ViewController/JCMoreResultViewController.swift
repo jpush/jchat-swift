@@ -43,12 +43,12 @@ class JCMoreResultViewController: UIViewController {
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "filteredUsersArray" {
-            self.users = searchResultView.filteredUsersArray
+            users = searchResultView.filteredUsersArray
         }
         if keyPath == "filteredGroupsArray" {
-            self.groups = searchResultView.filteredGroupsArray
+            groups = searchResultView.filteredGroupsArray
         }
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
     
     fileprivate lazy var tableView: UITableView = {

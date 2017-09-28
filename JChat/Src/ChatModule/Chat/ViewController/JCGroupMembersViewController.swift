@@ -8,6 +8,8 @@
 
 import UIKit
 import JMessage
+import RxSwift
+import RxCocoa
 
 class JCGroupMembersViewController: UIViewController {
     
@@ -28,6 +30,8 @@ class JCGroupMembersViewController: UIViewController {
     
     fileprivate lazy var filteredUsersArray: [JMSGUser] = []
     
+    let disposeBag = DisposeBag()
+    
     private func _init() {
         self.title = "群成员"
         self.view.backgroundColor = .white
@@ -38,7 +42,7 @@ class JCGroupMembersViewController: UIViewController {
         count = filteredUsersArray.count
         
         searchView.backgroundColor = UIColor(netHex: 0xe8edf3)
-        searchController.searchBar.delegate = self
+//        searchController.searchBar.delegate = self
         searchController.hidesNavigationBarDuringPresentation = false
         searchView.addSubview(searchController.searchBar)
         
@@ -57,6 +61,15 @@ class JCGroupMembersViewController: UIViewController {
         collectionView.register(JCGroupMemberCell.self, forCellWithReuseIdentifier: "JCGroupMemberCell")
         
         self.view.addSubview(collectionView)
+        
+        _ = searchController.searchBar.rx.text.orEmpty
+            .throttle(0.5, scheduler: MainScheduler.instance).subscribe(onNext: { (text) in
+                self.filter(text)
+            })
+            .disposed(by: disposeBag)
+        _ = searchController.searchBar.rx.cancelButtonClicked.subscribe(onNext: { (_) in
+            self.filter("")
+        }).disposed(by: disposeBag)
         
     }
     
@@ -119,13 +132,13 @@ extension JCGroupMembersViewController: UICollectionViewDelegate, UICollectionVi
     }
 }
 
-extension JCGroupMembersViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        filter(searchText)
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        filter("")
-    }
-}
+//extension JCGroupMembersViewController: UISearchBarDelegate {
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        filter(searchText)
+//    }
+//    
+//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//        filter("")
+//    }
+//}
 

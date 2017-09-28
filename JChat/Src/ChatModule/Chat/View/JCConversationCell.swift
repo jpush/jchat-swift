@@ -125,13 +125,25 @@ class JCConversationCell: JCTableViewCell {
             }
             
         } else {
-            self.avatorView.image = groupDefaultIcon
+//            self.avatorView.image = groupDefaultIcon
             if let group = conversation.target as? JMSGGroup {
                 self.titleLabel.text = group.displayName()
                 if group.isShieldMessage {
                     self.statueView.isHidden = false
                 }
+                group.thumbAvatarData({ (data, _, error) in
+                    if let data = data {
+                        self.avatorView.image = UIImage(data: data)
+                    } else {
+                        self.avatorView.image = self.groupDefaultIcon
+                    }
+                })
             }
+        }
+        if conversation.isSticky {
+            self.backgroundColor = UIColor(netHex: 0xF5F6F8)
+        } else {
+            self.backgroundColor = .white
         }
     }
     

@@ -72,7 +72,9 @@ class JCRemoveMemberViewController: UIViewController {
         
         users = group.memberArray()
         if group.owner == JMSGUser.myInfo().username  {
-            users = _removeUser(users, JMSGUser.myInfo())
+            users = users.filter({ (u) -> Bool in
+                u.username != JMSGUser.myInfo().username || u.appKey != JMSGUser.myInfo().appKey
+            })
         }
         filteredUsersArray = users
         _classify(users)
@@ -119,16 +121,6 @@ class JCRemoveMemberViewController: UIViewController {
         })
         self.tableView.reloadData()
         self.collectionView.reloadData()
-    }
-    
-    fileprivate func _removeUser(_ users: [JMSGUser], _ user: JMSGUser) ->  [JMSGUser]{
-        var arr = users
-        if let index = users.index(where: { (u) -> Bool in
-            u.username == user.username && u.appKey == user.appKey
-        }) {
-             arr.remove(at: index)
-        }
-        return arr
     }
     
     fileprivate func _reloadCollectionView() {
@@ -254,16 +246,20 @@ extension JCRemoveMemberViewController: UITableViewDelegate, UITableViewDataSour
         guard let cell = tableView.cellForRow(at: indexPath) as? JCSelectMemberCell else {
             return
         }
-        let user = self.data[keys[indexPath.section]]?[indexPath.row]
+        guard let user = self.data[keys[indexPath.section]]?[indexPath.row] else {
+            return
+        }
         if selectUsers.contains(where: { (u) -> Bool in
-            return u.username == user?.username && u.appKey == user?.appKey
+            return u.username == user.username && u.appKey == user.appKey
         })  {
             // remove
             cell.selectIcon = UIImage.loadImage("com_icon_unselect")
-            self.selectUsers = self._removeUser(self.selectUsers, user!)
+            selectUsers = selectUsers.filter({ (u) -> Bool in
+                u.username != user.username || u.appKey != user.appKey
+            })
             _reloadCollectionView()
         } else {
-            selectUsers.append(user!)
+            selectUsers.append(user)
             cell.selectIcon = UIImage.loadImage("com_icon_select")
             _reloadCollectionView()
         }
@@ -299,7 +295,7 @@ extension JCRemoveMemberViewController: UICollectionViewDelegate, UICollectionVi
         cell.backgroundColor = .white
         cell.bindDate(user: selectUsers[indexPath.row])
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.selectUsers.remove(at: indexPath.row)
         self.tableView.reloadData()

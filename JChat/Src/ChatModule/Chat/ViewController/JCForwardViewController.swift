@@ -11,6 +11,7 @@ import UIKit
 class JCForwardViewController: UIViewController {
     
     var message: JMSGMessage?
+    var formUser: JMSGUser!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +34,12 @@ class JCForwardViewController: UIViewController {
     fileprivate var selectUser: JMSGUser!
 
     private func _init() {
-        self.title = "转发"
+        if message == nil {
+            self.title = "发送名片"
+        } else {
+            self.title = "转发"
+        }
+        
         self.view.backgroundColor = UIColor(netHex: 0xe8edf3)
         _setupNavigation()
         
@@ -176,14 +182,32 @@ extension JCForwardViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 {
-            self.navigationController?.pushViewController(JCGroupListViewController(), animated: true)
+            let vc = JCGroupListViewController()
+            vc.message = message
+            vc.fromUser = formUser
+            self.navigationController?.pushViewController(vc, animated: true)
             return
         }
         selectUser = self.data[keys[indexPath.section - 1]]?[indexPath.row]
-        forwardMessage(message!)
+        if let message = message {
+            forwardMessage(message)
+        } else {
+            sendBusinessCard()
+        }
+        
     }
     
-    func forwardMessage(_ message: JMSGMessage) {
+    private func sendBusinessCard() {
+        JCAlertView.bulid().setTitle("发送给：\(self.selectUser.displayName())")
+            .setMessage(self.formUser.displayName() + "的名片")
+            .setDelegate(self)
+            .addCancelButton("取消")
+            .addButton("确定")
+            .setTag(10003)
+            .show()
+    }
+    
+    private func forwardMessage(_ message: JMSGMessage) {
         switch(message.contentType) {
         case .text:
             let content = message.content as! JMSGTextContent
@@ -194,10 +218,9 @@ extension JCForwardViewController: UITableViewDelegate, UITableViewDataSource {
                 .addButton("确定")
                 .setTag(10001)
                 .show()
-
         case .image:
             let content = message.content as! JMSGImageContent
-            guard let image = UIImage(contentsOfFile: content.originMediaLocalPath) else {
+            guard let image = UIImage(contentsOfFile: content.originMediaLocalPath  ?? content.thumbImageLocalPath!) else {
                 return
             }
             JCAlertView.bulid().setTitle("发送给：\(selectUser.displayName())")
@@ -208,7 +231,43 @@ extension JCForwardViewController: UITableViewDelegate, UITableViewDataSource {
                 .addImage(image)
                 .show()
         case .file:
-            break
+            let content = message.content as! JMSGFileContent
+            if message.isShortVideo {
+                JCAlertView.bulid().setTitle("发送给：\(selectUser.displayName())")
+                    .setMessage("[小视频]")
+                    .setDelegate(self)
+                    .addCancelButton("取消")
+                    .addButton("确定")
+                    .setTag(10001)
+                    .show()
+
+            } else {
+                JCAlertView.bulid().setTitle("发送给：\(selectUser.displayName())")
+                    .setMessage("[文件] \(content.fileName)")
+                    .setDelegate(self)
+                    .addCancelButton("取消")
+                    .addButton("确定")
+                    .setTag(10001)
+                    .show()
+
+            }
+        case .location:
+            let content = message.content as! JMSGLocationContent
+            JCAlertView.bulid().setTitle("发送给：\(selectUser.displayName())")
+                .setMessage("[位置] " + content.address)
+                .setDelegate(self)
+                .addCancelButton("取消")
+                .addButton("确定")
+                .setTag(10001)
+                .show()
+        case .voice:
+            JCAlertView.bulid().setTitle("发送给：\(selectUser.displayName())")
+                .setMessage("[语音消息]")
+                .setDelegate(self)
+                .addCancelButton("取消")
+                .addButton("确定")
+                .setTag(10001)
+                .show()
         default :
             break
         }
@@ -233,18 +292,24 @@ extension JCForwardViewController: UIAlertViewDelegate {
             return
         }
         switch alertView.tag {
-        case 10001:
-            let content = message?.content as! JMSGTextContent
-            JMSGMessage.sendSingleTextMessage(content.text, toUser: selectUser.username)
-//        case 10002:
-//            let content = message?.content as! JMSGImageContent
-//            guard let image = UIImage(contentsOfFile: content.originMediaLocalPath) else {
-//                return
-//            }
+        case 10001, 10002:
+            let optionalContent = JMSGOptionalContent()
+            optionalContent.needReadReceipt = true
+            JMSGMessage.forwardMessage(message!, target: selectUser, optionalContent: optionalContent)
+            
+        case 10003:
+            JMSGConversation.createSingleConversation(withUsername: selectUser.username) { (result, error) in
+                if let conversation = result as? JMSGConversation {
+                    let message = JMSGMessage.createBusinessCardMessage(conversation, self.formUser.username, self.formUser.appKey ?? "")
+                    let optionalContent = JMSGOptionalContent()
+                    optionalContent.needReadReceipt = true
+                    JMSGMessage.send(message, optionalContent: optionalContent)
+                }
+            }
         default:
             break
         }
-        MBProgressHUD_JChat.show(text: "已经发送", view: view, 2)
+        MBProgressHUD_JChat.show(text: "已发送", view: view, 2)
         weak var weakSelf = self
         let time: TimeInterval = 2
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + time) {

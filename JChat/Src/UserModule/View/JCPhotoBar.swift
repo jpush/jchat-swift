@@ -92,8 +92,6 @@ class JCPhotoBarItem: UIView {
     weak var delegate: JCPhotoBarDelegate?
     var index = 0
     
-
-    
     var isHiddenDelButton: Bool {
         get {
             return self.delButton.isHidden

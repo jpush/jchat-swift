@@ -19,5 +19,7 @@
 #import <JMessage/JMessage.h>
 #import "Reachability.h"
 #import "KILabel.h"
+#import "DLSlideView.h"
+#import "DLTabedSlideView.h"
 
 #endif /* JChat_Bridging_Header_h */

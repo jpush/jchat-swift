@@ -28,6 +28,9 @@ class JCJChatInfoViewController: UIViewController {
         
         tableview.delegate = self
         tableview.dataSource = self
+        tableview.estimatedRowHeight = 0
+        tableview.estimatedSectionFooterHeight = 0
+        tableview.estimatedSectionHeaderHeight = 0
         tableview.backgroundColor = UIColor(netHex: 0xe8edf3)
         tableview.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
         tableview.register(JCJChatInfoCell.self, forCellReuseIdentifier: "JCJChatInfoCell")

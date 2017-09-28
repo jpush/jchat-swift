@@ -267,6 +267,8 @@ extension String {
         }
         if error.code == 898001 {
             errorAlert = "用户名已存在"
+        if error.code == 801006 {
+            errorAlert = "账号已被禁用"
         }
         if errorAlert == "" {
             errorAlert = "未知错误"

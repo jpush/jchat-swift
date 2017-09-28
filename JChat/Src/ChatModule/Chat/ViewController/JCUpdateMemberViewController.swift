@@ -187,11 +187,9 @@ class JCUpdateMemberViewController: UIViewController {
     }
     
     fileprivate func _removeUser(_ user: JMSGUser) {
-        if let index = selectUsers.index(where: { (u) -> Bool in
-            u.username == user.username && u.appKey == user.appKey
-        }) {
-            selectUsers.remove(at: index)
-        }
+        selectUsers = selectUsers.filter({ (u) -> Bool in
+            u.username != user.username || u.appKey != user.appKey
+        })
     }
     
     fileprivate func _reloadCollectionView() {

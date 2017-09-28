@@ -66,6 +66,9 @@ class JCContactsViewController: UIViewController {
         contacterView.tableHeaderView = searchView
         contacterView.delegate = self
         contacterView.dataSource = self
+        contacterView.estimatedRowHeight = 0
+        contacterView.estimatedSectionFooterHeight = 0
+        contacterView.estimatedSectionHeaderHeight = 0
         contacterView.separatorStyle = .none
         contacterView.sectionIndexColor = UIColor(netHex: 0x2dd0cf)
         contacterView.sectionIndexBackgroundColor = .clear

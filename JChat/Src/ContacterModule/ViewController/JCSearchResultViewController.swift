@@ -98,34 +98,58 @@ class JCSearchResultViewController: UIViewController {
     }
     
     private func _getDate() {
+        self.users.removeAll()
+        self.groups.removeAll()
         
-        JMSGFriendManager.getFriendList { (result, error) in
+        JMSGConversation.allConversations { (result, error) in
             if error == nil {
-                self.users.removeAll()
-                self.users.append(contentsOf: result as! [JMSGUser])
-                if !self.searchString.isEmpty {
-                    self.filter(self.searchString)
+                if let conversations = result as? [JMSGConversation] {
+                    for conv in conversations {
+                        if !conv.isGroup {
+                            let user = conv.target as! JMSGUser
+                            self.users.append(user)
+                        }
+                    }
+                    if !self.searchString.isEmpty {
+                        self.filter(self.searchString)
+                    }
+                }
+            }
+            
+            JMSGFriendManager.getFriendList { (result, error) in
+                if error == nil {
+                    let users = result as! [JMSGUser]
+                    for user in users {
+                        if !self.users.contains(user) {
+                            self.users.append(user)
+                        }
+                    }
+                    
+                    if !self.searchString.isEmpty {
+                        self.filter(self.searchString)
+                    }
+                }
+            }
+            
+            JMSGGroup.myGroupArray { (result, error) in
+                if error != nil {
+                    return
+                }
+                for item in result as! [NSNumber] {
+                    JMSGGroup.groupInfo(withGroupId: "\(item)", completionHandler: { (result, error) in
+                        guard let group = result as? JMSGGroup else {
+                            return
+                        }
+                        self.groups.append(group)
+                        if !self.searchString.isEmpty {
+                            self.filter(self.searchString)
+                        }
+                    })
                 }
             }
         }
         
-        JMSGGroup.myGroupArray { (result, error) in
-            if error != nil {
-                return
-            }
-            self.groups.removeAll()
-            for item in result as! [NSNumber] {
-                JMSGGroup.groupInfo(withGroupId: "\(item)", completionHandler: { (result, error) in
-                    guard let group = result as? JMSGGroup else {
-                        return
-                    }
-                    self.groups.append(group)
-                    if !self.searchString.isEmpty {
-                        self.filter(self.searchString)
-                    }
-                })
-            }
-        }
+        
     }
     
     fileprivate func filter(_ searchString: String) {

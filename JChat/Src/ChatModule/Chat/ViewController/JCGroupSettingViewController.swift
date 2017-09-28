@@ -46,10 +46,14 @@ class JCGroupSettingViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.estimatedRowHeight = 0
+        tableView.estimatedSectionFooterHeight = 0
+        tableView.estimatedSectionHeaderHeight = 0
         tableView.sectionIndexColor = UIColor(netHex: 0x2dd0cf)
         tableView.sectionIndexBackgroundColor = .clear
         tableView.register(JCButtonCell.self, forCellReuseIdentifier: "JCButtonCell")
         tableView.register(JCMineInfoCell.self, forCellReuseIdentifier: "JCMineInfoCell")
+        tableView.register(GroupAvatorCell.self, forCellReuseIdentifier: "GroupAvatorCell")
         tableView.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
         view.addSubview(tableView)
         
@@ -115,10 +119,10 @@ extension JCGroupSettingViewController: UITableViewDelegate, UITableViewDataSour
         case 0:
             return 1
         case 1:
-            return 2
-        case 2:
-//            return 4
             return 3
+        case 2:
+//            return 5
+            return 4
         case 3:
             return 1
         default:
@@ -185,6 +189,9 @@ extension JCGroupSettingViewController: UITableViewDelegate, UITableViewDataSour
         if indexPath.section == 3 {
             return tableView.dequeueReusableCell(withIdentifier: "JCButtonCell", for: indexPath)
         }
+        if indexPath.section == 1 && indexPath.row == 0 {
+            return tableView.dequeueReusableCell(withIdentifier: "GroupAvatorCell", for: indexPath)
+        }
         return tableView.dequeueReusableCell(withIdentifier: "JCMineInfoCell", for: indexPath)
     }
     
@@ -209,18 +216,24 @@ extension JCGroupSettingViewController: UITableViewDelegate, UITableViewDataSour
             cell.accessoryType = .none
             return
         }
+
+        if let cell = cell as? GroupAvatorCell {
+            cell.title = "群头像"
+            cell.bindData(group)
+        }
+
         guard let cell = cell as? JCMineInfoCell else {
             return
         }
         if indexPath.section == 2 {
-            if indexPath.row == 0 {
+            if indexPath.row == 1 {
                 cell.delegate = self
                 cell.indexPate = indexPath
                 cell.accessoryType = .none
                 cell.isSwitchOn = group.isNoDisturb
                 cell.isShowSwitch = true
             }
-            if indexPath.row == 1 {
+            if indexPath.row == 2 {
                 cell.delegate = self
                 cell.indexPate = indexPath
                 cell.accessoryType = .none
@@ -232,10 +245,10 @@ extension JCGroupSettingViewController: UITableViewDelegate, UITableViewDataSour
             let conv = JMSGConversation.groupConversation(withGroupId: self.group.gid)
             let group = conv?.target as! JMSGGroup
             switch indexPath.row {
-            case 0:
+            case 1:
                 cell.title = "群聊名称"
                 cell.detail = group.displayName()
-            case 1:
+            case 2:
                 cell.title = "群描述"
                 cell.detail = group.desc
             default:
@@ -244,12 +257,14 @@ extension JCGroupSettingViewController: UITableViewDelegate, UITableViewDataSour
         } else {
             switch indexPath.row {
             case 0:
-                cell.title = "消息免打扰"
+                cell.title = "聊天文件"
             case 1:
+                cell.title = "消息免打扰"
+            case 2:
                 cell.title = "消息屏蔽"
 //            case 2:
 //                cell.title = "清理缓存"
-            case 2:
+            case 3:
                 cell.title = "清空聊天记录"
             default:
                 break
@@ -263,13 +278,17 @@ extension JCGroupSettingViewController: UITableViewDelegate, UITableViewDataSour
         if indexPath.section == 1 {
             switch indexPath.row {
             case 0:
+                let vc = GroupAvatorViewController()
+                vc.group = group
+                navigationController?.pushViewController(vc, animated: true)
+            case 1:
                 let vc = JCGroupNameViewController()
                 vc.group = group
-                self.navigationController?.pushViewController(vc, animated: true)
-            case 1:
+                navigationController?.pushViewController(vc, animated: true)
+            case 2:
                 let vc = JCGroupDescViewController()
                 vc.group = group
-                self.navigationController?.pushViewController(vc, animated: true)
+                navigationController?.pushViewController(vc, animated: true)
             default:
                 break
             }
@@ -281,7 +300,12 @@ extension JCGroupSettingViewController: UITableViewDelegate, UITableViewDataSour
 //                let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "清理缓存")
 //                actionSheet.tag = 1001
 //                actionSheet.show(in: self.view)
-            case 2:
+            case 0:
+                let vc = FileManagerViewController()
+                let conv = JMSGConversation.groupConversation(withGroupId: group.gid)
+                vc.conversation  = conv
+                navigationController?.pushViewController(vc, animated: true)
+            case 3:
                 let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "清空聊天记录")
                 actionSheet.tag = 1001
                 actionSheet.show(in: self.view)

@@ -35,11 +35,12 @@ open class JCMessageAvatarView: UIImageView, JCMessageContentViewType {
             self.image = message.senderAvator
             return
         }
-        self.image = userDefaultIcon
         weak var weakSelf = self
         message.sender?.thumbAvatarData({ (data, id, error) in
             if let data = data {
                 weakSelf?.image = UIImage(data: data)
+            } else {
+                self.image = self.userDefaultIcon
             }
         })
     }
@@ -48,13 +49,27 @@ open class JCMessageAvatarView: UIImageView, JCMessageContentViewType {
     private lazy var userDefaultIcon = UIImage.loadImage("com_icon_user_36")
     
     private func _commonInit() {
-        let tapGR = UITapGestureRecognizer(target: self, action: #selector(_tapHandler))
-        self.addGestureRecognizer(tapGR)
+        self.image = userDefaultIcon
         self.isUserInteractionEnabled = true
         layer.masksToBounds = true
+
+        let tapGR = UITapGestureRecognizer(target: self, action: #selector(_tapHandler))
+        self.addGestureRecognizer(tapGR)
+
+        let longTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(_longTap(_:)))
+        longTapGesture.numberOfTouchesRequired = 1
+        addGestureRecognizer(longTapGesture)
+        longTapGesture.require(toFail: tapGR)
     }
     
     func _tapHandler(sender:UITapGestureRecognizer) {
         delegate?.tapAvatarView?(message: message)
     }
+
+    func _longTap(_ gestureRecognizer: UILongPressGestureRecognizer)  {
+        if gestureRecognizer.state == .began {
+            delegate?.longTapAvatarView?(message: message)
+        }
+    }
+
 }

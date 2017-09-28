@@ -58,6 +58,7 @@ class JCMineInfoCell: JCTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         _init()
@@ -66,10 +67,6 @@ class JCMineInfoCell: JCTableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         _init()
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
     }
     
     private lazy var titleLabel: UILabel = UILabel()

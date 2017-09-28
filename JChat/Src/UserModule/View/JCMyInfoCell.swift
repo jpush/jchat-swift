@@ -41,6 +41,7 @@ class JCMyInfoCell: JCTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         _init()
@@ -49,11 +50,6 @@ class JCMyInfoCell: JCTableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         _init()
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
     }
     
     private lazy var iconView: UIImageView = UIImageView()

@@ -9,6 +9,11 @@
 import Foundation
 import JMessage
 
+@objc public enum MessageTargetType: Int {
+    case single = 0
+    case group
+}
+
 @objc public protocol JCMessageType: class {
     
     var name: String { get }
@@ -20,5 +25,7 @@ import JMessage
     var receiver: JMSGUser? { get }
     var content: JCMessageContentType { get }
     var options: JCMessageOptions { get }
-    var updateSizeIfNeeded: Bool {get}
+    var updateSizeIfNeeded: Bool { get }
+    var unreadCount: Int { get }
+    var targetType: MessageTargetType { get }
 }

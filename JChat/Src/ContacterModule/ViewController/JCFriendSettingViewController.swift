@@ -50,11 +50,17 @@ class JCFriendSettingViewController: UIViewController {
 //MARK: - UITableViewDataSource & UITableViewDelegate
 extension JCFriendSettingViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        if user.isFriend {
+            return 2
+        }
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
+            if user.isFriend {
+                return 3
+            }
             return 2
         }
         return 1
@@ -98,28 +104,68 @@ extension JCFriendSettingViewController: UITableViewDataSource, UITableViewDeleg
             guard let cell = cell as? JCMineInfoCell else {
                 return
             }
-            switch indexPath.row {
-            case 0:
-                cell.title = "备注名"
-                cell.accessoryType = .disclosureIndicator
-                cell.detail = user.noteName ?? ""
-            case 1:
-                cell.isSwitchOn = user.isInBlacklist
-                cell.delegate = self
-                cell.accessoryType = .none
-                cell.isShowSwitch = true
-                cell.title = "加入黑名单"
-            default:
-                break
+            if user.isFriend {
+                switch indexPath.row {
+                case 0:
+                    cell.title = "备注名"
+                    cell.accessoryType = .disclosureIndicator
+                    cell.detail = user.noteName ?? ""
+                case 1:
+                    cell.title = "发送名片"
+                    cell.accessoryType = .disclosureIndicator
+                case 2:
+                    cell.isSwitchOn = user.isInBlacklist
+                    cell.delegate = self
+                    cell.accessoryType = .none
+                    cell.isShowSwitch = true
+                    cell.title = "加入黑名单"
+                default:
+                    break
+                }
+            } else {
+                switch indexPath.row {
+                case 0:
+                    cell.title = "发送名片"
+                    cell.accessoryType = .disclosureIndicator
+                case 1:
+                    cell.isSwitchOn = user.isInBlacklist
+                    cell.delegate = self
+                    cell.accessoryType = .none
+                    cell.isShowSwitch = true
+                    cell.title = "加入黑名单"
+                default:
+                    break
+                }
             }
+            
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0 && indexPath.row == 0 {
-            let vc = JCNoteNameViewController()
-            vc.user = user
-            self.navigationController?.pushViewController(vc, animated: true)
+        if indexPath.section == 0 {
+            switch indexPath.row {
+            case 0:
+                if user.isFriend {
+                    let vc = JCNoteNameViewController()
+                    vc.user = user
+                    navigationController?.pushViewController(vc, animated: true)
+                } else {
+                    let vc = JCForwardViewController()
+                    vc.formUser = user
+                    let nav = JCNavigationController(rootViewController: vc)
+                    self.present(nav, animated: true)
+                }
+            case 1:
+                if user.isFriend {
+                    let vc = JCForwardViewController()
+                    vc.formUser = user
+                    let nav = JCNavigationController(rootViewController: vc)
+                    self.present(nav, animated: true)
+                }
+            default:
+                break
+            }
+            
         }
     }
     

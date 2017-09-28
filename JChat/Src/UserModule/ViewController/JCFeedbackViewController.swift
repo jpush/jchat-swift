@@ -72,11 +72,19 @@ class JCFeedbackViewController: UIViewController {
             MBProgressHUD_JChat.show(text: "反馈内容不能为空", view: view)
             return
         }
+        let optionalContent = JMSGOptionalContent()
+        optionalContent.needReadReceipt = true
         if !textView.text.isEmpty && textView.text != placeholder {
-            JMSGMessage.sendSingleTextMessage(textView.text, toUser: "feedback_ios")
+            let content = JMSGTextContent(text: textView.text)
+            let message = JMSGMessage.createSingleMessage(with: content, username: "feedback_ios")
+            JMSGMessage.send(message, optionalContent: optionalContent)
+//            JMSGMessage.sendSingleTextMessage(textView.text, toUser: "feedback_ios")
         }
         images.forEach { (image) in
-            JMSGMessage.sendSingleImageMessage(UIImageJPEGRepresentation(image, 1.0)!, toUser: "feedback_ios")
+            let content = JMSGImageContent(imageData: UIImageJPEGRepresentation(image, 1.0)!)
+            let message = JMSGMessage.createSingleMessage(with: content!, username: "feedback_ios")
+            JMSGMessage.send(message, optionalContent: optionalContent)
+//            JMSGMessage.sendSingleImageMessage(UIImageJPEGRepresentation(image, 1.0)!, toUser: "feedback_ios")
         }
 
 //        MBProgressHUD_JChat.show(text: "反馈成功", view: view)

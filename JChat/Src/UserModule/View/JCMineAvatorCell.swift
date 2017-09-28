@@ -15,6 +15,7 @@ class JCMineAvatorCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         _init()
@@ -23,11 +24,6 @@ class JCMineAvatorCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         _init()
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
     }
     
     func baindDate(user: JMSGUser) {

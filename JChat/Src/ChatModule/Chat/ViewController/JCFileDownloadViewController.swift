@@ -118,16 +118,16 @@ class JCFileDownloadViewController: UIViewController {
                 vc.fileType = fileType
                 self.navigationController?.pushViewController(vc, animated: true)
             case .video, .voice:
-                let url = URL(fileURLWithPath: content.originMediaLocalPath)
+                let url = URL(fileURLWithPath: content.originMediaLocalPath ?? "")
                 try! JCVideoManager.playVideo(data: Data(contentsOf: url), fileType, currentViewController: self)
             case .photo:
                 let browserImageVC = JCImageBrowserViewController()
-                let image = UIImage(contentsOfFile: content.originMediaLocalPath)
+                let image = UIImage(contentsOfFile: content.originMediaLocalPath ?? "")
                 browserImageVC.imageArr = [image!]
                 browserImageVC.imgCurrentIndex = 0
                 self.present(browserImageVC, animated: true) {}
             default:
-                let url = URL(fileURLWithPath: content.originMediaLocalPath)
+                let url = URL(fileURLWithPath: content.originMediaLocalPath ?? "")
                 documentInteractionController.url = url
                 documentInteractionController.presentOptionsMenu(from: .zero, in: self.view, animated: true)
             }

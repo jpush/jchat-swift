@@ -30,6 +30,9 @@ class JCMineViewController: UIViewController {
         
         tableview.delegate = self
         tableview.dataSource = self
+        tableview.estimatedRowHeight = 0
+        tableview.estimatedSectionFooterHeight = 0
+        tableview.estimatedSectionHeaderHeight = 0
         tableview.separatorStyle = .none
         tableview.register(JCMineInfoCell.self, forCellReuseIdentifier: "JCMineInfoCell")
         tableview.register(JCMineAvatorCell.self, forCellReuseIdentifier: "JCMineAvatorCell")

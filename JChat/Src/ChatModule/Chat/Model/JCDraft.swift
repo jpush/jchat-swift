@@ -52,7 +52,10 @@ class JCDraft: NSObject {
             guard let user = conversation.target as? JMSGUser else {
                 return ""
             }
-            id = "\(me.username)\(me.appKey!)\(user.username)\(user.appKey!)"
+            guard let appkey = user.appKey else {
+                return ""
+            }
+            id = "\(me.username)\(me.appKey!)\(user.username)\(appkey)"
         }
         return id
     }

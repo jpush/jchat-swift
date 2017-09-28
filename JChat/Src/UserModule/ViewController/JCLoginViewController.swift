@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import JMessage
+import RxSwift
+import RxCocoa
+
 
 class JCLoginViewController: UIViewController {
 
@@ -21,13 +23,14 @@ class JCLoginViewController: UIViewController {
         super.viewWillAppear(animated)
         if UserDefaults.standard.object(forKey: kLastUserName) != nil {
             lastUserName = UserDefaults.standard.object(forKey: kLastUserName) as? String
-            userNameTextField.text = lastUserName
+            textValue.value = lastUserName!
         }
         avator = UIImage.getMyAvator()
-        self.avatorView.image = avator
-        _updateLoginButton()
+        avatorView.image = avator
     }
 
+    fileprivate let textValue = Variable("")
+    fileprivate let disposeBag = DisposeBag()
     fileprivate var avator: UIImage?
     fileprivate var lastUserName: String?
     
@@ -39,7 +42,6 @@ class JCLoginViewController: UIViewController {
         title.textColor = .white
         title.text = "JChat"
         view.addSubview(title)
-        
         
         var rightButton = UIButton(frame: CGRect(x: view.width - 50 - 15, y: 20 + 7, width: 50, height: 30))
         rightButton.setTitle("新用户", for: .normal)
@@ -150,12 +152,10 @@ class JCLoginViewController: UIViewController {
         self.view.backgroundColor = .white
         UIApplication.shared.setStatusBarStyle(.default, animated: false)
         self.automaticallyAdjustsScrollViewInsets = false
-//        self.navigationController?.navigationBar.isHidden = true
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         view.addSubview(bgView)
         view.addSubview(headerView)
-        
         bgView.addSubview(avatorView)
         bgView.addSubview(tipsLabel)
         bgView.addSubview(userNameTextField)
@@ -167,8 +167,11 @@ class JCLoginViewController: UIViewController {
         bgView.addSubview(usernameLine)
         bgView.addSubview(passwordLine)
         
+
         let tap = UITapGestureRecognizer(target: self, action: #selector(_tapView))
         bgView.addGestureRecognizer(tap)
+        
+        _updateLoginButton()
     }
    
     func _tapView() {
@@ -223,7 +226,6 @@ class JCLoginViewController: UIViewController {
     }
     
     func textFieldDidChanged(_ textField: UITextField) {
-        _updateLoginButton()
         if userNameTextField.text == lastUserName {
             if avator != nil {
                 avatorView.image = avator
@@ -234,20 +236,24 @@ class JCLoginViewController: UIViewController {
     }
     
     func _updateLoginButton() {
-        if (userNameTextField.text?.isEmpty)! || (passwordTextField.text?.isEmpty)! {
-            loginButton.isEnabled = false
-            loginButton.alpha = 0.7
-        } else {
-            loginButton.isEnabled = true
-            loginButton.alpha = 1.0
-        }
+        _ = userNameTextField.rx.textInput <-> textValue
+        let nameObserable = textValue.asObservable().map({$0.length > 0})
+        let pwdObserable = passwordTextField.rx.text.orEmpty.asObservable().shareReplay(1).map({$0.length > 0})
+        _ = Observable.combineLatest(nameObserable, pwdObserable) {$0 && $1}.subscribe(onNext: { (valid) in
+            if valid {
+                self.loginButton.isEnabled = true
+                self.loginButton.alpha = 1.0
+            } else {
+                self.loginButton.isEnabled = false
+                self.loginButton.alpha = 0.4
+            }
+        }).disposed(by: disposeBag)
     }
 
 }
 
 extension JCLoginViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        _updateLoginButton()
         if textField.tag == 1001 {
             usernameLine.alpha = 1.0
             usernameIcon.image = UIImage.loadImage("com_icon_user_18_pre")
@@ -256,7 +262,6 @@ extension JCLoginViewController: UITextFieldDelegate {
             passwordIcon.image = UIImage.loadImage("com_icon_password_pre")
         }
         
-//        UIApplication.shared.setStatusBarStyle(.lightContent, animated: false)
         UIView.animate(withDuration: 0.3, animations: {
             self.avatorView.isHidden = true
             self.headerView.frame = CGRect(x: 0, y: 0, width: self.view.width, height: 64)
@@ -265,7 +270,6 @@ extension JCLoginViewController: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        _updateLoginButton()
         if textField.tag == 1001 {
             usernameLine.alpha = 0.4
             usernameIcon.image = UIImage.loadImage("com_icon_user_18")
@@ -274,7 +278,6 @@ extension JCLoginViewController: UITextFieldDelegate {
             passwordIcon.image = UIImage.loadImage("com_icon_password")
         }
         
-//        UIApplication.shared.setStatusBarStyle(.default, animated: false)
         UIView.animate(withDuration: 0.3) {
             self.avatorView.isHidden = false
             self.headerView.frame = CGRect(x: 0, y: -64, width: self.view.width, height: 64)

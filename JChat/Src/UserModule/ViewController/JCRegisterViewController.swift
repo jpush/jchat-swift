@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import JMessage
+import RxSwift
+import RxCocoa
 
 class JCRegisterViewController: UIViewController {
     
@@ -142,12 +143,9 @@ class JCRegisterViewController: UIViewController {
         self.title = "JChat"
         self.view.backgroundColor = .white
         self.automaticallyAdjustsScrollViewInsets = false
-//        self.navigationController?.navigationBar.isHidden = true
-//        self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         view.addSubview(bgView)
         view.addSubview(headerView)
-        
         bgView.addSubview(avatorView)
         bgView.addSubview(tipsLabel)
         bgView.addSubview(userNameTextField)
@@ -205,8 +203,6 @@ class JCRegisterViewController: UIViewController {
                 }
             }
         }
-
-
     }
     
     func _clickLoginButton() {

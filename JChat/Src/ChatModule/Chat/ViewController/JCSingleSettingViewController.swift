@@ -23,6 +23,9 @@ class JCSingleSettingViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.estimatedRowHeight = 0
+        tableView.estimatedSectionFooterHeight = 0
+        tableView.estimatedSectionHeaderHeight = 0
         tableView.sectionIndexColor = UIColor(netHex: 0x2dd0cf)
         tableView.sectionIndexBackgroundColor = .clear
         tableView.register(JCSingleSettingCell.self, forCellReuseIdentifier: "JCSingleSettingCell")
@@ -71,7 +74,7 @@ extension JCSingleSettingViewController: UITableViewDelegate, UITableViewDataSou
         case 0:
             return 1
         case 1:
-            return 2
+            return 3
         case 2:
             return 1
         default:
@@ -140,19 +143,21 @@ extension JCSingleSettingViewController: UITableViewDelegate, UITableViewDataSou
         guard let cell = cell as? JCMineInfoCell else {
             return
         }
-        if indexPath.section == 1 && indexPath.row == 0 {
+        if indexPath.section == 1 && indexPath.row == 1 {
             cell.delegate = self
             cell.accessoryType = .none
             cell.isShowSwitch = true
         }
         switch indexPath.row {
         case 0:
+            cell.title = "聊天文件"
+        case 1:
             cell.isSwitchOn = user.isNoDisturb
             cell.title = "消息免打扰"
 //        case 1:
 //            cell.isSwitchOn = JMessage.isSetGlobalNoDisturb()
 //            cell.title = "清理缓存"
-        case 1:
+        case 2:
             cell.title = "清空聊天记录"
         default:
             break
@@ -163,11 +168,16 @@ extension JCSingleSettingViewController: UITableViewDelegate, UITableViewDataSou
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 1 {
             switch indexPath.row {
-            case 1:
+            case 0:
+                let vc = FileManagerViewController()
+                let conv = JMSGConversation.singleConversation(withUsername: user.username)
+                vc.conversation  = conv
+                navigationController?.pushViewController(vc, animated: true)
+            case 2:
                 let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "清空聊天记录")
                 actionSheet.tag = 1001
                 actionSheet.show(in: self.view)
-            case 2:
+            case 3:
                 break
             default:
                 break
@@ -207,7 +217,6 @@ extension JCSingleSettingViewController: JCMineInfoCellDelegate {
                 }
             })
         }
-        
     }
 }
 
@@ -221,7 +230,6 @@ extension JCSingleSettingViewController: JCButtonCellDelegate {
             vc.user = user
             navigationController?.pushViewController(vc, animated: true)
         }
-        
     }
 }
 

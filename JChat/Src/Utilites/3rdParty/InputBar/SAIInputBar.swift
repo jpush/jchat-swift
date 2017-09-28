@@ -160,6 +160,7 @@ open class SAIInputBar: UIView {
         self.setInputMode(.none, animated: true)
         return _inputAccessoryView.resignFirstResponder()
     }
+    @discardableResult
     open override func becomeFirstResponder() -> Bool {
         return _inputAccessoryView.becomeFirstResponder()
     }

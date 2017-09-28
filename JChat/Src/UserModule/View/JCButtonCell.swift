@@ -39,6 +39,7 @@ class JCButtonCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         _init()
@@ -48,12 +49,7 @@ class JCButtonCell: UITableViewCell {
         super.awakeFromNib()
         _init()
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-    }
-    
+
     private var color = UIColor(netHex: 0x2dd0cf)
     private lazy var button: UIButton = UIButton()
     

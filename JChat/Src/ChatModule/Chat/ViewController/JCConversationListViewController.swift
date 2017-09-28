@@ -84,7 +84,17 @@ class JCConversationListViewController: UIViewController {
         if #available(iOS 10.0, *) {
             navigationController?.tabBarItem.badgeColor = UIColor(netHex: 0xEB424C)
         }
-        
+
+//        if #available(iOS 11.0, *) {
+//            tableview.contentInsetAdjustmentBehavior = .never
+//            if UIScreen.main.bounds.size.height == 812 {
+//                tableview.contentInset = UIEdgeInsetsMake(88, 0, 49, 0)
+//            } else {
+//                tableview.contentInset = UIEdgeInsetsMake(64, 0, 49, 0)
+//            }
+//            tableview.scrollIndicatorInsets = tableview.contentInset
+//        }
+
         let appDelegate = UIApplication.shared.delegate
         let window = appDelegate?.window!
         window?.addSubview(titleTips)
@@ -145,6 +155,7 @@ class JCConversationListViewController: UIViewController {
                 return
             }
             self.datas = conversatios as! [JMSGConversation]
+            self.datas = self.sortConverstaions(self.datas)
             self.tableview.reloadData()
             if self.datas.count == 0 {
                 self.emptyView.isHidden = false
@@ -154,29 +165,32 @@ class JCConversationListViewController: UIViewController {
             self._updateBadge()
         }
     }
+
+    fileprivate func sortConverstaions(_ convs: [JMSGConversation]) -> [JMSGConversation] {
+        var stickyConvs: [JMSGConversation] = []
+        var allConvs: [JMSGConversation] = []
+        for index in 0..<convs.count {
+            let conv = convs[index]
+            if conv.isSticky {
+                stickyConvs.append(conv)
+            } else {
+                allConvs.append(conv)
+            }
+        }
+//        allConvs = allConvs.sorted { (c1, c2) -> Bool in
+//            c1.latestMsgTime.intValue > c2.latestMsgTime.intValue
+//        }
+        stickyConvs = stickyConvs.sorted(by: { (c1, c2) -> Bool in
+            c1.stickyTime > c2.stickyTime
+        })
+
+        allConvs.insert(contentsOf: stickyConvs, at: 0)
+        return allConvs
+    }
     
     //MARK: - click func
     func _clickNavRightButton(_ sender: UIButton) {
         _setupPopView()
-    }
-    
-    func _addFriend() {
-        dismissPopupView()
-        navigationController?.pushViewController(JCSearchFriendViewController(), animated: true)
-    }
-    
-    func _addSingle() {
-        dismissPopupView()
-        let vc = JCSearchFriendViewController()
-        vc.isSearchUser = true
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func _addGroup() {
-        dismissPopupView()
-        let vc = JCUpdateMemberViewController()
-        vc.isAddMember = false
-        navigationController?.pushViewController(vc, animated: true)
     }
     
     private func _setupPopView() {
@@ -184,46 +198,9 @@ class JCConversationListViewController: UIViewController {
     }
     
     fileprivate lazy var selectView: YHPopupView = {
-        let popupView = YHPopupView(frame: CGRect(x: self.view.width - 145, y: 65, width: 140, height: 137.5))
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 140, height: 137.5))
-        imageView.image = UIImage.loadImage("com_icon _selectList")
-        popupView?.addSubview(imageView)
-        popupView?.backgroundViewColor = .clear
-        popupView?.clickBlankSpaceDismiss = true
-        
-        let height = (137.5 - 5) / 3
-        let width = 140.0
-        
-        let image = UIImage.createImage(color: UIColor(netHex: 0x02BDBC), size: CGSize(width: 140, height: height))
-        
-        let addFriend = UIButton(frame: CGRect(x: 0.0, y: 5 + height * 2, width: width, height: height))
-        addFriend.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        addFriend.addTarget(self, action: #selector(_addFriend), for: .touchUpInside)
-        addFriend.setImage(UIImage.loadImage("com_icon_friend_add"), for: .normal)
-        addFriend.setImage(UIImage.loadImage("com_icon_friend_add"), for: .highlighted)
-        addFriend.setBackgroundImage(image, for: .highlighted)
-        
-        let addGroup = UIButton(frame: CGRect(x: 0.0, y: 5 + height, width: width, height: height))
-        addGroup.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        addGroup.addTarget(self, action: #selector(_addGroup), for: .touchUpInside)
-        addGroup.setImage(UIImage.loadImage("com_icon_conv_group"), for: .normal)
-        addGroup.setImage(UIImage.loadImage("com_icon_conv_group"), for: .highlighted)
-        addGroup.setBackgroundImage(image, for: .highlighted)
-        
-        let addSingle = UIButton(frame: CGRect(x: 0.0, y: 5, width: width, height: height))
-        addSingle.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        addSingle.addTarget(self, action: #selector(_addSingle), for: .touchUpInside)
-        addSingle.setImage(UIImage.loadImage("com_icon_conv_single"), for: .normal)
-        addSingle.setImage(UIImage.loadImage("com_icon_conv_single"), for: .highlighted)
-        addSingle.setBackgroundImage(image, for: .highlighted)
-        
-        addFriend.setTitle("  添加朋友", for: .normal)
-        addSingle.setTitle("  发起单聊", for: .normal)
-        addGroup.setTitle("  发起群聊", for: .normal)
-        popupView?.addSubview(addSingle)
-        popupView?.addSubview(addGroup)
-        popupView?.addSubview(addFriend)
-        return popupView!
+        let popupView = MorePopupView(frame: CGRect(x: self.view.width - 150, y: 65, width: 145, height: 554 / 3))
+        popupView.delegate = self
+        return popupView
     }()
 }
 
@@ -278,10 +255,17 @@ extension JCConversationListViewController: UITableViewDelegate, UITableViewData
         let action1 = UITableViewRowAction(style: .destructive, title: "删除") { (action, indexPath) in
             self._delete(indexPath)
         }
-//        let action2 = UITableViewRowAction(style: .normal, title: "顶置") { (action, indexPath) in
-//
-//        }
-        return [action1]
+        let conversation = datas[showNetworkTips ? indexPath.row - 1 : indexPath.row]
+        let action2 = UITableViewRowAction(style: .normal, title: "置顶") { (action, indexPath) in
+            conversation.isSticky = !conversation.isSticky
+            self._getConversations()
+        }
+        if conversation.isSticky {
+            action2.title = "取消置顶"
+        } else {
+            action2.title = "置顶"
+        }
+        return [action1, action2]
     }
 
     private func _delete(_ indexPath: IndexPath) {
@@ -308,6 +292,33 @@ extension JCConversationListViewController: UITableViewDelegate, UITableViewData
         tableview.reloadData()
     }
     
+}
+
+extension JCConversationListViewController: MorePopupViewDelegate {
+    func popupView(view: MorePopupView, addGroup addButton: UIButton) {
+        dismissPopupView()
+        let vc = JCUpdateMemberViewController()
+        vc.isAddMember = false
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func popupView(view: MorePopupView, addFriend addButton: UIButton) {
+        dismissPopupView()
+        navigationController?.pushViewController(JCSearchFriendViewController(), animated: true)
+    }
+    
+    func popupView(view: MorePopupView, addSingle addButton: UIButton) {
+        dismissPopupView()
+        let vc = JCSearchFriendViewController()
+        vc.isSearchUser = true
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func popupView(view: MorePopupView, scanQRCode addButton: UIButton) {
+        dismissPopupView()
+        let vc = ScanQRCodeViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 extension JCConversationListViewController: JMessageDelegate {
@@ -443,5 +454,3 @@ internal func getAllConversation(_ conversations: [JMSGConversation]) -> Int {
     }
     return count
 }
-
-

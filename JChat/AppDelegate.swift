@@ -27,6 +27,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     //MARK: - life cycle
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+
+        #if READ_VERSION
+            print("-------------READ_VERSION------------")
+            print("如果不需要支持已读未读功能")
+            print("在 Build Settings 中，找到 Swift Compiler - Custom Flags，并在其中的 Other Swift Flags 删除 -D READ_VERSION")
+            print("-------------------------------------")
+        #endif
+
 //        DispatchQueue.main.async {
 //            if let window = self.window {
 //                let label = JCFPSLabel(frame: CGRect(x: window.bounds.width - 55 - 8, y: 10, width: 55, height: 20))
@@ -35,6 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                window.backgroundColor = .white
 //            }
 //        }
+
         JMessage.setupJMessage(launchOptions, appKey: JMAPPKEY, channel: nil, apsForProduction: true, category: nil, messageRoaming: true)
         _setupJMessage()
         

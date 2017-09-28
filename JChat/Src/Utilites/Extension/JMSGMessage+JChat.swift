@@ -40,11 +40,6 @@ extension JMSGMessage {
             }
             return false
         }
-        set {
-            if let content = self.content as? JMSGFileContent {
-                content.addStringExtra("mov", forKey: kShortVideo)
-            }
-        }
     }
     
     var fileType: String? {
@@ -77,6 +72,55 @@ extension JMSGMessage {
                 return "\(size)B"
             }
             return nil
+        }
+    }
+    
+    var businessCardName: String? {
+        get {
+            if !self.isBusinessCard {
+                return nil
+            }
+            guard let extras = self.content?.extras else {
+                return nil
+            }
+            return extras[kBusinessCardName] as? String
+        }
+
+    }
+    
+    var businessCardAppKey: String? {
+        get {
+            if !self.isBusinessCard {
+                return nil
+            }
+            guard let extras = self.content?.extras else {
+                return nil
+            }
+            return extras[kBusinessCardAppKey] as? String
+        }
+    }
+
+    
+    var isBusinessCard: Bool {
+        get {
+            if let content = self.content as? JMSGTextContent {
+                if let extras = content.extras {
+                    if extras.keys.contains(where: { (key) -> Bool in
+                        if let key = key as? String {
+                            return key == kBusinessCard
+                        }
+                        return false
+                    }) {
+                        return true
+                    }
+                }
+            }
+            return false
+        }
+        set {
+            if let content = self.content as? JMSGTextContent {
+                content.addStringExtra(kBusinessCard, forKey: kBusinessCard)
+            }
         }
     }
     
@@ -125,6 +169,32 @@ extension JMSGMessage {
                 content.addStringExtra(kLargeEmoticon, forKey: kLargeEmoticon)
             }
         }
+    }
+    
+    static func createBusinessCardMessage(_ conversation: JMSGConversation, _ userName: String, _ appKey: String) -> JMSGMessage {
+        let message: JMSGMessage!
+        let content = JMSGTextContent(text: "推荐了一张名片")
+        content.addStringExtra(userName, forKey: "userName")
+        content.addStringExtra(appKey, forKey: "appKey")
+        if conversation.isGroup  {
+            let group = conversation.target as! JMSGGroup
+            message = JMSGMessage.createGroupMessage(with: content, groupId: group.gid)
+        } else {
+            let user = conversation.target as! JMSGUser
+            message = JMSGMessage.createSingleMessage(with: content, username: user.username)
+        }
+        message.isBusinessCard = true
+        return message
+    }
+
+    static func createBusinessCardMessage(gid: String, userName: String, appKey: String) -> JMSGMessage {
+        let message: JMSGMessage!
+        let content = JMSGTextContent(text: "推荐了一张名片")
+        content.addStringExtra(userName, forKey: "userName")
+        content.addStringExtra(appKey, forKey: "appKey")
+        message = JMSGMessage.createGroupMessage(with: content, groupId: gid)
+        message.isBusinessCard = true
+        return message
     }
     
     static func createMessage(_ conversation: JMSGConversation, _ content: JMSGAbstractContent, _ reminds: [JCRemind]?) -> JMSGMessage {
