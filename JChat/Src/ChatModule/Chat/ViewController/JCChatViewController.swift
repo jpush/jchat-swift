@@ -158,6 +158,7 @@ class JCChatViewController: UIViewController {
     fileprivate var maxTime = 0
     fileprivate var minTime = 0
     fileprivate var minIndex = 0
+    fileprivate var jMessageCount = 0
     fileprivate var isFristLaunch = true
     fileprivate var recordingHub: JCRecordingView!
     fileprivate lazy var recordHelper: JCRecordVoiceHelper = {
@@ -220,6 +221,7 @@ class JCChatViewController: UIViewController {
     }
     
     func _removeAllMessage() {
+        jMessageCount = 0
         messages.removeAll()
         chatView.removeAll()
     }
@@ -240,7 +242,7 @@ class JCChatViewController: UIViewController {
         }
         let item1 = UIBarButtonItem(customView: navButton)
         navigationItem.rightBarButtonItems =  [item1]
-        
+
         leftButton.setImage(UIImage.loadImage("com_icon_back"), for: .normal)
         leftButton.setImage(UIImage.loadImage("com_icon_back"), for: .highlighted)
         leftButton.addTarget(self, action: #selector(_back), for: .touchUpInside)
@@ -258,7 +260,8 @@ class JCChatViewController: UIViewController {
     }
     
     fileprivate func _loadMessage(_ page: Int) {
-        let messages = conversation.messageArrayFromNewest(withOffset: NSNumber(value: page * 15), limit: NSNumber(value: 17))
+
+        let messages = conversation.messageArrayFromNewest(withOffset: NSNumber(value: jMessageCount), limit: NSNumber(value: 17))
         if messages.count == 0 {
             return
         }
@@ -304,6 +307,7 @@ class JCChatViewController: UIViewController {
     
     // MARK: - parse message
     fileprivate func _parseMessage(_ message: JMSGMessage) -> JCMessage? {
+        jMessageCount += 1
         var msg: JCMessage!
         let fromUser = message.fromUser
         let currentUser = JMSGUser.myInfo()
@@ -491,7 +495,6 @@ class JCChatViewController: UIViewController {
     func send(forImage image: UIImage) {
         
         let data = UIImageJPEGRepresentation(image, 1.0)!
-        print("---------- image data: %f", data.count / 1024 / 1024)
         let content = JMSGImageContent(imageData: data)
 
         let message = JMSGMessage.createMessage(conversation, content!, nil)
@@ -1002,6 +1005,9 @@ extension JCChatViewController: JCMessageDelegate {
     }
 
     func longTapAvatarView(message: JCMessageType) {
+        if !isGroup {
+            return
+        }
         _toolbar.becomeFirstResponder()
         if let user = message.sender {
             _toolbar.text.append("@")
@@ -1030,6 +1036,7 @@ extension JCChatViewController: JCChatViewDelegate {
         if let index = messages.index(where: { (m) -> Bool in
             m.msgId == message.msgId
         }) {
+            jMessageCount -= 1
             messages.remove(at: index)
         }
     }
@@ -1120,7 +1127,9 @@ extension JCChatViewController: UIAlertViewDelegate {
                 currentMessage.options.state = .sending
                 messages.append(currentMessage as! JCMessage)
                 chatView.append(currentMessage)
-                conversation.send(msg!)
+                let optionalContent = JMSGOptionalContent()
+                optionalContent.needReadReceipt = true
+                conversation.send(msg!, optionalContent: optionalContent)
                 chatView.scrollToLast(animated: true)
             }
         default:

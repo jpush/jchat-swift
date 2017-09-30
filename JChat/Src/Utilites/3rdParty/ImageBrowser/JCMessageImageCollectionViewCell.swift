@@ -45,10 +45,7 @@ public class JCMessageImageCollectionViewCell: UICollectionViewCell {
         singleTapGesture.require(toFail: doubleTapGesture)
         
         let longTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(longTapImage(_:)))
-        longTapGesture.minimumPressDuration = 0.4
-        longTapGesture.numberOfTouchesRequired = 1
         addGestureRecognizer(longTapGesture)
-        longTapGesture.require(toFail: singleTapGesture)
     }
     
     func singleTapImage(_ gestureRecognizer: UITapGestureRecognizer)  {

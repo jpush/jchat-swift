@@ -24,15 +24,15 @@ class JCConversationListViewController: UIViewController {
         super.viewDidAppear(animated)
         if isConnecting {
             titleTips.text = "连接中"
-            titleTips.isHidden = false
+            titleTipsView.isHidden = false
         } else {
-            titleTips.isHidden = true
+            titleTipsView.isHidden = true
         }
         _getConversations()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        titleTips.isHidden = true
+        titleTipsView.isHidden = true
     }
 
     deinit {
@@ -69,13 +69,23 @@ class JCConversationListViewController: UIViewController {
     }()
     
     fileprivate lazy var titleTips: UILabel = {
-        var tips = UILabel(frame: CGRect(x: self.view.width / 2 - 50, y: 20, width: 100, height: 44))
+        var tips = UILabel(frame: CGRect(x: 23, y: 0, width: 67, height: 44))
         tips.font = UIFont.systemFont(ofSize: 18)
         tips.textColor = UIColor.white
-        tips.textAlignment = .center
+        tips.textAlignment = .left
         tips.backgroundColor = UIColor(netHex: 0x5AD4D3)
-        tips.isHidden = true
         return tips
+    }()
+
+    fileprivate lazy var titleTipsView: UIView = {
+        var view = UIView(frame: CGRect(x: self.view.width / 2 - 45, y: 20, width: 90, height: 44))
+        view.backgroundColor =  UIColor(netHex: 0x5AD4D3)
+        let activityView = UIActivityIndicatorView(frame: CGRect(x: 0, y: 12, width: 20, height: 20))
+        view.addSubview(activityView)
+        activityView.startAnimating()
+        view.addSubview(self.titleTips)
+        view.isHidden = true
+        return view
     }()
     
     //Mark: - private func
@@ -93,11 +103,11 @@ class JCConversationListViewController: UIViewController {
 //                tableview.contentInset = UIEdgeInsetsMake(64, 0, 49, 0)
 //            }
 //            tableview.scrollIndicatorInsets = tableview.contentInset
-//        }
+//        } 
 
         let appDelegate = UIApplication.shared.delegate
         let window = appDelegate?.window!
-        window?.addSubview(titleTips)
+        window?.addSubview(titleTipsView)
         
         _setupNavigation()
         JMessage.add(self, with: nil)
@@ -402,12 +412,12 @@ extension JCConversationListViewController {
     
     func connectClose() {
         isConnecting = false
-        titleTips.isHidden = true
+        titleTipsView.isHidden = true
     }
     
     func connectSucceed() {
         isConnecting = false
-        titleTips.isHidden = true
+        titleTipsView.isHidden = true
     }
     
     func connecting() {
@@ -429,7 +439,7 @@ extension JCConversationListViewController {
             if currentVC.isKind(of: JCConversationListViewController.self) {
                 isConnecting = true
                 titleTips.text = "连接中"
-                titleTips.isHidden = false
+                titleTipsView.isHidden = false
             }
         }
     }

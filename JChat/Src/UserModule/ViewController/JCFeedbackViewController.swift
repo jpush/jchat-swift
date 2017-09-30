@@ -86,7 +86,7 @@ class JCFeedbackViewController: UIViewController {
             JMSGMessage.send(message, optionalContent: optionalContent)
 //            JMSGMessage.sendSingleImageMessage(UIImageJPEGRepresentation(image, 1.0)!, toUser: "feedback_ios")
         }
-
+        JMSGConversation.deleteSingleConversation(withUsername: "feedback_ios")
 //        MBProgressHUD_JChat.show(text: "反馈成功", view: view)
         view.endEditing(true)
         JCAlertView.bulid().setDelegate(self).setTitle("提交成功").setMessage("感谢您的反馈，我们将持续为您改进").addButton("确定").setTag(1001).show()

@@ -199,7 +199,7 @@ class JCRegisterViewController: UIViewController {
                     vc.password = password
                     self.navigationController?.pushViewController(vc, animated: true)
                 } else {
-                    MBProgressHUD_JChat.show(text: String.errorAlert(error as! NSError), view: self.view)
+                    MBProgressHUD_JChat.show(text: String.errorAlert(error! as NSError), view: self.view)
                 }
             }
         }
