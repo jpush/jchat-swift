@@ -88,10 +88,9 @@ class JCRegisterInfoViewController: UIViewController {
     //MARK: - private func
     private func _init() {
         self.title = "补充信息"
-        self.view.backgroundColor = .white
-        //        self.navigationController?.navigationBar.isHidden = true
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        view.backgroundColor = .white
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         
         nicknameTextField.addTarget(self, action: #selector(textFieldDidChanged(_ :)), for: .editingChanged)
         

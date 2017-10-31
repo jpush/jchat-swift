@@ -28,9 +28,6 @@ class JCUserInfoViewController: UIViewController {
         var tableview = UITableView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: self.view.height - 64), style: .grouped)
         tableview.delegate = self
         tableview.dataSource = self
-        tableview.estimatedRowHeight = 0
-        tableview.estimatedSectionFooterHeight = 0
-        tableview.estimatedSectionHeaderHeight = 0
         tableview.register(JCUserAvatorCell.self, forCellReuseIdentifier: "JCUserAvatorCell")
         tableview.register(JCUserInfoCell.self, forCellReuseIdentifier: "JCUserInfoCell")
         tableview.register(JCButtonCell.self, forCellReuseIdentifier: "JCButtonCell")
@@ -44,7 +41,7 @@ class JCUserInfoViewController: UIViewController {
     //MARK: - private func
     private func _init() {
         self.title = "详细信息"
-        self.automaticallyAdjustsScrollViewInsets = false
+        automaticallyAdjustsScrollViewInsets = false
         view.addSubview(tableview)
         _setupNavigation()
         NotificationCenter.default.addObserver(self, selector: #selector(_updateUserInfo), name: NSNotification.Name(rawValue: kUpdateFriendInfo), object: nil)
@@ -55,17 +52,17 @@ class JCUserInfoViewController: UIViewController {
         moreButton.addTarget(self, action: #selector(_clickNavRightButton), for: .touchUpInside)
         moreButton.setImage(UIImage.loadImage("com_icon_more"), for: .normal)
         let item = UIBarButtonItem(customView: moreButton)
-        self.navigationItem.rightBarButtonItem =  item
+        navigationItem.rightBarButtonItem =  item
     }
     
     func _updateUserInfo() {
-        self.tableview.reloadData()
+        tableview.reloadData()
     }
     
     func _clickNavRightButton() {
         let vc = JCFriendSettingViewController()
         vc.user = self.user
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -194,13 +191,13 @@ extension JCUserInfoViewController: JCButtonCellDelegate {
         if isOnAddFriend {
             let vc = JCAddFriendViewController()
             vc.user = user
-            self.navigationController?.pushViewController(vc, animated: true)
+            navigationController?.pushViewController(vc, animated: true)
             return
         }
         if isOnConversation {
-            for vc in (self.navigationController?.viewControllers)! {
+            for vc in (navigationController?.viewControllers)! {
                 if vc is JCChatViewController {
-                    self.navigationController?.popToViewController(vc, animated: true)
+                    navigationController?.popToViewController(vc, animated: true)
                 }
             }
             return
@@ -220,7 +217,7 @@ extension JCUserInfoViewController: JCDoubleButtonCellDelegate {
     func doubleButtonCell(clickLeftButton button: UIButton) {
         let vc = JCAddFriendViewController()
         vc.user = user
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
     func doubleButtonCell(clickRightButton button: UIButton) {
         JMSGConversation.createSingleConversation(withUsername: (user?.username)!, appKey: (user?.appKey)!) { (result, error) in
@@ -242,7 +239,7 @@ extension JCUserInfoViewController: JCUserAvatorCellDelegate {
         let browserImageVC = JCImageBrowserViewController()
         browserImageVC.imageArr = [image]
         browserImageVC.imgCurrentIndex = 0
-        self.present(browserImageVC, animated: true) {
+        present(browserImageVC, animated: true) {
         
         }
     }

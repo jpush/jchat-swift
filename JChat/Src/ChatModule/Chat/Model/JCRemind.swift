@@ -7,7 +7,6 @@
 //
 
 import UIKit
-
 class JCRemind: NSObject {
     
     var user: JMSGUser?

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0A4A7E2CF0C56EA64144D6F1 /* Pods_JChatUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C5229541B366E492E890423 /* Pods_JChatUITests.framework */; };
+		650AA8941F8A6FF400D28338 /* JMSGOptionalContent+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650AA8931F8A6FF400D28338 /* JMSGOptionalContent+.swift */; };
+		6517E08B1F90BBD9005A4B21 /* UISearchBar+JChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6517E08A1F90BBD9005A4B21 /* UISearchBar+JChat.swift */; };
 		651F362E1F53C14C00C9AAFD /* DLLRUCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 651F361F1F53C14C00C9AAFD /* DLLRUCache.m */; };
 		651F362F1F53C14C00C9AAFD /* DLCustomSlideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 651F36211F53C14C00C9AAFD /* DLCustomSlideView.m */; };
 		651F36301F53C14C00C9AAFD /* DLSlideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 651F36231F53C14C00C9AAFD /* DLSlideView.m */; };
@@ -19,9 +21,14 @@
 		651F36381F53ED6F00C9AAFD /* ImageFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651F36371F53ED6F00C9AAFD /* ImageFileViewController.swift */; };
 		651F363A1F53ED9D00C9AAFD /* FileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651F36391F53ED9D00C9AAFD /* FileViewController.swift */; };
 		651F363C1F53F1F700C9AAFD /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651F363B1F53F1F700C9AAFD /* FileCell.swift */; };
+		6530BBE71F96FA1E008140BD /* UITextInput+JChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6530BBE61F96FA1E008140BD /* UITextInput+JChat.swift */; };
+		653CD4381F8DEBE800585929 /* Array+JChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653CD4371F8DEBE800585929 /* Array+JChat.swift */; };
 		653D3EF01F45456400893EC1 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653D3EEF1F45456400893EC1 /* Operators.swift */; };
 		653E0F201F5554D800BD2B19 /* ImageFileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653E0F1E1F5554D800BD2B19 /* ImageFileCell.swift */; };
 		653E0F211F5554D800BD2B19 /* ImageFileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653E0F1F1F5554D800BD2B19 /* ImageFileHeader.swift */; };
+		653E60A41F8088D800739C9E /* ExJMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653E60A31F8088D800739C9E /* ExJMessage.swift */; };
+		653E60A61F80894F00739C9E /* JMSGMessage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653E60A51F80894F00739C9E /* JMSGMessage+.swift */; };
+		653E60A81F8089BE00739C9E /* JMSGConversation+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653E60A71F8089BE00739C9E /* JMSGConversation+.swift */; };
 		6541FC821F78A9E700C351CE /* defaultTheme.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6541FC7D1F78A9E700C351CE /* defaultTheme.bundle */; };
 		6541FC831F78A9E700C351CE /* blackTheme.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6541FC7E1F78A9E700C351CE /* blackTheme.bundle */; };
 		6541FC841F78A9E700C351CE /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6541FC7F1F78A9E700C351CE /* ThemeManager.swift */; };
@@ -30,13 +37,13 @@
 		6543F4291F501116005CA295 /* UserProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6543F4281F501116005CA295 /* UserProtocols.swift */; };
 		655730C61F57FD23005F1017 /* JCBusinessCardContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655730C51F57FD23005F1017 /* JCBusinessCardContent.swift */; };
 		655730C81F57FD3E005F1017 /* JCBusinessCardContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655730C71F57FD3E005F1017 /* JCBusinessCardContentView.swift */; };
+		656C64EA1F861658002CB59A /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656C64E91F861658002CB59A /* Log.swift */; };
 		6573BEFA1F70E80B00813B94 /* GroupAvatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6573BEF91F70E80B00813B94 /* GroupAvatorViewController.swift */; };
 		65921AF21F7368D400380745 /* FriendsBusinessCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65921AF11F7368D400380745 /* FriendsBusinessCardViewController.swift */; };
 		65A46F361F6A228600FBF416 /* UnreadListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A46F351F6A228600FBF416 /* UnreadListViewController.swift */; };
 		65CBEC881F43ED4200F68EE4 /* ScanQRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CBEC871F43ED4200F68EE4 /* ScanQRCodeViewController.swift */; };
+		65D311E11F8A8070006BAFDD /* UIViewController+JChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D311E01F8A8070006BAFDD /* UIViewController+JChat.swift */; };
 		65E081711F7D49460088730D /* UserDefaultValidationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E0816F1F7D49460088730D /* UserDefaultValidationService.swift */; };
-		65E081751F7D4A630088730D /* jcore-ios-1.1.5-debug-25.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65E081741F7D4A630088730D /* jcore-ios-1.1.5-debug-25.a */; };
-		65E081771F7D4BEF0088730D /* JMessage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65E081761F7D4BEF0088730D /* JMessage.framework */; };
 		65EA27881F70F5DE00E489C4 /* GroupAvatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65EA27871F70F5DE00E489C4 /* GroupAvatorCell.swift */; };
 		AC3A15961D2DE46D0DABF7EB /* Pods_JChatTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBCCA1A62435BE8F41C4D275 /* Pods_JChatTests.framework */; };
 		B401970F1EF3B34C006B9F2D /* JCNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B401970E1EF3B34C006B9F2D /* JCNetworkManager.swift */; };
@@ -140,7 +147,6 @@
 		B44D6B841E8CFD180018E884 /* JCMyInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44D6B831E8CFD180018E884 /* JCMyInfoCell.swift */; };
 		B450FF171F1F31F400F4BF41 /* JCRemind.swift in Sources */ = {isa = PBXBuildFile; fileRef = B450FF161F1F31F400F4BF41 /* JCRemind.swift */; };
 		B45223511EFCC0D700BE9409 /* JCAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45223501EFCC0D700BE9409 /* JCAppManager.swift */; };
-		B45223661EFCFFF600BE9409 /* JMSGMessage+JChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45223651EFCFFF600BE9409 /* JMSGMessage+JChat.swift */; };
 		B4583FBA1E948F410097FB4D /* JCSingleSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4583FB91E948F410097FB4D /* JCSingleSettingViewController.swift */; };
 		B4583FBE1E94F4AC0097FB4D /* JCIdentityVerificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4583FBD1E94F4AC0097FB4D /* JCIdentityVerificationViewController.swift */; };
 		B464C62D1EC05F9E00AE41B5 /* JCMoreResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464C62C1EC05F9E00AE41B5 /* JCMoreResultViewController.swift */; };
@@ -191,7 +197,6 @@
 		B4B9D71B1EB1C9C00075B83A /* JCGroupSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B9D71A1EB1C9C00075B83A /* JCGroupSettingCell.swift */; };
 		B4B9D71D1EB1E47C0075B83A /* JCAddFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B9D71C1EB1E47C0075B83A /* JCAddFriendViewController.swift */; };
 		B4D002F51ED6AE9E005ADD4C /* JCVerificationDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D002F41ED6AE9E005ADD4C /* JCVerificationDetailViewController.swift */; };
-		B4D85CDB1F21DE2700DF1A1B /* JMSGConversation+JChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D85CDA1F21DE2700DF1A1B /* JMSGConversation+JChat.swift */; };
 		B4DB28BE1E9F7B6C0024AB65 /* yh_image_no_picked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4DB28BA1E9F7B6C0024AB65 /* yh_image_no_picked@2x.png */; };
 		B4DB28BF1E9F7B6C0024AB65 /* yh_image_no_picked@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4DB28BB1E9F7B6C0024AB65 /* yh_image_no_picked@3x.png */; };
 		B4DB28C01E9F7B6C0024AB65 /* yh_image_picked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4DB28BC1E9F7B6C0024AB65 /* yh_image_picked@2x.png */; };
@@ -247,6 +252,8 @@
 		2D9B8B0D7A37CB5A64B1F049 /* Pods-JChatTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JChatTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JChatTests/Pods-JChatTests.debug.xcconfig"; sourceTree = "<group>"; };
 		30157DB80524A6BCE2DEFB37 /* Pods-JChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JChat.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JChat/Pods-JChat.debug.xcconfig"; sourceTree = "<group>"; };
 		3A828FCE98FFA8C8CDD83E2A /* Pods-JChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JChat.release.xcconfig"; path = "Pods/Target Support Files/Pods-JChat/Pods-JChat.release.xcconfig"; sourceTree = "<group>"; };
+		650AA8931F8A6FF400D28338 /* JMSGOptionalContent+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JMSGOptionalContent+.swift"; sourceTree = "<group>"; };
+		6517E08A1F90BBD9005A4B21 /* UISearchBar+JChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchBar+JChat.swift"; sourceTree = "<group>"; };
 		651F361D1F53C14C00C9AAFD /* DLCacheProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLCacheProtocol.h; sourceTree = "<group>"; };
 		651F361E1F53C14C00C9AAFD /* DLLRUCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLLRUCache.h; sourceTree = "<group>"; };
 		651F361F1F53C14C00C9AAFD /* DLLRUCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLLRUCache.m; sourceTree = "<group>"; };
@@ -267,9 +274,14 @@
 		651F36371F53ED6F00C9AAFD /* ImageFileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageFileViewController.swift; sourceTree = "<group>"; };
 		651F36391F53ED9D00C9AAFD /* FileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileViewController.swift; sourceTree = "<group>"; };
 		651F363B1F53F1F700C9AAFD /* FileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
+		6530BBE61F96FA1E008140BD /* UITextInput+JChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextInput+JChat.swift"; sourceTree = "<group>"; };
+		653CD4371F8DEBE800585929 /* Array+JChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+JChat.swift"; sourceTree = "<group>"; };
 		653D3EEF1F45456400893EC1 /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		653E0F1E1F5554D800BD2B19 /* ImageFileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageFileCell.swift; sourceTree = "<group>"; };
 		653E0F1F1F5554D800BD2B19 /* ImageFileHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageFileHeader.swift; sourceTree = "<group>"; };
+		653E60A31F8088D800739C9E /* ExJMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExJMessage.swift; sourceTree = "<group>"; };
+		653E60A51F80894F00739C9E /* JMSGMessage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JMSGMessage+.swift"; sourceTree = "<group>"; };
+		653E60A71F8089BE00739C9E /* JMSGConversation+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JMSGConversation+.swift"; sourceTree = "<group>"; };
 		6541FC7D1F78A9E700C351CE /* defaultTheme.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = defaultTheme.bundle; sourceTree = "<group>"; };
 		6541FC7E1F78A9E700C351CE /* blackTheme.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = blackTheme.bundle; sourceTree = "<group>"; };
 		6541FC7F1F78A9E700C351CE /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
@@ -278,13 +290,13 @@
 		6543F4281F501116005CA295 /* UserProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProtocols.swift; sourceTree = "<group>"; };
 		655730C51F57FD23005F1017 /* JCBusinessCardContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCBusinessCardContent.swift; sourceTree = "<group>"; };
 		655730C71F57FD3E005F1017 /* JCBusinessCardContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCBusinessCardContentView.swift; sourceTree = "<group>"; };
+		656C64E91F861658002CB59A /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		6573BEF91F70E80B00813B94 /* GroupAvatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupAvatorViewController.swift; sourceTree = "<group>"; };
 		65921AF11F7368D400380745 /* FriendsBusinessCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsBusinessCardViewController.swift; sourceTree = "<group>"; };
 		65A46F351F6A228600FBF416 /* UnreadListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnreadListViewController.swift; sourceTree = "<group>"; };
 		65CBEC871F43ED4200F68EE4 /* ScanQRCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanQRCodeViewController.swift; sourceTree = "<group>"; };
+		65D311E01F8A8070006BAFDD /* UIViewController+JChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+JChat.swift"; sourceTree = "<group>"; };
 		65E0816F1F7D49460088730D /* UserDefaultValidationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultValidationService.swift; sourceTree = "<group>"; };
-		65E081741F7D4A630088730D /* jcore-ios-1.1.5-debug-25.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "jcore-ios-1.1.5-debug-25.a"; path = "JMessage.framework/jcore-ios-1.1.5-debug-25.a"; sourceTree = "<group>"; };
-		65E081761F7D4BEF0088730D /* JMessage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JMessage.framework; sourceTree = "<group>"; };
 		65EA27871F70F5DE00E489C4 /* GroupAvatorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupAvatorCell.swift; sourceTree = "<group>"; };
 		6F45094B9185E340E098980B /* Pods-JChatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JChatTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-JChatTests/Pods-JChatTests.release.xcconfig"; sourceTree = "<group>"; };
 		9C5229541B366E492E890423 /* Pods_JChatUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JChatUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -399,7 +411,6 @@
 		B44D6B831E8CFD180018E884 /* JCMyInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCMyInfoCell.swift; sourceTree = "<group>"; };
 		B450FF161F1F31F400F4BF41 /* JCRemind.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCRemind.swift; sourceTree = "<group>"; };
 		B45223501EFCC0D700BE9409 /* JCAppManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCAppManager.swift; sourceTree = "<group>"; };
-		B45223651EFCFFF600BE9409 /* JMSGMessage+JChat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "JMSGMessage+JChat.swift"; sourceTree = "<group>"; };
 		B4583FB91E948F410097FB4D /* JCSingleSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCSingleSettingViewController.swift; sourceTree = "<group>"; };
 		B4583FBD1E94F4AC0097FB4D /* JCIdentityVerificationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCIdentityVerificationViewController.swift; sourceTree = "<group>"; };
 		B464C62C1EC05F9E00AE41B5 /* JCMoreResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCMoreResultViewController.swift; sourceTree = "<group>"; };
@@ -451,7 +462,6 @@
 		B4B9D71C1EB1E47C0075B83A /* JCAddFriendViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCAddFriendViewController.swift; sourceTree = "<group>"; };
 		B4D002F41ED6AE9E005ADD4C /* JCVerificationDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCVerificationDetailViewController.swift; sourceTree = "<group>"; };
 		B4D0A1DC1ECB55E20033713A /* JChat.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JChat.entitlements; sourceTree = "<group>"; };
-		B4D85CDA1F21DE2700DF1A1B /* JMSGConversation+JChat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "JMSGConversation+JChat.swift"; sourceTree = "<group>"; };
 		B4DB28BA1E9F7B6C0024AB65 /* yh_image_no_picked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yh_image_no_picked@2x.png"; sourceTree = "<group>"; };
 		B4DB28BB1E9F7B6C0024AB65 /* yh_image_no_picked@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yh_image_no_picked@3x.png"; sourceTree = "<group>"; };
 		B4DB28BC1E9F7B6C0024AB65 /* yh_image_picked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yh_image_picked@2x.png"; sourceTree = "<group>"; };
@@ -499,8 +509,6 @@
 				B43BA4351E8A309300565DB3 /* Security.framework in Frameworks */,
 				B43BA43B1E8A30B200565DB3 /* CoreGraphics.framework in Frameworks */,
 				B43F70351EA87FA10076D5AF /* OpenGLES.framework in Frameworks */,
-				65E081751F7D4A630088730D /* jcore-ios-1.1.5-debug-25.a in Frameworks */,
-				65E081771F7D4BEF0088730D /* JMessage.framework in Frameworks */,
 				B43F70331EA87F910076D5AF /* QuartzCore.framework in Frameworks */,
 				B43F70311EA87F7C0076D5AF /* CoreLocation.framework in Frameworks */,
 				B43BA43D1E8A30BB00565DB3 /* CoreAudio.framework in Frameworks */,
@@ -580,6 +588,41 @@
 			path = RxSwift;
 			sourceTree = "<group>";
 		};
+		653E609D1F80876000739C9E /* ExJMessage */ = {
+			isa = PBXGroup;
+			children = (
+				653E609E1F80876000739C9E /* Core */,
+				653E609F1F80876000739C9E /* Extensions */,
+				653E60A01F80876000739C9E /* Helpers */,
+			);
+			path = ExJMessage;
+			sourceTree = "<group>";
+		};
+		653E609E1F80876000739C9E /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				653E60A31F8088D800739C9E /* ExJMessage.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		653E609F1F80876000739C9E /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				653E60A51F80894F00739C9E /* JMSGMessage+.swift */,
+				653E60A71F8089BE00739C9E /* JMSGConversation+.swift */,
+				650AA8931F8A6FF400D28338 /* JMSGOptionalContent+.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		653E60A01F80876000739C9E /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		6543F4271F501116005CA295 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -639,6 +682,7 @@
 				B43BA38B1E8A2F0000565DB3 /* JChatTests */,
 				B43BA3961E8A2F0000565DB3 /* JChatUITests */,
 				B43BA3751E8A2F0000565DB3 /* Products */,
+				B43BA3CB1E8A2FF500565DB3 /* ContacterModule */,
 				BE41FBEBCBE1C125EE86D68E /* Pods */,
 				DDA5C80485C5FFA2C3776F21 /* Frameworks */,
 			);
@@ -710,7 +754,6 @@
 			isa = PBXGroup;
 			children = (
 				B43BA3AA1E8A2FF500565DB3 /* ChatModule */,
-				B43BA3CB1E8A2FF500565DB3 /* ContacterModule */,
 				B43BA3D61E8A2FF500565DB3 /* MainModule */,
 				B43BA3DA1E8A2FF500565DB3 /* UserModule */,
 				B43BA3E51E8A2FF500565DB3 /* Utilites */,
@@ -969,6 +1012,7 @@
 		B43BA3E51E8A2FF500565DB3 /* Utilites */ = {
 			isa = PBXGroup;
 			children = (
+				653E609D1F80876000739C9E /* ExJMessage */,
 				653D3EEE1F45456400893EC1 /* RxSwift */,
 				B401970D1EF3B31D006B9F2D /* NetworkManager */,
 				B40388101EEE767B00F764A7 /* Reachability */,
@@ -1003,8 +1047,10 @@
 				B43BA3EC1E8A2FF500565DB3 /* NSLayoutConstraint+JChat.swift */,
 				B43BA3ED1E8A2FF500565DB3 /* UIView+JChat.swift */,
 				B4459B501EF8BDF500AF7993 /* UIImage+JChat.swift */,
-				B45223651EFCFFF600BE9409 /* JMSGMessage+JChat.swift */,
-				B4D85CDA1F21DE2700DF1A1B /* JMSGConversation+JChat.swift */,
+				65D311E01F8A8070006BAFDD /* UIViewController+JChat.swift */,
+				653CD4371F8DEBE800585929 /* Array+JChat.swift */,
+				6517E08A1F90BBD9005A4B21 /* UISearchBar+JChat.swift */,
+				6530BBE61F96FA1E008140BD /* UITextInput+JChat.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1030,6 +1076,7 @@
 				B45223501EFCC0D700BE9409 /* JCAppManager.swift */,
 				B4451B0D1F1DF86100C0E889 /* JCAlertView.swift */,
 				B417BD181F25F416009E27CF /* JCFileManager.swift */,
+				656C64E91F861658002CB59A /* Log.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -1158,8 +1205,6 @@
 		DDA5C80485C5FFA2C3776F21 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				65E081761F7D4BEF0088730D /* JMessage.framework */,
-				65E081741F7D4A630088730D /* jcore-ios-1.1.5-debug-25.a */,
 				B43F70361EA880280076D5AF /* libstdc++.6.0.9.tbd */,
 				B43F70341EA87FA10076D5AF /* OpenGLES.framework */,
 				B43F70321EA87F910076D5AF /* QuartzCore.framework */,
@@ -1260,7 +1305,6 @@
 				TargetAttributes = {
 					B43BA3731E8A2F0000565DB3 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 8X2A38Q9VD;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -1529,8 +1573,8 @@
 				B4AC7BD51F258F2300EDA7B4 /* JCFileDownloadViewController.swift in Sources */,
 				B488D6041EA075C800568B2B /* JCVerificationInfo.swift in Sources */,
 				651F36301F53C14C00C9AAFD /* DLSlideView.m in Sources */,
+				65D311E11F8A8070006BAFDD /* UIViewController+JChat.swift in Sources */,
 				B4B583441F209D2D0044A6AD /* JCMessageFileContentView.swift in Sources */,
-				B4D85CDB1F21DE2700DF1A1B /* JMSGConversation+JChat.swift in Sources */,
 				B480C98F1E9DF12B00187D9B /* SAIInputItemView.swift in Sources */,
 				B4DF21321E9B5065005E62AA /* JCMessageVoiceContentView.swift in Sources */,
 				B43BA4091E8A2FF500565DB3 /* JCEmoticonPageView.swift in Sources */,
@@ -1562,6 +1606,7 @@
 				B481D6351ECAA1FB00FDFE5B /* JCGroupNameViewController.swift in Sources */,
 				B47FEA691EA4B86D00AF1732 /* JCRecordingView.swift in Sources */,
 				B46DF5231EC30F88009A3FF9 /* JCGroupMembersViewController.swift in Sources */,
+				653E60A61F80894F00739C9E /* JMSGMessage+.swift in Sources */,
 				B4DF212E1E9B5065005E62AA /* JCMessageTimeLineContentView.swift in Sources */,
 				65A46F361F6A228600FBF416 /* UnreadListViewController.swift in Sources */,
 				B43BA40E1E8A2FF500565DB3 /* JCUserInfoCell.swift in Sources */,
@@ -1580,12 +1625,14 @@
 				B403880D1EEE418100F764A7 /* JCNetworkTipsCell.swift in Sources */,
 				B4F448B51EB03C7000F44E9B /* JCMessageTipsView.swift in Sources */,
 				B43E6F311EB19BC60033171F /* JCGroupSettingViewController.swift in Sources */,
+				650AA8941F8A6FF400D28338 /* JMSGOptionalContent+.swift in Sources */,
 				B4DF21381E9B5413005E62AA /* JCChatViewUpdate.swift in Sources */,
 				B4D002F51ED6AE9E005ADD4C /* JCVerificationDetailViewController.swift in Sources */,
 				B43BA3781E8A2F0000565DB3 /* AppDelegate.swift in Sources */,
 				B43BA41C1E8A2FF500565DB3 /* JCUpdatePassworkViewController.swift in Sources */,
 				B480C9911E9DF12B00187D9B /* SAIInputTextFieldItem.swift in Sources */,
 				B43BA41D1E8A2FF500565DB3 /* Date+JChat.swift in Sources */,
+				653CD4381F8DEBE800585929 /* Array+JChat.swift in Sources */,
 				B43BA4141E8A2FF500565DB3 /* JCNavigationController.swift in Sources */,
 				B44D6B7F1E8CAE6F0018E884 /* JCMyAvatorCell.swift in Sources */,
 				6541FC861F78A9E700C351CE /* Protocols.swift in Sources */,
@@ -1599,7 +1646,9 @@
 				653D3EF01F45456400893EC1 /* Operators.swift in Sources */,
 				B43BA3F71E8A2FF500565DB3 /* JCCEmoticonLarge.swift in Sources */,
 				B49C0D5D1E8E311600C61082 /* JCPhotoBar.swift in Sources */,
+				6530BBE71F96FA1E008140BD /* UITextInput+JChat.swift in Sources */,
 				651F36331F53C14C00C9AAFD /* DLTabedSlideView.m in Sources */,
+				653E60A41F8088D800739C9E /* ExJMessage.swift in Sources */,
 				B488597C1EA73AF90038C1C0 /* JCMessageLocationContentView.swift in Sources */,
 				B43BA40B1E8A2FF500565DB3 /* JCEmoticonTabItemView.swift in Sources */,
 				B43BA4161E8A2FF500565DB3 /* JCJChatInfoViewController.swift in Sources */,
@@ -1616,6 +1665,7 @@
 				6573BEFA1F70E80B00813B94 /* GroupAvatorViewController.swift in Sources */,
 				B480C9941E9DF1C600187D9B /* SAIInputBar+Resource.swift in Sources */,
 				B4B9D71D1EB1E47C0075B83A /* JCAddFriendViewController.swift in Sources */,
+				656C64EA1F861658002CB59A /* Log.swift in Sources */,
 				B480C98A1E9DF12B00187D9B /* SAIInputAccessoryViewLayout.swift in Sources */,
 				B4DF21001E9B3328005E62AA /* JCMessageType.swift in Sources */,
 				B4DF21311E9B5065005E62AA /* JCMessageVoiceContent.swift in Sources */,
@@ -1658,8 +1708,9 @@
 				B43BA4431E8A42D400565DB3 /* JCButtonCell.swift in Sources */,
 				B43BFD9E1EE10F12004C83C1 /* JCDraft.swift in Sources */,
 				651F36361F53C51A00C9AAFD /* FileManagerViewController.swift in Sources */,
+				653E60A81F8089BE00739C9E /* JMSGConversation+.swift in Sources */,
+				6517E08B1F90BBD9005A4B21 /* UISearchBar+JChat.swift in Sources */,
 				B47FEA6A1EA4B86D00AF1732 /* JCRecordVoiceHelper.swift in Sources */,
-				B45223661EFCFFF600BE9409 /* JMSGMessage+JChat.swift in Sources */,
 				B4B9D71B1EB1C9C00075B83A /* JCGroupSettingCell.swift in Sources */,
 				65921AF21F7368D400380745 /* FriendsBusinessCardViewController.swift in Sources */,
 				B43BA3FE1E8A2FF500565DB3 /* JCChatViewController.swift in Sources */,
@@ -1835,7 +1886,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = JChat/JChat.entitlements;
-				DEVELOPMENT_TEAM = 8X2A38Q9VD;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1850,13 +1901,9 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-framework",
-					"\"MBProgressHUD\"",
 					"-ObjC",
-					"-lstdc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -D READ_VERSION";
-				PRODUCT_BUNDLE_IDENTIFIER = io.jchat.JChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/JChat/JChat-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
@@ -1870,7 +1917,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = JChat/JChat.entitlements;
-				DEVELOPMENT_TEAM = 8X2A38Q9VD;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1885,13 +1932,9 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-framework",
-					"\"MBProgressHUD\"",
 					"-ObjC",
-					"-lstdc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -D READ_VERSION";
-				PRODUCT_BUNDLE_IDENTIFIER = io.jchat.JChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/JChat/JChat-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;

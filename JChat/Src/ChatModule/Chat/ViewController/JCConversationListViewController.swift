@@ -37,6 +37,7 @@ class JCConversationListViewController: UIViewController {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+        JMessage.remove(self, with: nil)
     }
     
     fileprivate var isConnecting = false
@@ -95,16 +96,6 @@ class JCConversationListViewController: UIViewController {
             navigationController?.tabBarItem.badgeColor = UIColor(netHex: 0xEB424C)
         }
 
-//        if #available(iOS 11.0, *) {
-//            tableview.contentInsetAdjustmentBehavior = .never
-//            if UIScreen.main.bounds.size.height == 812 {
-//                tableview.contentInset = UIEdgeInsetsMake(88, 0, 49, 0)
-//            } else {
-//                tableview.contentInset = UIEdgeInsetsMake(64, 0, 49, 0)
-//            }
-//            tableview.scrollIndicatorInsets = tableview.contentInset
-//        } 
-
         let appDelegate = UIApplication.shared.delegate
         let window = appDelegate?.window!
         window?.addSubview(titleTipsView)
@@ -125,7 +116,6 @@ class JCConversationListViewController: UIViewController {
 
         _getConversations()
         NotificationCenter.default.addObserver(self, selector: #selector(_getConversations), name: NSNotification.Name(rawValue: kUpdateConversation), object: nil)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(connectClose), name: NSNotification.Name.jmsgNetworkDidClose, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(connectSucceed), name: NSNotification.Name.jmsgNetworkDidLogin, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(connecting), name: NSNotification.Name.jmsgNetworkIsConnecting, object: nil)
@@ -151,7 +141,7 @@ class JCConversationListViewController: UIViewController {
     }
     
     func _updateBadge() {
-        let count = getAllConversation(datas)
+        let count = datas.unreadCount
         if count > 99 {
             navigationController?.tabBarItem.badgeValue = "99+"
         } else {
@@ -181,17 +171,15 @@ class JCConversationListViewController: UIViewController {
         var allConvs: [JMSGConversation] = []
         for index in 0..<convs.count {
             let conv = convs[index]
-            if conv.isSticky {
+            if conv.ex.isSticky {
                 stickyConvs.append(conv)
             } else {
                 allConvs.append(conv)
             }
         }
-//        allConvs = allConvs.sorted { (c1, c2) -> Bool in
-//            c1.latestMsgTime.intValue > c2.latestMsgTime.intValue
-//        }
+
         stickyConvs = stickyConvs.sorted(by: { (c1, c2) -> Bool in
-            c1.stickyTime > c2.stickyTime
+            c1.ex.stickyTime > c2.ex.stickyTime
         })
 
         allConvs.insert(contentsOf: stickyConvs, at: 0)
@@ -267,10 +255,10 @@ extension JCConversationListViewController: UITableViewDelegate, UITableViewData
         }
         let conversation = datas[showNetworkTips ? indexPath.row - 1 : indexPath.row]
         let action2 = UITableViewRowAction(style: .normal, title: "置顶") { (action, indexPath) in
-            conversation.isSticky = !conversation.isSticky
+            conversation.ex.isSticky = !conversation.ex.isSticky
             self._getConversations()
         }
-        if conversation.isSticky {
+        if conversation.ex.isSticky {
             action2.title = "取消置顶"
         } else {
             action2.title = "置顶"
@@ -282,7 +270,7 @@ extension JCConversationListViewController: UITableViewDelegate, UITableViewData
         let conversation = datas[indexPath.row]
         let tager = conversation.target
         JCDraft.update(text: nil, conversation: conversation)
-        if conversation.isGroup {
+        if conversation.ex.isGroup {
             guard let group = tager as? JMSGGroup else {
                 return
             }
@@ -443,24 +431,4 @@ extension JCConversationListViewController {
             }
         }
     }
-}
-
-@inline(__always)
-internal func getAllConversation(_ conversations: [JMSGConversation]) -> Int {
-    var count = 0
-    for item in conversations {
-        if let group = item.target as? JMSGGroup {
-            // TODO: isNoDisturb 这个接口存在性能问题，如果大量离线会卡死
-            if group.isNoDisturb {
-                continue
-            }
-        }
-        if let user = item.target as? JMSGUser {
-            if user.isNoDisturb {
-                continue
-            }
-        }
-        count += item.unreadCount?.intValue ?? 0
-    }
-    return count
 }

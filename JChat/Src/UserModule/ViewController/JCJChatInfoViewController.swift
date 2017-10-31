@@ -28,9 +28,6 @@ class JCJChatInfoViewController: UIViewController {
         
         tableview.delegate = self
         tableview.dataSource = self
-        tableview.estimatedRowHeight = 0
-        tableview.estimatedSectionFooterHeight = 0
-        tableview.estimatedSectionHeaderHeight = 0
         tableview.backgroundColor = UIColor(netHex: 0xe8edf3)
         tableview.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
         tableview.register(JCJChatInfoCell.self, forCellReuseIdentifier: "JCJChatInfoCell")
@@ -70,19 +67,15 @@ extension JCJChatInfoViewController: UITableViewDelegate, UITableViewDataSource 
         return 4.5
     }
     
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             return tableView.dequeueReusableCell(withIdentifier: "JCJChatInfoCell", for: indexPath)
         }
-        
         var cell = tableView.dequeueReusableCell(withIdentifier: "JCMineInfoCell")
         if cell == nil {
-            
             cell = JCTableViewCell(style: .value1, reuseIdentifier: "JCMineInfoCell")
         }
         return cell!
-    
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -91,6 +84,7 @@ extension JCJChatInfoViewController: UITableViewDelegate, UITableViewDataSource 
             cell.accessoryType = .none
             cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 14)
             cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
+            cell.textLabel?.layer.masksToBounds = true
             switch indexPath.row {
             case 0:
                 cell.detailTextLabel?.text = "v\(version).\(bundleVersion)"

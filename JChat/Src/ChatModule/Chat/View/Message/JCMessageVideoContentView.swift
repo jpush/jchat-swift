@@ -33,6 +33,7 @@ open class JCMessageVideoContentView: UIImageView, JCMessageContentViewType {
         guard let content = message.content as? JCMessageVideoContent else {
             return
         }
+        _message = message
         _delegate = content.delegate
         if content.data != nil {
             _data = content.data
@@ -56,10 +57,11 @@ open class JCMessageVideoContentView: UIImageView, JCMessageContentViewType {
         }
         _playImageView.center = CGPoint(x: self.width / 2, y: self.height / 2)
     }
-    
+
     private weak var _delegate: JCMessageDelegate?
     private var _data: Data?
     private var _playImageView: UIImageView!
+    private var _message: JCMessageType!
     
     private func _commonInit() {
         isUserInteractionEnabled = true
@@ -78,6 +80,6 @@ open class JCMessageVideoContentView: UIImageView, JCMessageContentViewType {
     }
     
     func _clickCell() {
-        _delegate?.message?(videoData: _data)
+        _delegate?.message?(message: _message, videoData: _data)
     }
 }

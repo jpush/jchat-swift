@@ -49,9 +49,9 @@ internal class JCEmoticonBackgroundView: UIView {
         
         switch type {
         case .small:
-            _leftView.image = nil
-            _rightView.image = nil
-            _middleView.image = nil
+            _leftView.image = _SAIEmoticonPreviewBackgroundImageForSmall
+            _rightView.image = _SAIEmoticonPreviewBackgroundImageForSmall
+            _middleView.image = _SAIEmoticonPreviewBackgroundImageForSmall
             
         case .large:
             _leftView.image = _SAIEmoticonPreviewBackgroundImageForLargeOfLeft

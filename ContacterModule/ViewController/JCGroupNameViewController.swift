@@ -24,16 +24,22 @@ class JCGroupNameViewController: UIViewController {
         groupNameTextField.becomeFirstResponder()
     }
 
+    private var topOffset: CGFloat {
+        if isIPhoneX {
+            return 88
+        }
+        return 64
+    }
     private lazy var navRightButton: UIBarButtonItem = UIBarButtonItem(title: "完成", style: .plain, target: self, action: #selector(_saveNickname))
-    fileprivate lazy var groupNameTextField: UITextField = UITextField(frame: CGRect(x: 0, y: 64, width: self.view.width, height: 45))
-    fileprivate lazy var tipLabel:  UILabel = UILabel(frame: CGRect(x: self.view.width - 15 - 50, y: 64 + 21, width: 28, height: 12))
+    fileprivate lazy var groupNameTextField: UITextField = UITextField(frame: CGRect(x: 0, y: self.topOffset, width: self.view.width, height: 45))
+    fileprivate lazy var tipLabel:  UILabel = UILabel(frame: CGRect(x: self.view.width - 15 - 50, y: self.topOffset + 21, width: 28, height: 12))
     
     private var groupName = ""
     
     //MARK: - private func
     private func _init() {
         self.title = "群组名称"
-        self.automaticallyAdjustsScrollViewInsets = false
+        automaticallyAdjustsScrollViewInsets = false
         view.backgroundColor = UIColor(netHex: 0xe8edf3)
         
         groupNameTextField.backgroundColor = .white
@@ -52,9 +58,9 @@ class JCGroupNameViewController: UIViewController {
     }
     
     private func _setupNavigation() {
-        self.navigationItem.rightBarButtonItem =  navRightButton
+        navigationItem.rightBarButtonItem =  navRightButton
     }
-    
+
     func textFieldDidChanged(_ textField: UITextField) {
         if textField.markedTextRange == nil {
             let text = textField.text!
@@ -73,23 +79,14 @@ class JCGroupNameViewController: UIViewController {
     func _saveNickname() {
         groupNameTextField.resignFirstResponder()
         let groupName = groupNameTextField.text
-        MBProgressHUD_JChat.showMessage(message: "修改中...", toView: self.view)
-        JMSGGroup.updateGroupInfo(withGroupId: group.gid, name: groupName!, desc: group.desc ?? "") { (result, error) in
+        MBProgressHUD_JChat.showMessage(message: "修改中...", toView: view)
+        var desc = group.desc
+        if group.desc != nil && group.desc!.isEmpty {
+            desc = nil
+        }
+        JMSGGroup.updateGroupInfo(withGroupId: group.gid, name: groupName!, desc: desc) { (result, error) in
             MBProgressHUD_JChat.hide(forView: self.view, animated: true)
             if error == nil {
-//                for vc in (self.navigationController?.viewControllers)! {
-//                    if let groupVC = vc as? JCGroupSettingViewController {
-//                        NotificationCenter.default.post(name: Notification.Name(rawValue: kUpdateGroupInfo), object: nil)
-//                        let conv = JMSGConversation.groupConversation(withGroupId: self.group.gid)
-//                        let group = conv?.target as! JMSGGroup
-//                        groupVC.group = group
-//                        self.navigationController?.popToViewController(vc, animated: true)
-//                    }
-//                }
-                let conv = JMSGConversation.groupConversation(withGroupId: self.group.gid)
-                let group = conv?.target as! JMSGGroup
-                print(group)
-                print(group.displayName())
                 NotificationCenter.default.post(name: Notification.Name(rawValue: kUpdateGroupInfo), object: nil)
                 self.navigationController?.popViewController(animated: true)
             } else {

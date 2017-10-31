@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import JMessage
 import YHPopupView
 
 class JCContactsViewController: UIViewController {
@@ -16,7 +15,7 @@ class JCContactsViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(_updateBadge), name: NSNotification.Name(rawValue: kUpdateVerification), object: nil)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -37,21 +36,29 @@ class JCContactsViewController: UIViewController {
     }
     
     private lazy var addButton = UIButton(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
-    fileprivate var contacterView: UITableView = UITableView(frame: .zero, style: .grouped)
+    fileprivate lazy var contacterView: UITableView = {
+        var contacterView = UITableView(frame: .zero, style: .grouped)
+        contacterView.delegate = self
+        contacterView.dataSource = self
+        contacterView.separatorStyle = .none
+        contacterView.sectionIndexColor = UIColor(netHex: 0x2dd0cf)
+        contacterView.sectionIndexBackgroundColor = .clear
+        return contacterView
+    }()
     private lazy var searchController: JCSearchController = JCSearchController(searchResultsController: JCNavigationController(rootViewController: JCSearchResultViewController()))
     private lazy var searchView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.width, height: 31))
     fileprivate var badgeCount = 0
     
     fileprivate lazy var tagArray = ["验证消息", "群组"]
     fileprivate lazy var users: [JMSGUser] = []
-    
+
     fileprivate lazy var keys: [String] = []
     fileprivate lazy var data: Dictionary<String, [JMSGUser]> = Dictionary()
     
     //MARK: - private func
     private func _init() {
         self.title = "通讯录"
-        self.view.backgroundColor = UIColor(netHex: 0xe8edf3)
+        view.backgroundColor = UIColor(netHex: 0xe8edf3)
         
         if #available(iOS 10.0, *) {
             navigationController?.tabBarItem.badgeColor = UIColor(netHex: 0xEB424C)
@@ -64,14 +71,6 @@ class JCContactsViewController: UIViewController {
         
         searchView.addSubview(searchController.searchBar)
         contacterView.tableHeaderView = searchView
-        contacterView.delegate = self
-        contacterView.dataSource = self
-        contacterView.estimatedRowHeight = 0
-        contacterView.estimatedSectionFooterHeight = 0
-        contacterView.estimatedSectionHeaderHeight = 0
-        contacterView.separatorStyle = .none
-        contacterView.sectionIndexColor = UIColor(netHex: 0x2dd0cf)
-        contacterView.sectionIndexBackgroundColor = .clear
         contacterView.register(JCContacterCell.self, forCellReuseIdentifier: "JCContacterCell")
         contacterView.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
         view.addSubview(contacterView)
@@ -114,10 +113,9 @@ class JCContactsViewController: UIViewController {
             if !keys.contains(key) {
                 keys.append(key)
             }
-            
             data[key] = array
         }
-        keys = _JCSortKeys(keys)
+        keys = keys.sortedKeys()
     }
     
     func _getFriends() {
@@ -250,19 +248,5 @@ extension JCContactsViewController: UISearchControllerDelegate {
         nav.popToRootViewController(animated: false)
         navigationController?.tabBarController?.tabBar.isHidden = false
     }
-}
-
-@inline(__always)
-internal func _JCSortKeys(_ keys: [String]) -> [String] {
-    var array = keys.sorted(by: { (str1, str2) -> Bool in
-        return str1 < str2
-    })
-    if let first = array.first {
-        if first == "#" {
-            array.removeFirst()
-            array.append(first)
-        }
-    }
-    return array
 }
 

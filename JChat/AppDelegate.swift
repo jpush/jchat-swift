@@ -13,7 +13,7 @@ import JMessage
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    let JMAPPKEY = "填写你的 AppKey"
+    let JMAPPKEY = <#填写你的 JMessage AppKey#>
     // 百度地图 SDK AppKey，请自行申请你对应的 AppKey
     let BMAPPKEY = "BNsPzc36d1GBRD9zC3QGO3wUFbY3P3qv"
     
@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     fileprivate var hostReachability: Reachability!
     
     deinit {
-        hostReachability?.stopNotifier()
+        hostReachability.stopNotifier()
     }
     
     //MARK: - life cycle
@@ -43,6 +43,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                window.backgroundColor = .white
 //            }
 //        }
+        if #available(iOS 11.0, *) {
+            UITableView.appearance().estimatedRowHeight = 0
+            UITableView.appearance().estimatedSectionFooterHeight = 0
+            UITableView.appearance().estimatedSectionHeaderHeight = 0
+        }
 
         JMessage.setupJMessage(launchOptions, appKey: JMAPPKEY, channel: nil, apsForProduction: true, category: nil, messageRoaming: true)
         _setupJMessage()
@@ -52,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _mapManager?.start(BMAPPKEY, generalDelegate: nil)
         
         hostReachability = Reachability(hostName: "www.apple.com")
-        hostReachability?.startNotifier()
+        hostReachability.startNotifier()
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.backgroundColor = .white
@@ -128,7 +133,7 @@ extension AppDelegate: JMessageDelegate {
             cacheInvitation(event: event)
         case .loginKicked, .serverAlterPassword, .userLoginStatusUnexpected:
             _logout()
-        case .deletedFriend:
+        case .deletedFriend, .receiveServerFriendUpdate:
             NotificationCenter.default.post(name: Notification.Name(rawValue: kUpdateFriendList), object: nil)
         default:
             break
@@ -173,18 +178,24 @@ extension AppDelegate: JMessageDelegate {
 
 extension AppDelegate: UIAlertViewDelegate {
     
-    private func _pushToLoginView() {
+    private func pushToLoginView() {
         UserDefaults.standard.removeObject(forKey: kCurrentUserPassword)
-        let appDelegate = UIApplication.shared.delegate
-        let window = appDelegate?.window!
-        window?.rootViewController = JCNavigationController(rootViewController: JCLoginViewController())
+        if let appDelegate = UIApplication.shared.delegate,
+            let window = appDelegate.window {
+            window?.rootViewController = JCNavigationController(rootViewController: JCLoginViewController())
+        }
     }
     
     func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
         if buttonIndex == 1 {
-            let username = UserDefaults.standard.object(forKey: kLastUserName) as! String
-            let password = UserDefaults.standard.object(forKey: kCurrentUserPassword) as! String
-            
+            guard let username = UserDefaults.standard.object(forKey: kLastUserName) as? String  else {
+                pushToLoginView()
+                return
+            }
+            guard let password = UserDefaults.standard.object(forKey: kCurrentUserPassword) as? String else {
+                pushToLoginView()
+                return
+            }
             MBProgressHUD_JChat.showMessage(message: "登录中", toView: nil)
             JMSGUser.login(withUsername: username, password: password) { (result, error) in
                 MBProgressHUD_JChat.hide(forView: nil, animated: true)
@@ -193,12 +204,12 @@ extension AppDelegate: UIAlertViewDelegate {
                     UserDefaults.standard.set(username, forKey: kCurrentUserName)
                     UserDefaults.standard.set(password, forKey: kCurrentUserPassword)
                 } else {
-                    self._pushToLoginView()
+                    self.pushToLoginView()
                     MBProgressHUD_JChat.show(text: "\(String.errorAlert(error! as NSError))", view: self.window?.rootViewController?.view, 2)
                 }
             }
         } else {
-            _pushToLoginView()
+            pushToLoginView()
         }
     }
 }

@@ -12,10 +12,10 @@ class JCResaonCell: JCTableViewCell {
     
     var resaon: String? {
         get {
-            return self.titleLabel.text
+            return titleLabel.text
         }
         set {
-            self.titleLabel.text = newValue
+            titleLabel.text = newValue
         }
     }
     

@@ -89,7 +89,9 @@ class ImageFileViewController: UIViewController {
             
             data[key] = array
         }
-        keys = _JCSortKeys(keys)
+        keys = keys.sorted(by: { (str1, str2) -> Bool in
+            str1 > str2
+        })
     }
 }
 
@@ -115,7 +117,6 @@ extension ImageFileViewController: UICollectionViewDelegate, UICollectionViewDat
         }
         return cell
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize{
         return CGSize(width: view.width, height: 26)

@@ -23,7 +23,6 @@ open class JCMessageTimeLineContentView: UILabel, JCMessageContentViewType {
         guard let content = message.content as? JCMessageTimeLineContent else {
             return
         }
-        print(content.text)
         text = content.text
     }
     

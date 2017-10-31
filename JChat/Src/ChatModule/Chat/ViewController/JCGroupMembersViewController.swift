@@ -34,8 +34,8 @@ class JCGroupMembersViewController: UIViewController {
     
     private func _init() {
         self.title = "群成员"
-        self.view.backgroundColor = .white
-        self.definesPresentationContext = true
+        view.backgroundColor = .white
+        definesPresentationContext = true
         
         users = group.memberArray()
         filteredUsersArray = users
@@ -50,8 +50,8 @@ class JCGroupMembersViewController: UIViewController {
         flowLayout.scrollDirection = .vertical
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.minimumLineSpacing = 0
-        flowLayout.headerReferenceSize = CGSize(width: self.view.width, height: 36)
-        collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: flowLayout)
+        flowLayout.headerReferenceSize = CGSize(width: view.width, height: 36)
+        collectionView = UICollectionView(frame: view.frame, collectionViewLayout: flowLayout)
         collectionView.bounces = true
         collectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "kHeaderView")
         
@@ -60,7 +60,7 @@ class JCGroupMembersViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.register(JCGroupMemberCell.self, forCellWithReuseIdentifier: "JCGroupMemberCell")
         
-        self.view.addSubview(collectionView)
+        view.addSubview(collectionView)
         
         _ = searchController.searchBar.rx.text.orEmpty
             .throttle(0.5, scheduler: MainScheduler.instance).subscribe(onNext: { (text) in
@@ -126,9 +126,9 @@ extension JCGroupMembersViewController: UICollectionViewDelegate, UICollectionVi
         let user = filteredUsersArray[indexPath.row]
         let vc = JCUserInfoViewController()
         vc.user = user
+        navigationController?.pushViewController(vc, animated: true)
         searchController.isActive = false
         filter("")
-        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

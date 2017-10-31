@@ -22,6 +22,7 @@ class JCGroupListViewController: UITableViewController {
     var groupList: [JMSGGroup] = []
     private lazy var defaultImage: UIImage? = UIImage.loadImage("com_icon_group_36")
     fileprivate var selectGroup: JMSGGroup!
+
     // MARK: - private func
     private func _init() {
         self.title = "群组"
@@ -77,9 +78,9 @@ class JCGroupListViewController: UITableViewController {
         let group = groupList[indexPath.row]
         cell.textLabel?.text = group.displayName()
         cell.imageView?.image = defaultImage
-        group.thumbAvatarData { (data, _, _) in
+        group.largeAvatarData { (data, _, _) in
             if let data = data {
-                cell.imageView?.image = UIImage(data: data)
+                cell.imageView?.image = UIImage(data: data)?.resizeImage(CGSize(width: 36, height: 36))
             }
         }
     }
@@ -121,70 +122,11 @@ class JCGroupListViewController: UITableViewController {
     }
 
     private func forwardMessage(_ message: JMSGMessage) {
-        switch(message.contentType) {
-        case .text:
-            let content = message.content as! JMSGTextContent
-            JCAlertView.bulid().setTitle("发送给：\(selectGroup.displayName())")
-                .setMessage(content.text)
-                .setDelegate(self)
-                .addCancelButton("取消")
-                .addButton("确定")
-                .setTag(10001)
-                .show()
-
-        case .image:
-            let content = message.content as! JMSGImageContent
-            guard let image = UIImage(contentsOfFile: content.originMediaLocalPath ?? content.thumbImageLocalPath ?? "") else {
-                return
-            }
-            JCAlertView.bulid().setTitle("发送给：\(selectGroup.displayName())")
-                .setDelegate(self)
-                .addCancelButton("取消")
-                .addButton("确定")
-                .setTag(10002)
-                .addImage(image)
-                .show()
-        case .file:
-            let content = message.content as! JMSGFileContent
-            if message.isShortVideo {
-                JCAlertView.bulid().setTitle("发送给：\(selectGroup.displayName())")
-                    .setMessage("[小视频]")
-                    .setDelegate(self)
-                    .addCancelButton("取消")
-                    .addButton("确定")
-                    .setTag(10001)
-                    .show()
-
-            } else {
-                JCAlertView.bulid().setTitle("发送给：\(selectGroup.displayName())")
-                    .setMessage("[文件] \(content.fileName)")
-                    .setDelegate(self)
-                    .addCancelButton("取消")
-                    .addButton("确定")
-                    .setTag(10001)
-                    .show()
-
-            }
-        case .location:
-            let content = message.content as! JMSGLocationContent
-            JCAlertView.bulid().setTitle("发送给：\(selectGroup.displayName())")
-                .setMessage("[位置] " + content.address)
-                .setDelegate(self)
-                .addCancelButton("取消")
-                .addButton("确定")
-                .setTag(10001)
-                .show()
-        case .voice:
-            JCAlertView.bulid().setTitle("发送给：\(selectGroup.displayName())")
-                .setMessage("[语音消息]")
-                .setDelegate(self)
-                .addCancelButton("取消")
-                .addButton("确定")
-                .setTag(10001)
-                .show()
-        default :
-            break
-        }
+        JCAlertView.bulid().setJMessage(message)
+            .setTitle("发送给：\(selectGroup.displayName())")
+            .setDelegate(self)
+            .setTag(10001)
+            .show()
     }
 
 }
@@ -195,21 +137,20 @@ extension JCGroupListViewController: UIAlertViewDelegate {
             return
         }
         switch alertView.tag {
-        case 10001, 10002:
-            let optionalContent = JMSGOptionalContent()
-            optionalContent.needReadReceipt = true
-            JMSGMessage.forwardMessage(message!, target: selectGroup, optionalContent: optionalContent)
+        case 10001:
+            JMSGMessage.forwardMessage(message!, target: selectGroup, optionalContent: JMSGOptionalContent.ex.default)
 
         case 10003:
-            let msg = JMSGMessage.createBusinessCardMessage(gid: selectGroup.gid, userName: fromUser!.username, appKey: fromUser?.appKey ?? "")
-            let optionalContent = JMSGOptionalContent()
-            optionalContent.needReadReceipt = true
-            JMSGMessage.send(msg, optionalContent: optionalContent)
+            let msg = JMSGMessage.ex.createBusinessCardMessage(gid: selectGroup.gid, userName: fromUser!.username, appKey: fromUser?.appKey ?? "")
+            JMSGMessage.send(msg, optionalContent: JMSGOptionalContent.ex.default)
 
         default:
             break
         }
         MBProgressHUD_JChat.show(text: "已发送", view: view, 2)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: kReloadAllMessage), object: nil)
+        }
         weak var weakSelf = self
         let time: TimeInterval = 2
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + time) {

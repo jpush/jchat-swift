@@ -172,7 +172,7 @@ extension JCEmoticonInputView: JCEmoticonDelegate {
         return delegate?.emoticon?(self, shouldSelectFor: emoticon) ?? true
     }
     open func emoticon(shouldPreviewFor emoticon: JCEmoticon?) -> Bool {
-        return delegate?.emoticon?(self, shouldPreviewFor: emoticon) ?? true
+        return delegate?.emoticon?(self, shouldPreviewFor: emoticon) ?? false
     }
     
     open func emoticon(didSelectFor emoticon: JCEmoticon) {

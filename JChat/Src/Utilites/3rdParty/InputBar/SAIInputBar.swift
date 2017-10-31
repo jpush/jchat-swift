@@ -155,7 +155,7 @@ open class SAIInputBar: UIView {
         _cacheContentSize = size
         return size
     }
-    
+    @discardableResult
     open override func resignFirstResponder() -> Bool {
         self.setInputMode(.none, animated: true)
         return _inputAccessoryView.resignFirstResponder()

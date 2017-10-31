@@ -39,9 +39,16 @@ class FileManagerViewController: UIViewController {
     private var musicMessages: [JMSGMessage] = []
     private var otherFileMessages: [JMSGMessage] = []
     private var selectMessage: [JMSGMessage] = []
+
+    private var topOffset: CGFloat {
+        if isIPhoneX {
+            return 88
+        }
+        return 64
+    }
     
     private lazy var tabedSlideView: DLTabedSlideView = {
-        var tabedSlideView = DLTabedSlideView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: self.view.height - 64))
+        var tabedSlideView = DLTabedSlideView(frame: CGRect(x: 0, y: self.topOffset, width: self.view.width, height: self.view.height - self.topOffset))
         tabedSlideView.delegate = self
         tabedSlideView.baseViewController = self
         tabedSlideView.tabItemNormalColor = .black
@@ -136,10 +143,14 @@ class FileManagerViewController: UIViewController {
         imageMessages.removeAll()
         otherFileMessages.removeAll()
         for message in messages {
-            if !message.isFile {
+            if message.contentType == .image {
+                imageMessages.append(message)
                 continue
             }
-            if let fileType = message.fileType {
+            if !message.ex.isFile {
+                continue
+            }
+            if let fileType = message.ex.fileType {
                 switch fileType.fileFormat() {
                 case .document:
                     docMessages.append(message)

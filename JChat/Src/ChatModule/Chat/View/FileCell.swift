@@ -79,22 +79,27 @@ class FileCell: JCTableViewCell {
     private lazy var selectView: UIImageView = UIImageView()
     private var isSelect = false
     private lazy var fileIcon: UIImageView = UIImageView()
-    private lazy var fileName: UILabel = UILabel()
-    private lazy var fileSize: UILabel = UILabel()
-    private lazy var summary: UILabel = UILabel()
-    
-    private func _init() {
-        
-        selectView.image = UIImage.loadImage("com_icon_file_unselect")
-        
+    private lazy var fileName: UILabel = {
+        let fileName = UILabel()
         fileName.textColor = UIColor(netHex: 0x2C2C2C)
         fileName.font = UIFont.systemFont(ofSize: 15)
-        
+        return fileName
+    }()
+    private lazy var fileSize: UILabel = {
+        let fileSize = UILabel()
         fileSize.textColor = UIColor(netHex: 0x2C2C2C)
         fileSize.font = UIFont.systemFont(ofSize: 12)
-        
+        return fileSize
+    }()
+    private lazy var summary: UILabel = {
+        let summary = UILabel()
         summary.textColor = UIColor(netHex: 0x999999)
         summary.font = UIFont.systemFont(ofSize: 12)
+        return summary
+    }()
+    
+    private func _init() {
+        selectView.image = UIImage.loadImage("com_icon_file_unselect")
         
         contentView.addSubview(fileIcon)
         contentView.addSubview(fileName)

@@ -87,13 +87,6 @@ class JCUserAvatorCell: JCTableViewCell {
             let image = UIImage(data: imageData)
             self.avatorView.image = image
         }
-//        user.thumbAvatarData { (data, username, error) in
-//            guard let imageData = data else {
-//                return
-//            }
-//            let image = UIImage(data: imageData)
-//            self.avatorView.image = image
-//        }
     }
     
     func _tapHandler(sender:UITapGestureRecognizer) {

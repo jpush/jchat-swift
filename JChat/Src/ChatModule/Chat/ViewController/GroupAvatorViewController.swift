@@ -116,8 +116,6 @@ extension GroupAvatorViewController: UINavigationControllerDelegate, UIImagePick
             }
             let info = JMSGGroupInfo()
             info.avatarData = imageData
-            info.desc = group.desc
-            info.name = group.name
             JMSGGroup.updateInfo(withGid: group.gid, groupInfo: info, completionHandler: { (result, error) in
                 DispatchQueue.main.async(execute: { () -> Void in
                     MBProgressHUD_JChat.hide(forView: self.view, animated: true)

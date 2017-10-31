@@ -17,7 +17,7 @@ class JCGroupDescViewController: UIViewController {
         super.viewDidLoad()
         _init()
         descTextView.text = group.desc
-        var count = 80 - (group.desc?.characters.count)!
+        var count = 80 - (group.desc?.characters.count ?? 0)
         count = count < 0 ? 0 : count
         tipLabel.text = "\(count)"
         descTextView.becomeFirstResponder()
@@ -31,7 +31,7 @@ class JCGroupDescViewController: UIViewController {
     //MARK: - private func
     private func _init() {
         self.title = "群描述"
-        self.automaticallyAdjustsScrollViewInsets = false;
+        automaticallyAdjustsScrollViewInsets = false;
         view.backgroundColor = UIColor(netHex: 0xe8edf3)
         
         bgView.backgroundColor = .white
@@ -51,15 +51,19 @@ class JCGroupDescViewController: UIViewController {
     }
     
     private func _setupNavigation() {
-        self.navigationItem.rightBarButtonItem =  navRightButton
+        navigationItem.rightBarButtonItem =  navRightButton
     }
     
     //MARK: - click func
     func _saveSignature() {
         descTextView.resignFirstResponder()
         let desc = descTextView.text!
-        MBProgressHUD_JChat.showMessage(message: "修改中...", toView: self.view)
-        JMSGGroup.updateGroupInfo(withGroupId: group.gid, name: group.name!, desc: desc) { (result, error) in
+        MBProgressHUD_JChat.showMessage(message: "修改中...", toView: view)
+        var name: String? = group.name
+        if name!.isEmpty {
+            name = nil
+        }
+        JMSGGroup.updateGroupInfo(withGroupId: group.gid, name: name, desc: desc) { (result, error) in
             MBProgressHUD_JChat.hide(forView: self.view, animated: true)
             if error == nil {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: kUpdateGroupInfo), object: nil)
@@ -73,17 +77,10 @@ class JCGroupDescViewController: UIViewController {
 
 extension JCGroupDescViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        if textView.markedTextRange == nil {
-            let text = textView.text!
-            if text.characters.count > 80 {
-                let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 80))
-                
-                let subText = text.substring(with: range)
-                textView.text = subText
-            }
-            let count = 80 - (textView.text?.characters.count)!
-            tipLabel.text = "\(count)"
-        }
+        textView.limitNonMarkedTextSize(80)
+
+        let count = 80 - (nonMarkedText(textView)?.characters.count ?? 0)
+        tipLabel.text = "\(count)"
     }
 }
 

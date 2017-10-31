@@ -22,35 +22,48 @@ class JCNicknameViewController: UIViewController {
         tipLabel.text = "\(count)"
         nicknameTextField.becomeFirstResponder()
     }
-    
-    private lazy var navRightButton: UIBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(_saveNickname))
-    fileprivate lazy var nicknameTextField: UITextField = UITextField(frame: CGRect(x: 0, y: 64, width: self.view.width, height: 45))
-    fileprivate lazy var tipLabel:  UILabel = UILabel(frame: CGRect(x: self.view.width - 15 - 28, y: 64 + 21, width: 28, height: 12))
-    
-    //MARK: - private func 
-    private func _init() {
-        self.title = "昵称"
-        self.automaticallyAdjustsScrollViewInsets = false
-        view.backgroundColor = UIColor(netHex: 0xe8edf3)
-        
+
+    private var topOffset: CGFloat {
+        if isIPhoneX {
+            return 88
+        }
+        return 64
+    }
+    fileprivate lazy var nicknameTextField: UITextField = {
+        let nicknameTextField = UITextField(frame: CGRect(x: 0, y: self.topOffset, width: self.view.width, height: 45))
         nicknameTextField.backgroundColor = .white
         nicknameTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         nicknameTextField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 27, height: 0))
         nicknameTextField.leftViewMode = .always
         nicknameTextField.rightViewMode = .always
         nicknameTextField.addTarget(self, action: #selector(textFieldDidChanged(_ :)), for: .editingChanged)
-        view.addSubview(nicknameTextField)
-        
+        return nicknameTextField
+    }()
+    fileprivate lazy var tipLabel: UILabel = {
+        let tipLabel =  UILabel(frame: CGRect(x: self.view.width - 15 - 28, y: self.topOffset + 21, width: 28, height: 12))
         tipLabel.text = "20"
         tipLabel.textColor = UIColor(netHex: 0x999999)
         tipLabel.font = UIFont.systemFont(ofSize: 12)
         tipLabel.textAlignment = .right
+        return tipLabel
+    }()
+
+    private lazy var navRightButton: UIBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(_saveNickname))
+    
+    //MARK: - private func 
+    private func _init() {
+        self.title = "昵称"
+        automaticallyAdjustsScrollViewInsets = false
+        view.backgroundColor = UIColor(netHex: 0xe8edf3)
+
+         _setupNavigation()
+
+        view.addSubview(nicknameTextField)
         view.addSubview(tipLabel)
-        _setupNavigation()
     }
     
     private func _setupNavigation() {
-        self.navigationItem.rightBarButtonItem =  navRightButton
+        navigationItem.rightBarButtonItem =  navRightButton
     }
     
     func textFieldDidChanged(_ textField: UITextField) {

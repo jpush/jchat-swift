@@ -12,28 +12,28 @@ class JCUserInfoCell: JCTableViewCell {
     
     var icon: UIImage? {
         get {
-            return self.iconView.image
+            return iconView.image
         }
         set {
-            self.iconView.image = newValue
+            iconView.image = newValue
         }
     }
     
     var title: String? {
         get {
-            return self.titleLabel.text
+            return titleLabel.text
         }
         set {
-            self.titleLabel.text = newValue
+            titleLabel.text = newValue
         }
     }
     
     var detail: String? {
         get {
-            return self.detailLabel.text
+            return detailLabel.text
         }
         set {
-            self.detailLabel.text = newValue
+            detailLabel.text = newValue
         }
     }
 

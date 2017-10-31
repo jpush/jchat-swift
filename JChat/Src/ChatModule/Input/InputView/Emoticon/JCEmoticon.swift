@@ -66,9 +66,22 @@ open class JCEmoticon: NSObject {
             }()
         
         if let image = contents as? UIImage {
+            imageView.subviews.forEach{
+                $0.removeFromSuperview()
+            }
             imageView.bounds = CGRect(origin: .zero, size: image.size)
             imageView.center = CGPoint(x: view.frame.width / 2, y: view.frame.height / 2)
             imageView.image = contents as? UIImage
+        }
+        if let emjoji = contents as? String {
+            imageView.subviews.forEach{
+                $0.removeFromSuperview()
+            }
+            let label = UILabel(frame: view.frame)
+            label.textAlignment = .center
+            label.text = emjoji
+            label.font = UIFont.systemFont(ofSize: view.frame.width / 3 * 2)
+            imageView.addSubview(label)
         }
     }
     

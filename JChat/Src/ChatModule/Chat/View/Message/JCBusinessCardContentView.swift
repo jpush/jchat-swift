@@ -29,7 +29,7 @@ class JCBusinessCardContentView: UIView, JCMessageContentViewType {
         _userName = content.userName
         _appKey = content.appKey
         
-        _userNameLabel.text = "用户名：\(String(describing: _userName!))"
+        userNameLabel.text = "用户名：\(String(describing: _userName!))"
         
         if let userName = _userName {
             JMSGUser.userInfoArray(withUsernameArray: [userName], completionHandler: { (result, error) in
@@ -40,19 +40,19 @@ class JCBusinessCardContentView: UIView, JCMessageContentViewType {
                 self._user = user
 
                 if user.nickname != nil && !user.nickname!.isEmpty {
-                    self._nickNameLabel.text = user.nickname
-                    self._nickNameLabel.frame = CGRect(x: 62, y: 11.5, width: 126, height: 22.5)
+                    self.nickNameLabel.text = user.nickname
+                    self.nickNameLabel.frame = CGRect(x: 62, y: 11.5, width: 126, height: 22.5)
                 } else {
-                    self._userNameLabel.text = ""
-                    self._nickNameLabel.text = user.username
-                    self._nickNameLabel.frame = CGRect(x: 62, y: 22.5, width: 126, height: 22.5)
+                    self.userNameLabel.text = ""
+                    self.nickNameLabel.text = user.username
+                    self.nickNameLabel.frame = CGRect(x: 62, y: 22.5, width: 126, height: 22.5)
                 }
 
                 user.thumbAvatarData({ (data, msgId, error) in
                     if let data = data {
-                        self._imageView.image = UIImage(data: data)
+                        self.imageView.image = UIImage(data: data)
                     } else {
-                        self._imageView.image = UIImage.loadImage("com_icon_user_40")
+                        self.imageView.image = UIImage.loadImage("com_icon_user_40")
                     }
                 })
             })
@@ -68,43 +68,54 @@ class JCBusinessCardContentView: UIView, JCMessageContentViewType {
     private var _message: JCMessageType!
     private var _user: JMSGUser?
     
-    private var _imageView: UIImageView!
-    private lazy var _line: UILabel = UILabel()
-    private lazy var _userNameLabel = UILabel()
-    private lazy var _nickNameLabel = UILabel()
-    private lazy var _tipsLabel = UILabel()
+    private lazy var imageView: UIImageView = {
+        let imageView = UIImageView(frame: CGRect(x: 12, y: 13.5, width: 40, height: 40))
+        imageView.image = UIImage.loadImage("com_icon_user_40")
+        return imageView
+    }()
+    private lazy var line: UILabel = {
+        let line = UILabel()
+        line.frame = CGRect(x: 10, y: 66, width: 180, height: 1)
+        line.layer.backgroundColor = UIColor(netHex: 0xE8E8E8).cgColor
+        return line
+    }()
+    private lazy var userNameLabel: UILabel = {
+        let userNameLabel = UILabel()
+        userNameLabel.frame = CGRect(x: 62, y: 37, width: 126, height: 20)
+        userNameLabel.font = UIFont.systemFont(ofSize: 14)
+        userNameLabel.textColor = UIColor(netHex: 0x999999)
+        return userNameLabel
+    }()
+    private lazy var nickNameLabel: UILabel = {
+        let nickNameLabel = UILabel()
+        nickNameLabel.frame = CGRect(x: 62, y: 11.5, width: 126, height: 22.5)
+        nickNameLabel.font = UIFont.systemFont(ofSize: 16)
+        nickNameLabel.textColor = .black
+        return nickNameLabel
+    }()
+    private lazy var tipsLabel: UILabel = {
+        let tipsLabel = UILabel()
+        tipsLabel.frame = CGRect(x: 12, y: 69.5, width: 100, height: 14)
+        tipsLabel.font = UIFont.systemFont(ofSize: 10)
+        tipsLabel.textColor = UIColor(netHex: 0x989898)
+        tipsLabel.text = "个人名片"
+        return tipsLabel
+    }()
     
     private func _commonInit() {
         _tapGesture()
-        _imageView = UIImageView(frame: CGRect(x: 12, y: 13.5, width: 40, height: 40))
-        _imageView.image = UIImage.loadImage("com_icon_user_40")
-        self.addSubview(_imageView)
-        
-        _nickNameLabel.frame = CGRect(x: 62, y: 11.5, width: 126, height: 22.5)
-        _nickNameLabel.font = UIFont.systemFont(ofSize: 16)
-        _nickNameLabel.textColor = .black
-        self.addSubview(_nickNameLabel)
-        
-        _userNameLabel.frame = CGRect(x: 62, y: 37, width: 126, height: 20)
-        _userNameLabel.font = UIFont.systemFont(ofSize: 14)
-        _userNameLabel.textColor = UIColor(netHex: 0x999999)
-        self.addSubview(_userNameLabel)
-        
-        _tipsLabel.frame = CGRect(x: 12, y: 69.5, width: 100, height: 14)
-        _tipsLabel.font = UIFont.systemFont(ofSize: 10)
-        _tipsLabel.textColor = UIColor(netHex: 0x989898)
-        _tipsLabel.text = "个人名片"
-        self.addSubview(_tipsLabel)
-        
-        _line.frame = CGRect(x: 10, y: 66, width: 180, height: 1)
-        _line.layer.backgroundColor = UIColor(netHex: 0xE8E8E8).cgColor
-        self.addSubview(_line)
+
+        addSubview(imageView)
+        addSubview(nickNameLabel)
+        addSubview(userNameLabel)
+        addSubview(tipsLabel)
+        addSubview(line)
     }
     
     func _tapGesture() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(_clickCell))
         tap.numberOfTapsRequired = 1
-        self.addGestureRecognizer(tap)
+        addGestureRecognizer(tap)
     }
     
     func _clickCell() {

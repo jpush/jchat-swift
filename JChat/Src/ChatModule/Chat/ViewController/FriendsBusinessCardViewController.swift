@@ -18,8 +18,18 @@ class FriendsBusinessCardViewController: UIViewController {
     }
 
     fileprivate lazy var toolView: UIView = UIView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: 55))
-    fileprivate var tableView: UITableView = UITableView(frame: .zero, style: .grouped)
-    fileprivate lazy var searchView: UISearchBar = UISearchBar()
+    fileprivate lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .grouped)
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.keyboardDismissMode = .onDrag
+        tableView.sectionIndexColor = UIColor(netHex: 0x2dd0cf)
+        tableView.sectionIndexBackgroundColor = .clear
+        tableView.register(JCContacterCell.self, forCellReuseIdentifier: "JCContacterCell")
+        tableView.frame = CGRect(x: 0, y: 31 + 64, width: self.view.width, height: self.view.height - 31 - 64)
+        return tableView
+    }()
+    fileprivate lazy var searchView: UISearchBar = UISearchBar.default
 
     fileprivate lazy var users: [JMSGUser] = []
     fileprivate lazy var keys: [String] = []
@@ -45,35 +55,18 @@ class FriendsBusinessCardViewController: UIViewController {
     }()
 
     private func _init() {
+        self.title = "发送名片"
         view.backgroundColor = .white
         automaticallyAdjustsScrollViewInsets = false
-        self.title = "发送名片"
 
         view.addSubview(toolView)
-
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.keyboardDismissMode = .onDrag
-        tableView.sectionIndexColor = UIColor(netHex: 0x2dd0cf)
-        tableView.sectionIndexBackgroundColor = .clear
-        tableView.register(JCContacterCell.self, forCellReuseIdentifier: "JCContacterCell")
-        tableView.frame = CGRect(x: 0, y: 31 + 64, width: view.width, height: view.height - 31 - 64)
         view.addSubview(tableView)
-
         view.addSubview(tipsView)
 
         _classify([], isFrist: true)
 
-        searchView.frame = CGRect(x: 15, y: 0, width: toolView.width - 30, height: 31)
-        searchView.barStyle = .default
-        searchView.backgroundColor = .white
-        searchView.barTintColor = .white
+        searchView.frame = CGRect(x: 0, y: 0, width: toolView.width, height: 31)
         searchView.delegate = self
-        searchView.autocapitalizationType = .none
-        searchView.placeholder = "搜索"
-        searchView.layer.borderColor = UIColor.white.cgColor
-        searchView.layer.borderWidth = 1
-        searchView.layer.masksToBounds = true
 
         toolView.addSubview(searchView)
 
@@ -96,13 +89,27 @@ class FriendsBusinessCardViewController: UIViewController {
         }
 
         if isFrist {
+
+            JMSGConversation.allConversations { (result, error) in
+                if error == nil {
+                    if let conversations = result as? [JMSGConversation] {
+                        for conv in conversations {
+                            if let user = conv.target as? JMSGUser {
+                                self.users.append(user)
+                            }
+                        }
+                    }
+                }
+            }
+
             JMSGFriendManager.getFriendList { (result, error) in
                 if error == nil {
-                    self.users.removeAll()
-                    self.keys.removeAll()
-                    self.data.removeAll()
                     for item in result as! [JMSGUser] {
-                        self.users.append(item)
+                        if !self.users.contains(item) {
+                            self.users.append(item)
+                        }
+                    }
+                    for item in self.users {
                         var key = item.displayName().firstCharacter()
                         if !key.isLetterOrNum() {
                             key = "#"
@@ -116,11 +123,10 @@ class FriendsBusinessCardViewController: UIViewController {
                         if !self.keys.contains(key) {
                             self.keys.append(key)
                         }
-
                         self.data[key] = array
                     }
                     self.filteredUsersArray = self.users
-                    self.keys = _JCSortKeys(self.keys)
+                    self.keys = self.keys.sortedKeys()
                     self.tableView.reloadData()
                 }
             }
@@ -145,7 +151,7 @@ class FriendsBusinessCardViewController: UIViewController {
 
                 data[key] = array
             }
-            keys = _JCSortKeys(keys)
+            keys = keys.sortedKeys()
             tableView.reloadData()
         }
     }
@@ -212,7 +218,7 @@ extension FriendsBusinessCardViewController: UITableViewDelegate, UITableViewDat
         tableView.deselectRow(at: indexPath, animated: true)
         selectUser = data[keys[indexPath.section]]?[indexPath.row]
         var displayName = ""
-        if conversation.isGroup {
+        if conversation.ex.isGroup {
             let group = conversation.target as! JMSGGroup
             displayName = group.displayName()
         } else {
@@ -233,16 +239,15 @@ extension FriendsBusinessCardViewController: UIAlertViewDelegate {
             return
         }
 
-
-        let message = JMSGMessage.createBusinessCardMessage(conversation, self.selectUser.username, self.selectUser.appKey ?? "")
-        let optionalContent = JMSGOptionalContent()
-        optionalContent.needReadReceipt = true
-        JMSGMessage.send(message, optionalContent: optionalContent)
+        let message = JMSGMessage.ex.createBusinessCardMessage(conversation, selectUser.username, selectUser.appKey ?? "")
+        JMSGMessage.send(message, optionalContent: JMSGOptionalContent.ex.default)
         MBProgressHUD_JChat.show(text: "已发送", view: view, 2)
         weak var weakSelf = self
         let time: TimeInterval = 2
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + time) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: kReloadAllMessage), object: nil)
+        }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + time) {
             weakSelf?.dismiss(animated: true, completion: nil)
         }
     }

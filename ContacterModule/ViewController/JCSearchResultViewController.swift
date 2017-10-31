@@ -7,9 +7,12 @@
 //
 
 import UIKit
-import JMessage
 
 class JCSearchResultViewController: UIViewController {
+
+    var message: JMSGMessage?
+    var fromUser: JMSGUser!
+    weak var delegate: UIViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,7 +21,7 @@ class JCSearchResultViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.isNavigationBarHidden = true
+        navigationController?.isNavigationBarHidden = true
         if searchController != nil {
             searchController.searchBar.isHidden = false
         }
@@ -26,7 +29,7 @@ class JCSearchResultViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.isNavigationBarHidden = false
+        navigationController?.isNavigationBarHidden = false
     }
     
     deinit {
@@ -34,7 +37,16 @@ class JCSearchResultViewController: UIViewController {
     }
     
     var searchController: UISearchController!
-    fileprivate lazy var tableView: UITableView = UITableView(frame: .zero, style: .grouped)
+    fileprivate lazy var tableView: UITableView = {
+        var tableView = UITableView(frame: .zero, style: .grouped)
+        tableView.keyboardDismissMode = .onDrag
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.sectionIndexBackgroundColor = .clear
+        tableView.register(JCContacterCell.self, forCellReuseIdentifier: "JCContacterCell")
+        tableView.frame = CGRect(x: 0, y: 64, width: self.view.width, height: self.view.height - 64)
+        return tableView
+    }()
     fileprivate lazy var tagArray = ["联系人", "群组"]
     fileprivate lazy var users: [JMSGUser] = []
     fileprivate lazy var groups: [JMSGGroup] = []
@@ -57,11 +69,13 @@ class JCSearchResultViewController: UIViewController {
         tipsView.backgroundColor = .white
         return tipsView
     }()
+    fileprivate var selectGroup: JMSGGroup!
+    fileprivate var selectUser: JMSGUser!
     
     private func _init() {
-        self.view.backgroundColor = UIColor(netHex: 0xe8edf3)
-        self.automaticallyAdjustsScrollViewInsets = false
-        self.navigationController?.automaticallyAdjustsScrollViewInsets = false
+        view.backgroundColor = UIColor(netHex: 0xe8edf3)
+        automaticallyAdjustsScrollViewInsets = false
+        navigationController?.automaticallyAdjustsScrollViewInsets = false
         
         tipsLabel.font = UIFont.systemFont(ofSize: 16)
         tipsLabel.textColor = UIColor(netHex: 0x999999)
@@ -69,12 +83,7 @@ class JCSearchResultViewController: UIViewController {
         view.addSubview(tipsLabel)
         
         _getDate()
-        tableView.keyboardDismissMode = .onDrag
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.sectionIndexBackgroundColor = .clear
-        tableView.register(JCContacterCell.self, forCellReuseIdentifier: "JCContacterCell")
-        tableView.frame = CGRect(x: 0, y: 64, width: view.width, height: view.height - 64)
+
         view.addSubview(tableView)
         view.addSubview(networkErrorView)
         
@@ -90,22 +99,22 @@ class JCSearchResultViewController: UIViewController {
             let status = curReach.currentReachabilityStatus()
             switch status {
             case NotReachable:
-                self.networkErrorView.isHidden = false
+                networkErrorView.isHidden = false
             default :
-                self.networkErrorView.isHidden = true
+                networkErrorView.isHidden = true
             }
         }
     }
     
     private func _getDate() {
-        self.users.removeAll()
-        self.groups.removeAll()
+        users.removeAll()
+        groups.removeAll()
         
         JMSGConversation.allConversations { (result, error) in
             if error == nil {
                 if let conversations = result as? [JMSGConversation] {
                     for conv in conversations {
-                        if !conv.isGroup {
+                        if !conv.ex.isGroup {
                             let user = conv.target as! JMSGUser
                             self.users.append(user)
                         }
@@ -163,7 +172,6 @@ class JCSearchResultViewController: UIViewController {
             tableView.isHidden = true
             
             let attr = NSMutableAttributedString(string: "没有搜到 ")
-            
             let attrSearchString = NSAttributedString(string: searchString, attributes: [ NSForegroundColorAttributeName : UIColor(netHex: 0x2dd0cf), NSFontAttributeName : UIFont.boldSystemFont(ofSize: 16.0)])
             
             attr.append(attrSearchString)
@@ -174,7 +182,75 @@ class JCSearchResultViewController: UIViewController {
             tableView.isHidden = false
         }
         
-        self.tableView.reloadData()
+        tableView.reloadData()
+    }
+
+    fileprivate func sendBusinessCard() {
+        JCAlertView.bulid().setTitle("发送给：\(selectGroup.displayName())")
+            .setMessage(fromUser!.displayName() + "的名片")
+            .setDelegate(self)
+            .addCancelButton("取消")
+            .addButton("确定")
+            .setTag(10003)
+            .show()
+    }
+
+    fileprivate func forwardMessage(_ message: JMSGMessage) {
+
+        let alertView = JCAlertView.bulid().setJMessage(message)
+            .setDelegate(self)
+            .setTag(10001)
+        if selectUser == nil {
+            alertView.setTitle("发送给：\(selectGroup.displayName())")
+        } else {
+            alertView.setTitle("发送给：\(selectUser.displayName())")
+        }
+        alertView.show()
+    }
+
+    public func close() {
+        searchController.isActive = false
+        delegate?.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension JCSearchResultViewController: UIAlertViewDelegate {
+    func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
+        if buttonIndex != 1 {
+            return
+        }
+        switch alertView.tag {
+        case 10001:
+            if selectUser != nil {
+                JMSGMessage.forwardMessage(message!, target: selectUser, optionalContent: JMSGOptionalContent.ex.default)
+            } else {
+                JMSGMessage.forwardMessage(message!, target: selectGroup, optionalContent: JMSGOptionalContent.ex.default)
+            }
+
+        case 10003:
+            if selectUser != nil {
+                JMSGConversation.createSingleConversation(withUsername: selectUser.username) { (result, error) in
+                    if let conversation = result as? JMSGConversation {
+                        let message = JMSGMessage.ex.createBusinessCardMessage(conversation, self.fromUser.username, self.fromUser.appKey ?? "")
+                        JMSGMessage.send(message, optionalContent: JMSGOptionalContent.ex.default)
+                    }
+                }
+            } else {
+                let msg = JMSGMessage.ex.createBusinessCardMessage(gid: selectGroup.gid, userName: fromUser!.username, appKey: fromUser!.appKey ?? "")
+                JMSGMessage.send(msg, optionalContent: JMSGOptionalContent.ex.default)
+            }
+        default:
+            break
+        }
+        MBProgressHUD_JChat.show(text: "已发送", view: view, 2)
+
+        let time: TimeInterval = 2
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: kReloadAllMessage), object: nil)
+        }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + time) { [weak self] in
+            self?.close()
+        }
     }
 }
 
@@ -275,6 +351,9 @@ extension JCSearchResultViewController: UITableViewDelegate, UITableViewDataSour
         
         if indexPath.row == 3 {
             let vc = JCMoreResultViewController()
+            vc.fromUser = fromUser
+            vc.message = message
+            vc.delegate = self
             if isUser {
                 vc.users = filteredUsersArray
             } else {
@@ -282,24 +361,42 @@ extension JCSearchResultViewController: UITableViewDelegate, UITableViewDataSour
             }
             vc.searchResultView = self
             vc.searchController = self.searchController
-            if self.searchController != nil {
-                self.searchController.searchBar.resignFirstResponder()
+            if searchController != nil {
+                searchController.searchBar.resignFirstResponder()
             }
-            self.navigationController?.pushViewController(vc, animated: true)
+            navigationController?.pushViewController(vc, animated: true)
             return
         }
         
         if isUser {
-            let vc = JCUserInfoViewController()
             let user = filteredUsersArray[indexPath.row]
-            vc.user = user
-            if self.searchController != nil {
-                self.searchController.searchBar.resignFirstResponder()
-                self.searchController.searchBar.isHidden = true
+            selectUser = user
+            if let message = message {
+                forwardMessage(message)
+                return
             }
-            self.navigationController?.pushViewController(vc, animated: true)
+            if fromUser != nil {
+                sendBusinessCard()
+                return
+            }
+            let vc = JCUserInfoViewController()
+            vc.user = user
+            if searchController != nil {
+                searchController.searchBar.resignFirstResponder()
+                searchController.searchBar.isHidden = true
+            }
+            navigationController?.pushViewController(vc, animated: true)
         } else {
             let group = filteredGroupsArray[indexPath.row]
+            selectGroup = group
+            if let message = self.message {
+                forwardMessage(message)
+                return
+            }
+            if self.fromUser != nil {
+                sendBusinessCard()
+                return
+            }
             JMSGConversation.createGroupConversation(withGroupId: group.gid) { (result, error) in
                 let conv = result as! JMSGConversation
                 let vc = JCChatViewController(conversation: conv)
@@ -308,6 +405,7 @@ extension JCSearchResultViewController: UITableViewDelegate, UITableViewDataSour
                     self.searchController.searchBar.resignFirstResponder()
                     self.searchController.searchBar.isHidden = true
                 }
+
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }

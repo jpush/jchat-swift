@@ -19,39 +19,39 @@ class JCDoubleButtonCell: UITableViewCell {
     
     var leftButtonTitle: String {
         get {
-            return (self.leftButton.titleLabel?.text)!
+            return leftButton.titleLabel?.text ?? ""
         }
         set {
-            self.leftButton.setTitle(newValue, for: .normal)
+            leftButton.setTitle(newValue, for: .normal)
         }
     }
     
     var leftButtonColor: UIColor {
         get {
-            return self.color
+            return color
         }
         set {
             color = newValue
-            self.leftButton.backgroundColor = newValue
+            leftButton.backgroundColor = newValue
         }
     }
     
     var rightButtonTitle: String {
         get {
-            return (self.rightButton.titleLabel?.text)!
+            return rightButton.titleLabel?.text ?? ""
         }
         set {
-            self.rightButton.setTitle(newValue, for: .normal)
+            rightButton.setTitle(newValue, for: .normal)
         }
     }
     
     var rightButtonColor: UIColor {
         get {
-            return self.color
+            return color
         }
         set {
             color = newValue
-            self.rightButton.backgroundColor = newValue
+            rightButton.backgroundColor = newValue
         }
     }
     
@@ -67,11 +67,6 @@ class JCDoubleButtonCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         _init()
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
     }
     
     private var color = UIColor(netHex: 0x2dd0cf)
@@ -105,7 +100,6 @@ class JCDoubleButtonCell: UITableViewCell {
         addConstraint(_JCLayoutConstraintMake(rightButton, .right, .equal, contentView, .right, -15))
         addConstraint(_JCLayoutConstraintMake(rightButton, .top, .equal, contentView, .top))
         addConstraint(_JCLayoutConstraintMake(rightButton, .bottom, .equal, contentView, .bottom))
-        
     }
     
     //MARK: - click func

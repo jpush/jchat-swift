@@ -166,7 +166,6 @@ class MyQRCodeViewController: UIViewController {
         UIGraphicsEndImageContext()
         return image!
     }
-    
 }
 
 extension MyQRCodeViewController: UIActionSheetDelegate {

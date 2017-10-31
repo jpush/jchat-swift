@@ -37,7 +37,6 @@ class JCGroupMemberCell: UICollectionViewCell {
     
     private func _init() {
         
-        avatorView.image = userDefaultIcon
         nickname.font = UIFont.systemFont(ofSize: 12)
         nickname.textAlignment = .center
         
@@ -58,11 +57,12 @@ class JCGroupMemberCell: UICollectionViewCell {
     
     func bindDate(user: JMSGUser) {
         nickname.text = user.displayName()
-        avatorView.image = userDefaultIcon
         user.thumbAvatarData { (data, id, error) in
             if let data = data {
                 let image = UIImage(data: data)
                 self.avatorView.image = image
+            } else {
+                self.avatorView.image = self.userDefaultIcon
             }
         }
     }

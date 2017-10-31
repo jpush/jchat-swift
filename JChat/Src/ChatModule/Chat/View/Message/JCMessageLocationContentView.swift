@@ -30,6 +30,7 @@ class JCMessageLocationContentView: UIImageView, JCMessageContentViewType {
         guard let content = message.content as? JCMessageLocationContent else {
             return
         }
+        _message = message
         _delegate = content.delegate
         _address = content.address
         _lon = content.lon
@@ -38,6 +39,7 @@ class JCMessageLocationContentView: UIImageView, JCMessageContentViewType {
     }
     
     private weak var _delegate: JCMessageDelegate?
+    private var _message: JCMessageType!
     private var _address: String?
     private var _lon: Double?
     private var _lat: Double?
@@ -63,6 +65,6 @@ class JCMessageLocationContentView: UIImageView, JCMessageContentViewType {
     }
     
     func _clickCell() {
-        _delegate?.message?(location: _address, lat: _lat ?? 0, lon: _lon ?? 0)
+        _delegate?.message?(message: _message, location: _address, lat: _lat ?? 0, lon: _lon ?? 0)
     }
 }

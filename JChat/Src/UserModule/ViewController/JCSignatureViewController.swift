@@ -22,6 +22,12 @@ class JCSignatureViewController: UIViewController {
         tipLabel.text = "\(count)"
     }
 
+    private var topOffset: CGFloat {
+        if isIPhoneX {
+            return 88
+        }
+        return 64
+    }
     private lazy var saveButton: UIButton = {
         var saveButton = UIButton()
         saveButton.setTitle("提交", for: .normal)
@@ -30,33 +36,38 @@ class JCSignatureViewController: UIViewController {
         saveButton.addTarget(self, action: #selector(_saveSignature), for: .touchUpInside)
         return saveButton
     }()
-    private lazy var bgView: UIView = UIView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: 120))
-    private lazy var signatureTextView: UITextView = UITextView(frame: CGRect(x: 15, y: 15, width: self.view.width - 30, height: 90))
-    private lazy var navRightButton: UIBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(_saveSignature))
-    fileprivate lazy var tipLabel:  UILabel = UILabel(frame: CGRect(x: self.bgView.width - 15 - 50, y: self.bgView.height - 24, width: 50, height: 12))
- 
-    //MARK: - private func 
-    private func _init() {
-        self.title = "个性签名"
-        self.automaticallyAdjustsScrollViewInsets = false;
-        view.backgroundColor = UIColor(netHex: 0xe8edf3)
-        
-        
-        view.addSubview(saveButton)
-        
+    private lazy var bgView: UIView = {
+        let bgView = UIView(frame: CGRect(x: 0, y: self.topOffset, width: self.view.width, height: 120))
         bgView.backgroundColor = .white
-        view.addSubview(bgView)
-        
+        return bgView
+    }()
+    private lazy var signatureTextView: UITextView = {
+        let signatureTextView = UITextView(frame: CGRect(x: 15, y: 15, width: self.view.width - 30, height: 90))
         signatureTextView.delegate = self
         signatureTextView.font = UIFont.systemFont(ofSize: 16)
         signatureTextView.backgroundColor = .white
-        bgView.addSubview(signatureTextView)
-        
-        tipLabel.text = "30"
-        
+        return signatureTextView
+    }()
+    fileprivate lazy var tipLabel:  UILabel = {
+        let tipLabel = UILabel(frame: CGRect(x: self.bgView.width - 15 - 50, y: self.bgView.height - 24, width: 50, height: 12))
         tipLabel.textColor = UIColor(netHex: 0x999999)
         tipLabel.font = UIFont.systemFont(ofSize: 12)
         tipLabel.textAlignment = .right
+        return tipLabel
+    }()
+
+    private lazy var navRightButton: UIBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(_saveSignature))
+
+    //MARK: - private func 
+    private func _init() {
+        self.title = "个性签名"
+        automaticallyAdjustsScrollViewInsets = false;
+        view.backgroundColor = UIColor(netHex: 0xe8edf3)
+        
+        view.addSubview(saveButton)
+        view.addSubview(bgView)
+
+        bgView.addSubview(signatureTextView)
         bgView.addSubview(tipLabel)
 
         view.addConstraint(_JCLayoutConstraintMake(saveButton, .left, .equal, view, .left, 15))
@@ -68,13 +79,12 @@ class JCSignatureViewController: UIViewController {
     }
     
     private func _setupNavigation() {
-        self.navigationItem.rightBarButtonItem =  navRightButton
+        navigationItem.rightBarButtonItem = navRightButton
     }
     
     //MARK: - click func
     func _saveSignature() {
         signatureTextView.resignFirstResponder()
-        
         JMSGUser.updateMyInfo(withParameter: signatureTextView.text!, userFieldType: .fieldsSignature) { (resultObject, error) -> Void in
             if error == nil {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: kUpdateUserInfo), object: nil)
@@ -82,20 +92,16 @@ class JCSignatureViewController: UIViewController {
             } else {
                 print("error:\(String(describing: error?.localizedDescription))")
             }
-            
         }
     }
 }
 
 extension JCSignatureViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        if textView.markedTextRange != nil {
-            
-        } else {
+        if textView.markedTextRange == nil {
             let text = textView.text!
             if text.characters.count > 30 {
                 let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 30))
-                
                 let subText = text.substring(with: range)
                 textView.text = subText
             }

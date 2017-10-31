@@ -167,14 +167,11 @@ extension ScanQRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
             if frame.size.height > validFrame.size.height {
                 return
             }
-
             
             if object.type == AVMetadataObjectTypeQRCode {
                 guard let url = object.stringValue else {
                     return
                 }
-                print(validFrame)
-                print(frame)
                 if let Url = URL(string: url) {
                     if UIApplication.shared.canOpenURL(Url) {
                         UIApplication.shared.openURL(Url)
@@ -182,45 +179,34 @@ extension ScanQRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                         let newUrl = URL(string: "https://" + url)
                         UIApplication.shared.openURL(newUrl!)
                     }
-                } else {
-                    
-                    let jsonData:Data = url.data(using: .utf8)!
-                    
-                    let dict = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
-                    guard let info = dict as? NSDictionary else {
-                        return
-                    }
-                    if let userInfo = info["user"] as? NSDictionary {
-//                        self.isStopAnimate = true
-                        self.session.stopRunning()
-                        let username = userInfo["username"] as! String
-                        let appkey = userInfo["appkey"] as! String
-                        JMSGUser.userInfoArray(withUsernameArray: [username], appKey: appkey, completionHandler: { (result, error) in
-                            if error == nil {
-                                let users = result as! [JMSGUser]
-                                let user = users.first
-                                let vc = JCUserInfoViewController()
-                                vc.user = user
-                                self.navigationController?.pushViewController(vc, animated: true)
-                            } else {
-                            
-                            }
-                        })
-                    }
+                    return
                 }
-                
-//                qrCodeFrameView.frame = barCodeObject!.bounds
-//                self.session.stopRunning()
-                
+                let jsonData:Data = url.data(using: .utf8)!
+
+                let dict = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
+                guard let info = dict as? NSDictionary else {
+                    return
+                }
+                guard let userInfo = info["user"] as? NSDictionary else {
+                    return
+                }
+                let username = userInfo["username"] as! String
+                let appkey = userInfo["appkey"] as! String
+                session.stopRunning()
+                JMSGUser.userInfoArray(withUsernameArray: [username], appKey: appkey, completionHandler: { (result, error) in
+                    if error == nil {
+                        let users = result as! [JMSGUser]
+                        let user = users.first
+                        let vc = JCUserInfoViewController()
+                        vc.user = user
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }
+                })
             }
         }
     }
     
-    private func parseUrl(_ url: String) {
-        
-    }
-    
-    
+
     func convertStringToDictionary(text: String) -> [String : AnyObject]? {
         if let data = text.data(using: .utf8) {
             do {

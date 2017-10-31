@@ -11,8 +11,6 @@ import UIKit
 class JCBusinessCardContent: NSObject, JCMessageContentType {
 
     public weak var delegate: JCMessageDelegate?
-    
-    
     open var layoutMargins: UIEdgeInsets = .zero
     
     open class var viewType: JCMessageContentViewType.Type {

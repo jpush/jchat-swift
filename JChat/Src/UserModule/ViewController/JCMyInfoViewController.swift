@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import JMessage
 import YHPopupView
 
 class JCMyInfoViewController: UIViewController {
@@ -25,9 +24,6 @@ class JCMyInfoViewController: UIViewController {
         var tableview = UITableView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: self.view.height - 64), style: .grouped)
         tableview.delegate = self
         tableview.dataSource = self
-        tableview.estimatedRowHeight = 0
-        tableview.estimatedSectionFooterHeight = 0
-        tableview.estimatedSectionHeaderHeight = 0
         tableview.register(JCMyAvatorCell.self, forCellReuseIdentifier: "JCMyAvatorCell")
         tableview.register(JCMyInfoCell.self, forCellReuseIdentifier: "JCMyInfoCell")
         tableview.separatorStyle = .none
@@ -67,7 +63,7 @@ class JCMyInfoViewController: UIViewController {
     //MARK: - private func
     private func _init() {
         self.title = "个人信息"
-        self.automaticallyAdjustsScrollViewInsets = false
+        automaticallyAdjustsScrollViewInsets = false
         view.addSubview(tableview)
         NotificationCenter.default.addObserver(self, selector: #selector(_updateUserInfo), name: NSNotification.Name(rawValue: kUpdateUserInfo), object: nil)
     }
@@ -131,9 +127,7 @@ extension JCMyInfoViewController: UITableViewDataSource, UITableViewDelegate {
             guard let cell = cell as? JCMyInfoCell else {
                 return
             }
-        
             cell.accessoryType = .disclosureIndicator
-           
             switch indexPath.row {
             case 0:
                 cell.title = "昵称"
@@ -202,7 +196,6 @@ extension JCMyInfoViewController: UITableViewDataSource, UITableViewDelegate {
             default:
                 break
             }
- 
         }
     }
    

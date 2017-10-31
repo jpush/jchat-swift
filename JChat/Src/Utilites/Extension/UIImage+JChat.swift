@@ -80,9 +80,9 @@ extension UIImage {
         return nil
     }
     
-    func resizeImage(image: UIImage, newSize: CGSize) -> UIImage {
-        UIGraphicsBeginImageContext(newSize)
-        image.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
+    func resizeImage(_ newSize: CGSize) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(newSize, false, UIScreen.main.scale)
+        self.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return newImage!

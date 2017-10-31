@@ -12,10 +12,10 @@ import JMessage
 class JCUpdateMemberCell: UICollectionViewCell {
     var avator: UIImage? {
         get {
-            return self.avatorView.image
+            return avatorView.image
         }
         set {
-            self.avatorView.image = newValue
+            avatorView.image = newValue
         }
     }
     

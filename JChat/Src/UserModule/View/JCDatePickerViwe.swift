@@ -55,11 +55,11 @@ class JCDatePickerViwe: UIView {
     //MARK: - private func 
     private func _init() {
         // 216 + 40
-        self.backgroundColor = .white
+        backgroundColor = .white
 
-        self.addSubview(finishButton)
-        self.addSubview(cancelButton)
-        self.addSubview(datePicker)
+        addSubview(finishButton)
+        addSubview(cancelButton)
+        addSubview(datePicker)
         
         addConstraint(_JCLayoutConstraintMake(cancelButton, .left, .equal, self, .left))
         addConstraint(_JCLayoutConstraintMake(cancelButton, .right, .equal, self, .centerX))
@@ -79,11 +79,11 @@ class JCDatePickerViwe: UIView {
     
     //MARK: - click event
     func _cancel(_ sender: UIButton) {
-        delegate?.datePicker?(cancel: sender, date: self.datePicker.date)
+        delegate?.datePicker?(cancel: sender, date: datePicker.date)
     }
     
     func _finish(_ sender: UIButton) {
-        delegate?.datePicker?(finish: sender, date: self.datePicker.date)
+        delegate?.datePicker?(finish: sender, date: datePicker.date)
     }
 
 }

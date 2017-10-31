@@ -149,10 +149,10 @@ class JCLoginViewController: UIViewController {
     //MARK: - private func 
     private func _init() {
         self.title = "JChat"
-        self.view.backgroundColor = .white
+        view.backgroundColor = .white
         UIApplication.shared.setStatusBarStyle(.default, animated: false)
-        self.automaticallyAdjustsScrollViewInsets = false
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        automaticallyAdjustsScrollViewInsets = false
+        navigationController?.setNavigationBarHidden(true, animated: false)
         
         view.addSubview(bgView)
         view.addSubview(headerView)
@@ -195,7 +195,7 @@ class JCLoginViewController: UIViewController {
             return
         }
         
-        MBProgressHUD_JChat.showMessage(message: "登录中", toView: self.view)
+        MBProgressHUD_JChat.showMessage(message: "登录中", toView: view)
         JMSGUser.login(withUsername: username, password: password) { (result, error) in
             MBProgressHUD_JChat.hide(forView: self.view, animated: true)
             if error == nil {

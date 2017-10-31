@@ -23,13 +23,3 @@ let kReloadAllMessage = "kReloadAllMessage"
 let kUnreadInvitationCount = "kUnreadInvitationCount"
 let kUpdateFileMessage = "kUpdateFileMessage"
 
-// MARK: - emoticon
-let kLargeEmoticon = "kLargeEmoticon"
-let kShortVideo = "video"
-let kBusinessCard = "businessCard"
-let kBusinessCardName = "userName"
-let kBusinessCardAppKey = "appKey"
-let kConversationSticky = "kConversationSticky"
-
-let kFileType = "fileType"
-let kFileSize = "fileSize"

@@ -159,12 +159,13 @@ internal class JCChatViewUpdate: NSObject {
         guard first != .max && last != .min else {
             return []
         }
+
         // sort
-        allInserts.sort { $0.0 < $1.0 }
-        allUpdates.sort { $0.0 < $1.0 }
-        allRemoves.sort { $0 < $1 }
-        allMoves.sort { $0.0 < $1.0 }
-        
+//        allInserts.sort { $0.0 < $1.0 }
+//        allUpdates.sort { $0.0 < $1.0 }
+//        allRemoves.sort { $0 < $1 }
+//        allMoves.sort { $0.0 < $1.0 }
+
         let count = oldData.count
         let begin = first - 1 // prev
         let end = last + 1 // next
@@ -233,23 +234,6 @@ internal class JCChatViewUpdate: NSObject {
         let selectedRange = Range<Int>(max(begin, 0) ..< min(end, count))
         let selectedItems = oldData.subarray(with: selectedRange)
         
-        // 这里是不合理的做法， 后面再改
-//        if updateItems.count > 0 {
-//            var results: Array<JCChatViewUpdateChange> = []
-//            for item in updateItems {
-//                switch item {
-//                case .update( _, let index):
-//                    results.append(.update(from: index, to: index))
-//                default:
-//                    break
-//                }
-//            }
-//            if results.count > 0 {
-//                return results
-//            }
-//        }
-        
-        
         // compute index paths
         let start = selectedRange.lowerBound
         // lcs
@@ -264,109 +248,18 @@ internal class JCChatViewUpdate: NSObject {
     
     // MARK: convert message
     
-    internal func _convert(message current: JCMessageType, previous: JCMessageType?, next: JCMessageType?, first: JCMessageType?, last: JCMessageType?) -> [JCMessageType] {
-        
-        //     V-1         V-2         V-3         V-4
-        // +---------+ +---------+ +---------+ +---------+
-        // |    M   <| |    M    | |    M   <| |    M    |
-        // |#   T   <| |#   M   <| |#   T   <| |#   M   <|
-        // |    D    | |    D    | |    D    | |    D    |
-        // |#   T   <| |#   T   <| |#   M   <| |#   M   <|
-        // |    M   <| |    M   <| |    M    | |    M    |
-        // +---------+ +---------+ +---------+ +---------+
-        //
-        
-        // check vaild previous and vaild next time interval
-//        let ti = JCChatViewUpdate.minimuxTimeInterval
-//        let tprevious = _fetch(before: previous ?? first)
-//        var tcurrent = current
-//        
-//        // reset current message of after
-//        if let next = next, current._isTimeLineMessage {
-//            tcurrent = next
-//        }
-//        
-//        
-//        guard trunc(fabs(tprevious?._timeIntervalSince(tcurrent) ?? (ti + 1)) * 1000) > trunc(ti * 1000) else {
-//            // too near, check current message type
-//            guard current._isTimeLineMessage else {
-//                return [current]
-//            }
-//            // too near, current is lt-message, but this is no need, ignore
-//            return []
-//        }
-//        // too far away, if current is lt-message, ignore current message
-//        if let content = current.content as? JCMessageTimeLineContent {
-//            // if only one lt-message, ignore current lt-message
-//            if previous == nil && first == nil && next == nil && last == nil {
-//                return []
-//            }
-//            // if previous is empty, content lt-message is begin, reserved current lt-message
-//            if previous == nil && content.before == nil {
-//                return [_timeLine(with: current)]
-//            }
-//            // if next is empty(is end), ignore current lt-message
-//            if next == nil && last == nil {
-//                return []
-//            }
-//            // if previous is lt-message, has two lt-message, ignore current message
-//            if let content = previous?.content as? JCMessageTimeLineContent {
-//                // reset previous lt-message for after
-//                content.after = current
-//                // ignore current lt-message
-//                return []
-//            }
-//            // only reserved current lt-message
-//            return [_timeLine(with: current)]
-//        }
-//        // too far away, if previous is lt-message, ignore add lt-message required
-//        if let content = previous?.content as? JCMessageTimeLineContent {
-//            // reset previous lt-message for after
-//            content.after = current
-//            // only reserved current message
-//            return [current]
-//        }
-//        // too far away, if previous is empty, but first not is empty, ignore add lt-message required
-//        if previous == nil, first != nil {
-//            // only reserved current message
-//            return [current]
-//        }
-        // too far away
-//        return [_timeLine(after: current, before: previous), current]
-        return [current]
-    }
-    
     private func _convert(messages elements: [JCMessageType], first: JCMessageType?, last: JCMessageType?) -> [JCMessageType] {
         // merge
         let elements = [first].flatMap({ $0 }) + elements + [last].flatMap({ $0 })
         // processing
         return (0 ..< elements.count).reduce(NSMutableArray(capacity: elements.count * 2)) { result, index in
-            // get context messages
-            let previous = result.lastObject as? JCMessageType
             let current = elements[index]
-            let next = (index + 1 < elements.count) ? elements[index + 1] : nil
-            // convert & merge message
-            result.addObjects(from: _convert(message: current, previous: previous, next: next, first: first, last: last))
+            result.add(current)
             // continue
             return result
-            } as! [JCMessageType]
+        } as! [JCMessageType]
     }
-    
-    // MARK: util
-    
-    private func _fetch(after message: JCMessageType?) -> JCMessageType? {
-        guard let content = message?.content as? JCMessageTimeLineContent else {
-            return message
-        }
-        return content.after
-    }
-    private func _fetch(before message: JCMessageType?) -> JCMessageType? {
-        guard let content = message?.content as? JCMessageTimeLineContent else {
-            return message
-        }
-        return content.before
-    }
-    
+
     internal func _element(at index: Int) -> JCMessageType? {
         guard index >= 0 && index < oldData.count else {
             return nil
@@ -374,39 +267,9 @@ internal class JCChatViewUpdate: NSObject {
         return oldData[index]
     }
     
-    fileprivate func _timeLine(with ltmessage: JCMessageType) -> JCMessageType {
-        guard let content = ltmessage.content as? JCMessageTimeLineContent else {
-            return _timeLine(after: ltmessage, before: nil)
-        }
-        let content2 = JCMessageTimeLineContent(date: content.after?.date ?? ltmessage.date)
-        let message = JCMessage(content: content2)
-        
-        content2.before = content.before
-        content2.after = content.after
-        message.date = content.after?.date ?? ltmessage.date
-        
-        return message
-    }
-    fileprivate func _timeLine(after: JCMessageType, before: JCMessageType?) -> JCMessageType {
-        let content = JCMessageTimeLineContent(date: after.date)
-        let message = JCMessage(content: content)
-        
-        content.before = before
-        content.after = after
-        message.date = after.date
-        
-        return message
-    }
-    
+
     // MARK: compare
-    
     private func _equal<T: JCMessageType>(_ lhs: T, _ rhs: T) -> Bool {
-        // message is lt-message?
-        if let lcnt = lhs.content as? JCMessageTimeLineContent, let rcnt = rhs.content as? JCMessageTimeLineContent {
-            // check tl-message
-            return lcnt.after?.identifier == rcnt.after?.identifier 
-        }
-        // check other message
         return lhs.identifier == rhs.identifier && lhs.options.state == rhs.options.state
     }
     
@@ -507,7 +370,6 @@ internal class JCChatViewUpdate: NSObject {
     }
     
     // MARK: property
-    
     internal let newData: JCChatViewData
     internal let oldData: JCChatViewData
     
@@ -515,15 +377,4 @@ internal class JCChatViewUpdate: NSObject {
     internal var updateChanges: Array<JCChatViewUpdateChange>?
     
     internal static var minimuxTimeInterval: TimeInterval = 60
-}
-
-fileprivate extension JCMessageType {
-    
-    
-    fileprivate var _isTimeLineMessage: Bool {
-        return content is JCMessageTimeLineContent
-    }
-    fileprivate func _timeIntervalSince(_ other: JCMessageType) -> TimeInterval {
-        return date.timeIntervalSince(other.date)
-    }
 }

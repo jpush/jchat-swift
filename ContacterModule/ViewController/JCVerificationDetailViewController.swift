@@ -24,7 +24,7 @@ class JCVerificationDetailViewController: UIViewController {
     private func _init() {
         
         self.title = "详细信息"
-        self.automaticallyAdjustsScrollViewInsets = false
+        automaticallyAdjustsScrollViewInsets = false
         
         tableview.delegate = self
         tableview.dataSource = self
@@ -209,7 +209,7 @@ extension JCVerificationDetailViewController: JCUserAvatorCellDelegate {
         let browserImageVC = JCImageBrowserViewController()
         browserImageVC.imageArr = [image]
         browserImageVC.imgCurrentIndex = 0
-        self.present(browserImageVC, animated: true) {
+        present(browserImageVC, animated: true) {
             
         }
     }

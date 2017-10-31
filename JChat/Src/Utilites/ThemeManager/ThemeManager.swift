@@ -42,7 +42,6 @@ final class ThemeManager: NSObject {
         }
         
         themeColors = getThemeColors()
-
         // 收到内存警告时，移除所有缓存
         NotificationCenter.default.addObserver(
             self, selector: #selector(clearMemoryCache), name: .UIApplicationDidReceiveMemoryWarning, object: nil)

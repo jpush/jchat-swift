@@ -40,8 +40,8 @@ class JCSearchFriendViewController: UIViewController {
     private var isActive = false
     
     fileprivate lazy var searchController: JCSearchController = JCSearchController(searchResultsController: nil)
-    private lazy var searchView: UIView = UIView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: 31))
-    fileprivate lazy var bgView: UIView = UIView(frame: CGRect(x: 0, y: 64 + 31 + 5, width: self.view.width, height: self.view.height - 31 - 5))
+    private lazy var searchView: UIView = UIView(frame: CGRect(x: 0, y: self.topOffset, width: self.view.width, height: 31))
+    fileprivate lazy var bgView: UIView = UIView(frame: CGRect(x: 0, y: self.topOffset + 31 + 5, width: self.view.width, height: self.view.height - 31 - 5))
     fileprivate lazy var infoView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.width, height: 65.5))
     
     fileprivate lazy var avatorView: UIImageView = UIImageView(frame: CGRect(x: 15, y: 7.5, width: 50, height: 50))
@@ -63,8 +63,8 @@ class JCSearchFriendViewController: UIViewController {
     }()
     
     private lazy var networkErrorView: UIView = {
-        let tipsView = UIView(frame: CGRect(x: 0, y: 64 + 36, width: self.view.width, height: self.view.height))
-        var tipsLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 64, width: tipsView.width, height: 22.5))
+        let tipsView = UIView(frame: CGRect(x: 0, y: self.topOffset + 36, width: self.view.width, height: self.view.height))
+        var tipsLabel: UILabel = UILabel(frame: CGRect(x: 0, y: self.topOffset, width: tipsView.width, height: 22.5))
         tipsLabel.textColor = UIColor(netHex: 0x999999)
         tipsLabel.textAlignment = .center
         tipsLabel.font = UIFont.systemFont(ofSize: 16)
@@ -76,11 +76,18 @@ class JCSearchFriendViewController: UIViewController {
     }()
     
     fileprivate var user: JMSGUser?
-    
+
+    private var topOffset: CGFloat {
+        if isIPhoneX {
+            return 88
+        }
+        return 64
+    }
+
     private func _init() {
-        
-        self.view.backgroundColor = UIColor(netHex: 0xE8EDF3)
-        self.automaticallyAdjustsScrollViewInsets = false
+        view.backgroundColor = UIColor(netHex: 0xE8EDF3)
+        automaticallyAdjustsScrollViewInsets = false
+
         if isSearchUser {
             self.title = "发起单聊"
         } else {
@@ -133,7 +140,6 @@ class JCSearchFriendViewController: UIViewController {
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(note:)), name: NSNotification.Name(rawValue: "kNetworkReachabilityChangedNotification"), object: nil)
-        
     }
     
     func reachabilityChanged(note: NSNotification) {
@@ -141,9 +147,9 @@ class JCSearchFriendViewController: UIViewController {
             let status = curReach.currentReachabilityStatus()
             switch status {
             case NotReachable:
-                self.networkErrorView.isHidden = false
+                networkErrorView.isHidden = false
             default :
-                self.networkErrorView.isHidden = true
+                networkErrorView.isHidden = true
             }
         }
     }
@@ -167,7 +173,7 @@ class JCSearchFriendViewController: UIViewController {
         let vc = JCAddFriendViewController()
         vc.user = self.user!
         searchController.isActive = false
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -195,7 +201,7 @@ extension JCSearchFriendViewController: JCSearchControllerDelegate, UISearchBarD
         if name.isEmpty {
             return
         }
-        MBProgressHUD_JChat.showMessage(message: "查找中", toView: self.view)
+        MBProgressHUD_JChat.showMessage(message: "查找中", toView: view)
         JMSGUser.userInfoArray(withUsernameArray: [name]) { (result, error) in
             self.bgView.isHidden = false
             MBProgressHUD_JChat.hide(forView: self.view, animated: true)

@@ -11,7 +11,7 @@ import UIKit
 class JCForwardViewController: UIViewController {
     
     var message: JMSGMessage?
-    var formUser: JMSGUser!
+    var fromUser: JMSGUser!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,8 +20,19 @@ class JCForwardViewController: UIViewController {
 
     private lazy var cancelButton = UIButton(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
     
-    fileprivate var contacterView: UITableView = UITableView(frame: .zero, style: .grouped)
-    private lazy var searchController: JCSearchController = JCSearchController(searchResultsController: JCNavigationController(rootViewController: JCSearchResultViewController()))
+    fileprivate lazy var contacterView: UITableView = {
+        var contacterView = UITableView(frame: .zero, style: .grouped)
+        contacterView.delegate = self
+        contacterView.dataSource = self
+        contacterView.separatorStyle = .none
+        contacterView.sectionIndexColor = UIColor(netHex: 0x2dd0cf)
+        contacterView.sectionIndexBackgroundColor = .clear
+        contacterView.register(JCContacterCell.self, forCellReuseIdentifier: "JCContacterCell")
+        contacterView.frame = CGRect(x: 0, y: 0, width: self.view.width, height: self.view.height)
+        return contacterView
+    }()
+    let searchResultVC = JCSearchResultViewController()
+    private lazy var searchController: JCSearchController = JCSearchController(searchResultsController: JCNavigationController(rootViewController: self.searchResultVC))
     private lazy var searchView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.width, height: 31))
     fileprivate var badgeCount = 0
     
@@ -39,8 +50,12 @@ class JCForwardViewController: UIViewController {
         } else {
             self.title = "转发"
         }
-        
-        self.view.backgroundColor = UIColor(netHex: 0xe8edf3)
+
+        searchResultVC.message = message
+        searchResultVC.fromUser = fromUser
+        searchResultVC.delegate = self
+
+        view.backgroundColor = UIColor(netHex: 0xe8edf3)
         _setupNavigation()
         
         let nav = searchController.searchResultsController as! JCNavigationController
@@ -50,13 +65,7 @@ class JCForwardViewController: UIViewController {
         
         searchView.addSubview(searchController.searchBar)
         contacterView.tableHeaderView = searchView
-        contacterView.delegate = self
-        contacterView.dataSource = self
-        contacterView.separatorStyle = .none
-        contacterView.sectionIndexColor = UIColor(netHex: 0x2dd0cf)
-        contacterView.sectionIndexBackgroundColor = .clear
-        contacterView.register(JCContacterCell.self, forCellReuseIdentifier: "JCContacterCell")
-        contacterView.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
+
         view.addSubview(contacterView)
         
         _getFriends()
@@ -67,41 +76,40 @@ class JCForwardViewController: UIViewController {
         cancelButton.setTitle("取消", for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         let item = UIBarButtonItem(customView: cancelButton)
-        self.navigationItem.leftBarButtonItem = item
+        navigationItem.leftBarButtonItem = item
     }
     
     func _clickNavleftButton() {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     func _updateUserInfo() {
         let users = self.users
         _classify(users)
-        self.contacterView.reloadData()
+        contacterView.reloadData()
     }
     
     func _classify(_ users: [JMSGUser]) {
         self.users = users
-        self.keys.removeAll()
-        self.data.removeAll()
+        keys.removeAll()
+        data.removeAll()
         for item in users {
             var key = item.displayName().firstCharacter()
             if !key.isLetterOrNum() {
                 key = "#"
             }
-            var array = self.data[key]
+            var array = data[key]
             if array == nil {
                 array = [item]
             } else {
                 array?.append(item)
             }
-            if !self.keys.contains(key) {
-                self.keys.append(key)
+            if !keys.contains(key) {
+                keys.append(key)
             }
-            
-            self.data[key] = array
+            data[key] = array
         }
-        self.keys = _JCSortKeys(self.keys)
+        keys = keys.sortedKeys()
     }
     
     func _getFriends() {
@@ -129,7 +137,7 @@ extension JCForwardViewController: UITableViewDelegate, UITableViewDataSource {
         if section == 0 {
             return tagArray.count
         }
-        return self.data[keys[section - 1]]!.count
+        return data[keys[section - 1]]!.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -140,7 +148,7 @@ extension JCForwardViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return self.keys
+        return keys
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -174,7 +182,7 @@ extension JCForwardViewController: UITableViewDelegate, UITableViewDataSource {
             }
             return
         }
-        let user = self.data[keys[indexPath.section - 1]]?[indexPath.row]
+        let user = data[keys[indexPath.section - 1]]?[indexPath.row]
         cell.isShowBadge = false
         cell.bindDate(user!)
     }
@@ -184,11 +192,11 @@ extension JCForwardViewController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.section == 0 {
             let vc = JCGroupListViewController()
             vc.message = message
-            vc.fromUser = formUser
-            self.navigationController?.pushViewController(vc, animated: true)
+            vc.fromUser = fromUser
+            navigationController?.pushViewController(vc, animated: true)
             return
         }
-        selectUser = self.data[keys[indexPath.section - 1]]?[indexPath.row]
+        selectUser = data[keys[indexPath.section - 1]]?[indexPath.row]
         if let message = message {
             forwardMessage(message)
         } else {
@@ -198,8 +206,9 @@ extension JCForwardViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     private func sendBusinessCard() {
-        JCAlertView.bulid().setTitle("发送给：\(self.selectUser.displayName())")
-            .setMessage(self.formUser.displayName() + "的名片")
+        fromUser = fromUser ?? JMSGUser.myInfo()
+        JCAlertView.bulid().setTitle("发送给：\(selectUser.displayName())")
+            .setMessage(fromUser.displayName() + "的名片")
             .setDelegate(self)
             .addCancelButton("取消")
             .addButton("确定")
@@ -208,78 +217,20 @@ extension JCForwardViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     private func forwardMessage(_ message: JMSGMessage) {
-        switch(message.contentType) {
-        case .text:
-            let content = message.content as! JMSGTextContent
-            JCAlertView.bulid().setTitle("发送给：\(selectUser.displayName())")
-                .setMessage(content.text)
-                .setDelegate(self)
-                .addCancelButton("取消")
-                .addButton("确定")
-                .setTag(10001)
-                .show()
-        case .image:
-            let content = message.content as! JMSGImageContent
-            guard let image = UIImage(contentsOfFile: content.originMediaLocalPath  ?? content.thumbImageLocalPath!) else {
-                return
-            }
-            JCAlertView.bulid().setTitle("发送给：\(selectUser.displayName())")
-                .setDelegate(self)
-                .addCancelButton("取消")
-                .addButton("确定")
-                .setTag(10002)
-                .addImage(image)
-                .show()
-        case .file:
-            let content = message.content as! JMSGFileContent
-            if message.isShortVideo {
-                JCAlertView.bulid().setTitle("发送给：\(selectUser.displayName())")
-                    .setMessage("[小视频]")
-                    .setDelegate(self)
-                    .addCancelButton("取消")
-                    .addButton("确定")
-                    .setTag(10001)
-                    .show()
-
-            } else {
-                JCAlertView.bulid().setTitle("发送给：\(selectUser.displayName())")
-                    .setMessage("[文件] \(content.fileName)")
-                    .setDelegate(self)
-                    .addCancelButton("取消")
-                    .addButton("确定")
-                    .setTag(10001)
-                    .show()
-
-            }
-        case .location:
-            let content = message.content as! JMSGLocationContent
-            JCAlertView.bulid().setTitle("发送给：\(selectUser.displayName())")
-                .setMessage("[位置] " + content.address)
-                .setDelegate(self)
-                .addCancelButton("取消")
-                .addButton("确定")
-                .setTag(10001)
-                .show()
-        case .voice:
-            JCAlertView.bulid().setTitle("发送给：\(selectUser.displayName())")
-                .setMessage("[语音消息]")
-                .setDelegate(self)
-                .addCancelButton("取消")
-                .addButton("确定")
-                .setTag(10001)
-                .show()
-        default :
-            break
-        }
+        JCAlertView.bulid().setJMessage(message)
+            .setTitle("发送给：\(selectUser.displayName())")
+            .setDelegate(self)
+            .setTag(10001)
+            .show()
     }
 }
 
 extension JCForwardViewController: UISearchControllerDelegate {
     func willPresentSearchController(_ searchController: UISearchController) {
-        self.contacterView.isHidden = true
+        contacterView.isHidden = true
     }
     func willDismissSearchController(_ searchController: UISearchController) {
-        self.contacterView.isHidden = false
+        contacterView.isHidden = false
         let nav = searchController.searchResultsController as! JCNavigationController
         nav.isNavigationBarHidden = true
         nav.popToRootViewController(animated: false)
@@ -292,28 +243,27 @@ extension JCForwardViewController: UIAlertViewDelegate {
             return
         }
         switch alertView.tag {
-        case 10001, 10002:
-            let optionalContent = JMSGOptionalContent()
-            optionalContent.needReadReceipt = true
-            JMSGMessage.forwardMessage(message!, target: selectUser, optionalContent: optionalContent)
+        case 10001:
+            JMSGMessage.forwardMessage(message!, target: selectUser, optionalContent: JMSGOptionalContent.ex.default)
             
         case 10003:
             JMSGConversation.createSingleConversation(withUsername: selectUser.username) { (result, error) in
                 if let conversation = result as? JMSGConversation {
-                    let message = JMSGMessage.createBusinessCardMessage(conversation, self.formUser.username, self.formUser.appKey ?? "")
-                    let optionalContent = JMSGOptionalContent()
-                    optionalContent.needReadReceipt = true
-                    JMSGMessage.send(message, optionalContent: optionalContent)
+                    let message = JMSGMessage.ex.createBusinessCardMessage(conversation, self.fromUser.username, self.fromUser.appKey ?? "")
+                    JMSGMessage.send(message, optionalContent: JMSGOptionalContent.ex.default)
                 }
             }
         default:
             break
         }
         MBProgressHUD_JChat.show(text: "已发送", view: view, 2)
-        weak var weakSelf = self
+
         let time: TimeInterval = 2
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + time) {
-            weakSelf?.dismiss(animated: true, completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: kReloadAllMessage), object: nil)
+        }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + time) { [weak self] in
+            self?.dismiss(animated: true, completion: nil)
         }
     }
 }

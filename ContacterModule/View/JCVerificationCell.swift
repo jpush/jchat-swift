@@ -36,16 +36,16 @@ class JCVerificationCell: JCTableViewCell {
         reason.text = info.resaon
         switch info.state {
         case JCVerificationType.accept.rawValue:
-            self.tipInfo.text = "已添加"
-            self.acceptButton.isHidden = true
+            tipInfo.text = "已添加"
+            acceptButton.isHidden = true
         case JCVerificationType.wait.rawValue:
-            self.tipInfo.text = "等待验证"
-            self.acceptButton.isHidden = true
+            tipInfo.text = "等待验证"
+            acceptButton.isHidden = true
         case JCVerificationType.receive.rawValue:
-            self.acceptButton.isHidden = false
+            acceptButton.isHidden = false
         case JCVerificationType.reject.rawValue:
-            self.tipInfo.text = "已拒绝"
-            self.acceptButton.isHidden = true
+            tipInfo.text = "已拒绝"
+            acceptButton.isHidden = true
         default:
             break
         }

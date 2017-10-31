@@ -94,10 +94,10 @@ class JCPhotoBarItem: UIView {
     
     var isHiddenDelButton: Bool {
         get {
-            return self.delButton.isHidden
+            return delButton.isHidden
         }
         set {
-            self.delButton.isHidden = newValue
+            delButton.isHidden = newValue
         }
     }
 

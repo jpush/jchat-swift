@@ -99,7 +99,11 @@ class JCUpdatePassworkViewController: UIViewController {
         
         view.addConstraint(_JCLayoutConstraintMake(bgView, .left, .equal, view, .left))
         view.addConstraint(_JCLayoutConstraintMake(bgView, .right, .equal, view, .right))
-        view.addConstraint(_JCLayoutConstraintMake(bgView, .top, .equal, view, .top, 64))
+        if isIPhoneX {
+            view.addConstraint(_JCLayoutConstraintMake(bgView, .top, .equal, view, .top, 88))
+        } else {
+            view.addConstraint(_JCLayoutConstraintMake(bgView, .top, .equal, view, .top, 64))
+        }
         view.addConstraint(_JCLayoutConstraintMake(bgView, .height, .equal, nil, .notAnAttribute, 135))
         
         bgView.addConstraint(_JCLayoutConstraintMake(oldPasswordLabel, .left, .equal, bgView, .left, 15))

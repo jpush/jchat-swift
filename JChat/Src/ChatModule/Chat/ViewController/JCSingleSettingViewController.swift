@@ -9,7 +9,7 @@
 import UIKit
 import JMessage
 
-class JCSingleSettingViewController: UIViewController {
+class JCSingleSettingViewController: UIViewController, CustomNavigation {
     
     var user: JMSGUser!
 
@@ -23,9 +23,6 @@ class JCSingleSettingViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.estimatedRowHeight = 0
-        tableView.estimatedSectionFooterHeight = 0
-        tableView.estimatedSectionHeaderHeight = 0
         tableView.sectionIndexColor = UIColor(netHex: 0x2dd0cf)
         tableView.sectionIndexBackgroundColor = .clear
         tableView.register(JCSingleSettingCell.self, forCellReuseIdentifier: "JCSingleSettingCell")
@@ -38,27 +35,11 @@ class JCSingleSettingViewController: UIViewController {
     
     //MARK: - private func 
     private func _init() {
-        self.view.backgroundColor = .white
         self.title = "聊天设置"
+        view.backgroundColor = .white
+
         view.addSubview(tableView)
-        _setupNavigation()
-    }
-    
-    private func _setupNavigation() {
-        leftButton.setImage(UIImage.loadImage("com_icon_back"), for: .normal)
-        leftButton.setImage(UIImage.loadImage("com_icon_back"), for: .highlighted)
-        leftButton.addTarget(self, action: #selector(_back), for: .touchUpInside)
-        leftButton.setTitle("返回", for: .normal)
-        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        leftButton.contentHorizontalAlignment = .left
-        let item = UIBarButtonItem(customView: leftButton)
-        navigationItem.leftBarButtonItems =  [item]
-        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        navigationController?.interactivePopGestureRecognizer?.delegate = self
-    }
-    
-    func _back() {
-        navigationController?.popViewController(animated: true)
+        customLeftBarButton(delegate: self)
     }
 }
 
@@ -176,7 +157,7 @@ extension JCSingleSettingViewController: UITableViewDelegate, UITableViewDataSou
             case 2:
                 let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "清空聊天记录")
                 actionSheet.tag = 1001
-                actionSheet.show(in: self.view)
+                actionSheet.show(in: view)
             case 3:
                 break
             default:
@@ -197,7 +178,7 @@ extension JCSingleSettingViewController: UIActionSheetDelegate {
                 let conv = JMSGConversation.singleConversation(withUsername: user.username)
                 conv?.deleteAllMessages()
                 NotificationCenter.default.post(name: Notification.Name(rawValue: kDeleteAllMessage), object: nil)
-                MBProgressHUD_JChat.show(text: "成功清空", view: self.view)
+                MBProgressHUD_JChat.show(text: "成功清空", view: view)
             }
         }
     }
@@ -207,7 +188,7 @@ extension JCSingleSettingViewController: UIActionSheetDelegate {
 extension JCSingleSettingViewController: JCMineInfoCellDelegate {
     func mineInfoCell(clickSwitchButton button: UISwitch, indexPath: IndexPath?) {
         if user.isNoDisturb != button.isOn {
-            MBProgressHUD_JChat.showMessage(message: "修改中", toView: self.view)
+            MBProgressHUD_JChat.showMessage(message: "修改中", toView: view)
             user.setIsNoDisturb(button.isOn, handler: { (result, error) in
                 MBProgressHUD_JChat.hide(forView: self.view, animated: true)
                 if error == nil {

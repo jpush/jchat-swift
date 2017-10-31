@@ -8,8 +8,6 @@
 
 import UIKit
 import MJRefresh
-import RxSwift
-import RxCocoa
 
 public protocol JCChatViewDataSource: class {
     
@@ -311,6 +309,7 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
     }
     
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
         let message = _chatViewData[indexPath.item]
         
 //        let options = (message.options.showsCard.hashValue << 0) | (message.options.showsAvatar.hashValue << 1)
@@ -478,13 +477,10 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
 extension JCChatView {
     override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentOffset" {
-
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()) {
                 if !isWait {
                     isWait = true
                     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.05) {
-//                        print(self._chatContainerView.visibleCells.count)
-//                        print(self._chatContainerView.indexPathsForVisibleItems)
                         self.delegate?.indexPathsForVisibleItems?(chatView: self, items: self._chatContainerView.indexPathsForVisibleItems)
                         isWait = false
                     }

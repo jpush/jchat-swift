@@ -99,7 +99,7 @@ extension String {
     
     static func conversationIdWithConversation(_ conversation:JMSGConversation) -> String {
         var conversationId = ""
-        if !conversation.isGroup {
+        if !conversation.ex.isGroup {
             let user = conversation.target as! JMSGUser
             conversationId = "\(user.username)_0"
         } else {
@@ -321,8 +321,12 @@ extension String {
     }
     
     public func firstCharacter() -> String {
-        let py = self.py()
-        return String(describing: py.characters.first!).uppercased()
+        let firstCharacter = String(describing: self.first!)
+        if firstCharacter.isLetterOrNum() {
+            return firstCharacter.uppercased()
+        }
+        let py = String(describing: firstCharacter.py().first!)
+        return py.uppercased()
     }
     
     public func isLetterOrNum() -> Bool {

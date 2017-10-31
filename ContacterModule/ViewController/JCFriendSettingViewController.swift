@@ -36,14 +36,14 @@ class JCFriendSettingViewController: UIViewController {
     //MARK: - private func
     private func _init() {
         self.title = "设置"
-        self.automaticallyAdjustsScrollViewInsets = false
+        automaticallyAdjustsScrollViewInsets = false
         view.addSubview(tableview)
         
         NotificationCenter.default.addObserver(self, selector: #selector(_updateFriendInfo), name: NSNotification.Name(rawValue: kUpdateFriendInfo), object: nil)
     }
     
     func _updateFriendInfo() {
-        self.tableview.reloadData()
+        tableview.reloadData()
     }
 }
 
@@ -151,16 +151,16 @@ extension JCFriendSettingViewController: UITableViewDataSource, UITableViewDeleg
                     navigationController?.pushViewController(vc, animated: true)
                 } else {
                     let vc = JCForwardViewController()
-                    vc.formUser = user
+                    vc.fromUser = user
                     let nav = JCNavigationController(rootViewController: vc)
-                    self.present(nav, animated: true)
+                    present(nav, animated: true)
                 }
             case 1:
                 if user.isFriend {
                     let vc = JCForwardViewController()
-                    vc.formUser = user
+                    vc.fromUser = user
                     let nav = JCNavigationController(rootViewController: vc)
-                    self.present(nav, animated: true)
+                    present(nav, animated: true)
                 }
             default:
                 break
@@ -199,9 +199,9 @@ extension JCFriendSettingViewController: UIAlertViewDelegate {
 
 extension JCFriendSettingViewController: JCMineInfoCellDelegate {
     func mineInfoCell(clickSwitchButton button: UISwitch, indexPath: IndexPath?) {
-        MBProgressHUD_JChat.showMessage(message: "修改中", toView: self.view)
+        MBProgressHUD_JChat.showMessage(message: "修改中", toView: view)
         if button.isOn {
-            JMSGUser.addUsers(toBlacklist: [self.user.username]) { (result, error) in
+            JMSGUser.addUsers(toBlacklist: [user.username]) { (result, error) in
                 MBProgressHUD_JChat.hide(forView: self.view, animated: true)
                 if error == nil {
                     MBProgressHUD_JChat.show(text: "修改成功", view: self.view)
@@ -211,7 +211,7 @@ extension JCFriendSettingViewController: JCMineInfoCellDelegate {
                 }
             }
         } else {
-            JMSGUser.delUsers(fromBlacklist: [self.user.username]) { (result, error) in
+            JMSGUser.delUsers(fromBlacklist: [user.username]) { (result, error) in
                 MBProgressHUD_JChat.hide(forView: self.view, animated: true)
                 if error == nil {
                     MBProgressHUD_JChat.show(text: "修改成功", view: self.view)

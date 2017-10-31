@@ -39,7 +39,7 @@ extension  ThemeProtocol where Self: UIView {
     
     func removeThemeObserver() {
         print("removeViewThemeObserver")
-         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: kUpdateTheme), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: kUpdateTheme), object: nil)
     }
     
 }

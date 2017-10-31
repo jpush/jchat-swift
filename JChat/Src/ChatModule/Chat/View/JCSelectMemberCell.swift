@@ -52,11 +52,6 @@ class JCSelectMemberCell: UITableViewCell {
         _init()
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
-    
     private lazy var avatorView: UIImageView = UIImageView()
     private lazy var usernameLabel: UILabel = UILabel()
     private lazy var selectIconView: UIImageView = UIImageView()

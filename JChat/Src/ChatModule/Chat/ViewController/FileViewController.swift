@@ -80,10 +80,11 @@ class FileViewController: UIViewController {
             if !keys.contains(key) {
                 keys.append(key)
             }
-            
             data[key] = array
         }
-        keys = _JCSortKeys(keys)
+        keys = keys.sorted(by: { (str1, str2) -> Bool in
+            str1 > str2
+        })
     }
 }
 
@@ -107,7 +108,7 @@ extension FileViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0.001
+        return 26
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -135,7 +136,7 @@ extension FileViewController: UITableViewDelegate, UITableViewDataSource {
         default:
             image = UIImage.loadImage("com_icon_file_other")!
         }
-        let file = File(image, content.fileName, message.fileSize ?? "", "\(message.fromName) \(keys[indexPath.section])")
+        let file = File(image, content.fileName, message.ex.fileSize ?? "", "\(message.fromName) \(keys[indexPath.section])")
         cell.bindData(file)
         cell.isEditMode = isEdit
         if !isEditModel {
@@ -161,7 +162,7 @@ extension FileViewController: UITableViewDelegate, UITableViewDataSource {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "kDidSelectFileMessage"), object: nil)
         } else {
             let content = message.content as! JMSGFileContent
-            let type = message.fileType
+            let type = message.ex.fileType
             let fileName = content.fileName
             switch fileType {
             case .doc:

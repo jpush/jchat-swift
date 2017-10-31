@@ -35,7 +35,7 @@ class JCAddFriendViewController: UIViewController {
     }
     
     private func _setupNavigation() {
-        self.navigationItem.rightBarButtonItem =  navRightButton
+        navigationItem.rightBarButtonItem =  navRightButton
     }
     
     //MARK: - click func

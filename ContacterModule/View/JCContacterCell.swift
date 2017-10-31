@@ -7,34 +7,33 @@
 //
 
 import UIKit
-import JMessage
 
 class JCContacterCell: JCTableViewCell {
     
     var isShowBadge: Bool {
         get {
-            return !self.redPoin.isHidden
+            return !redPoin.isHidden
         }
         set {
-            self.redPoin.isHidden = !newValue
+            redPoin.isHidden = !newValue
         }
     }
     
     var icon: UIImage? {
         get {
-            return self.avatorView.image
+            return avatorView.image
         }
         set {
-            self.avatorView.image = newValue
+            avatorView.image = newValue
         }
     }
     
     var title: String? {
         get {
-            return self.usernameLabel.text
+            return usernameLabel.text
         }
         set {
-            self.usernameLabel.text = newValue
+            usernameLabel.text = newValue
         }
     }
 
@@ -51,30 +50,32 @@ class JCContacterCell: JCTableViewCell {
         super.awakeFromNib()
         _init()
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
-    
+
     private lazy var avatorView: UIImageView = UIImageView()
     private lazy var usernameLabel: UILabel = UILabel()
     private lazy var redPoin: UILabel = UILabel()
     
     public func bindDate(_ user : JMSGUser) {
         self.title = user.displayName()
-        self.icon = UIImage.loadImage("com_icon_user_36")
         user.thumbAvatarData({ (data, name, error) in
             if let data = data {
                 let image = UIImage(data: data)
                 self.icon = image
+            } else {
+                self.icon = UIImage.loadImage("com_icon_user_36")
             }
         })
     }
     
     public func bindDateWithGroup(group : JMSGGroup) {
-        self.title = group.displayName()
-        self.icon = UIImage.loadImage("com_icon_group_36")
+        title = group.displayName()
+        group.thumbAvatarData { (data, id, error) in
+            if let data = data {
+                self.icon = UIImage(data: data)
+            } else {
+                self.icon = UIImage.loadImage("com_icon_group_36")
+            }
+        }
     }
     
     //MARK: - private func
@@ -82,6 +83,8 @@ class JCContacterCell: JCTableViewCell {
         
         usernameLabel.textColor = UIColor(netHex: 0x2c2c2c)
         usernameLabel.font = UIFont.systemFont(ofSize: 14)
+        usernameLabel.backgroundColor = .white
+        usernameLabel.layer.masksToBounds = true
 
         redPoin.textAlignment = .center
         redPoin.text = ""

@@ -24,7 +24,7 @@ class GroupAvatorCell: JCTableViewCell {
             return avatorView.image
         }
         set {
-            avatorView.image = avator
+            avatorView.image = newValue
         }
     }
 

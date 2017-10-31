@@ -40,7 +40,7 @@ class JCIdentityVerificationViewController: UITableViewController {
     func _getData() {
         infos.removeAll()
         infos = JCVerificationInfoDB.shareInstance.quaryData()
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
 
     

@@ -32,19 +32,30 @@ public class JCGroupSettingCell: UITableViewCell {
         super.awakeFromNib()
         _init()
     }
-    
-    override public func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-    }
-    
-    private var collectionView: UICollectionView!
+
     private lazy var moreButton: UIButton = UIButton()
     fileprivate var count = 0
     fileprivate var sectionCount = 0
     fileprivate lazy var users: [JMSGUser] = []
     fileprivate var isMyGroup = false
     fileprivate var currentUserCount = 0
+
+    private lazy var flowLayout: UICollectionViewFlowLayout = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .vertical
+        flowLayout.minimumInteritemSpacing = 0
+        flowLayout.minimumLineSpacing = 0
+        return flowLayout
+    }()
+    private lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: self.flowLayout)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(JCGroupMemberCell.self, forCellWithReuseIdentifier: "JCGroupMemberCell")
+        collectionView.isScrollEnabled = false
+        collectionView.backgroundColor = UIColor.clear
+        return collectionView
+    }()
     
     func bindData(_ group: JMSGGroup) {
         self.group = group
@@ -55,19 +66,9 @@ public class JCGroupSettingCell: UITableViewCell {
     private func _init() {
         
         _getData()
-        
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
-        flowLayout.minimumInteritemSpacing = 0
-        flowLayout.minimumLineSpacing = 0
-        collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
-        collectionView.isScrollEnabled = false
+
         addSubview(collectionView)
-        
-        collectionView.backgroundColor = UIColor.clear
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(JCGroupMemberCell.self, forCellWithReuseIdentifier: "JCGroupMemberCell")
+
         let showMore = isMyGroup ? count > 13 : count > 14
         if showMore {
             moreButton.addTarget(self, action: #selector(_clickMore), for: .touchUpInside)
@@ -102,8 +103,6 @@ public class JCGroupSettingCell: UITableViewCell {
                 addConstraint(_JCLayoutConstraintMake(collectionView, .height, .equal, nil, .notAnAttribute, 100))
             }
         }
-        
-        
     }
     
     func _clickMore() {

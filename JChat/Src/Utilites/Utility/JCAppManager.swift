@@ -18,3 +18,12 @@ class JCAppManager {
     }
 
 }
+
+
+var isIPhoneX: Bool {
+    if UIScreen.main.bounds.height > 736 {
+        return true
+    } else {
+        return false
+    }
+}

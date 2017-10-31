@@ -11,7 +11,6 @@ import UIKit
 @objc public protocol JCMessageContentType: class  {
     
     weak var delegate: JCMessageDelegate? { get }
-    
     var layoutMargins: UIEdgeInsets { get }
     
     func sizeThatFits(_ size: CGSize) -> CGSize
@@ -24,5 +23,4 @@ import UIKit
     init()
     func apply(_ message: JCMessageType)
 }
-
 

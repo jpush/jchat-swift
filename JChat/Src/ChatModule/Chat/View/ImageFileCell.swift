@@ -35,7 +35,7 @@ class ImageFileCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        initView()
+        _init()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -43,14 +43,26 @@ class ImageFileCell: UICollectionViewCell {
     }
     
     func bindDate(_ message: JMSGMessage) {
+        if message.contentType == .image {
+            let content = message.content as! JMSGImageContent
+            content.largeImageData(progress: nil, completionHandler: { (data, msgId, error) in
+                if msgId == message.msgId {
+                    if let data = data {
+                        let image = UIImage(data: data)
+                        self.imageView.image = image
+                    }
+                }
+            })
+        }
         guard let content = message.content as? JMSGFileContent else {
             return
         }
-        
         content.fileData { (data, msgId, error) in
             if msgId == message.msgId {
-                let image = UIImage(data: data!)
-                self.imageView.image = image
+                if let data = data {
+                    let image = UIImage(data: data)
+                    self.imageView.image = image
+                }
             }
         }
     }
@@ -58,7 +70,8 @@ class ImageFileCell: UICollectionViewCell {
     lazy var imageView: UIImageView = UIImageView()
     private var isSelect = false
     private lazy var selectView: UIImageView = UIImageView()
-    func initView(){
+
+    private func _init(){
         imageView.frame = CGRect(x: 0, y: 0, width: self.width, height: self.height)
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true

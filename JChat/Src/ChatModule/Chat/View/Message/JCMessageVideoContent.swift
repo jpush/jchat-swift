@@ -10,15 +10,12 @@ import UIKit
 import JMessage
 
 open class JCMessageVideoContent: NSObject, JCMessageContentType {
-    public weak var delegate: JCMessageDelegate?
 
-    
+    public weak var delegate: JCMessageDelegate?
     open var layoutMargins: UIEdgeInsets = .zero
-    
     open class var viewType: JCMessageContentViewType.Type {
         return JCMessageVideoContentView.self
     }
-    
     open var data: Data?
     open var image: UIImage?
     open var fileContent: JMSGFileContent?

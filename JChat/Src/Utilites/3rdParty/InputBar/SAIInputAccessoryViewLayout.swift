@@ -181,8 +181,13 @@ internal class SAIInputAccessoryViewLayout: UICollectionViewLayout {
     
     var minimumLineSpacing: CGFloat = 8
     var minimumInteritemSpacing: CGFloat = 8
-    
-    var contentInsets: UIEdgeInsets = UIEdgeInsetsMake(8, 10, 8, 10)
+
+    var contentInsets: UIEdgeInsets {
+        if isIPhoneX {
+            return UIEdgeInsetsMake(8, 10, 20, 10)
+        }
+        return UIEdgeInsetsMake(8, 10, 8, 10)
+    }
     
     // MARK: Invalidate
     

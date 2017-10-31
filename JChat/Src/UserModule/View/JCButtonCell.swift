@@ -18,20 +18,20 @@ class JCButtonCell: UITableViewCell {
     
     var buttonTitle: String {
         get {
-            return (self.button.titleLabel?.text)!
+            return (button.titleLabel?.text)!
         }
         set {
-            self.button.setTitle(newValue, for: .normal)
+            button.setTitle(newValue, for: .normal)
         }
     }
     
     var buttonColor: UIColor {
         get {
-            return self.color
+            return color
         }
         set {
             color = newValue
-            self.button.setBackgroundImage(UIImage.createImage(color: color, size: CGSize(width: self.contentView.width - 30, height: self.contentView.height)), for: .normal)
+            button.setBackgroundImage(UIImage.createImage(color: color, size: CGSize(width: self.contentView.width - 30, height: self.contentView.height)), for: .normal)
         }
     }
 
@@ -51,16 +51,21 @@ class JCButtonCell: UITableViewCell {
     }
 
     private var color = UIColor(netHex: 0x2dd0cf)
-    private lazy var button: UIButton = UIButton()
-    
-    //MARK: - private func 
-    private func _init() {
-        backgroundColor = .clear
+    private lazy var button: UIButton = {
+        let button = UIButton()
         button.addTarget(self, action: #selector(_click(_:)), for: .touchUpInside)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.setTitle("退出登录", for: .normal)
         button.layer.cornerRadius = 3.0
         button.layer.masksToBounds = true
+
+        return button
+    }()
+    
+    //MARK: - private func 
+    private func _init() {
+        backgroundColor = .clear
+
         button.setBackgroundImage(UIImage.createImage(color: color, size: CGSize(width: contentView.width - 30, height: contentView.height)), for: .normal)
         contentView.addSubview(button)
         
@@ -68,12 +73,10 @@ class JCButtonCell: UITableViewCell {
         addConstraint(_JCLayoutConstraintMake(button, .right, .equal, contentView, .right, -15))
         addConstraint(_JCLayoutConstraintMake(button, .top, .equal, contentView, .top))
         addConstraint(_JCLayoutConstraintMake(button, .bottom, .equal, contentView, .bottom))
-        
     }
     
     //MARK: - click func
     func _click(_ sender: UIButton) {
         delegate?.buttonCell?(clickButton: sender)
     }
-
 }

@@ -32,12 +32,6 @@ open class JCMessageTextContent: NSObject, JCMessageContentType {
     open var text: NSAttributedString
     
     open func sizeThatFits(_ size: CGSize) -> CGSize {
-        // +-+-------------+-+
-        // | +-------------+ |
-        // | |   Content   | |
-        // | +-------------+ |
-        // +-+-------------+-+
-        
         let mattr = NSMutableAttributedString(attributedString: text)
         mattr.addAttribute(NSFontAttributeName, value: UIFont.systemFont(ofSize: 16), range: NSMakeRange(0, mattr.length))
 

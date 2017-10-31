@@ -32,7 +32,7 @@ open class JCMessageAvatarView: UIImageView, JCMessageContentViewType {
     open func apply(_ message: JCMessageType) {
         self.message = message
         if message.senderAvator != nil {
-            self.image = message.senderAvator
+            image = message.senderAvator
             return
         }
         weak var weakSelf = self
@@ -49,8 +49,8 @@ open class JCMessageAvatarView: UIImageView, JCMessageContentViewType {
     private lazy var userDefaultIcon = UIImage.loadImage("com_icon_user_36")
     
     private func _commonInit() {
-        self.image = userDefaultIcon
-        self.isUserInteractionEnabled = true
+        image = userDefaultIcon
+        isUserInteractionEnabled = true
         layer.masksToBounds = true
 
         let tapGR = UITapGestureRecognizer(target: self, action: #selector(_tapHandler))
@@ -58,7 +58,6 @@ open class JCMessageAvatarView: UIImageView, JCMessageContentViewType {
 
         let longTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(_longTap(_:)))
         longTapGesture.minimumPressDuration = 0.4
-//        longTapGesture.require(toFail: tapGR)
         addGestureRecognizer(longTapGesture)
     }
     

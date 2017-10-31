@@ -9,18 +9,14 @@
 import UIKit
 
 open class JCMessageVoiceContent: NSObject, JCMessageContentType {
-    public weak var delegate: JCMessageDelegate?
 
-    
+    public weak var delegate: JCMessageDelegate?
     open var layoutMargins: UIEdgeInsets = .init(top: 5, left: 10, bottom: 5, right: 10)
-    
     open class var viewType: JCMessageContentViewType.Type {
         return JCMessageVoiceContentView.self
     }
-    
     open var data: Data?
     open var duration: TimeInterval = 9999
-    
     open var attributedText: NSAttributedString?
     
     open func sizeThatFits(_ size: CGSize) -> CGSize {

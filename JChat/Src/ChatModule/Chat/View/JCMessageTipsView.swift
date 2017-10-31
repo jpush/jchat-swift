@@ -68,39 +68,40 @@ open class JCMessageTipsView: UIView, JCMessageContentViewType {
         #endif
     }
     
-    private var activityView: UIActivityIndicatorView!
-    private var errorInfoView: UIImageView!
-    private var indexPath: IndexPath?
-    private var unreadCountTips: UIButton!
-    private var message: JCMessageType!
-    
-    private func _commonInit() {
-        
-        activityView = UIActivityIndicatorView(frame: CGRect(x: 100 - 15, y: 5, width: 10, height: 10))
+    private lazy var activityView: UIActivityIndicatorView = {
+        let activityView = UIActivityIndicatorView(frame: CGRect(x: 100 - 15, y: 5, width: 10, height: 10))
         activityView.activityIndicatorViewStyle = .gray
         activityView.isUserInteractionEnabled = false
-        addSubview(activityView)
-        
+        return activityView
+    }()
+    private lazy var errorInfoView: UIImageView = {
         let image = UIImage.loadImage("com_icon_send_error")
-        errorInfoView = UIImageView(frame: CGRect(x: 100 - 21, y: 0, width: 21, height: 21))
+        let errorInfoView = UIImageView(frame: CGRect(x: 100 - 21, y: 0, width: 21, height: 21))
         errorInfoView.isUserInteractionEnabled = true
         errorInfoView.image = image
-        let tapGR = UITapGestureRecognizer(target: self, action: #selector(_tapHandler))
-        errorInfoView.addGestureRecognizer(tapGR)
         errorInfoView.isHidden = true
-        addSubview(errorInfoView)
-
-        #if READ_VERSION
-        unreadCountTips = UIButton(frame: CGRect(x: 0, y: 0, width: 95, height: 21))
+        return errorInfoView
+    }()
+    private lazy var unreadCountTips: UIButton = {
+        let unreadCountTips = UIButton(frame: CGRect(x: 0, y: 0, width: 95, height: 21))
         unreadCountTips.addTarget(self, action: #selector(_clickUnreadCount), for: .touchUpInside)
         unreadCountTips.setTitle("未读", for: .normal)
         unreadCountTips.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         unreadCountTips.setTitleColor(UIColor(netHex: 0x2DD0CF), for: .normal)
         unreadCountTips.isHidden = true
         unreadCountTips.contentHorizontalAlignment = .right
+        return unreadCountTips
+    }()
+    private var message: JCMessageType!
+    
+    private func _commonInit() {
+        addSubview(activityView)
+        let tapGR = UITapGestureRecognizer(target: self, action: #selector(_tapHandler))
+        errorInfoView.addGestureRecognizer(tapGR)
+        addSubview(errorInfoView)
+        #if READ_VERSION
         addSubview(unreadCountTips)
         #endif
-        
     }
     
     func _clickUnreadCount() {

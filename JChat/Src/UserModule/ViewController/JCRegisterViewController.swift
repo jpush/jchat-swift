@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
 
 class JCRegisterViewController: UIViewController {
     
@@ -25,6 +23,7 @@ class JCRegisterViewController: UIViewController {
         _updateRegisterButton()
     }
 
+    //MARK: - property
     fileprivate lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: -64, width: self.view.width, height: 64))
         view.backgroundColor = UIColor(netHex: 0x2DD0CF)
@@ -34,13 +33,11 @@ class JCRegisterViewController: UIViewController {
         title.text = "JChat"
         view.addSubview(title)
         
-        
         var rightButton = UIButton(frame: CGRect(x: view.width - 50 - 15, y: 20 + 7, width: 50, height: 30))
         rightButton.setTitle("去登录", for: .normal)
         rightButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         rightButton.addTarget(self, action: #selector(_clickLoginButton), for: .touchUpInside)
         view.addSubview(rightButton)
-        
         return view
     }()
     
@@ -138,11 +135,11 @@ class JCRegisterViewController: UIViewController {
     
     fileprivate lazy var bgView: UIView = UIView(frame: self.view.frame)
     
-    //MARK: - private func
+    //MARK: - private mothed
     private func _init() {
         self.title = "JChat"
-        self.view.backgroundColor = .white
-        self.automaticallyAdjustsScrollViewInsets = false
+        view.backgroundColor = .white
+        automaticallyAdjustsScrollViewInsets = false
         
         view.addSubview(bgView)
         view.addSubview(headerView)
@@ -188,7 +185,7 @@ class JCRegisterViewController: UIViewController {
             return
         }
         
-        MBProgressHUD_JChat.showMessage(message: "注册中", toView: self.view)
+        MBProgressHUD_JChat.showMessage(message: "注册中", toView: view)
 
         JMSGUser.register(withUsername: username, password: password) { (result, error) in
             let _ = DispatchQueue.main.async {

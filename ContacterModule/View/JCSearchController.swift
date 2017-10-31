@@ -32,45 +32,16 @@ class JCSearchController: UISearchController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        searchBar.setValue(searchBar, forKey: "searchBarTextField.frame")
-//        let searchBarTextField = searchBar.value(forKey: "_searchField") as! UITextField
-//        searchBarTextField.frame = searchBar.frame
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        print("viewDidAppear")
-
-    }
-
-    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        let frame = self.searchBar.frame
+        let frame = searchBar.frame
         if frame.origin.y > 0 && frame.origin.y < 20  {
             searchBar.frame = CGRect(x: frame.origin.x, y: 20, width: frame.size.width, height: 31)
         } else {
             searchBar.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: 31)
         }
-//        searchBar.setValue(searchBar, forKey: "searchBarTextField")
-//        let searchBarTextField = searchBar.value(forKey: "_searchField") as! UITextField
-//        searchBarTextField.frame = searchBar.frame
-    }
-
-
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-//        searchBar.setValue(searchBar.frame, forKey: "_searchField.frame")
-
-//        for view in (searchBar.subviews.first?.subviews)! {
-//
-//            if view.self is NSClassFromString("_UISearchBarSearchFieldBackgroundView") {
-//                let textField = view as! UITextField
-//                textField.frame = searchBar.frame
-//            }
-//        }
-//        NSClassFromString("_UISearchBarSearchFieldBackgroundView")?.setValue(searchBar.frame, forKey: "frame")
-
     }
 
     override func viewDidLayoutSubviews() {
@@ -79,21 +50,16 @@ class JCSearchController: UISearchController {
         searchBar.layer.borderWidth = 1
         searchBar.layer.masksToBounds = true
         
-        let frame = self.searchBar.frame
+        let frame = searchBar.frame
         if frame.origin.y > 0 && frame.origin.y < 20  {
             searchBar.frame = CGRect(x: frame.origin.x, y: 20, width: frame.size.width, height: 31)
         } else {
             searchBar.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: 31)
         }
-
-//        searchBar.setValue(searchBar.frame, forKey: "_searchField.frame")
-//        let searchBarTextField = searchBar.value(forKey: "_searchField") as! UITextField
-//        searchBarTextField.frame = searchBar.frame
-
     }
 
     private func _init() {
-        self.automaticallyAdjustsScrollViewInsets = false
+        automaticallyAdjustsScrollViewInsets = false
         dimsBackgroundDuringPresentation = false
         hidesNavigationBarDuringPresentation = true
         searchBar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 31)

@@ -19,38 +19,38 @@ class JCMineInfoCell: JCTableViewCell {
     
     var title: String {
         get {
-            return self.titleLabel.text!
+            return titleLabel.text ?? ""
         }
         set {
-            return self.titleLabel.text  = newValue
+            return titleLabel.text  = newValue
         }
     }
     
     var detail: String? {
         get {
-            return self.detailLabel.text
+            return detailLabel.text
         }
         set {
-            self.detailLabel.isHidden = false
-            self.detailLabel.text = newValue
+            detailLabel.isHidden = false
+            detailLabel.text = newValue
         }
     }
     
     var isShowSwitch: Bool {
         get {
-            return !self.switchButton.isHidden
+            return !switchButton.isHidden
         }
         set {
-            self.switchButton.isHidden = !newValue
+            switchButton.isHidden = !newValue
         }
     }
     
     var isSwitchOn: Bool {
         get {
-            return self.switchButton.isOn
+            return switchButton.isOn
         }
         set {
-            self.switchButton.isOn = newValue
+            switchButton.isOn = newValue
         }
     }
 
@@ -69,23 +69,33 @@ class JCMineInfoCell: JCTableViewCell {
         _init()
     }
     
-    private lazy var titleLabel: UILabel = UILabel()
-    private lazy var switchButton: UISwitch =  UISwitch()
-    private lazy var detailLabel: UILabel = UILabel()
-    
-    //MARK: - private func
-    private func _init() {
+    private lazy var titleLabel: UILabel = {
+        let titleLabel = UILabel()
         titleLabel.textAlignment = .left
         titleLabel.font = UIFont.systemFont(ofSize: 16)
-
+        titleLabel.backgroundColor = .white
+        titleLabel.layer.masksToBounds = true
+        return titleLabel
+    }()
+    private lazy var switchButton: UISwitch =  {
+        let switchButton = UISwitch()
         switchButton.isHidden = true
         switchButton.addTarget(self, action: #selector(clickSwitch(_:)), for: .valueChanged)
-        
+        return switchButton
+    }()
+    private lazy var detailLabel: UILabel = {
+        let detailLabel = UILabel()
         detailLabel.textAlignment = .right
         detailLabel.font = UIFont.systemFont(ofSize: 14)
         detailLabel.isHidden = true
         detailLabel.textColor = UIColor(netHex: 0x999999)
-        
+        detailLabel.backgroundColor = .white
+        detailLabel.layer.masksToBounds = true
+        return detailLabel
+    }()
+    
+    //MARK: - private func
+    private func _init() {
         contentView.addSubview(switchButton)
         contentView.addSubview(titleLabel)
         contentView.addSubview(detailLabel)
@@ -100,12 +110,8 @@ class JCMineInfoCell: JCTableViewCell {
         addConstraint(_JCLayoutConstraintMake(detailLabel, .right, .equal, contentView, .right))
         addConstraint(_JCLayoutConstraintMake(detailLabel, .height, .equal, contentView, .height))
 
-//        addConstraint(_JCLayoutConstraintMake(switchButton, .top, .equal, contentView, .top, 15.5))
         addConstraint(_JCLayoutConstraintMake(switchButton, .right, .equal, contentView, .right, -15))
-//        addConstraint(_JCLayoutConstraintMake(switchButton, .height, .equal, nil, .notAnAttribute, 14))
-//        addConstraint(_JCLayoutConstraintMake(switchButton, .width, .equal, nil, .notAnAttribute, 60))
         addConstraint(_JCLayoutConstraintMake(switchButton, .centerY, .equal, contentView, .centerY))
-        
     }
     
     func clickSwitch(_ sender: UISwitch) {

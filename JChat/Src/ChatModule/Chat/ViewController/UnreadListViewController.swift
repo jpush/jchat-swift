@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UnreadListViewController: UIViewController {
+class UnreadListViewController: UIViewController, CustomNavigation {
 
     var message: JMSGMessage!
 
@@ -19,7 +19,6 @@ class UnreadListViewController: UIViewController {
 
     fileprivate var unreadList = UnreadListTableView()
     fileprivate var readList = UnreadListTableView()
-    fileprivate lazy var leftButton = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 65 / 3))
 
     private lazy var tabedSlideView: DLTabedSlideView = {
         var tabedSlideView = DLTabedSlideView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: self.view.height - 64))
@@ -37,7 +36,7 @@ class UnreadListViewController: UIViewController {
         self.title = "消息查看列表"
         view.backgroundColor = .white
 
-        _setupNavigation()
+        customLeftBarButton(delegate: self)
 
         MBProgressHUD_JChat.showMessage(message: "获取中...", toView: view)
         message.messageReadDetailHandler { (readUsers, unreadUsers, error) in
@@ -70,25 +69,6 @@ class UnreadListViewController: UIViewController {
 
 
     }
-
-    private func _setupNavigation() {
-        leftButton.setImage(UIImage.loadImage("com_icon_back"), for: .normal)
-        leftButton.setImage(UIImage.loadImage("com_icon_back"), for: .highlighted)
-        leftButton.addTarget(self, action: #selector(_back), for: .touchUpInside)
-        leftButton.setTitle("返回", for: .normal)
-        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        leftButton.contentHorizontalAlignment = .left
-        let item = UIBarButtonItem(customView: leftButton)
-        navigationItem.leftBarButtonItems =  [item]
-        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        navigationController?.interactivePopGestureRecognizer?.delegate = self
-    }
-
-    @objc private func _back() {
-        navigationController?.popViewController(animated: true)
-    }
-
-
 }
 
 extension UnreadListViewController: DLTabedSlideViewDelegate {
@@ -119,6 +99,7 @@ class UnreadListTableView: UITableViewController {
     private func _init() {
         view.backgroundColor = .white
         tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
         tableView.register(JCContacterCell.self, forCellReuseIdentifier: "JCContacterCell")
         let line = UILabel(frame: CGRect(x: 0, y: 0, width: view.width, height: 0.5))
         line.layer.backgroundColor = UIColor(netHex: 0xD9D9D9).cgColor

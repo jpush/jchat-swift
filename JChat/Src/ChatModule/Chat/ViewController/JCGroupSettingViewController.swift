@@ -9,7 +9,7 @@
 import UIKit
 import JMessage
 
-class JCGroupSettingViewController: UIViewController {
+class JCGroupSettingViewController: UIViewController, CustomNavigation {
     
     var group: JMSGGroup!
     
@@ -27,13 +27,12 @@ class JCGroupSettingViewController: UIViewController {
     fileprivate lazy var users: [JMSGUser] = []
     fileprivate var isMyGroup = false
     fileprivate var isNeedUpdate = false
-    
-    fileprivate lazy var leftButton = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 65 / 3))
-    
+
     //MARK: - private func
     private func _init() {
-        self.view.backgroundColor = .white
         self.title = "群组信息"
+        view.backgroundColor = .white
+
         users = group.memberArray()
         memberCount = users.count
         
@@ -46,9 +45,6 @@ class JCGroupSettingViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.estimatedRowHeight = 0
-        tableView.estimatedSectionFooterHeight = 0
-        tableView.estimatedSectionHeaderHeight = 0
         tableView.sectionIndexColor = UIColor(netHex: 0x2dd0cf)
         tableView.sectionIndexBackgroundColor = .clear
         tableView.register(JCButtonCell.self, forCellReuseIdentifier: "JCButtonCell")
@@ -57,7 +53,7 @@ class JCGroupSettingViewController: UIViewController {
         tableView.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
         view.addSubview(tableView)
         
-        _setupNavigation()
+        customLeftBarButton(delegate: self)
         
         JMSGGroup.groupInfo(withGroupId: group.gid) { (result, error) in
             if error == nil {
@@ -73,29 +69,12 @@ class JCGroupSettingViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(_updateGroupInfo), name: NSNotification.Name(rawValue: kUpdateGroupInfo), object: nil)
     }
     
-    private func _setupNavigation() {
-        leftButton.setImage(UIImage.loadImage("com_icon_back"), for: .normal)
-        leftButton.setImage(UIImage.loadImage("com_icon_back"), for: .highlighted)
-        leftButton.addTarget(self, action: #selector(_back), for: .touchUpInside)
-        leftButton.setTitle("返回", for: .normal)
-        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        leftButton.contentHorizontalAlignment = .left
-        let item = UIBarButtonItem(customView: leftButton)
-        navigationItem.leftBarButtonItems =  [item]
-        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        navigationController?.interactivePopGestureRecognizer?.delegate = self
-    }
-    
-    func _back() {
-        navigationController?.popViewController(animated: true)
-    }
-    
     func _updateGroupInfo() {
         if !isNeedUpdate {
             let conv = JMSGConversation.groupConversation(withGroupId: group.gid)
             group = conv?.target as! JMSGGroup
         }
-        if group.memberArray().count != self.memberCount {
+        if group.memberArray().count != memberCount {
             isNeedUpdate = true
             memberCount = group.memberArray().count
         }
@@ -324,7 +303,6 @@ extension JCGroupSettingViewController: UIAlertViewDelegate {
             group.exit({ (result, error) in
                 MBProgressHUD_JChat.hide(forView: self.view, animated: true)
                 if error == nil {
-                    JMSGConversation.deleteGroupConversation(withGroupId: self.group.gid)
                     self.navigationController?.popToRootViewController(animated: true)
                 } else {
                     MBProgressHUD_JChat.show(text: "\(String.errorAlert(error! as NSError))", view: self.view)
@@ -340,32 +318,26 @@ extension JCGroupSettingViewController: JCMineInfoCellDelegate {
     func mineInfoCell(clickSwitchButton button: UISwitch, indexPath: IndexPath?) {
         if indexPath != nil {
             switch (indexPath?.row)! {
-            case 0:
+            case 1:
                 if group.isNoDisturb == button.isOn {
                     return
                 }
-//                MBProgressHUD_JChat.showMessage(message: "修改中", toView: self.view)
                 // 消息免打扰
                 group.setIsNoDisturb(button.isOn, handler: { (result, error) in
                     MBProgressHUD_JChat.hide(forView: self.view, animated: true)
-                    if error == nil {
-//                        MBProgressHUD_JChat.show(text: "修改成功", view: self.view)
-                    } else {
+                    if error != nil {
                         button.isOn = !button.isOn
                         MBProgressHUD_JChat.show(text: "\(String.errorAlert(error! as NSError))", view: self.view)
                     }
                 })
-            case 1:
+            case 2:
                 if group.isShieldMessage == button.isOn {
                     return
                 }
-//                MBProgressHUD_JChat.showMessage(message: "修改中", toView: self.view)
                 // 消息屏蔽
                 group.setIsShield(button.isOn, handler: { (result, error) in
                     MBProgressHUD_JChat.hide(forView: self.view, animated: true)
-                    if error == nil {
-//                        MBProgressHUD_JChat.show(text: "修改成功", view: self.view)
-                    } else {
+                    if error != nil {
                         button.isOn = !button.isOn
                         MBProgressHUD_JChat.show(text: "\(String.errorAlert(error! as NSError))", view: self.view)
                     }

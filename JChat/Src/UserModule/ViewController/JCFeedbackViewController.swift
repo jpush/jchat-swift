@@ -17,9 +17,15 @@ class JCFeedbackViewController: UIViewController {
     }
 
     fileprivate lazy var images: [UIImage] = []
-    
-    private lazy  var bgView: UIView = UIView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: 180))
-    private lazy  var textView: UITextView = {
+
+    private var topOffset: CGFloat {
+        if isIPhoneX {
+            return 88
+        }
+        return 64
+    }
+    private lazy var bgView: UIView = UIView(frame: CGRect(x: 0, y: self.topOffset, width: self.view.width, height: 180))
+    private lazy var textView: UITextView = {
         var textView = UITextView(frame: CGRect(x: 15, y: 12, width: self.view.width - 30, height: 65))
         textView.delegate = self
         textView.text = self.placeholder
@@ -27,10 +33,26 @@ class JCFeedbackViewController: UIViewController {
         textView.textColor = self.placeholderColor
         return textView
     }()
-    fileprivate lazy  var tipLabel: UILabel = UILabel()
+    fileprivate lazy  var tipLabel: UILabel = {
+        var tipLabel = UILabel(frame: CGRect(x: self.view.width - 60 - 15 , y: 82.5, width: 60, height: 16.5))
+        tipLabel.textAlignment = .right
+        tipLabel.textColor = UIColor(netHex: 0x999999)
+        tipLabel.font = UIFont.systemFont(ofSize: 16)
+        tipLabel.text = "300";
+        return tipLabel
+    }()
+    private lazy  var sendButton: UIButton = {
+        var sendButton = UIButton(frame: CGRect(x: 15, y: self.topOffset + 180 + 20, width: self.view.width - 30, height: 40))
+        let image = UIImage.createImage(color: UIColor(netHex: 0x2dd0cf),
+                                        size: CGSize(width: self.view.width - 30, height: 40))
+        sendButton.setBackgroundImage(image, for: .normal)
+        sendButton.layer.cornerRadius = 3.0
+        sendButton.layer.masksToBounds = true
+        sendButton.setTitle("提交", for: .normal)
+        sendButton.addTarget(self, action: #selector(_sendFeedBack), for: .touchUpInside)
+        return sendButton
+    }()
     fileprivate lazy  var photoBar: JCPhotoBar = JCPhotoBar(frame: CGRect(x: 0, y: 105, width: self.view.width, height: 65))
-    private lazy  var sendButton: UIButton = UIButton(frame: CGRect(x: 15, y: 64 + 180 + 20, width: self.view.width - 30, height: 40))
-    
     fileprivate let placeholder = "请输入您的问题和意见，感谢您的使用。"
     fileprivate let placeholderColor = UIColor(netHex: 0x999999)
     
@@ -41,29 +63,16 @@ class JCFeedbackViewController: UIViewController {
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(_tapView))
         view.addGestureRecognizer(tap)
-        
-        bgView.backgroundColor = .white
-        view.addSubview(bgView)
-        
+
         photoBar.delegate = self
         photoBar.bindData([])
-        
-        tipLabel.textAlignment = .right
-        tipLabel.textColor = UIColor(netHex: 0x999999)
-        tipLabel.font = UIFont.systemFont(ofSize: 16)
-        tipLabel.text = "300";
-        tipLabel.frame = CGRect(x: view.width - 60 - 15 , y: 82.5, width: 60, height: 16.5)
-        
+
+        bgView.backgroundColor = .white
         bgView.addSubview(tipLabel)
         bgView.addSubview(textView)
         bgView.addSubview(photoBar)
-        
-        let image = UIImage.createImage(color: UIColor(netHex: 0x2dd0cf), size: CGSize(width: self.view.width - 30, height: 40))
-        sendButton.setBackgroundImage(image, for: .normal)
-        sendButton.layer.cornerRadius = 3.0
-        sendButton.layer.masksToBounds = true
-        sendButton.setTitle("提交", for: .normal)
-        sendButton.addTarget(self, action: #selector(_sendFeedBack), for: .touchUpInside)
+
+        view.addSubview(bgView)
         view.addSubview(sendButton)
     }
     
@@ -72,22 +81,17 @@ class JCFeedbackViewController: UIViewController {
             MBProgressHUD_JChat.show(text: "反馈内容不能为空", view: view)
             return
         }
-        let optionalContent = JMSGOptionalContent()
-        optionalContent.needReadReceipt = true
         if !textView.text.isEmpty && textView.text != placeholder {
             let content = JMSGTextContent(text: textView.text)
             let message = JMSGMessage.createSingleMessage(with: content, username: "feedback_ios")
-            JMSGMessage.send(message, optionalContent: optionalContent)
-//            JMSGMessage.sendSingleTextMessage(textView.text, toUser: "feedback_ios")
+            JMSGMessage.send(message, optionalContent: JMSGOptionalContent.ex.default)
         }
         images.forEach { (image) in
             let content = JMSGImageContent(imageData: UIImageJPEGRepresentation(image, 1.0)!)
             let message = JMSGMessage.createSingleMessage(with: content!, username: "feedback_ios")
-            JMSGMessage.send(message, optionalContent: optionalContent)
-//            JMSGMessage.sendSingleImageMessage(UIImageJPEGRepresentation(image, 1.0)!, toUser: "feedback_ios")
+            JMSGMessage.send(message, optionalContent: JMSGOptionalContent.ex.default)
         }
         JMSGConversation.deleteSingleConversation(withUsername: "feedback_ios")
-//        MBProgressHUD_JChat.show(text: "反馈成功", view: view)
         view.endEditing(true)
         JCAlertView.bulid().setDelegate(self).setTitle("提交成功").setMessage("感谢您的反馈，我们将持续为您改进").addButton("确定").setTag(1001).show()
     }
@@ -129,10 +133,7 @@ extension JCFeedbackViewController: JCPhotoBarDelegate {
         let browserImageVC = JCImageBrowserViewController()
         browserImageVC.imageArr = images
         browserImageVC.imgCurrentIndex = index
-        
-        self.present(browserImageVC, animated: true) {
-            
-        }
+        present(browserImageVC, animated: true) {}
     }
     
     func photoBarDeleteImage(index: Int) {
@@ -148,9 +149,6 @@ extension JCFeedbackViewController: YHPhotoPickerViewControllerDelegate {
     
     func yhPhotoPickerViewController(_ PhotoPickerViewController: YHSelectPhotoViewController!, selectedPhotos photos: [Any]!) {
         for image in photos as! [UIImage] {
-            if images.count >= 4 {
-                break
-            }
             images.append(image)
         }
         photoBar.bindData(images)

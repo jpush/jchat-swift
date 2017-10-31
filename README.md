@@ -20,7 +20,7 @@ JChat 同时具备好友模式和无好友模式：
 * 无好友模式：无需将对方加为好友，通过搜索对方的用户名可直接发起聊天。
 * 好友模式：可申请将对方加为好友，对方会收到好友验证，验证通过则互为好友关系。
 
-目前已覆盖 [Android](https://github.com/jpush/jchat-android) 和 iOS 平台，之后将提供 web 版本，开发者可参照 JChat 快速打造自己的 APP，提高开发效率。
+目前已覆盖 iOS、 [Android](https://github.com/jpush/jchat-android) 、 [Web](https://github.com/jpush/jchat-web) 和 [Windows](https://github.com/jpush/jchat-windows) 平台，开发者可参照 JChat 快速打造自己的 APP，提高开发效率。
 
 ![image](Images/1.gif)
 
@@ -59,6 +59,12 @@ pod install（这个可能比较慢，请耐心等待……）
 
 1. 填写项目工程中的 Bundle Identifier
 2. 在 AppDelegate.swift 文件中，按提示填入自己项目的 AppKey。AppKey 是 JMessage SDK 运行的基本参数，如示未获取到应的 AppKey，请到极 [极光官方网站](https://jpush.cn) 登录控制台创建应用获取。
+
+### 功能配置
+
+一、消息回执功能
+
+如果不需要支持已读未读功能，在 Build Settings 中，找到 Swift Compiler - Custom Flags，并在其中的 Other Swift Flags 删除 -D READ_VERSION。
 
 ### JMessage 文档
 
