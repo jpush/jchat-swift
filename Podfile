@@ -11,8 +11,8 @@ target 'JChat' do
   pod 'FMDB', '~> 2.6.2'
   pod 'BaiduMapKit', '~> 3.3.2'
   pod 'JMessage', '~> 3.3.0’
-  pod 'RxSwift'
-  pod 'RxCocoa'
+  pod 'RxSwift', '~> 3.6.1'
+  pod 'RxCocoa', '~> 3.6.1'
 
   # Pods for JChat
 
