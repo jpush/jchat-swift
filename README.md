@@ -6,7 +6,7 @@
 [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat
 		)](http://mit-license.org)
 
-		
+​		
 ### 简介
 
 JChat 是基于 JMessage SDK 带有完整 UI 界面的即时通讯应用。 演示了完整的即时通讯功能，包括：
@@ -54,11 +54,11 @@ pod install（这个可能比较慢，请耐心等待……）
 ### 运行应用
 
 一、打开项目文件 JChat.xcworkspace
-	
+​	
 二、配置运行的基本属性
 
 1. 填写项目工程中的 Bundle Identifier
-2. 在 AppDelegate.swift 文件中，按提示填入自己项目的 AppKey。AppKey 是 JMessage SDK 运行的基本参数，如示未获取到应的 AppKey，请到极 [极光官方网站](https://jpush.cn) 登录控制台创建应用获取。
+2. 在 AppDelegate.swift 文件中，按提示填入自己项目的 AppKey。AppKey 是 JMessage SDK 运行的基本参数，如示未获取到应的 AppKey，请到极 [极光官方网站](https://jiguang.cn) 登录控制台创建应用获取。
 
 ### 功能配置
 
