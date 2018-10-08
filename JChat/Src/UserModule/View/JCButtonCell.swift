@@ -76,7 +76,7 @@ class JCButtonCell: UITableViewCell {
     }
     
     //MARK: - click func
-    func _click(_ sender: UIButton) {
+    @objc func _click(_ sender: UIButton) {
         delegate?.buttonCell?(clickButton: sender)
     }
 }

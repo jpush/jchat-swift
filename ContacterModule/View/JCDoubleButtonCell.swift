@@ -103,11 +103,11 @@ class JCDoubleButtonCell: UITableViewCell {
     }
     
     //MARK: - click func
-    func _clickLeftButton(_ sender: UIButton) {
+    @objc func _clickLeftButton(_ sender: UIButton) {
         delegate?.doubleButtonCell?(clickLeftButton: sender)
     }
     
-    func _clickRightButton(_ sender: UIButton) {
+    @objc func _clickRightButton(_ sender: UIButton) {
         delegate?.doubleButtonCell?(clickRightButton: sender)
     }
 

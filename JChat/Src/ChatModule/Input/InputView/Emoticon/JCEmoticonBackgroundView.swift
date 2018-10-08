@@ -81,15 +81,15 @@ internal class JCEmoticonBackgroundView: UIView {
         _middleView.translatesAutoresizingMaskIntoConstraints = false
         
         _middleView.image = _SAIEmoticonPreviewBackgroundImageForSmall
-        _middleView.setContentHuggingPriority(UILayoutPriorityRequired, for: .horizontal)
-        _middleView.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: .horizontal)
+        _middleView.setContentHuggingPriority(UILayoutPriority.required, for: .horizontal)
+        _middleView.setContentCompressionResistancePriority(UILayoutPriority.required, for: .horizontal)
         
         addSubview(_leftView)
         addSubview(_rightView)
         addSubview(_middleView)
         
         addConstraint(_JCEmoticonLayoutConstraintMake(_leftView, .top, .equal, self, .top))
-        addConstraint(_JCEmoticonLayoutConstraintMake(_leftView, .left, .equal, self, .left, priority: 751))
+        addConstraint(_JCEmoticonLayoutConstraintMake(_leftView, .left, .equal, self, .left, priority: UILayoutPriority(rawValue: 751)))
         addConstraint(_JCEmoticonLayoutConstraintMake(_leftView, .right, .equal, _middleView, .left))
         addConstraint(_JCEmoticonLayoutConstraintMake(_leftView, .bottom, .equal, self, .bottom))
         
@@ -99,7 +99,7 @@ internal class JCEmoticonBackgroundView: UIView {
         
         addConstraint(_JCEmoticonLayoutConstraintMake(_rightView, .top, .equal, self, .top))
         addConstraint(_JCEmoticonLayoutConstraintMake(_rightView, .left, .equal, _middleView, .right))
-        addConstraint(_JCEmoticonLayoutConstraintMake(_rightView, .right, .equal, self, .right, priority: 751))
+        addConstraint(_JCEmoticonLayoutConstraintMake(_rightView, .right, .equal, self, .right, priority: UILayoutPriority(rawValue: 751)))
         addConstraint(_JCEmoticonLayoutConstraintMake(_rightView, .bottom, .equal, self, .bottom))
     }
     

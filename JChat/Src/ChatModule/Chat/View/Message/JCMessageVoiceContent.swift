@@ -29,7 +29,7 @@ open class JCMessageVoiceContent: NSObject, JCMessageContentType {
         if minute == 0 {
             string = "\(second)''"
         }
-        attributedText = NSAttributedString(string: string, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 14)])
+        attributedText = NSAttributedString(string: string, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)])
         
         return .init(width: 20 + 38 + 20, height: 26)
     }

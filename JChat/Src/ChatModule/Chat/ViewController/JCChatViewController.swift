@@ -194,7 +194,7 @@ class JCChatViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(_updateFileMessage(_:)), name: NSNotification.Name(rawValue: kUpdateFileMessage), object: nil)
     }
     
-    func _updateFileMessage(_ notification: Notification) {
+    @objc func _updateFileMessage(_ notification: Notification) {
         let userInfo = notification.userInfo
         let msgId = userInfo?[kUpdateFileMessage] as! String
         let message = conversation.message(withMessageId: msgId)!
@@ -213,7 +213,7 @@ class JCChatViewController: UIViewController {
     }
 
 
-    func _reloadMessage() {
+    @objc func _reloadMessage() {
         _removeAllMessage()
         messagePage = 0
         _loadMessage(messagePage)
@@ -222,13 +222,13 @@ class JCChatViewController: UIViewController {
         }
     }
     
-    func _removeAllMessage() {
+    @objc func _removeAllMessage() {
         jMessageCount = 0
         messages.removeAll()
         chatView.removeAll()
     }
     
-    func _tapView() {
+    @objc func _tapView() {
         view.endEditing(true)
         toolbar.resignFirstResponder()
     }
@@ -251,7 +251,7 @@ class JCChatViewController: UIViewController {
         navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
-    func _back() {
+    @objc func _back() {
         navigationController?.popViewController(animated: true)
     }
     
@@ -414,7 +414,7 @@ class JCChatViewController: UIViewController {
         send(msg, message)
     }
     
-    func keyboardFrameChanged(_ notification: Notification) {
+    @objc func keyboardFrameChanged(_ notification: Notification) {
         let dic = NSDictionary(dictionary: (notification as NSNotification).userInfo!)
         let keyboardValue = dic.object(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
         let bottomDistance = UIScreen.main.bounds.size.height - keyboardValue.cgRectValue.origin.y
@@ -432,7 +432,7 @@ class JCChatViewController: UIViewController {
         }
     }
     
-    func _sendHandler() {
+    @objc func _sendHandler() {
         let text = toolbar.attributedText
         if text != nil && (text?.length)! > 0 {
             send(forText: text!)
@@ -440,13 +440,13 @@ class JCChatViewController: UIViewController {
         }
     }
     
-    func _getSingleInfo() {
+    @objc func _getSingleInfo() {
         let vc = JCSingleSettingViewController()
         vc.user = conversation.target as! JMSGUser
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func _getGroupInfo() {
+    @objc func _getGroupInfo() {
         let vc = JCGroupSettingViewController()
         let group = conversation.target as! JMSGGroup
         vc.group = group
@@ -935,7 +935,7 @@ extension JCChatViewController: JCChatViewDelegate {
                 if msg.isHaveRead {
                     continue
                 }
-                msg.setMessageHaveRead({ _ in
+                msg.setMessageHaveRead({ _,_  in
 
                 })
             }
@@ -1184,7 +1184,7 @@ extension JCChatViewController: SAIInputBarDelegate, SAIInputBarDisplayable {
         recordHelper.updateMeterDelegate = recordingHub
         recordingHub.startRecordingHUDAtView(view)
         recordingHub.frame = CGRect(x: view.centerX - 70, y: view.centerY - 70, width: 136, height: 136)
-        recordHelper.startRecordingWithPath(String.getRecorderPath()) { _ in
+        recordHelper.startRecordingWithPath(String.getRecorderPath()) { 
         }
     }
     

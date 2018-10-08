@@ -76,7 +76,7 @@ class JCFeedbackViewController: UIViewController {
         view.addSubview(sendButton)
     }
     
-    func _sendFeedBack() {
+    @objc func _sendFeedBack() {
         if textView.text == placeholder && images.count == 0 {
             MBProgressHUD_JChat.show(text: "反馈内容不能为空", view: view)
             return
@@ -96,7 +96,7 @@ class JCFeedbackViewController: UIViewController {
         JCAlertView.bulid().setDelegate(self).setTitle("提交成功").setMessage("感谢您的反馈，我们将持续为您改进").addButton("确定").setTag(1001).show()
     }
     
-    func _tapView() {
+    @objc func _tapView() {
         view.endEditing(true)
     }
 

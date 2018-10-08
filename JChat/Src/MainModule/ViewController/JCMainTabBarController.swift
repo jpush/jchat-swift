@@ -24,7 +24,7 @@ class JCMainTabBarController: UITabBarController {
         let chatTabBar = UITabBarItem(title: "会话",
                                       image: UIImage.loadImage("com_icon_chat")?.withRenderingMode(.alwaysOriginal),
                                       selectedImage: UIImage.loadImage("com_icon_chat_pre")?.withRenderingMode(.alwaysOriginal))
-        chatTabBar.setTitleTextAttributes([NSForegroundColorAttributeName : UIColor.black], for: .selected)
+        chatTabBar.setTitleTextAttributes([NSAttributedStringKey.foregroundColor : UIColor.black], for: .selected)
         let chatNav = JCNavigationController(rootViewController: conversationVC)
         chatNav.tabBarItem = chatTabBar
         
@@ -34,7 +34,7 @@ class JCMainTabBarController: UITabBarController {
         let contactsTabBar = UITabBarItem(title: "通讯录",
                                           image: UIImage.loadImage("com_icon_contacter")?.withRenderingMode(.alwaysOriginal),
                                           selectedImage: UIImage.loadImage("com_icon_contacter_pre")?.withRenderingMode(.alwaysOriginal))
-        contactsTabBar.setTitleTextAttributes([NSForegroundColorAttributeName : UIColor.black], for: .selected)
+        contactsTabBar.setTitleTextAttributes([NSAttributedStringKey.foregroundColor : UIColor.black], for: .selected)
         let contactsNav = JCNavigationController(rootViewController: contactsVC)
         if UserDefaults.standard.object(forKey: kUnreadInvitationCount) != nil {
             let count = UserDefaults.standard.object(forKey: kUnreadInvitationCount) as! Int
@@ -54,7 +54,7 @@ class JCMainTabBarController: UITabBarController {
         let mineTabBar = UITabBarItem(title: "我",
                                       image: UIImage.loadImage("com_icon_mine")?.withRenderingMode(.alwaysOriginal),
                                       selectedImage: UIImage.loadImage("com_icon_mine_pre")?.withRenderingMode(.alwaysOriginal))
-        mineTabBar.setTitleTextAttributes([NSForegroundColorAttributeName : UIColor.black], for: .selected)
+        mineTabBar.setTitleTextAttributes([NSAttributedStringKey.foregroundColor : UIColor.black], for: .selected)
         let mineNav = JCNavigationController(rootViewController: mineVC)
         mineNav.tabBarItem = mineTabBar
         

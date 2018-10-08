@@ -19,13 +19,13 @@ protocol ThemeProtocol {
 }
 
 extension UIView {
-    func updateTheme() {
+    @objc func updateTheme() {
         print("update view theme")
     }
 }
 
 extension UIViewController {
-    func updateTheme() {
+    @objc func updateTheme() {
         print("update view controller theme")
     }
 }

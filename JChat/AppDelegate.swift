@@ -27,6 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     //MARK: - life cycle
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        // open override class func initialize() remove from swoft 4.0 , 在这里统一处理
+        SAIInputBar.initializeOnceMethod()
 
         #if READ_VERSION
             print("-------------READ_VERSION------------")

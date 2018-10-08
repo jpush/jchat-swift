@@ -69,7 +69,7 @@ class JCGroupSettingViewController: UIViewController, CustomNavigation {
         NotificationCenter.default.addObserver(self, selector: #selector(_updateGroupInfo), name: NSNotification.Name(rawValue: kUpdateGroupInfo), object: nil)
     }
     
-    func _updateGroupInfo() {
+    @objc func _updateGroupInfo() {
         if !isNeedUpdate {
             let conv = JMSGConversation.groupConversation(withGroupId: group.gid)
             group = conv?.target as! JMSGGroup

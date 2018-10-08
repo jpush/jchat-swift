@@ -311,7 +311,7 @@ internal class SAIInputAccessoryView: UIView {
         _textField.scrollIndicatorInsets = UIEdgeInsetsMake(2, 0, 2, 0)
         _textField.translatesAutoresizingMaskIntoConstraints = false
         _textField.backgroundView.translatesAutoresizingMaskIntoConstraints = false
-        _textField.typingAttributes[NSParagraphStyleAttributeName] = {
+        _textField.typingAttributes[NSAttributedStringKey.paragraphStyle.rawValue] = {
             let style = NSMutableParagraphStyle()
             style.lineBreakMode = .byCharWrapping
             return style
@@ -351,10 +351,10 @@ internal class SAIInputAccessoryView: UIView {
         _collectionView.dataSource = self
         _collectionView.delegate = self
         _collectionView.translatesAutoresizingMaskIntoConstraints = false
-        _collectionView.setContentHuggingPriority(700, for: .horizontal)
-        _collectionView.setContentHuggingPriority(700, for: .vertical)
-        _collectionView.setContentCompressionResistancePriority(200, for: .horizontal)
-        _collectionView.setContentCompressionResistancePriority(200, for: .vertical)
+        _collectionView.setContentHuggingPriority(UILayoutPriority(rawValue: 700), for: .horizontal)
+        _collectionView.setContentHuggingPriority(UILayoutPriority(rawValue: 700), for: .vertical)
+        _collectionView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 200), for: .horizontal)
+        _collectionView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 200), for: .vertical)
         
         // update center bar item
         _setBarItems([], atPosition: .center)
@@ -395,23 +395,23 @@ internal class SAIInputAccessoryView: UIView {
     }
     
     // click event
-    open func _touchDown() {
+    @objc open func _touchDown() {
         delegate?.inputAccessoryView(touchDown: _recordButton)
     }
     
-    open func _touchUpInside() {
+    @objc open func _touchUpInside() {
         delegate?.inputAccessoryView(touchUpInside: _recordButton)
     }
     
-    open func _touchUpOutside() {
+    @objc open func _touchUpOutside() {
         delegate?.inputAccessoryView(touchUpOutside: _recordButton)
     }
     
-    open func _dragOutside() {
+    @objc open func _dragOutside() {
        delegate?.inputAccessoryView(dragOutside: _recordButton)
     }
     
-    open func _dragInside() {
+    @objc open func _dragInside() {
         delegate?.inputAccessoryView(dragInside: _recordButton)
     }
     

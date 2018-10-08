@@ -114,7 +114,7 @@ class JCMineInfoCell: JCTableViewCell {
         addConstraint(_JCLayoutConstraintMake(switchButton, .centerY, .equal, contentView, .centerY))
     }
     
-    func clickSwitch(_ sender: UISwitch) {
+    @objc func clickSwitch(_ sender: UISwitch) {
         delegate?.mineInfoCell?(clickSwitchButton: sender, indexPath: indexPate)
     }
 

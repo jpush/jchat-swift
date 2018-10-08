@@ -30,11 +30,11 @@ open class JCCEmoticonLarge: JCCEmoticon {
         image.draw(in: nframe1)
         
         // 标题
-        let cfg = [NSFontAttributeName: UIFont.systemFont(ofSize: 12),
-                   NSForegroundColorAttributeName: UIColor.gray]
+        let cfg = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12),
+                   NSAttributedStringKey.foregroundColor: UIColor.gray]
         let name = title as NSString
         
-        let titleSize = name.size(attributes: cfg)
+        let titleSize = name.size(withAttributes: cfg)
         
         nframe2.origin.x = nframe2.minX + (nframe2.width - titleSize.width) / 2
         nframe2.origin.y = nframe2.minY + (nframe2.height - titleSize.height) / 2

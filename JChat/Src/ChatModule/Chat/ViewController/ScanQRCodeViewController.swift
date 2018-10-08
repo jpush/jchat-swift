@@ -18,15 +18,16 @@ class ScanQRCodeViewController: UIViewController {
         self.title = "扫一扫"
         view.backgroundColor = .white
         
-        let authStatus = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+        let authStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
         if(authStatus == .restricted || authStatus == .denied){
             let alertView = UIAlertView(title: "无法访问相机", message: "请在设备的设置-趣阅中允许访问相机。",delegate: self, cancelButtonTitle: "好的", otherButtonTitles: "去设置")
             alertView.show()
             return;
         }
-        
-        previewLayer.frame = view.frame
-        view.layer.addSublayer(previewLayer)
+        if let previewLayer = previewLayer {
+            previewLayer.frame = view.frame
+            view.layer.addSublayer(previewLayer)
+        }
         session.startRunning()
         
         let borderView = UIImageView(frame: CGRect(x: (view.width - 240) / 2, y: 123, width: 240, height: 240))
@@ -82,26 +83,28 @@ class ScanQRCodeViewController: UIViewController {
     
     fileprivate lazy var session: AVCaptureSession = {
         var session = AVCaptureSession()
-        var device = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        guard let device = AVCaptureDevice.default(for: AVMediaType.video) else {
+            return session
+        }
         var input: AVCaptureDeviceInput?
         do {
             input = try AVCaptureDeviceInput(device: device)
         } catch {
             print(error)
         }
-        if input != nil {
+        if let input = input {
             session.addInput(input)
         }
         var output = AVCaptureMetadataOutput()
         session.addOutput(output)
-        output.metadataObjectTypes = [AVMetadataObjectTypeQRCode]
+        output.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
         output.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
         
         return session
     }()
-    fileprivate lazy var previewLayer: AVCaptureVideoPreviewLayer = {
+    fileprivate lazy var previewLayer: AVCaptureVideoPreviewLayer? = {
         var previewLayer = AVCaptureVideoPreviewLayer(session: self.session)
-        return previewLayer!
+        return previewLayer
     }()
     
     private func _getBackgroundImage() -> UIImage? {
@@ -122,7 +125,7 @@ class ScanQRCodeViewController: UIViewController {
     
     var isAnimating = false
     
-    func startQRCAnimate() {
+    @objc func startQRCAnimate() {
         if isStopAnimate || isAnimating {
             return
         }
@@ -147,7 +150,9 @@ extension ScanQRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
             guard let object = metadataObject as? AVMetadataMachineReadableCodeObject else {
                 return
             }
-            
+
+            guard let previewLayer = previewLayer else { return }
+
             let barCodeObject = previewLayer.transformedMetadataObject(for: object)
             let frame = barCodeObject!.bounds
             
@@ -168,7 +173,7 @@ extension ScanQRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                 return
             }
             
-            if object.type == AVMetadataObjectTypeQRCode {
+            if object.type == AVMetadataObject.ObjectType.qr {
                 guard let url = object.stringValue else {
                     return
                 }

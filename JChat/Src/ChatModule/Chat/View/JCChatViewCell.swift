@@ -228,12 +228,12 @@ open class JCChatViewCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         return true
     }
     
-    func copyMessage(_ sender: Any) {}
-    func deleteMessage(_ sender: Any) {}
-    func forwardMessage(_ sender: Any) {}
-    func withdrawMessage(_ sender: Any) {}
+    @objc func copyMessage(_ sender: Any) {}
+    @objc func deleteMessage(_ sender: Any) {}
+    @objc func forwardMessage(_ sender: Any) {}
+    @objc func withdrawMessage(_ sender: Any) {}
 
-    private dynamic func _handleMenuGesture(_ sender: UILongPressGestureRecognizer) {
+    @objc private dynamic func _handleMenuGesture(_ sender: UILongPressGestureRecognizer) {
         guard sender.state == .began else {
             return
         }

@@ -105,7 +105,7 @@ class JCRegisterInfoViewController: UIViewController {
         view.addGestureRecognizer(tap)
     }
     
-    func textFieldDidChanged(_ textField: UITextField) {
+    @objc func textFieldDidChanged(_ textField: UITextField) {
         if textField.markedTextRange == nil {
             let text = textField.text!
             if text.characters.count > 30 {
@@ -117,11 +117,11 @@ class JCRegisterInfoViewController: UIViewController {
         }
     }
     
-    func _tapView() {
+    @objc func _tapView() {
         view.endEditing(true)
     }
      
-    func _tapHandler() {
+    @objc func _tapHandler() {
         view.endEditing(true)
         let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "  从相册中选择", "拍照")
         actionSheet.tag = 1001
@@ -129,7 +129,7 @@ class JCRegisterInfoViewController: UIViewController {
     }
 
     //MARK: - click event
-    func _userRegister() {
+    @objc func _userRegister() {
         MBProgressHUD_JChat.showMessage(message: "保存中", toView: self.view)
         userLogin(withUsername: self.username, password: self.password)
     }

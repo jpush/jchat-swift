@@ -66,7 +66,7 @@ class JCNicknameViewController: UIViewController {
         navigationItem.rightBarButtonItem =  navRightButton
     }
     
-    func textFieldDidChanged(_ textField: UITextField) {
+    @objc func textFieldDidChanged(_ textField: UITextField) {
         // markedTextRange指的是当前高亮选中的，除了长按选中，用户中文输入拼音过程往往也是高亮选中状态
         if textField.markedTextRange == nil {
             let text = textField.text!
@@ -82,7 +82,7 @@ class JCNicknameViewController: UIViewController {
     }
     
     //MARK: - click func
-    func _saveNickname() {
+    @objc func _saveNickname() {
         nicknameTextField.resignFirstResponder()
         let nickname = nicknameTextField.text!
         JMSGUser.updateMyInfo(withParameter: nickname, userFieldType: .fieldsNickname) { (resultObject, error) -> Void in

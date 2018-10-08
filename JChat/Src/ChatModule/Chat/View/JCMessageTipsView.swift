@@ -104,11 +104,11 @@ open class JCMessageTipsView: UIView, JCMessageContentViewType {
         #endif
     }
     
-    func _clickUnreadCount() {
+    @objc func _clickUnreadCount() {
         delegate?.tapUnreadTips?(message: message)
     }
     
-    func _tapHandler(sender: UITapGestureRecognizer) {
+    @objc func _tapHandler(sender: UITapGestureRecognizer) {
         delegate?.clickTips?(message: message)
     }
 }

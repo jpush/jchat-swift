@@ -51,8 +51,8 @@ class JCSearchResultViewController: UIViewController {
     fileprivate lazy var users: [JMSGUser] = []
     fileprivate lazy var groups: [JMSGGroup] = []
     
-    dynamic lazy var filteredUsersArray: [JMSGUser] = []
-    dynamic lazy var filteredGroupsArray: [JMSGGroup] = []
+    @objc dynamic lazy var filteredUsersArray: [JMSGUser] = []
+    @objc dynamic lazy var filteredGroupsArray: [JMSGGroup] = []
     
     fileprivate var searchString = ""
     
@@ -94,7 +94,7 @@ class JCSearchResultViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(note:)), name: NSNotification.Name(rawValue: "kNetworkReachabilityChangedNotification"), object: nil)
     }
     
-    func reachabilityChanged(note: NSNotification) {
+    @objc func reachabilityChanged(note: NSNotification) {
         if let curReach = note.object as? Reachability {
             let status = curReach.currentReachabilityStatus()
             switch status {
@@ -172,7 +172,7 @@ class JCSearchResultViewController: UIViewController {
             tableView.isHidden = true
             
             let attr = NSMutableAttributedString(string: "没有搜到 ")
-            let attrSearchString = NSAttributedString(string: searchString, attributes: [ NSForegroundColorAttributeName : UIColor(netHex: 0x2dd0cf), NSFontAttributeName : UIFont.boldSystemFont(ofSize: 16.0)])
+            let attrSearchString = NSAttributedString(string: searchString, attributes: [ NSAttributedStringKey.foregroundColor : UIColor(netHex: 0x2dd0cf), NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 16.0)])
             
             attr.append(attrSearchString)
             attr.append(NSAttributedString(string:  " 相关的信息"))

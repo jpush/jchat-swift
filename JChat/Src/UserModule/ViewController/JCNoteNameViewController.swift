@@ -71,7 +71,7 @@ class JCNoteNameViewController: UIViewController {
         navigationItem.rightBarButtonItem =  navRightButton
     }
     
-    func textFieldDidChanged(_ textField: UITextField) {
+    @objc func textFieldDidChanged(_ textField: UITextField) {
         // markedTextRange指的是当前高亮选中的，除了长按选中，用户中文输入拼音过程往往也是高亮选中状态
         if textField.markedTextRange == nil {
             let text = textField.text!
@@ -86,7 +86,7 @@ class JCNoteNameViewController: UIViewController {
     }
     
     //MARK: - click func
-    func _saveNickname() {
+    @objc func _saveNickname() {
         noteNameTextField.resignFirstResponder()
         MBProgressHUD_JChat.showMessage(message: "修改中", toView: self.view)
         user.updateNoteName(noteNameTextField.text!) { (result, error) in

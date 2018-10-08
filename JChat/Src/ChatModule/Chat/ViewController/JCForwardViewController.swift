@@ -79,7 +79,7 @@ class JCForwardViewController: UIViewController {
         navigationItem.leftBarButtonItem = item
     }
     
-    func _clickNavleftButton() {
+    @objc func _clickNavleftButton() {
         dismiss(animated: true, completion: nil)
     }
     

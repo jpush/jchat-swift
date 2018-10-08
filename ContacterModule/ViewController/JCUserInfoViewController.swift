@@ -55,11 +55,11 @@ class JCUserInfoViewController: UIViewController {
         navigationItem.rightBarButtonItem =  item
     }
     
-    func _updateUserInfo() {
+    @objc func _updateUserInfo() {
         tableview.reloadData()
     }
     
-    func _clickNavRightButton() {
+    @objc func _clickNavRightButton() {
         let vc = JCFriendSettingViewController()
         vc.user = self.user
         navigationController?.pushViewController(vc, animated: true)

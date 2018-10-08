@@ -55,7 +55,7 @@ class JCGroupDescViewController: UIViewController {
     }
     
     //MARK: - click func
-    func _saveSignature() {
+    @objc func _saveSignature() {
         descTextView.resignFirstResponder()
         let desc = descTextView.text!
         MBProgressHUD_JChat.showMessage(message: "修改中...", toView: view)

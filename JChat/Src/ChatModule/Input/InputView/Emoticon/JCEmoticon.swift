@@ -39,8 +39,8 @@ open class JCEmoticon: NSObject {
             image.draw(in: nrect)
             
         case let str as NSString:
-            let cfg = [NSFontAttributeName: UIFont.systemFont(ofSize: 32)]
-            let size = str.size(attributes: cfg)
+            let cfg = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 32)]
+            let size = str.size(withAttributes: cfg)
             let nrect = CGRect(x: rect.minX + (rect.width - size.width + 3) / 2,
                                y: rect.minY + (rect.height - size.height) / 2,
                                width: size.width,

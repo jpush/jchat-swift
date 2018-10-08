@@ -89,7 +89,7 @@ class JCUserAvatorCell: JCTableViewCell {
         }
     }
     
-    func _tapHandler(sender:UITapGestureRecognizer) {
+    @objc func _tapHandler(sender:UITapGestureRecognizer) {
         delegate?.tapAvator?(self.avatorView.image)
     }
 
