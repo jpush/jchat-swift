@@ -127,7 +127,7 @@ class JCVerificationCell: JCTableViewCell {
         
     }
     
-    func _clickAcceptButton() {
+    @objc func _clickAcceptButton() {
         JMSGFriendManager.acceptInvitation(withUsername: info.username, appKey: info.appkey) { (result, error) in
             if error == nil {
                 self.info.state = JCVerificationType.accept.rawValue

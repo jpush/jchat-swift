@@ -78,11 +78,11 @@ class JCDatePickerViwe: UIView {
     }
     
     //MARK: - click event
-    func _cancel(_ sender: UIButton) {
+    @objc func _cancel(_ sender: UIButton) {
         delegate?.datePicker?(cancel: sender, date: datePicker.date)
     }
     
-    func _finish(_ sender: UIButton) {
+    @objc func _finish(_ sender: UIButton) {
         delegate?.datePicker?(finish: sender, date: datePicker.date)
     }
 

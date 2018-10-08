@@ -83,7 +83,7 @@ class JCSignatureViewController: UIViewController {
     }
     
     //MARK: - click func
-    func _saveSignature() {
+    @objc func _saveSignature() {
         signatureTextView.resignFirstResponder()
         JMSGUser.updateMyInfo(withParameter: signatureTextView.text!, userFieldType: .fieldsSignature) { (resultObject, error) -> Void in
             if error == nil {
@@ -101,7 +101,7 @@ extension JCSignatureViewController: UITextViewDelegate {
         if textView.markedTextRange == nil {
             let text = textView.text!
             if text.characters.count > 30 {
-                let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 30))
+                let range = text.startIndex ..< text.index(text.startIndex, offsetBy: 30)
                 let subText = text.substring(with: range)
                 textView.text = subText
             }

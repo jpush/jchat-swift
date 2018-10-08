@@ -44,7 +44,7 @@ public enum SAIInputMode: CustomStringConvertible {
     public var description: String {
         switch self {
         case .none: return "None"
-        case .editing(_): return "Editing"
+        case .editing: return "Editing"
         case .audio: return "Audio"
         case .selecting(_): return "Selecting"
         }
@@ -422,14 +422,14 @@ open class SAIInputBar: UIView {
         
         _inputAccessoryView.delegate = self
         _inputAccessoryView.translatesAutoresizingMaskIntoConstraints = false
-        _inputAccessoryView.setContentHuggingPriority(UILayoutPriorityRequired, for: .vertical)
-        _inputAccessoryView.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: .vertical)
+        _inputAccessoryView.setContentHuggingPriority(UILayoutPriority.required, for: .vertical)
+        _inputAccessoryView.setContentCompressionResistancePriority(UILayoutPriority.required, for: .vertical)
         //_inputAccessoryView.backgroundColor = color
         _inputAccessoryView.backgroundColor = .clear
         
         _backgroundView.translatesAutoresizingMaskIntoConstraints = false
-        _backgroundView.setContentHuggingPriority(1, for: .vertical)
-        _backgroundView.setContentCompressionResistancePriority(1, for: .vertical)
+        _backgroundView.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
+        _backgroundView.setContentCompressionResistancePriority(UILayoutPriority(1), for: .vertical)
         _backgroundView.barTintColor = .white
         _backgroundView.isTranslucent = false // 毛玻璃效果还有bug
         //_backgroundView.barStyle = .black
@@ -501,8 +501,8 @@ open class SAIInputBar: UIView {
     fileprivate var _cacheKeyboardIsInitialized: Bool = false
     
     // MARK: - 
-    
-    open override class func initialize() {
+    // open override class func initialize() remove from swoft 4.0
+    open class func initializeOnceMethod() {
         _ = _ib_inputBar_once
     }
     
@@ -1022,7 +1022,10 @@ internal func _SAInputExchangeSelector(_ cls: AnyClass?, _ sel1: Selector, _ sel
     guard let cls = cls else {
         return
     }
-    method_exchangeImplementations(class_getInstanceMethod(cls, sel1), class_getInstanceMethod(cls, sel2))
+    guard let method1 = class_getInstanceMethod(cls, sel1) , let method2 = class_getInstanceMethod(cls, sel2) else {
+        return
+    }
+    method_exchangeImplementations(method1, method2)
 }
 
 private var _ib_inputBar_once: Bool = {

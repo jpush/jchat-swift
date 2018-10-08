@@ -105,7 +105,7 @@ public class JCGroupSettingCell: UITableViewCell {
         }
     }
     
-    func _clickMore() {
+    @objc func _clickMore() {
         delegate?.clickMoreButton?(clickButton: moreButton)
     }
     

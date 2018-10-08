@@ -66,7 +66,7 @@ class JCRecordVoiceHelper: NSObject {
         recordPath = nil
     }
     
-    func updateMeters() {
+    @objc func updateMeters() {
         if recorder == nil {
             return
         }

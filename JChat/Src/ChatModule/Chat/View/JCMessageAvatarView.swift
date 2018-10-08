@@ -61,11 +61,11 @@ open class JCMessageAvatarView: UIImageView, JCMessageContentViewType {
         addGestureRecognizer(longTapGesture)
     }
     
-    func _tapHandler(sender:UITapGestureRecognizer) {
+    @objc func _tapHandler(sender:UITapGestureRecognizer) {
         delegate?.tapAvatarView?(message: message)
     }
 
-    func _longTap(_ gestureRecognizer: UILongPressGestureRecognizer)  {
+    @objc func _longTap(_ gestureRecognizer: UILongPressGestureRecognizer)  {
         if gestureRecognizer.state == .began {
             delegate?.longTapAvatarView?(message: message)
         }

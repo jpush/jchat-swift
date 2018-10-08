@@ -37,7 +37,7 @@ class JCIdentityVerificationViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(_getData), name: NSNotification.Name(rawValue: kUpdateVerification), object: nil)
     }
     
-    func _getData() {
+    @objc func _getData() {
         infos.removeAll()
         infos = JCVerificationInfoDB.shareInstance.quaryData()
         tableView.reloadData()

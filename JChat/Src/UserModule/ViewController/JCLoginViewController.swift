@@ -174,12 +174,12 @@ class JCLoginViewController: UIViewController {
         _updateLoginButton()
     }
    
-    func _tapView() {
+    @objc func _tapView() {
         view.endEditing(true)
     }
     
     //MARK: - click event
-    func _userLogin() {
+    @objc func _userLogin() {
         let username = userNameTextField.text!.trim()
         let password = passwordTextField.text!.trim()
         
@@ -219,13 +219,13 @@ class JCLoginViewController: UIViewController {
         }
     }
     
-    func _clickRegisterButton() {
+    @objc func _clickRegisterButton() {
         userNameTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
         navigationController?.pushViewController(JCRegisterViewController(), animated: true)
     }
     
-    func textFieldDidChanged(_ textField: UITextField) {
+    @objc func textFieldDidChanged(_ textField: UITextField) {
         if userNameTextField.text == lastUserName {
             if avator != nil {
                 avatorView.image = avator

@@ -138,11 +138,11 @@ class JCSearchFriendViewController: UIViewController {
         if JCNetworkManager.isNotReachable {
             networkErrorView.isHidden = false
         }
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(note:)), name: NSNotification.Name(rawValue: "kNetworkReachabilityChangedNotification"), object: nil)
     }
     
-    func reachabilityChanged(note: NSNotification) {
+    @objc func reachabilityChanged(note: NSNotification) {
         if let curReach = note.object as? Reachability {
             let status = curReach.currentReachabilityStatus()
             switch status {
@@ -154,7 +154,7 @@ class JCSearchFriendViewController: UIViewController {
         }
     }
     
-    func _tapHandler(sender:UITapGestureRecognizer) {
+    @objc func _tapHandler(sender:UITapGestureRecognizer) {
         if (user?.isEqual(to: JMSGUser.myInfo()))! {
             searchController.isActive = false
             navigationController?.pushViewController(JCMyInfoViewController(), animated: true)
@@ -169,7 +169,7 @@ class JCSearchFriendViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func _addFriend() {
+    @objc func _addFriend() {
         let vc = JCAddFriendViewController()
         vc.user = self.user!
         searchController.isActive = false

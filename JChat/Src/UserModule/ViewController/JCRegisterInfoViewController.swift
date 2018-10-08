@@ -50,7 +50,8 @@ class JCRegisterInfoViewController: UIViewController {
     private lazy var registerButton: UIButton = {
         var button = UIButton()
         button.backgroundColor = UIColor(netHex: 0x2DD0CF)
-        button.frame = CGRect(x: 38, y: 64 + 40 + 80 + 40 + 40 + 38, width: self.view.width - 76, height: 40)
+        let yOffset:CGFloat = 64 + 40 + 80 + 40 + 40 + 38
+        button.frame = CGRect(x: 38, y: yOffset, width: self.view.width - 76, height: 40)
         button.setTitle("完成", for: .normal)
         button.layer.cornerRadius = 3.0
         button.layer.masksToBounds = true
@@ -104,11 +105,11 @@ class JCRegisterInfoViewController: UIViewController {
         view.addGestureRecognizer(tap)
     }
     
-    func textFieldDidChanged(_ textField: UITextField) {
+    @objc func textFieldDidChanged(_ textField: UITextField) {
         if textField.markedTextRange == nil {
             let text = textField.text!
             if text.characters.count > 30 {
-                let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 30))
+                let range = text.startIndex ..< text.index(text.startIndex, offsetBy: 30)
                 
                 let subText = text.substring(with: range)
                 textField.text = subText
@@ -116,11 +117,11 @@ class JCRegisterInfoViewController: UIViewController {
         }
     }
     
-    func _tapView() {
+    @objc func _tapView() {
         view.endEditing(true)
     }
      
-    func _tapHandler() {
+    @objc func _tapHandler() {
         view.endEditing(true)
         let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "  从相册中选择", "拍照")
         actionSheet.tag = 1001
@@ -128,7 +129,7 @@ class JCRegisterInfoViewController: UIViewController {
     }
 
     //MARK: - click event
-    func _userRegister() {
+    @objc func _userRegister() {
         MBProgressHUD_JChat.showMessage(message: "保存中", toView: self.view)
         userLogin(withUsername: self.username, password: self.password)
     }

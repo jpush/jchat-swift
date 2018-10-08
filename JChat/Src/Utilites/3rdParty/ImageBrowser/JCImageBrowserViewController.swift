@@ -152,7 +152,7 @@ extension JCImageBrowserViewController: UIActionSheetDelegate {
         }
     }
     
-    func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafeRawPointer){
+    @objc func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafeRawPointer){
         if error == nil {
             MBProgressHUD_JChat.show(text: "保存成功", view: view)
         } else {

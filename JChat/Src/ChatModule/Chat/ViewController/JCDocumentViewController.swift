@@ -71,7 +71,7 @@ class JCDocumentViewController: UIViewController, CustomNavigation {
         customLeftBarButton(delegate: self)
     }
 
-    func _openFile() {
+    @objc func _openFile() {
         guard let url = fileUrl else {
             return
         }

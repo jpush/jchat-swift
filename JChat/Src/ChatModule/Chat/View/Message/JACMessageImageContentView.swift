@@ -77,7 +77,7 @@ open class JCMessageImageContentView: UIImageView, JCMessageContentViewType {
         addSubview(percentLabel)
     }
     
-    func _tapHandler(sender:UITapGestureRecognizer) {
+    @objc func _tapHandler(sender:UITapGestureRecognizer) {
         _delegate?.message?(message: _message, image: image)
     }
 }

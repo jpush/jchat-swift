@@ -151,7 +151,7 @@ class JCRemoveMemberViewController: UIViewController {
         collectionView.reloadData()
     }
     
-    func _clickNavRightButton(_ sender: UIButton) {
+    @objc func _clickNavRightButton(_ sender: UIButton) {
         var userNames: [String] = []
         for item in selectUsers {
             userNames.append(item.username)

@@ -153,7 +153,7 @@ class JCUpdatePassworkViewController: UIViewController {
     }
     
     //MARK: - click event
-    func _updatePasswork() {
+    @objc func _updatePasswork() {
         view.endEditing(true)
         let oldPassword = oldPasswordTextField.text!
         let newPassword = newPasswordTextField.text!

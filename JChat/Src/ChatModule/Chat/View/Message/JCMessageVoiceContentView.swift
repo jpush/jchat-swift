@@ -87,7 +87,7 @@ open class JCMessageVoiceContentView: UIView, JCMessageContentViewType {
         addGestureRecognizer(tap)
     }
     
-    func _clickCell() {
+    @objc func _clickCell() {
 //        _delegate?.message?(message: _message, voiceData: _data, duration: _duration)
 
         // TODO: 这里不就应该把 V 层代码放在这里，需要考虑下这个播放时开启动画的传递方式

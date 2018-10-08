@@ -119,7 +119,7 @@ class MyQRCodeViewController: UIViewController {
             colorFilter.setValue(CIColor(red: 0, green: 0, blue: 0), forKey: "inputColor0")
             colorFilter.setValue(CIColor(red: 1, green: 1, blue: 1), forKey: "inputColor1")
             // 返回二维码image
-            let codeImage = UIImage(ciImage: (colorFilter.outputImage!.applying(CGAffineTransform(scaleX: 5, y: 5))))
+            let codeImage = UIImage(ciImage: (colorFilter.outputImage!.transformed(by: CGAffineTransform(scaleX: 5, y: 5))))
             
             // 中间一般放logo
             guard let imageName = qrImageName else {
@@ -154,7 +154,7 @@ class MyQRCodeViewController: UIViewController {
         navigationItem.rightBarButtonItems =  [item1]
     }
     
-    func _saveImage() {
+    @objc func _saveImage() {
         let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "保存图片")
         actionSheet.show(in: view)
     }
@@ -176,7 +176,7 @@ extension MyQRCodeViewController: UIActionSheetDelegate {
         }
     }
     
-    func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafeRawPointer){
+    @objc func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafeRawPointer){
         if error == nil {
             MBProgressHUD_JChat.show(text: "保存成功", view: view)
         } else {

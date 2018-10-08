@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIViewController {
-    func back(_ animated: Bool = true) {
+    @objc func back(_ animated: Bool = true) {
         navigationController?.popViewController(animated: animated)
     }
 }

@@ -61,13 +61,13 @@ class JCGroupNameViewController: UIViewController {
         navigationItem.rightBarButtonItem =  navRightButton
     }
 
-    func textFieldDidChanged(_ textField: UITextField) {
+    @objc func textFieldDidChanged(_ textField: UITextField) {
         if textField.markedTextRange == nil {
             let text = textField.text!
             if text.characters.count > 20 {
-                let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 20))
-                
-                let subText = text.substring(with: range)
+//                let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 20))
+//                let subText = text.substring(with: range)
+                let subText = text.substring(to: text.index(text.startIndex, offsetBy: 20))
                 textField.text = subText
             }
             let count = 20 - (textField.text?.characters.count)!
@@ -76,7 +76,7 @@ class JCGroupNameViewController: UIViewController {
     }
     
     //MARK: - click func
-    func _saveNickname() {
+    @objc func _saveNickname() {
         groupNameTextField.resignFirstResponder()
         let groupName = groupNameTextField.text
         MBProgressHUD_JChat.showMessage(message: "修改中...", toView: view)

@@ -176,7 +176,7 @@ var isWait = false
     
     fileprivate lazy var _chatContainerRegistedTypes: Set<String> = []
     
-    func _onPullToFresh() {
+    @objc func _onPullToFresh() {
         delegate?.refershChatView?(chatView: self)
     }
     func stopRefresh() {
@@ -283,23 +283,23 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
         return _chatContainerView.isDragging || _chatContainerView.isDecelerating
     }
     
-    open dynamic var indexPathsForVisibleItems: [IndexPath] {
+    @objc open dynamic var indexPathsForVisibleItems: [IndexPath] {
         return _chatContainerView.indexPathsForVisibleItems
     }
     
-    open dynamic var contentSize: CGSize {
+    @objc open dynamic var contentSize: CGSize {
         set { return _chatContainerView.contentSize = newValue }
         get { return _chatContainerView.contentSize }
     }
-    open dynamic var contentOffset: CGPoint {
+    @objc open dynamic var contentOffset: CGPoint {
         set { return _chatContainerView.contentOffset = newValue }
         get { return _chatContainerView.contentOffset }
     }
-    open dynamic var contentInset: UIEdgeInsets {
+    @objc open dynamic var contentInset: UIEdgeInsets {
         set { return _chatContainerView.contentInset = newValue }
         get { return _chatContainerView.contentInset }
     }
-    open dynamic var scrollIndicatorInsets: UIEdgeInsets {
+    @objc open dynamic var scrollIndicatorInsets: UIEdgeInsets {
         set { return _chatContainerView.scrollIndicatorInsets = newValue }
         get { return _chatContainerView.scrollIndicatorInsets }
     }
@@ -444,10 +444,10 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
         return false
     }
     
-    func copyMessage(_ sender: Any) {}
-    func deleteMessage(_ sender: Any) {}
-    func forwardMessage(_ sender: Any) {}
-    func withdrawMessage(_ sender: Any) {}
+    @objc func copyMessage(_ sender: Any) {}
+    @objc func deleteMessage(_ sender: Any) {}
+    @objc func forwardMessage(_ sender: Any) {}
+    @objc func withdrawMessage(_ sender: Any) {}
     
     open func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
         let message = _chatViewData[indexPath.item]

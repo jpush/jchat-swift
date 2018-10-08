@@ -139,7 +139,7 @@ class JCPhotoBarItem: UIView {
         addSubview(delButton)
     }
     
-    func _tapHandler() {
+    @objc func _tapHandler() {
         if isHiddenDelButton {
             delegate?.photoBarAddImage?()
             return
@@ -147,7 +147,7 @@ class JCPhotoBarItem: UIView {
         delegate?.photoBarClickImage?(index: index)
     }
     
-    func _delImage(_ sender: UIButton) {
+    @objc func _delImage(_ sender: UIButton) {
         delegate?.photoBarDeleteImage?(index: index)
     }
 }

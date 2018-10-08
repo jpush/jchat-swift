@@ -53,7 +53,10 @@ internal class SAIInputTextField: UITextView {
         // update text
         let att = typingAttributes
         textStorage.replaceCharacters(in: NSMakeRange(location, length), with: attributedText)
-        textStorage.addAttributes(att, range: newRange)
+
+        for attributeString in att.keys {
+            textStorage.addAttribute(NSAttributedStringKey(rawValue: attributeString), value: att[attributeString], range: newRange)
+        }
         
         // update new text range
         let newPosition = position(from: beginningOfDocument, offset: location + newTextLength) ?? UITextPosition()

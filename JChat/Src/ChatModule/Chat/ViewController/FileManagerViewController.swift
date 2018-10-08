@@ -120,7 +120,7 @@ class FileManagerViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(_didSelectFileMessage), name: NSNotification.Name(rawValue: "kDidSelectFileMessage"), object: nil)
     }
     
-    func _didSelectFileMessage() {
+    @objc func _didSelectFileMessage() {
         selectMessage.removeAll()
         selectMessage.append(contentsOf: imageFileViewController.selectMessages)
         selectMessage.append(contentsOf: docFileViewController.selectMessages)
@@ -186,7 +186,7 @@ class FileManagerViewController: UIViewController {
         self.navigationItem.rightBarButtonItem =  navRightButton
     }
     
-    func _clickNavRightButton() {
+    @objc func _clickNavRightButton() {
         if isEditMode {
             navRightButton.title = "选择"
             tabedSlideView.frame = CGRect(x: tabedSlideView.x, y: tabedSlideView.y, width: tabedSlideView.width, height: tabedSlideView.height + 45)
@@ -205,7 +205,7 @@ class FileManagerViewController: UIViewController {
         selectMessage = []
     }
     
-    func _delFile() {
+    @objc func _delFile() {
         if selectMessage.count <= 0 {
             return
         }
