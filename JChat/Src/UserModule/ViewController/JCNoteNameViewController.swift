@@ -76,7 +76,7 @@ class JCNoteNameViewController: UIViewController {
         if textField.markedTextRange == nil {
             let text = textField.text!
             if text.characters.count > 20 {
-                let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 20))
+                let range = text.startIndex ..< text.index(text.startIndex, offsetBy: 20)
                 let subText = text.substring(with: range)
                 textField.text = subText
             }

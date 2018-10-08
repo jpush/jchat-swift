@@ -13,7 +13,7 @@ import JMessage
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    let JMAPPKEY = <#填写你的 JMessage AppKey#>
+    let JMAPPKEY = "57720b267fb2bab69b3fbfcb"
     // 百度地图 SDK AppKey，请自行申请你对应的 AppKey
     let BMAPPKEY = "BNsPzc36d1GBRD9zC3QGO3wUFbY3P3qv"
     

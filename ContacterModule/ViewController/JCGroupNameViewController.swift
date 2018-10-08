@@ -65,9 +65,9 @@ class JCGroupNameViewController: UIViewController {
         if textField.markedTextRange == nil {
             let text = textField.text!
             if text.characters.count > 20 {
-                let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 20))
-                
-                let subText = text.substring(with: range)
+//                let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 20))
+//                let subText = text.substring(with: range)
+                let subText = text.substring(to: text.index(text.startIndex, offsetBy: 20))
                 textField.text = subText
             }
             let count = 20 - (textField.text?.characters.count)!

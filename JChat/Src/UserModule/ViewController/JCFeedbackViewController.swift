@@ -184,7 +184,7 @@ extension JCFeedbackViewController: UITextViewDelegate {
         if textView.markedTextRange == nil {
             let text = textView.text!
             if text.characters.count > 300 {
-                let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 300))
+                let range = text.startIndex ..< text.index(text.startIndex, offsetBy: 300)
                 
                 let subText = text.substring(with: range)
                 textView.text = subText

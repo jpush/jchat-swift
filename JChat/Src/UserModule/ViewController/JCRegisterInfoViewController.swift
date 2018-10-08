@@ -50,7 +50,8 @@ class JCRegisterInfoViewController: UIViewController {
     private lazy var registerButton: UIButton = {
         var button = UIButton()
         button.backgroundColor = UIColor(netHex: 0x2DD0CF)
-        button.frame = CGRect(x: 38, y: 64 + 40 + 80 + 40 + 40 + 38, width: self.view.width - 76, height: 40)
+        let yOffset:CGFloat = 64 + 40 + 80 + 40 + 40 + 38
+        button.frame = CGRect(x: 38, y: yOffset, width: self.view.width - 76, height: 40)
         button.setTitle("完成", for: .normal)
         button.layer.cornerRadius = 3.0
         button.layer.masksToBounds = true
@@ -108,7 +109,7 @@ class JCRegisterInfoViewController: UIViewController {
         if textField.markedTextRange == nil {
             let text = textField.text!
             if text.characters.count > 30 {
-                let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 30))
+                let range = text.startIndex ..< text.index(text.startIndex, offsetBy: 30)
                 
                 let subText = text.substring(with: range)
                 textField.text = subText
