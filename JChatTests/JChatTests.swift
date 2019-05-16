@@ -2,7 +2,7 @@
 //  JChatTests.swift
 //  JChatTests
 //
-//  Created by deng on 2017/3/28.
+//  Created by JIGUANG on 2017/3/28.
 //  Copyright © 2017年 dengyonghao. All rights reserved.
 //
 

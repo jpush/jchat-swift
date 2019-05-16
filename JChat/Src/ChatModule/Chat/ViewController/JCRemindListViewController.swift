@@ -2,7 +2,7 @@
 //  JCRemindListViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/6/26.
+//  Created by JIGUANG on 2017/6/26.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -35,17 +35,9 @@ class JCRemindListViewController: UIViewController {
         return tableView
     }()
     fileprivate lazy var searchView: UISearchBar = {
-        let searchView = UISearchBar()
+        let searchView = UISearchBar.default
         searchView.frame = CGRect(x: 0, y: 0, width: self.view.width, height: 31)
-        searchView.barStyle = .default
-        searchView.backgroundColor = .white
-        searchView.barTintColor = .white
         searchView.delegate = self
-        searchView.autocapitalizationType = .none
-        searchView.placeholder = "搜索"
-        searchView.layer.borderColor = UIColor.white.cgColor
-        searchView.layer.borderWidth = 1
-        searchView.layer.masksToBounds = true
         return searchView
     }()
     
@@ -59,7 +51,7 @@ class JCRemindListViewController: UIViewController {
     
     private func _init() {
         self.title = "选择提醒的人"
-        self.view.backgroundColor = .white
+        view.backgroundColor = .white
         _setupNavigation()
         tableView.tableHeaderView = searchView
         users = group.memberArray()
@@ -72,16 +64,16 @@ class JCRemindListViewController: UIViewController {
         cancel.setTitle("取消", for: .normal)
         cancel.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         let item = UIBarButtonItem(customView: cancel)
-        self.navigationItem.leftBarButtonItem =  item
+        navigationItem.leftBarButtonItem = item
     }
     
-    func _clickNavRightButton() {
-        self.dismiss(animated: true, completion: nil)
+    @objc func _clickNavRightButton() {
+        dismiss(animated: true, completion: nil)
     }
     
     func _classify(_ users: [JMSGUser]) {
-        self.keys.removeAll()
-        self.data.removeAll()
+        keys.removeAll()
+        data.removeAll()
         for item in users {
             if item.username == JMSGUser.myInfo().username {
                 continue
@@ -90,19 +82,18 @@ class JCRemindListViewController: UIViewController {
             if !key.isLetterOrNum() {
                 key = "#"
             }
-            var array = self.data[key]
+            var array = data[key]
             if array == nil {
                 array = [item]
             } else {
                 array?.append(item)
             }
-            if !self.keys.contains(key) {
-                self.keys.append(key)
+            if !keys.contains(key) {
+                keys.append(key)
             }
-            
-            self.data[key] = array
+            data[key] = array
         }
-        self.keys = _JCSortKeys(self.keys)
+        keys = keys.sortedKeys()
     }
     
     fileprivate func filter(_ searchString: String) {
@@ -136,7 +127,7 @@ extension JCRemindListViewController: UITableViewDelegate, UITableViewDataSource
         if section == 0 && !isSearching {
             return tagArray.count
         }
-        return isSearching ? self.data[keys[section]]!.count : self.data[keys[section - 1]]!.count
+        return isSearching ? data[keys[section]]!.count : data[keys[section - 1]]!.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -150,7 +141,7 @@ extension JCRemindListViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return self.keys
+        return keys
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -183,7 +174,7 @@ extension JCRemindListViewController: UITableViewDelegate, UITableViewDataSource
             }
             return
         }
-        let user = isSearching ? self.data[keys[indexPath.section]]?[indexPath.row] : self.data[keys[indexPath.section - 1]]?[indexPath.row]
+        let user = isSearching ? data[keys[indexPath.section]]?[indexPath.row] : data[keys[indexPath.section - 1]]?[indexPath.row]
         cell.bindDate(user!)
     }
     
@@ -191,13 +182,13 @@ extension JCRemindListViewController: UITableViewDelegate, UITableViewDataSource
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 && !isSearching {
             finish(nil, true, 4)
-            self.dismiss(animated: true, completion: nil)
+            dismiss(animated: true, completion: nil)
             return
         }
-        if let user = isSearching ? self.data[keys[indexPath.section]]?[indexPath.row] : self.data[keys[indexPath.section - 1]]?[indexPath.row]  {
+        if let user = isSearching ? data[keys[indexPath.section]]?[indexPath.row] : data[keys[indexPath.section - 1]]?[indexPath.row]  {
             finish(user, false, user.displayName().length)
         }
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }
 

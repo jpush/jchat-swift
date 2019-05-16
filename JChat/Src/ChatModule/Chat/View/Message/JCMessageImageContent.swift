@@ -2,7 +2,7 @@
 //  JCMessageImageContent.swift
 //  JChat
 //
-//  Created by deng on 2017/3/9.
+//  Created by JIGUANG on 2017/3/9.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -26,12 +26,9 @@ open class JCMessageImageContent: NSObject, JCMessageContentType {
              image = UIImage.createImage(color: UIColor(netHex: 0xCDD0D1), size: imageSize ?? CGSize(width: 160, height: 160))
         }
         let size = imageSize ?? (image?.size)!
-        
         let scale = min(min(160, size.width) / size.width, min(160, size.height) / size.height)
-        
         let w = size.width * scale
         let h = size.height * scale
-        
         return .init(width: w, height: h)
     }
 }

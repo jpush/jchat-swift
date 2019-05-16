@@ -2,12 +2,11 @@
 //  JCRegisterViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/2/16.
+//  Created by JIGUANG on 2017/2/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
 import UIKit
-import JMessage
 
 class JCRegisterViewController: UIViewController {
     
@@ -24,6 +23,7 @@ class JCRegisterViewController: UIViewController {
         _updateRegisterButton()
     }
 
+    //MARK: - property
     fileprivate lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: -64, width: self.view.width, height: 64))
         view.backgroundColor = UIColor(netHex: 0x2DD0CF)
@@ -33,13 +33,11 @@ class JCRegisterViewController: UIViewController {
         title.text = "JChat"
         view.addSubview(title)
         
-        
         var rightButton = UIButton(frame: CGRect(x: view.width - 50 - 15, y: 20 + 7, width: 50, height: 30))
         rightButton.setTitle("去登录", for: .normal)
         rightButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         rightButton.addTarget(self, action: #selector(_clickLoginButton), for: .touchUpInside)
         view.addSubview(rightButton)
-        
         return view
     }()
     
@@ -137,17 +135,14 @@ class JCRegisterViewController: UIViewController {
     
     fileprivate lazy var bgView: UIView = UIView(frame: self.view.frame)
     
-    //MARK: - private func
+    //MARK: - private mothed
     private func _init() {
         self.title = "JChat"
-        self.view.backgroundColor = .white
-        self.automaticallyAdjustsScrollViewInsets = false
-//        self.navigationController?.navigationBar.isHidden = true
-//        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        view.backgroundColor = .white
+        automaticallyAdjustsScrollViewInsets = false
         
         view.addSubview(bgView)
         view.addSubview(headerView)
-        
         bgView.addSubview(avatorView)
         bgView.addSubview(tipsLabel)
         bgView.addSubview(userNameTextField)
@@ -163,16 +158,16 @@ class JCRegisterViewController: UIViewController {
         bgView.addGestureRecognizer(tap)
     }
     
-    func textFieldDidChanged(_ textField: UITextField) {
+    @objc func textFieldDidChanged(_ textField: UITextField) {
         _updateRegisterButton()
     }
     
-    func _tapView() {
+    @objc func _tapView() {
         view.endEditing(true)
     }
     
     //MARK: - click event
-    func _userRegister() {
+    @objc func _userRegister() {
         userNameTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
         let username = userNameTextField.text!.trim()
@@ -190,29 +185,24 @@ class JCRegisterViewController: UIViewController {
             return
         }
         
-        MBProgressHUD_JChat.showMessage(message: "用户名校验", toView: self.view)
-        JCAPIManager.sharedAPI.searchUser(username) { (data, response, error) in
-            let _ = DispatchQueue.main.sync {
+        MBProgressHUD_JChat.showMessage(message: "注册中", toView: view)
+
+        JMSGUser.register(withUsername: username, password: password) { (result, error) in
+            let _ = DispatchQueue.main.async {
                 MBProgressHUD_JChat.hide(forView: self.view, animated: true)
                 if error == nil {
-                    let result = try! JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-                    if result["username"] != nil {
-                        MBProgressHUD_JChat.show(text: "用户名重复", view: self.view)
-                    } else {
-                        let vc = JCRegisterInfoViewController()
-                        vc.username = username
-                        vc.password = password
-                        self.navigationController?.pushViewController(vc, animated: true)
-                    }
-                }
-                else {
-                    MBProgressHUD_JChat.show(text: "校验失败，请重试", view: self.view)
+                    let vc = JCRegisterInfoViewController()
+                    vc.username = username
+                    vc.password = password
+                    self.navigationController?.pushViewController(vc, animated: true)
+                } else {
+                    MBProgressHUD_JChat.show(text: String.errorAlert(error! as NSError), view: self.view)
                 }
             }
         }
     }
     
-    func _clickLoginButton() {
+    @objc func _clickLoginButton() {
         navigationController?.popViewController(animated: true)
     }
     

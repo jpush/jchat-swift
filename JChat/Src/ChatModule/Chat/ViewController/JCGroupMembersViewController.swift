@@ -2,12 +2,14 @@
 //  JCGroupMembersViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/5/10.
+//  Created by JIGUANG on 2017/5/10.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
 import UIKit
 import JMessage
+import RxSwift
+import RxCocoa
 
 class JCGroupMembersViewController: UIViewController {
     
@@ -28,17 +30,19 @@ class JCGroupMembersViewController: UIViewController {
     
     fileprivate lazy var filteredUsersArray: [JMSGUser] = []
     
+    let disposeBag = DisposeBag()
+    
     private func _init() {
         self.title = "群成员"
-        self.view.backgroundColor = .white
-        self.definesPresentationContext = true
+        view.backgroundColor = .white
+        definesPresentationContext = true
         
         users = group.memberArray()
         filteredUsersArray = users
         count = filteredUsersArray.count
         
         searchView.backgroundColor = UIColor(netHex: 0xe8edf3)
-        searchController.searchBar.delegate = self
+//        searchController.searchBar.delegate = self
         searchController.hidesNavigationBarDuringPresentation = false
         searchView.addSubview(searchController.searchBar)
         
@@ -46,17 +50,26 @@ class JCGroupMembersViewController: UIViewController {
         flowLayout.scrollDirection = .vertical
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.minimumLineSpacing = 0
-        flowLayout.headerReferenceSize = CGSize(width: self.view.width, height: 36)
-        collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: flowLayout)
+        flowLayout.headerReferenceSize = CGSize(width: view.width, height: 36)
+        collectionView = UICollectionView(frame: view.frame, collectionViewLayout: flowLayout)
         collectionView.bounces = true
-        collectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "kHeaderView")
+        collectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "kHeaderView")
         
         collectionView.backgroundColor = .white
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(JCGroupMemberCell.self, forCellWithReuseIdentifier: "JCGroupMemberCell")
         
-        self.view.addSubview(collectionView)
+        view.addSubview(collectionView)
+        
+        _ = searchController.searchBar.rx.text.orEmpty
+            .throttle(0.5, scheduler: MainScheduler.instance).subscribe(onNext: { (text) in
+                self.filter(text)
+            })
+            .disposed(by: disposeBag)
+        _ = searchController.searchBar.rx.cancelButtonClicked.subscribe(onNext: { (_) in
+            self.filter("")
+        }).disposed(by: disposeBag)
         
     }
     
@@ -102,7 +115,7 @@ extension JCGroupMembersViewController: UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "kHeaderView", for: indexPath)
-        if kind == UICollectionElementKindSectionHeader {
+        if kind == UICollectionView.elementKindSectionHeader {
             header.backgroundColor = UIColor(netHex: 0xe8edf3)
             header.addSubview(searchView)
         }
@@ -113,19 +126,19 @@ extension JCGroupMembersViewController: UICollectionViewDelegate, UICollectionVi
         let user = filteredUsersArray[indexPath.row]
         let vc = JCUserInfoViewController()
         vc.user = user
+        navigationController?.pushViewController(vc, animated: true)
         searchController.isActive = false
         filter("")
-        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
-extension JCGroupMembersViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        filter(searchText)
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        filter("")
-    }
-}
+//extension JCGroupMembersViewController: UISearchBarDelegate {
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        filter(searchText)
+//    }
+//    
+//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//        filter("")
+//    }
+//}
 

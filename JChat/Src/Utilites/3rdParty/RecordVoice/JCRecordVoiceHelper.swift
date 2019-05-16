@@ -66,7 +66,7 @@ class JCRecordVoiceHelper: NSObject {
         recordPath = nil
     }
     
-    func updateMeters() {
+    @objc func updateMeters() {
         if recorder == nil {
             return
         }
@@ -79,9 +79,9 @@ class JCRecordVoiceHelper: NSObject {
         if currentTimeInterval > maxRecordTime {
             stopRecord()
             delegate?.beyondLimit?(currentTimeInterval!)
-            if self.stopRecordCompletion != nil {
+            if stopRecordCompletion != nil {
                 DispatchQueue.main.async(execute: stopRecordCompletion!)
-                self.recorder?.updateMeters()
+                recorder?.updateMeters()
             }
         }
     }
@@ -97,27 +97,27 @@ class JCRecordVoiceHelper: NSObject {
     }
     
     func resetTimer() {
-        if self.theTimer == nil {
+        if theTimer == nil {
             return
         } else {
-            self.theTimer!.invalidate()
-            self.theTimer = nil
+            theTimer!.invalidate()
+            theTimer = nil
         }
     }
     
     func cancelRecording() {
-        if self.recorder == nil { return }
-        
-        if self.recorder?.isRecording != false {
-            self.recorder?.stop()
+        if recorder == nil {
+            return
         }
-        
-        self.recorder = nil
+        if recorder?.isRecording != false {
+            recorder?.stop()
+        }
+        recorder = nil
     }
     
     func stopRecord() {
-        self.cancelRecording()
-        self.resetTimer()
+        cancelRecording()
+        resetTimer()
     }
     
     func startRecordingWithPath(_ path:String, startRecordCompleted:@escaping CompletionCallBack) {
@@ -127,7 +127,11 @@ class JCRecordVoiceHelper: NSObject {
         
         let audioSession:AVAudioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            if #available(iOS 10.0, *) {
+                try audioSession.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.default, options: AVAudioSession.CategoryOptions.defaultToSpeaker)
+            } else {
+                // Fallback on earlier versions
+            }
         } catch let error as NSError {
             print("could not set session category")
             print(error.localizedDescription)
@@ -170,27 +174,27 @@ class JCRecordVoiceHelper: NSObject {
     }
     
     func finishRecordingCompletion() {
-        self.stopRecord()
-        self.getVoiceDuration(self.recordPath!)
+        stopRecord()
+        getVoiceDuration(recordPath!)
         
-        if self.stopRecordCompletion != nil {
-            DispatchQueue.main.async(execute: self.stopRecordCompletion!)
+        if stopRecordCompletion != nil {
+            DispatchQueue.main.async(execute: stopRecordCompletion!)
         }
     }
     
     func cancelledDeleteWithCompletion() {
-        self.stopRecord()
-        if self.recordPath != nil {
+        stopRecord()
+        if recordPath != nil {
             let fileManager:FileManager = FileManager.default
-            if fileManager.fileExists(atPath: self.recordPath!) == true {
+            if fileManager.fileExists(atPath: recordPath!) == true {
                 do {
-                    try fileManager.removeItem(atPath: self.recordPath!)
+                    try fileManager.removeItem(atPath: recordPath!)
                 } catch let error as NSError {
                     print("can no to remove the voice file \(error.localizedDescription)")
                 }
             } else {
-                if self.cancelledDeleteCompletion != nil {
-                    DispatchQueue.main.async(execute: self.cancelledDeleteCompletion!)
+                if cancelledDeleteCompletion != nil {
+                    DispatchQueue.main.async(execute: cancelledDeleteCompletion!)
                 }
             }
             
@@ -218,7 +222,7 @@ extension JCRecordVoiceHelper : AVAudioPlayerDelegate {
         print("finished playing \(flag)")
         
     }
-    
+
     func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
         if let e = error {
             print("\(e.localizedDescription)")
@@ -228,4 +232,9 @@ extension JCRecordVoiceHelper : AVAudioPlayerDelegate {
 
 extension JCRecordVoiceHelper : AVAudioRecorderDelegate {
     
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Category) -> String {
+	return input.rawValue
 }

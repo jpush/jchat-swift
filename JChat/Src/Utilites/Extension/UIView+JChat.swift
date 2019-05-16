@@ -2,7 +2,7 @@
 //  UIView+JChat.swift
 //  JChat
 //
-//  Created by deng on 2017/3/22.
+//  Created by JIGUANG on 2017/3/22.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 

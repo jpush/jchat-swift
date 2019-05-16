@@ -2,7 +2,7 @@
 //  JCChatView.swift
 //  JChat
 //
-//  Created by deng on 2017/2/28.
+//  Created by JIGUANG on 2017/2/28.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -17,18 +17,22 @@ public protocol JCChatViewDataSource: class {
     
 }
 
+var isWait = false
+
 @objc public protocol JCChatViewDelegate: NSObjectProtocol {
     
     @objc optional func chatView(_ chatView: JCChatView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool
     @objc optional func chatView(_ chatView: JCChatView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool
     @objc optional func chatView(_ chatView: JCChatView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?)
-    @objc optional func refershChatView( chatView: JCChatView)
+    @objc optional func refershChatView(chatView: JCChatView)
     @objc optional func tapImageMessage(image: UIImage?, indexPath: IndexPath)
     
     @objc optional func deleteMessage(message: JCMessageType)
     @objc optional func copyMessage(message: JCMessageType)
     @objc optional func forwardMessage(message: JCMessageType)
     @objc optional func withdrawMessage(message: JCMessageType)
+
+    @objc optional func indexPathsForVisibleItems(chatView: JCChatView, items: [IndexPath])
 }
 
 
@@ -160,6 +164,9 @@ public protocol JCChatViewDataSource: class {
         _chatContainerView.delegate = self
         
         addSubview(_chatContainerView)
+        #if READ_VERSION
+        _chatContainerView.addObserver(self, forKeyPath: "contentOffset", options: .new, context: nil)
+        #endif
     }
     
     fileprivate var _chatViewData: JCChatViewData
@@ -169,11 +176,11 @@ public protocol JCChatViewDataSource: class {
     
     fileprivate lazy var _chatContainerRegistedTypes: Set<String> = []
     
-    func _onPullToFresh() {
+    @objc func _onPullToFresh() {
         delegate?.refershChatView?(chatView: self)
     }
     func stopRefresh() {
-        self._chatContainerView.mj_header.endRefreshing()
+        _chatContainerView.mj_header.endRefreshing()
     }
     
     func scrollToLast(animated: Bool) {
@@ -181,6 +188,12 @@ public protocol JCChatViewDataSource: class {
         if count > 0 {
             _chatContainerView.scrollToItem(at: IndexPath(row: count - 1, section: 0), at: .bottom, animated: animated)
         }
+    }
+
+    deinit {
+        #if READ_VERSION
+        _chatContainerView.removeObserver(self, forKeyPath: "contentOffset")
+        #endif
     }
 }
 
@@ -270,23 +283,23 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
         return _chatContainerView.isDragging || _chatContainerView.isDecelerating
     }
     
-    open var indexPathsForVisibleItems: [IndexPath] {
+    @objc open dynamic var indexPathsForVisibleItems: [IndexPath] {
         return _chatContainerView.indexPathsForVisibleItems
     }
     
-    open dynamic var contentSize: CGSize {
+    @objc open dynamic var contentSize: CGSize {
         set { return _chatContainerView.contentSize = newValue }
         get { return _chatContainerView.contentSize }
     }
-    open dynamic var contentOffset: CGPoint {
+    @objc open dynamic var contentOffset: CGPoint {
         set { return _chatContainerView.contentOffset = newValue }
         get { return _chatContainerView.contentOffset }
     }
-    open dynamic var contentInset: UIEdgeInsets {
+    @objc open dynamic var contentInset: UIEdgeInsets {
         set { return _chatContainerView.contentInset = newValue }
         get { return _chatContainerView.contentInset }
     }
-    open dynamic var scrollIndicatorInsets: UIEdgeInsets {
+    @objc open dynamic var scrollIndicatorInsets: UIEdgeInsets {
         set { return _chatContainerView.scrollIndicatorInsets = newValue }
         get { return _chatContainerView.scrollIndicatorInsets }
     }
@@ -296,9 +309,8 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
     }
     
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
         let message = _chatViewData[indexPath.item]
-        
-//        let options = (message.options.showsCard.hashValue << 0) | (message.options.showsAvatar.hashValue << 1)
         let alignment = message.options.alignment.rawValue
         let identifier = NSStringFromClass(type(of: message.content)) + ".\(alignment)"
         
@@ -335,7 +347,7 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemTipsOf style: JCMessageStyle) -> CGSize {
-        return .init(width: 21, height: 21)
+        return .init(width: 100, height: 21)
     }
     
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForItemOf style: JCMessageStyle) -> UIEdgeInsets {
@@ -414,12 +426,9 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
             return true
         }
         
-//        if action == #selector(forwardMessage(_:)) {
-//            if message.content is JCMessageVoiceContent || message.content is JCMessageLocationContent  {
-//                return false
-//            }
-//            return true
-//        }
+        if action == #selector(forwardMessage(_:)) {
+            return true
+        }
         
         if action == #selector(withdrawMessage(_:)) {
             if let sender = message.sender {
@@ -433,10 +442,10 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
         return false
     }
     
-    func copyMessage(_ sender: Any) {}
-    func deleteMessage(_ sender: Any) {}
-    func forwardMessage(_ sender: Any) {}
-    func withdrawMessage(_ sender: Any) {}
+    @objc func copyMessage(_ sender: Any) {}
+    @objc func deleteMessage(_ sender: Any) {}
+    @objc func forwardMessage(_ sender: Any) {}
+    @objc func withdrawMessage(_ sender: Any) {}
     
     open func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
         let message = _chatViewData[indexPath.item]
@@ -461,6 +470,23 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
             delegate?.withdrawMessage?(message: message)
         }
     }
+}
+
+extension JCChatView {
+    override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "contentOffset" {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()) {
+                if !isWait {
+                    isWait = true
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.05) {
+                        self.delegate?.indexPathsForVisibleItems?(chatView: self, items: self._chatContainerView.indexPathsForVisibleItems)
+                        isWait = false
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 extension JCChatView: SAIInputBarScrollViewType {

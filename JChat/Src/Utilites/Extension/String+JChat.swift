@@ -2,7 +2,7 @@
 //  JCString+JChat.swift
 //  JChat
 //
-//  Created by deng on 2017/2/16.
+//  Created by JIGUANG on 2017/2/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -99,7 +99,7 @@ extension String {
     
     static func conversationIdWithConversation(_ conversation:JMSGConversation) -> String {
         var conversationId = ""
-        if !conversation.isGroup {
+        if !conversation.ex.isGroup {
             let user = conversation.target as! JMSGUser
             conversationId = "\(user.username)_0"
         } else {
@@ -113,7 +113,7 @@ extension String {
 extension String {
     static func errorAlert(_ error: NSError) -> String {
         var errorAlert: String = ""
-        
+
         if error.code > 860000 {
             let  errorcode = JMSGSDKErrorCode(rawValue: Int(error.code))
             switch errorcode! as JMSGSDKErrorCode{
@@ -265,6 +265,12 @@ extension String {
         if error.code == 869999 {
             errorAlert = "网络连接错误"
         }
+        if error.code == 898001 {
+            errorAlert = "用户名已存在"
+        }
+        if error.code == 801006 {
+            errorAlert = "账号已被禁用"
+        }
         if errorAlert == "" {
             errorAlert = "未知错误"
         }
@@ -273,8 +279,9 @@ extension String {
 }
 
 extension String {
+
     var length: Int {
-        return self.characters.count
+        return self.count
     }
     
     var isContainsChinese: Bool {
@@ -314,8 +321,12 @@ extension String {
     }
     
     public func firstCharacter() -> String {
-        let py = self.py()
-        return String(describing: py.characters.first!).uppercased()
+        let firstCharacter = String(describing: self.first!)
+        if firstCharacter.isLetterOrNum() {
+            return firstCharacter.uppercased()
+        }
+        let py = String(describing: firstCharacter.py().first!)
+        return py.uppercased()
     }
     
     public func isLetterOrNum() -> Bool {

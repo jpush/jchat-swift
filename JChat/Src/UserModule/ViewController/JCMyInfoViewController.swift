@@ -2,12 +2,11 @@
 //  JCUserInfoViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/3/16.
+//  Created by JIGUANG on 2017/3/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
 import UIKit
-import JMessage
 import YHPopupView
 
 class JCMyInfoViewController: UIViewController {
@@ -64,12 +63,12 @@ class JCMyInfoViewController: UIViewController {
     //MARK: - private func
     private func _init() {
         self.title = "个人信息"
-        self.automaticallyAdjustsScrollViewInsets = false
+        automaticallyAdjustsScrollViewInsets = false
         view.addSubview(tableview)
         NotificationCenter.default.addObserver(self, selector: #selector(_updateUserInfo), name: NSNotification.Name(rawValue: kUpdateUserInfo), object: nil)
     }
     
-    func _updateUserInfo() {
+    @objc func _updateUserInfo() {
         user = JMSGUser.myInfo()
         tableview.reloadData()
     }
@@ -85,7 +84,7 @@ extension JCMyInfoViewController: UITableViewDataSource, UITableViewDelegate {
         if section == 0 || section == 2 {
             return 1
         }
-        return 5
+        return 6
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -128,15 +127,17 @@ extension JCMyInfoViewController: UITableViewDataSource, UITableViewDelegate {
             guard let cell = cell as? JCMyInfoCell else {
                 return
             }
-        
             cell.accessoryType = .disclosureIndicator
-           
             switch indexPath.row {
             case 0:
                 cell.title = "昵称"
                 cell.detail = user.nickname ?? ""
                 cell.icon = UIImage.loadImage("com_icon_nickname")
             case 1:
+                cell.title = "二维码"
+                cell.detail = "我的二维码"
+                cell.icon = UIImage.loadImage("com_icon_qrcode")
+            case 2:
                 cell.title = "性别"
                 cell.icon = UIImage.loadImage("com_icon_gender")
                 switch user.gender {
@@ -147,15 +148,15 @@ extension JCMyInfoViewController: UITableViewDataSource, UITableViewDelegate {
                 case .unknown:
                     cell.detail = "保密"
                 }
-            case 2:
+            case 3:
                 cell.title = "生日"
                 cell.icon = UIImage.loadImage("com_icon_birthday")
                 cell.detail = user.birthday
-            case 3:
+            case 4:
                 cell.title = "地区"
                 cell.icon = UIImage.loadImage("com_icon_region")
                 cell.detail = user.region
-            case 4:
+            case 5:
                 cell.title = "个性签名"
                 cell.icon = UIImage.loadImage("com_icon_signature")
                 cell.detail = user.signature
@@ -179,21 +180,22 @@ extension JCMyInfoViewController: UITableViewDataSource, UITableViewDelegate {
                 vc.nickName = user.nickname ?? ""
                 navigationController?.pushViewController(vc, animated: true)
             case 1:
+                navigationController?.pushViewController(MyQRCodeViewController(), animated: true)
+            case 2:
                 let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "男", "女", "保密")
                 actionSheet.tag = 1002
                 actionSheet.show(in: view)
-            case 2:
-                presentPopupView(datePickerPopupView)
             case 3:
-                presentPopupView(areaPickerPopupView)
+                presentPopupView(datePickerPopupView)
             case 4:
+                presentPopupView(areaPickerPopupView)
+            case 5:
                 let vc = JCSignatureViewController()
                 vc.signature = user.signature ?? ""
                 navigationController?.pushViewController(vc, animated: true)
             default:
                 break
             }
- 
         }
     }
    
@@ -255,14 +257,17 @@ extension JCMyInfoViewController: UINavigationControllerDelegate, UIImagePickerC
         picker.dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+// Local variable inserted by Swift 4.2 migrator.
+let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
+
         
-        var image = info[UIImagePickerControllerEditedImage] as! UIImage?
+        var image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.editedImage)] as! UIImage?
         image = image?.fixOrientation()
         if image != nil {
             MBProgressHUD_JChat.showMessage(message: "正在上传", toView: view)
             
-            guard let imageData = UIImageJPEGRepresentation(image!, 0.8) else {
+            guard let imageData = image!.jpegData(compressionQuality: 0.8) else {
                 return
             }
             
@@ -329,4 +334,14 @@ extension JCMyInfoViewController: JCAreaPickerViewDelegate {
     func areaPickerView(_ areaPickerView: JCAreaPickerView, cancleSelect button: UIButton) {
         dismissPopupView()
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
+	return input.rawValue
 }

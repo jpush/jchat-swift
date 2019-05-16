@@ -21,6 +21,8 @@ class JCImageBrowserViewController: UIViewController {
     fileprivate var imageMessages: [JMSGMessage]!
     fileprivate var isMessageType = false
     
+    fileprivate var selectImage: UIImage?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.black
@@ -49,11 +51,16 @@ class JCImageBrowserViewController: UIViewController {
     func getImageMessages(_ messages: [JCMessageType]) -> [JMSGMessage] {
         var imageMessages: [JMSGMessage] = []
         for message in messages {
-            guard let msg = conversation.message(withMessageId: message.msgId) else {
-                continue
+            var msg: JMSGMessage?
+            if message.targetType == .chatRoom {
+                msg = message.jmessage
+            }else{
+                msg = conversation.message(withMessageId: message.msgId)
             }
-            if msg.contentType == .image {
-                imageMessages.append(msg)
+            if msg != nil {
+                if msg?.contentType == .image {
+                    imageMessages.append(msg!)
+                }
             }
         }
         return imageMessages
@@ -132,7 +139,8 @@ extension JCImageBrowserViewController: JCImageBrowserCellDelegate {
         dismiss(animated: true, completion: nil)
     }
     
-    func longTap() {
+    func longTap(tableviewCell cell: JCMessageImageCollectionViewCell) {
+        selectImage = cell.messageImage.image
         let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "保存到手机")
         actionSheet.show(in: view)
         SAIInputBarLoad()
@@ -143,6 +151,18 @@ extension JCImageBrowserViewController: UIActionSheetDelegate {
     func actionSheet(_ actionSheet: UIActionSheet, clickedButtonAt buttonIndex: Int) {
         if buttonIndex == 1 {
             view.becomeFirstResponder()
+            if let image = selectImage {
+                UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(image:didFinishSavingWithError:contextInfo:)), nil)
+            }
         }
     }
+    
+    @objc func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafeRawPointer){
+        if error == nil {
+            MBProgressHUD_JChat.show(text: "保存成功", view: view)
+        } else {
+            MBProgressHUD_JChat.show(text: "保存失败，请重试", view: view)
+        }
+    }
+
 }

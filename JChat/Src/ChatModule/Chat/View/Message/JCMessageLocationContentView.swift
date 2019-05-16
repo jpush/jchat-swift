@@ -2,7 +2,7 @@
 //  JCMessageLocationContentView.swift
 //  JChat
 //
-//  Created by deng on 2017/4/19.
+//  Created by JIGUANG on 2017/4/19.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -30,6 +30,7 @@ class JCMessageLocationContentView: UIImageView, JCMessageContentViewType {
         guard let content = message.content as? JCMessageLocationContent else {
             return
         }
+        _message = message
         _delegate = content.delegate
         _address = content.address
         _lon = content.lon
@@ -38,10 +39,12 @@ class JCMessageLocationContentView: UIImageView, JCMessageContentViewType {
     }
     
     private weak var _delegate: JCMessageDelegate?
+    private var _message: JCMessageType!
     private var _address: String?
     private var _lon: Double?
     private var _lat: Double?
     private var _addressLabel = UILabel(frame: CGRect(x: 10, y: 0, width: 113, height: 40))
+    private lazy var locationImage: UIImage? = UIImage.loadImage("location_address")
     
     private func _commonInit() {
         _addressLabel.font = UIFont.systemFont(ofSize: 13)
@@ -50,7 +53,7 @@ class JCMessageLocationContentView: UIImageView, JCMessageContentViewType {
         isUserInteractionEnabled = true
         layer.cornerRadius = 2
         layer.masksToBounds = true
-        image = UIImage.loadImage("location_address")
+        image = locationImage
         _tapGesture()
     }
     
@@ -61,7 +64,7 @@ class JCMessageLocationContentView: UIImageView, JCMessageContentViewType {
         addGestureRecognizer(tap)
     }
     
-    func _clickCell() {
-        _delegate?.message?(location: _address, lat: _lat ?? 0, lon: _lon ?? 0)
+    @objc func _clickCell() {
+        _delegate?.message?(message: _message, location: _address, lat: _lat ?? 0, lon: _lon ?? 0)
     }
 }

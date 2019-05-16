@@ -2,7 +2,7 @@
 //  JCMineInfoCell.swift
 //  JChat
 //
-//  Created by deng on 2017/3/28.
+//  Created by JIGUANG on 2017/3/28.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -19,45 +19,46 @@ class JCMineInfoCell: JCTableViewCell {
     
     var title: String {
         get {
-            return self.titleLabel.text!
+            return titleLabel.text ?? ""
         }
         set {
-            return self.titleLabel.text  = newValue
+            return titleLabel.text  = newValue
         }
     }
     
     var detail: String? {
         get {
-            return self.detailLabel.text
+            return detailLabel.text
         }
         set {
-            self.detailLabel.isHidden = false
-            self.detailLabel.text = newValue
+            detailLabel.isHidden = false
+            detailLabel.text = newValue
         }
     }
     
     var isShowSwitch: Bool {
         get {
-            return !self.switchButton.isHidden
+            return !switchButton.isHidden
         }
         set {
-            self.switchButton.isHidden = !newValue
+            switchButton.isHidden = !newValue
         }
     }
     
     var isSwitchOn: Bool {
         get {
-            return self.switchButton.isOn
+            return switchButton.isOn
         }
         set {
-            self.switchButton.isOn = newValue
+            switchButton.isOn = newValue
         }
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         _init()
@@ -68,27 +69,33 @@ class JCMineInfoCell: JCTableViewCell {
         _init()
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
-    private lazy var titleLabel: UILabel = UILabel()
-    private lazy var switchButton: UISwitch =  UISwitch()
-    private lazy var detailLabel: UILabel = UILabel()
-    
-    //MARK: - private func
-    private func _init() {
+    private lazy var titleLabel: UILabel = {
+        let titleLabel = UILabel()
         titleLabel.textAlignment = .left
         titleLabel.font = UIFont.systemFont(ofSize: 16)
-
+        titleLabel.backgroundColor = .white
+        titleLabel.layer.masksToBounds = true
+        return titleLabel
+    }()
+    private lazy var switchButton: UISwitch =  {
+        let switchButton = UISwitch()
         switchButton.isHidden = true
         switchButton.addTarget(self, action: #selector(clickSwitch(_:)), for: .valueChanged)
-        
+        return switchButton
+    }()
+    private lazy var detailLabel: UILabel = {
+        let detailLabel = UILabel()
         detailLabel.textAlignment = .right
         detailLabel.font = UIFont.systemFont(ofSize: 14)
         detailLabel.isHidden = true
         detailLabel.textColor = UIColor(netHex: 0x999999)
-        
+        detailLabel.backgroundColor = .white
+        detailLabel.layer.masksToBounds = true
+        return detailLabel
+    }()
+    
+    //MARK: - private func
+    private func _init() {
         contentView.addSubview(switchButton)
         contentView.addSubview(titleLabel)
         contentView.addSubview(detailLabel)
@@ -103,15 +110,11 @@ class JCMineInfoCell: JCTableViewCell {
         addConstraint(_JCLayoutConstraintMake(detailLabel, .right, .equal, contentView, .right))
         addConstraint(_JCLayoutConstraintMake(detailLabel, .height, .equal, contentView, .height))
 
-//        addConstraint(_JCLayoutConstraintMake(switchButton, .top, .equal, contentView, .top, 15.5))
         addConstraint(_JCLayoutConstraintMake(switchButton, .right, .equal, contentView, .right, -15))
-//        addConstraint(_JCLayoutConstraintMake(switchButton, .height, .equal, nil, .notAnAttribute, 14))
-//        addConstraint(_JCLayoutConstraintMake(switchButton, .width, .equal, nil, .notAnAttribute, 60))
         addConstraint(_JCLayoutConstraintMake(switchButton, .centerY, .equal, contentView, .centerY))
-        
     }
     
-    func clickSwitch(_ sender: UISwitch) {
+    @objc func clickSwitch(_ sender: UISwitch) {
         delegate?.mineInfoCell?(clickSwitchButton: sender, indexPath: indexPate)
     }
 

@@ -2,7 +2,7 @@
 //  JCRegisterInfoViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/5/12.
+//  Created by JIGUANG on 2017/5/12.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -25,14 +25,13 @@ class JCRegisterInfoViewController: UIViewController {
         super.viewWillAppear(animated)
         UIApplication.shared.setStatusBarStyle(.lightContent, animated: false)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        _updateRegisterButton()
     }
     
     private lazy var nicknameTextField: UITextField = {
         var textField = UITextField()
         textField.addTarget(self, action: #selector(textFieldDidChanged(_ :)), for: .editingChanged)
         textField.clearButtonMode = .whileEditing
-        textField.placeholder = "请输入用户名"
+        textField.placeholder = "请输入昵称"
         textField.font = UIFont.systemFont(ofSize: 16)
         textField.frame = CGRect(x: 38 + 40 + 15, y: 64 + 40 + 80 + 40, width: self.view.width - 76 - 38, height: 40)
         return textField
@@ -51,8 +50,10 @@ class JCRegisterInfoViewController: UIViewController {
     private lazy var registerButton: UIButton = {
         var button = UIButton()
         button.backgroundColor = UIColor(netHex: 0x2DD0CF)
-        button.frame = CGRect(x: 38, y: 64 + 40 + 80 + 40 + 40 + 38, width: self.view.width - 76, height: 40)
-        button.setTitle("注册", for: .normal)
+        let button_y = 64 + 40 + 80 + 40 + 40 + 38
+        let button_width = Int(self.view.width - 76)
+        button.frame = CGRect(x: 38, y: button_y, width: button_width, height: 40)
+        button.setTitle("完成", for: .normal)
         button.layer.cornerRadius = 3.0
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(_userRegister), for: .touchUpInside)
@@ -89,10 +90,9 @@ class JCRegisterInfoViewController: UIViewController {
     //MARK: - private func
     private func _init() {
         self.title = "补充信息"
-        self.view.backgroundColor = .white
-        //        self.navigationController?.navigationBar.isHidden = true
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        view.backgroundColor = .white
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         
         nicknameTextField.addTarget(self, action: #selector(textFieldDidChanged(_ :)), for: .editingChanged)
         
@@ -106,12 +106,12 @@ class JCRegisterInfoViewController: UIViewController {
         view.addGestureRecognizer(tap)
     }
     
-    func textFieldDidChanged(_ textField: UITextField) {
-        _updateRegisterButton()
+    @objc func textFieldDidChanged(_ textField: UITextField) {
         if textField.markedTextRange == nil {
             let text = textField.text!
-            if text.characters.count > 30 {
-                let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 30))
+            if text.count > 30 {
+                let range = (text.startIndex ..< text.index(text.startIndex, offsetBy: 30))
+                //let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 30))
                 
                 let subText = text.substring(with: range)
                 textField.text = subText
@@ -119,39 +119,21 @@ class JCRegisterInfoViewController: UIViewController {
         }
     }
     
-    func _tapView() {
+    @objc func _tapView() {
         view.endEditing(true)
     }
      
-    func _tapHandler() {
+    @objc func _tapHandler() {
         view.endEditing(true)
         let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "  从相册中选择", "拍照")
         actionSheet.tag = 1001
         actionSheet.show(in: self.view)
     }
-    
-    func _updateRegisterButton() {
-        if (nicknameTextField.text?.isEmpty)! {
-            registerButton.isEnabled = false
-            registerButton.alpha = 0.7
-        } else {
-            registerButton.isEnabled = true
-            registerButton.alpha = 1.0
-        }
-    }
-    
+
     //MARK: - click event
-    func _userRegister() {
-        MBProgressHUD_JChat.showMessage(message: "注册中", toView: self.view)
-        JMSGUser.register(withUsername: username, password: password) { (result, error) in
-            if error == nil {
-                self.userLogin(withUsername: self.username, password: self.password)
-            } else {
-                MBProgressHUD_JChat.hide(forView: self.view, animated: true)
-                MBProgressHUD_JChat.show(text: "注册失败", view: self.view)
-            }
-        }
-        
+    @objc func _userRegister() {
+        MBProgressHUD_JChat.showMessage(message: "保存中", toView: self.view)
+        userLogin(withUsername: self.username, password: self.password)
     }
     
     private func userLogin(withUsername: String, password: String) {
@@ -166,7 +148,7 @@ class JCRegisterInfoViewController: UIViewController {
                 let window = appDelegate?.window!
                 window?.rootViewController = JCMainTabBarController()
             } else {
-                MBProgressHUD_JChat.show(text: "注册成功，但登录失败", view: self.view)
+                MBProgressHUD_JChat.show(text: "登录失败", view: self.view)
             }
         }
     }
@@ -183,7 +165,7 @@ class JCRegisterInfoViewController: UIViewController {
     
     private func uploadImage() {
         if let image = image {
-            let imageData = UIImagePNGRepresentation(image)
+            let imageData = image.jpegData(compressionQuality: 0.8)
             JMSGUser.updateMyInfo(withParameter: imageData!, userFieldType: .fieldsAvatar, completionHandler: { (result, error) in
                 if error == nil {
                     let avatorData = NSKeyedArchiver.archivedData(withRootObject: imageData!)
@@ -227,9 +209,12 @@ extension JCRegisterInfoViewController: UINavigationControllerDelegate, UIImageP
         picker.dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+// Local variable inserted by Swift 4.2 migrator.
+let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
+
         
-        var image = info[UIImagePickerControllerOriginalImage] as! UIImage?
+        var image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as! UIImage?
         image = image?.fixOrientation()
         self.image = image
         avatorView.image = image
@@ -237,3 +222,13 @@ extension JCRegisterInfoViewController: UINavigationControllerDelegate, UIImageP
     }
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
+	return input.rawValue
+}

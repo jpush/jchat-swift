@@ -2,7 +2,7 @@
 //  JCJChatInfoViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/3/16.
+//  Created by JIGUANG on 2017/3/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -67,19 +67,15 @@ extension JCJChatInfoViewController: UITableViewDelegate, UITableViewDataSource 
         return 4.5
     }
     
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             return tableView.dequeueReusableCell(withIdentifier: "JCJChatInfoCell", for: indexPath)
         }
-        
         var cell = tableView.dequeueReusableCell(withIdentifier: "JCMineInfoCell")
         if cell == nil {
-            
             cell = JCTableViewCell(style: .value1, reuseIdentifier: "JCMineInfoCell")
         }
         return cell!
-    
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -88,6 +84,7 @@ extension JCJChatInfoViewController: UITableViewDelegate, UITableViewDataSource 
             cell.accessoryType = .none
             cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 14)
             cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
+            cell.textLabel?.layer.masksToBounds = true
             switch indexPath.row {
             case 0:
                 cell.detailTextLabel?.text = "v\(version).\(bundleVersion)"

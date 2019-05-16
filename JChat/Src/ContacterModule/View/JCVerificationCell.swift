@@ -2,7 +2,7 @@
 //  JCVerificationCell.swift
 //  JChat
 //
-//  Created by deng on 2017/4/6.
+//  Created by JIGUANG on 2017/4/6.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -11,7 +11,7 @@ import JMessage
 
 class JCVerificationCell: JCTableViewCell {
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
@@ -36,16 +36,16 @@ class JCVerificationCell: JCTableViewCell {
         reason.text = info.resaon
         switch info.state {
         case JCVerificationType.accept.rawValue:
-            self.tipInfo.text = "已添加"
-            self.acceptButton.isHidden = true
+            tipInfo.text = "已添加"
+            acceptButton.isHidden = true
         case JCVerificationType.wait.rawValue:
-            self.tipInfo.text = "等待验证"
-            self.acceptButton.isHidden = true
+            tipInfo.text = "等待验证"
+            acceptButton.isHidden = true
         case JCVerificationType.receive.rawValue:
-            self.acceptButton.isHidden = false
+            acceptButton.isHidden = false
         case JCVerificationType.reject.rawValue:
-            self.tipInfo.text = "已拒绝"
-            self.acceptButton.isHidden = true
+            tipInfo.text = "已拒绝"
+            acceptButton.isHidden = true
         default:
             break
         }
@@ -127,7 +127,7 @@ class JCVerificationCell: JCTableViewCell {
         
     }
     
-    func _clickAcceptButton() {
+    @objc func _clickAcceptButton() {
         JMSGFriendManager.acceptInvitation(withUsername: info.username, appKey: info.appkey) { (result, error) in
             if error == nil {
                 self.info.state = JCVerificationType.accept.rawValue

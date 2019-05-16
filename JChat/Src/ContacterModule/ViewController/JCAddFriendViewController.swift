@@ -2,7 +2,7 @@
 //  JCAddFriendViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/4/27.
+//  Created by JIGUANG on 2017/4/27.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -35,11 +35,11 @@ class JCAddFriendViewController: UIViewController {
     }
     
     private func _setupNavigation() {
-        self.navigationItem.rightBarButtonItem =  navRightButton
+        navigationItem.rightBarButtonItem =  navRightButton
     }
     
     //MARK: - click func
-    func _addFriend() {
+    @objc func _addFriend() {
         guard let user = user else {
             return
         }

@@ -2,7 +2,7 @@
 //  MBProgressHUD+JChat.swift
 //  JChat
 //
-//  Created by deng on 2017/3/16.
+//  Created by JIGUANG on 2017/3/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -11,7 +11,7 @@ import MBProgressHUD
 
 class MBProgressHUD_JChat: MBProgressHUD {
 
-    open static func showMessage(message: String, toView: UIView?) {
+    public static func showMessage(message: String, toView: UIView?) {
         DispatchQueue.main.async {
             var currentView = toView
             if toView == nil {
@@ -26,7 +26,7 @@ class MBProgressHUD_JChat: MBProgressHUD {
         }
     }
     
-    open static func show(text: String, view: UIView?, _ time: TimeInterval = 1.5) {
+    public static func show(text: String, view: UIView?, _ time: TimeInterval = 1.5) {
         DispatchQueue.main.async {
             var currentView = view
             if view == nil {
@@ -42,7 +42,7 @@ class MBProgressHUD_JChat: MBProgressHUD {
         }
     }
     
-    open static func hide(forView: UIView?, animated: Bool) {
+    public static func hide(forView: UIView?, animated: Bool) {
         DispatchQueue.main.async {
             var currentView = forView
             if currentView == nil {

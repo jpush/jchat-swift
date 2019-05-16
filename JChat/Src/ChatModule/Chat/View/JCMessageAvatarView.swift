@@ -2,7 +2,7 @@
 //  JCMessageAvatarView.swift
 //  JChat
 //
-//  Created by deng on 10/04/2017.
+//  Created by JIGUANG on 10/04/2017.
 //  Copyright © 2017 HXHG. All rights reserved.
 //
 
@@ -32,14 +32,15 @@ open class JCMessageAvatarView: UIImageView, JCMessageContentViewType {
     open func apply(_ message: JCMessageType) {
         self.message = message
         if message.senderAvator != nil {
-            self.image = message.senderAvator
+            image = message.senderAvator
             return
         }
-        self.image = userDefaultIcon
         weak var weakSelf = self
         message.sender?.thumbAvatarData({ (data, id, error) in
             if let data = data {
                 weakSelf?.image = UIImage(data: data)
+            } else {
+                self.image = self.userDefaultIcon
             }
         })
     }
@@ -48,13 +49,26 @@ open class JCMessageAvatarView: UIImageView, JCMessageContentViewType {
     private lazy var userDefaultIcon = UIImage.loadImage("com_icon_user_36")
     
     private func _commonInit() {
+        image = userDefaultIcon
+        isUserInteractionEnabled = true
+        layer.masksToBounds = true
+
         let tapGR = UITapGestureRecognizer(target: self, action: #selector(_tapHandler))
         self.addGestureRecognizer(tapGR)
-        self.isUserInteractionEnabled = true
-        layer.masksToBounds = true
+
+        let longTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(_longTap(_:)))
+        longTapGesture.minimumPressDuration = 0.4
+        addGestureRecognizer(longTapGesture)
     }
     
-    func _tapHandler(sender:UITapGestureRecognizer) {
+    @objc func _tapHandler(sender:UITapGestureRecognizer) {
         delegate?.tapAvatarView?(message: message)
     }
+
+    @objc func _longTap(_ gestureRecognizer: UILongPressGestureRecognizer)  {
+        if gestureRecognizer.state == .began {
+            delegate?.longTapAvatarView?(message: message)
+        }
+    }
+
 }

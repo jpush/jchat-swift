@@ -2,7 +2,7 @@
 //  JCFriendSettingViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/5/10.
+//  Created by JIGUANG on 2017/5/10.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -36,25 +36,31 @@ class JCFriendSettingViewController: UIViewController {
     //MARK: - private func
     private func _init() {
         self.title = "设置"
-        self.automaticallyAdjustsScrollViewInsets = false
+        automaticallyAdjustsScrollViewInsets = false
         view.addSubview(tableview)
         
         NotificationCenter.default.addObserver(self, selector: #selector(_updateFriendInfo), name: NSNotification.Name(rawValue: kUpdateFriendInfo), object: nil)
     }
     
-    func _updateFriendInfo() {
-        self.tableview.reloadData()
+    @objc func _updateFriendInfo() {
+        tableview.reloadData()
     }
 }
 
 //MARK: - UITableViewDataSource & UITableViewDelegate
 extension JCFriendSettingViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        if user.isFriend {
+            return 2
+        }
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
+            if user.isFriend {
+                return 3
+            }
             return 2
         }
         return 1
@@ -98,28 +104,68 @@ extension JCFriendSettingViewController: UITableViewDataSource, UITableViewDeleg
             guard let cell = cell as? JCMineInfoCell else {
                 return
             }
-            switch indexPath.row {
-            case 0:
-                cell.title = "备注名"
-                cell.accessoryType = .disclosureIndicator
-                cell.detail = user.noteName ?? ""
-            case 1:
-                cell.isSwitchOn = user.isInBlacklist
-                cell.delegate = self
-                cell.accessoryType = .none
-                cell.isShowSwitch = true
-                cell.title = "加入黑名单"
-            default:
-                break
+            if user.isFriend {
+                switch indexPath.row {
+                case 0:
+                    cell.title = "备注名"
+                    cell.accessoryType = .disclosureIndicator
+                    cell.detail = user.noteName ?? ""
+                case 1:
+                    cell.title = "发送名片"
+                    cell.accessoryType = .disclosureIndicator
+                case 2:
+                    cell.isSwitchOn = user.isInBlacklist
+                    cell.delegate = self
+                    cell.accessoryType = .none
+                    cell.isShowSwitch = true
+                    cell.title = "加入黑名单"
+                default:
+                    break
+                }
+            } else {
+                switch indexPath.row {
+                case 0:
+                    cell.title = "发送名片"
+                    cell.accessoryType = .disclosureIndicator
+                case 1:
+                    cell.isSwitchOn = user.isInBlacklist
+                    cell.delegate = self
+                    cell.accessoryType = .none
+                    cell.isShowSwitch = true
+                    cell.title = "加入黑名单"
+                default:
+                    break
+                }
             }
+            
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0 && indexPath.row == 0 {
-            let vc = JCNoteNameViewController()
-            vc.user = user
-            self.navigationController?.pushViewController(vc, animated: true)
+        if indexPath.section == 0 {
+            switch indexPath.row {
+            case 0:
+                if user.isFriend {
+                    let vc = JCNoteNameViewController()
+                    vc.user = user
+                    navigationController?.pushViewController(vc, animated: true)
+                } else {
+                    let vc = JCForwardViewController()
+                    vc.fromUser = user
+                    let nav = JCNavigationController(rootViewController: vc)
+                    present(nav, animated: true)
+                }
+            case 1:
+                if user.isFriend {
+                    let vc = JCForwardViewController()
+                    vc.fromUser = user
+                    let nav = JCNavigationController(rootViewController: vc)
+                    present(nav, animated: true)
+                }
+            default:
+                break
+            }
+            
         }
     }
     
@@ -153,9 +199,9 @@ extension JCFriendSettingViewController: UIAlertViewDelegate {
 
 extension JCFriendSettingViewController: JCMineInfoCellDelegate {
     func mineInfoCell(clickSwitchButton button: UISwitch, indexPath: IndexPath?) {
-        MBProgressHUD_JChat.showMessage(message: "修改中", toView: self.view)
+        MBProgressHUD_JChat.showMessage(message: "修改中", toView: view)
         if button.isOn {
-            JMSGUser.addUsers(toBlacklist: [self.user.username]) { (result, error) in
+            JMSGUser.addUsers(toBlacklist: [user.username]) { (result, error) in
                 MBProgressHUD_JChat.hide(forView: self.view, animated: true)
                 if error == nil {
                     MBProgressHUD_JChat.show(text: "修改成功", view: self.view)
@@ -165,7 +211,7 @@ extension JCFriendSettingViewController: JCMineInfoCellDelegate {
                 }
             }
         } else {
-            JMSGUser.delUsers(fromBlacklist: [self.user.username]) { (result, error) in
+            JMSGUser.delUsers(fromBlacklist: [user.username]) { (result, error) in
                 MBProgressHUD_JChat.hide(forView: self.view, animated: true)
                 if error == nil {
                     MBProgressHUD_JChat.show(text: "修改成功", view: self.view)

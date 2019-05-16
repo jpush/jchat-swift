@@ -11,18 +11,18 @@ import JMessage
 
 @objc public protocol JCImageBrowserCellDelegate: NSObjectProtocol {
     @objc optional func singleTap()
-    @objc optional func longTap()
+    @objc optional func longTap(tableviewCell cell: JCMessageImageCollectionViewCell)
 }
 
 @objc(JCMessageImageCollectionViewCell)
-class JCMessageImageCollectionViewCell: UICollectionViewCell {
+public class JCMessageImageCollectionViewCell: UICollectionViewCell {
     
     weak var delegate: JCImageBrowserCellDelegate?
     
     @IBOutlet weak var messageImageContent: UIScrollView!
     var messageImage: UIImageView!
     
-    override func awakeFromNib() {
+    override public func awakeFromNib() {
         super.awakeFromNib()
         messageImage = UIImageView()
         messageImage.contentMode = .scaleAspectFit
@@ -45,23 +45,20 @@ class JCMessageImageCollectionViewCell: UICollectionViewCell {
         singleTapGesture.require(toFail: doubleTapGesture)
         
         let longTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(longTapImage(_:)))
-        longTapGesture.minimumPressDuration = 0.8
-        longTapGesture.numberOfTouchesRequired = 1
         addGestureRecognizer(longTapGesture)
-        longTapGesture.require(toFail: singleTapGesture)
     }
     
-    func singleTapImage(_ gestureRecognizer: UITapGestureRecognizer)  {
+    @objc func singleTapImage(_ gestureRecognizer: UITapGestureRecognizer)  {
         delegate?.singleTap?()
     }
     
-    func doubleTapImage(_ gestureRecognizer: UITapGestureRecognizer) {
+    @objc func doubleTapImage(_ gestureRecognizer: UITapGestureRecognizer) {
         adjustImageScale()
     }
     
-    func longTapImage(_ gestureRecognizer: UILongPressGestureRecognizer)  {
+    @objc func longTapImage(_ gestureRecognizer: UILongPressGestureRecognizer)  {
         if gestureRecognizer.state == .began {
-            delegate?.longTap?()
+            delegate?.longTap?(tableviewCell: self)
         }
     }
     
@@ -83,7 +80,9 @@ class JCMessageImageCollectionViewCell: UICollectionViewCell {
         }
         content.thumbImageData { (data, msgId, error) in
             if msgId == message.msgId {
-                self.messageImage.image = UIImage(data: data!)
+                if let data = data {
+                    self.messageImage.image = UIImage(data: data)
+                }
             }
             
             content.largeImageData(progress: nil, completionHandler: { (data, msgId, error) in
@@ -91,7 +90,9 @@ class JCMessageImageCollectionViewCell: UICollectionViewCell {
                     if msgId != message.msgId {
                         return
                     }
-                    self.messageImage.image = UIImage(data: data!)
+                    if let data = data {
+                        self.messageImage.image = UIImage(data: data)
+                    }
                 }
             })
         }
@@ -99,7 +100,7 @@ class JCMessageImageCollectionViewCell: UICollectionViewCell {
 }
 
 extension JCMessageImageCollectionViewCell:UIScrollViewDelegate {
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+    public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return messageImage
     }
 }

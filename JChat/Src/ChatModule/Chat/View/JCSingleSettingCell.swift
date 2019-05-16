@@ -2,12 +2,11 @@
 //  JCSingleSettingCell.swift
 //  JChat
 //
-//  Created by deng on 2017/4/27.
+//  Created by JIGUANG on 2017/4/27.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
 import UIKit
-import JMessage
 
 @objc public protocol JCSingleSettingCellDelegate: NSObjectProtocol {
     @objc optional func singleSettingCell(clickAddButton button: UIButton)
@@ -15,11 +14,10 @@ import JMessage
 }
 
 class JCSingleSettingCell: UITableViewCell {
-    
-    
+
     weak var delegate: JCSingleSettingCellDelegate?
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
@@ -33,14 +31,26 @@ class JCSingleSettingCell: UITableViewCell {
         _init()
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-    }
-    
-    private lazy var avatorButton: UIButton = UIButton()
-    private lazy var addButton: UIButton = UIButton()
-    private lazy var nickname: UILabel = UILabel()
+    private lazy var avatorButton: UIButton = {
+        let avatorButton = UIButton()
+        avatorButton.setBackgroundImage(UIImage.loadImage("com_icon_user_50"), for: .normal)
+        avatorButton.addTarget(self, action: #selector(_clickAvator), for: .touchUpInside)
+        return avatorButton
+    }()
+    private lazy var addButton: UIButton = {
+        let addButton = UIButton()
+        addButton.setBackgroundImage(UIImage.loadImage("com_icon_single_add"), for: .normal)
+        addButton.setBackgroundImage(UIImage.loadImage("com_icon_single_add_per"), for: .highlighted)
+        addButton.addTarget(self, action: #selector(_clickAdd), for: .touchUpInside)
+        return addButton
+    }()
+    private lazy var nickname: UILabel = {
+        let nickname = UILabel()
+        nickname.font = UIFont.systemFont(ofSize: 12)
+        nickname.textAlignment = .center
+        nickname.textColor = UIColor(netHex: 0x2C2C2C)
+        return nickname
+    }()
     
     func bindData(_ user: JMSGUser) {
         nickname.text = user.displayName()
@@ -53,18 +63,6 @@ class JCSingleSettingCell: UITableViewCell {
     }
     
     private func _init() {
-        avatorButton.setBackgroundImage(UIImage.loadImage("com_icon_user_50"), for: .normal)
-        
-        avatorButton.addTarget(self, action: #selector(_clickAvator), for: .touchUpInside)
-        
-        nickname.font = UIFont.systemFont(ofSize: 12)
-        nickname.textAlignment = .center
-        nickname.textColor = UIColor(netHex: 0x2C2C2C)
-        
-        addButton.setBackgroundImage(UIImage.loadImage("com_icon_single_add"), for: .normal)
-        addButton.setBackgroundImage(UIImage.loadImage("com_icon_single_add_per"), for: .highlighted)
-        addButton.addTarget(self, action: #selector(_clickAdd), for: .touchUpInside)
-        
         contentView.addSubview(avatorButton)
         contentView.addSubview(addButton)
         contentView.addSubview(nickname)
@@ -83,14 +81,13 @@ class JCSingleSettingCell: UITableViewCell {
         addConstraint(_JCLayoutConstraintMake(addButton, .width, .equal, nil, .notAnAttribute, 50))
         addConstraint(_JCLayoutConstraintMake(addButton, .height, .equal, nil, .notAnAttribute, 50))
         addConstraint(_JCLayoutConstraintMake(addButton, .top, .equal, contentView, .top, 16.5))
-    
     }
     
-    func _clickAvator() {
+    @objc func _clickAvator() {
         delegate?.singleSettingCell?(clickAvatorButton: avatorButton)
     }
     
-    func _clickAdd() {
+    @objc func _clickAdd() {
         delegate?.singleSettingCell?(clickAddButton: addButton)
     }
 

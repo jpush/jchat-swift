@@ -2,7 +2,7 @@
 //  JCConversationListViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/2/16.
+//  Created by JIGUANG on 2017/2/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -24,19 +24,20 @@ class JCConversationListViewController: UIViewController {
         super.viewDidAppear(animated)
         if isConnecting {
             titleTips.text = "连接中"
-            titleTips.isHidden = false
+            titleTipsView.isHidden = false
         } else {
-            titleTips.isHidden = true
+            titleTipsView.isHidden = true
         }
         _getConversations()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        titleTips.isHidden = true
+        titleTipsView.isHidden = true
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+        JMessage.remove(self, with: nil)
     }
     
     fileprivate var isConnecting = false
@@ -69,13 +70,23 @@ class JCConversationListViewController: UIViewController {
     }()
     
     fileprivate lazy var titleTips: UILabel = {
-        var tips = UILabel(frame: CGRect(x: self.view.width / 2 - 50, y: 20, width: 100, height: 44))
+        var tips = UILabel(frame: CGRect(x: 23, y: 0, width: 67, height: 44))
         tips.font = UIFont.systemFont(ofSize: 18)
         tips.textColor = UIColor.white
-        tips.textAlignment = .center
+        tips.textAlignment = .left
         tips.backgroundColor = UIColor(netHex: 0x5AD4D3)
-        tips.isHidden = true
         return tips
+    }()
+
+    fileprivate lazy var titleTipsView: UIView = {
+        var view = UIView(frame: CGRect(x: self.view.width / 2 - 45, y: 20, width: 90, height: 44))
+        view.backgroundColor =  UIColor(netHex: 0x5AD4D3)
+        let activityView = UIActivityIndicatorView(frame: CGRect(x: 0, y: 12, width: 20, height: 20))
+        view.addSubview(activityView)
+        activityView.startAnimating()
+        view.addSubview(self.titleTips)
+        view.isHidden = true
+        return view
     }()
     
     //Mark: - private func
@@ -84,10 +95,10 @@ class JCConversationListViewController: UIViewController {
         if #available(iOS 10.0, *) {
             navigationController?.tabBarItem.badgeColor = UIColor(netHex: 0xEB424C)
         }
-        
+
         let appDelegate = UIApplication.shared.delegate
         let window = appDelegate?.window!
-        window?.addSubview(titleTips)
+        window?.addSubview(titleTipsView)
         
         _setupNavigation()
         JMessage.add(self, with: nil)
@@ -105,13 +116,12 @@ class JCConversationListViewController: UIViewController {
 
         _getConversations()
         NotificationCenter.default.addObserver(self, selector: #selector(_getConversations), name: NSNotification.Name(rawValue: kUpdateConversation), object: nil)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(connectClose), name: NSNotification.Name.jmsgNetworkDidClose, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(connectSucceed), name: NSNotification.Name.jmsgNetworkDidLogin, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(connecting), name: NSNotification.Name.jmsgNetworkIsConnecting, object: nil)
     }
     
-    func reachabilityChanged(note: NSNotification) {
+    @objc func reachabilityChanged(note: NSNotification) {
         if let curReach = note.object as? Reachability {
             let status = curReach.currentReachabilityStatus()
             switch status {
@@ -131,7 +141,7 @@ class JCConversationListViewController: UIViewController {
     }
     
     func _updateBadge() {
-        let count = getAllConversation(datas)
+        let count = datas.unreadCount
         if count > 99 {
             navigationController?.tabBarItem.badgeValue = "99+"
         } else {
@@ -139,12 +149,13 @@ class JCConversationListViewController: UIViewController {
         }
     }
     
-    func _getConversations() {
+    @objc func _getConversations() {
         JMSGConversation.allConversations { (result, error) in
             guard let conversatios = result else {
                 return
             }
             self.datas = conversatios as! [JMSGConversation]
+            self.datas = self.sortConverstaions(self.datas)
             self.tableview.reloadData()
             if self.datas.count == 0 {
                 self.emptyView.isHidden = false
@@ -154,29 +165,30 @@ class JCConversationListViewController: UIViewController {
             self._updateBadge()
         }
     }
+
+    fileprivate func sortConverstaions(_ convs: [JMSGConversation]) -> [JMSGConversation] {
+        var stickyConvs: [JMSGConversation] = []
+        var allConvs: [JMSGConversation] = []
+        for index in 0..<convs.count {
+            let conv = convs[index]
+            if conv.ex.isSticky {
+                stickyConvs.append(conv)
+            } else {
+                allConvs.append(conv)
+            }
+        }
+
+        stickyConvs = stickyConvs.sorted(by: { (c1, c2) -> Bool in
+            c1.ex.stickyTime > c2.ex.stickyTime
+        })
+
+        allConvs.insert(contentsOf: stickyConvs, at: 0)
+        return allConvs
+    }
     
     //MARK: - click func
-    func _clickNavRightButton(_ sender: UIButton) {
+    @objc func _clickNavRightButton(_ sender: UIButton) {
         _setupPopView()
-    }
-    
-    func _addFriend() {
-        dismissPopupView()
-        navigationController?.pushViewController(JCSearchFriendViewController(), animated: true)
-    }
-    
-    func _addSingle() {
-        dismissPopupView()
-        let vc = JCSearchFriendViewController()
-        vc.isSearchUser = true
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func _addGroup() {
-        dismissPopupView()
-        let vc = JCUpdateMemberViewController()
-        vc.isAddMember = false
-        navigationController?.pushViewController(vc, animated: true)
     }
     
     private func _setupPopView() {
@@ -184,46 +196,9 @@ class JCConversationListViewController: UIViewController {
     }
     
     fileprivate lazy var selectView: YHPopupView = {
-        let popupView = YHPopupView(frame: CGRect(x: self.view.width - 145, y: 65, width: 140, height: 137.5))
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 140, height: 137.5))
-        imageView.image = UIImage.loadImage("com_icon _selectList")
-        popupView?.addSubview(imageView)
-        popupView?.backgroundViewColor = .clear
-        popupView?.clickBlankSpaceDismiss = true
-        
-        let height = (137.5 - 5) / 3
-        let width = 140.0
-        
-        let image = UIImage.createImage(color: UIColor(netHex: 0x02BDBC), size: CGSize(width: 140, height: height))
-        
-        let addFriend = UIButton(frame: CGRect(x: 0.0, y: 5 + height * 2, width: width, height: height))
-        addFriend.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        addFriend.addTarget(self, action: #selector(_addFriend), for: .touchUpInside)
-        addFriend.setImage(UIImage.loadImage("com_icon_friend_add"), for: .normal)
-        addFriend.setImage(UIImage.loadImage("com_icon_friend_add"), for: .highlighted)
-        addFriend.setBackgroundImage(image, for: .highlighted)
-        
-        let addGroup = UIButton(frame: CGRect(x: 0.0, y: 5 + height, width: width, height: height))
-        addGroup.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        addGroup.addTarget(self, action: #selector(_addGroup), for: .touchUpInside)
-        addGroup.setImage(UIImage.loadImage("com_icon_conv_group"), for: .normal)
-        addGroup.setImage(UIImage.loadImage("com_icon_conv_group"), for: .highlighted)
-        addGroup.setBackgroundImage(image, for: .highlighted)
-        
-        let addSingle = UIButton(frame: CGRect(x: 0.0, y: 5, width: width, height: height))
-        addSingle.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        addSingle.addTarget(self, action: #selector(_addSingle), for: .touchUpInside)
-        addSingle.setImage(UIImage.loadImage("com_icon_conv_single"), for: .normal)
-        addSingle.setImage(UIImage.loadImage("com_icon_conv_single"), for: .highlighted)
-        addSingle.setBackgroundImage(image, for: .highlighted)
-        
-        addFriend.setTitle("  添加朋友", for: .normal)
-        addSingle.setTitle("  发起单聊", for: .normal)
-        addGroup.setTitle("  发起群聊", for: .normal)
-        popupView?.addSubview(addSingle)
-        popupView?.addSubview(addGroup)
-        popupView?.addSubview(addFriend)
-        return popupView!
+        let popupView = MorePopupView(frame: CGRect(x: self.view.width - 150, y: 65, width: 145, height: 554 / 3))
+        popupView.delegate = self
+        return popupView
     }()
 }
 
@@ -278,17 +253,24 @@ extension JCConversationListViewController: UITableViewDelegate, UITableViewData
         let action1 = UITableViewRowAction(style: .destructive, title: "删除") { (action, indexPath) in
             self._delete(indexPath)
         }
-//        let action2 = UITableViewRowAction(style: .normal, title: "顶置") { (action, indexPath) in
-//
-//        }
-        return [action1]
+        let conversation = datas[showNetworkTips ? indexPath.row - 1 : indexPath.row]
+        let action2 = UITableViewRowAction(style: .normal, title: "置顶") { (action, indexPath) in
+            conversation.ex.isSticky = !conversation.ex.isSticky
+            self._getConversations()
+        }
+        if conversation.ex.isSticky {
+            action2.title = "取消置顶"
+        } else {
+            action2.title = "置顶"
+        }
+        return [action1, action2]
     }
 
     private func _delete(_ indexPath: IndexPath) {
         let conversation = datas[indexPath.row]
         let tager = conversation.target
         JCDraft.update(text: nil, conversation: conversation)
-        if conversation.isGroup {
+        if conversation.ex.isGroup {
             guard let group = tager as? JMSGGroup else {
                 return
             }
@@ -308,6 +290,33 @@ extension JCConversationListViewController: UITableViewDelegate, UITableViewData
         tableview.reloadData()
     }
     
+}
+
+extension JCConversationListViewController: MorePopupViewDelegate {
+    func popupView(view: MorePopupView, addGroup addButton: UIButton) {
+        dismissPopupView()
+        let vc = JCUpdateMemberViewController()
+        vc.isAddMember = false
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func popupView(view: MorePopupView, addFriend addButton: UIButton) {
+        dismissPopupView()
+        navigationController?.pushViewController(JCSearchFriendViewController(), animated: true)
+    }
+    
+    func popupView(view: MorePopupView, addSingle addButton: UIButton) {
+        dismissPopupView()
+        let vc = JCSearchFriendViewController()
+        vc.isSearchUser = true
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func popupView(view: MorePopupView, scanQRCode addButton: UIButton) {
+        dismissPopupView()
+        let vc = ScanQRCodeViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 extension JCConversationListViewController: JMessageDelegate {
@@ -389,17 +398,17 @@ extension JCConversationListViewController {
         }
     }
     
-    func connectClose() {
+    @objc func connectClose() {
         isConnecting = false
-        titleTips.isHidden = true
+        titleTipsView.isHidden = true
     }
     
-    func connectSucceed() {
+    @objc func connectSucceed() {
         isConnecting = false
-        titleTips.isHidden = true
+        titleTipsView.isHidden = true
     }
     
-    func connecting() {
+    @objc func connecting() {
         _connectingSate()
     }
     
@@ -418,30 +427,8 @@ extension JCConversationListViewController {
             if currentVC.isKind(of: JCConversationListViewController.self) {
                 isConnecting = true
                 titleTips.text = "连接中"
-                titleTips.isHidden = false
+                titleTipsView.isHidden = false
             }
         }
     }
 }
-
-@inline(__always)
-internal func getAllConversation(_ conversations: [JMSGConversation]) -> Int {
-    var count = 0
-    for item in conversations {
-        if let group = item.target as? JMSGGroup {
-            // TODO: isNoDisturb 这个接口存在性能问题，如果大量离线会卡死
-            if group.isNoDisturb {
-                continue
-            }
-        }
-        if let user = item.target as? JMSGUser {
-            if user.isNoDisturb {
-                continue
-            }
-        }
-        count += item.unreadCount?.intValue ?? 0
-    }
-    return count
-}
-
-

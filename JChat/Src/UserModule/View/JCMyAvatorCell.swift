@@ -2,7 +2,7 @@
 //  JCMyAvatorCell.swift
 //  JChat
 //
-//  Created by deng on 2017/3/30.
+//  Created by JIGUANG on 2017/3/30.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -11,10 +11,11 @@ import JMessage
 
 class JCMyAvatorCell: UITableViewCell {
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         _init()
@@ -24,26 +25,27 @@ class JCMyAvatorCell: UITableViewCell {
         super.awakeFromNib()
         _init()
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-    }
-    
-    private lazy var avatorView: UIImageView = UIImageView()
-    private lazy var nameLabel: UILabel = UILabel()
+
+    private lazy var avatorView: UIImageView = {
+        let avatorView = UIImageView()
+        avatorView.contentMode = .scaleAspectFill
+        avatorView.clipsToBounds = true
+        return avatorView
+    }()
+    private lazy var nameLabel: UILabel = {
+        let nameLabel = UILabel()
+        nameLabel.textAlignment = .center
+        nameLabel.font = UIFont.systemFont(ofSize: 14)
+        nameLabel.textColor = UIColor(netHex: 0x999999)
+        nameLabel.backgroundColor = .white
+        nameLabel.layer.masksToBounds = true
+        return nameLabel
+    }()
     
     private lazy var defaultAvator = UIImage.loadImage("com_icon_user_80")
     
     //MARK: - private func 
     private func _init() {
-        avatorView.contentMode = .scaleAspectFill
-        avatorView.clipsToBounds = true
-        avatorView.image = defaultAvator
-        nameLabel.textAlignment = .center
-        nameLabel.font = UIFont.systemFont(ofSize: 14)
-        nameLabel.textColor = UIColor(netHex: 0x999999)
-        
         contentView.addSubview(avatorView)
         contentView.addSubview(nameLabel)
         
@@ -59,14 +61,14 @@ class JCMyAvatorCell: UITableViewCell {
     }
     
     func bindData(user: JMSGUser) {
-        self.nameLabel.text =  "用户名：" + user.username
-        avatorView.image = defaultAvator
+        nameLabel.text =  "用户名：" + user.username
         user.thumbAvatarData { (data, username, error) in
-            guard let imageData = data else {
-                return 
+            if let imageData = data {
+                let image = UIImage(data: imageData)
+                self.avatorView.image = image
+            } else {
+                self.avatorView.image = self.defaultAvator
             }
-            let image = UIImage(data: imageData)
-            self.avatorView.image = image
         }
     }
 

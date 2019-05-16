@@ -2,7 +2,7 @@
 //  JCMyInfoCell.swift
 //  JChat
 //
-//  Created by deng on 2017/3/30.
+//  Created by JIGUANG on 2017/3/30.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -12,32 +12,32 @@ class JCUserInfoCell: JCTableViewCell {
     
     var icon: UIImage? {
         get {
-            return self.iconView.image
+            return iconView.image
         }
         set {
-            self.iconView.image = newValue
+            iconView.image = newValue
         }
     }
     
     var title: String? {
         get {
-            return self.titleLabel.text
+            return titleLabel.text
         }
         set {
-            self.titleLabel.text = newValue
+            titleLabel.text = newValue
         }
     }
     
     var detail: String? {
         get {
-            return self.detailLabel.text
+            return detailLabel.text
         }
         set {
-            self.detailLabel.text = newValue
+            detailLabel.text = newValue
         }
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }

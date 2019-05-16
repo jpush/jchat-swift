@@ -2,7 +2,7 @@
 //  JCIdentityVerificationViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/4/5.
+//  Created by JIGUANG on 2017/4/5.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -37,10 +37,10 @@ class JCIdentityVerificationViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(_getData), name: NSNotification.Name(rawValue: kUpdateVerification), object: nil)
     }
     
-    func _getData() {
+    @objc func _getData() {
         infos.removeAll()
         infos = JCVerificationInfoDB.shareInstance.quaryData()
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
 
     
@@ -93,11 +93,11 @@ class JCIdentityVerificationViewController: UITableViewController {
         return true
     }
     
-    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .delete
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let info = infos[indexPath.row]
             JCVerificationInfoDB.shareInstance.delete(info)

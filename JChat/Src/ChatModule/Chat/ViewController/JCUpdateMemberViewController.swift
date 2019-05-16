@@ -2,7 +2,7 @@
 //  JCUpdateMemberViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/5/11.
+//  Created by JIGUANG on 2017/5/11.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -28,10 +28,17 @@ class JCUpdateMemberViewController: UIViewController {
         }
     }
 
-    fileprivate lazy var toolView: UIView = UIView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: 55))
+    private var topOffset: CGFloat {
+        if isIPhoneX {
+            return 88
+        }
+        return 64
+    }
+
+    fileprivate lazy var toolView: UIView = UIView(frame: CGRect(x: 0, y: self.topOffset, width: self.view.width, height: 55))
     fileprivate var tableView: UITableView = UITableView(frame: .zero, style: .grouped)
     fileprivate var collectionView: UICollectionView!
-    fileprivate lazy var searchView: UISearchBar = UISearchBar()
+    fileprivate lazy var searchBar: UISearchBar = UISearchBar.default
     fileprivate lazy var confirm = UIButton(frame: CGRect(x: 0, y: 0, width: 120, height: 28))
     
     fileprivate lazy var users: [JMSGUser] = []
@@ -44,7 +51,7 @@ class JCUpdateMemberViewController: UIViewController {
     fileprivate var members: [JMSGUser]?
     
     fileprivate lazy var tipsView: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: 64 + 31 + 5, width: self.view.width, height: self.view.height - 31 - 64 - 5))
+        let view = UIView(frame: CGRect(x: 0, y: self.topOffset + 31 + 5, width: self.view.width, height: self.view.height - 31 - self.topOffset - 5))
         view.backgroundColor = .white
         let tips = UILabel(frame: CGRect(x: 0, y: 0, width: view.width, height: 50))
         tips.font = UIFont.systemFont(ofSize: 16)
@@ -74,7 +81,7 @@ class JCUpdateMemberViewController: UIViewController {
         tableView.sectionIndexColor = UIColor(netHex: 0x2dd0cf)
         tableView.sectionIndexBackgroundColor = .clear
         tableView.register(JCSelectMemberCell.self, forCellReuseIdentifier: "JCSelectMemberCell")
-        tableView.frame = CGRect(x: 0, y: 31 + 64, width: view.width, height: view.height - 31 - 64)
+        tableView.frame = CGRect(x: 0, y: 31 + topOffset, width: view.width, height: view.height - 31 - topOffset)
         view.addSubview(tableView)
         
         view.addSubview(tipsView)
@@ -91,19 +98,11 @@ class JCUpdateMemberViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.register(JCUpdateMemberCell.self, forCellWithReuseIdentifier: "JCUpdateMemberCell")
         
-        searchView.frame = CGRect(x: 15, y: 0, width: toolView.width - 30, height: 31)
-        searchView.barStyle = .default
-        searchView.backgroundColor = .white
-        searchView.barTintColor = .white
-        searchView.delegate = self
-        searchView.autocapitalizationType = .none
-        searchView.placeholder = "可搜索非好友"
-        searchView.layer.borderColor = UIColor.white.cgColor
-        searchView.layer.borderWidth = 1
-        searchView.layer.masksToBounds = true
-        
-        
-        toolView.addSubview(searchView)
+        searchBar.frame = CGRect(x: 15, y: 0, width: toolView.width - 30, height: 31)
+        searchBar.delegate = self
+        searchBar.placeholder = "可搜索非好友"
+
+        toolView.addSubview(searchBar)
         toolView.addSubview(collectionView)
         
         _setupNavigation()
@@ -154,7 +153,7 @@ class JCUpdateMemberViewController: UIViewController {
                         self.data[key] = array
                     }
                     self.filteredUsersArray = self.users
-                    self.keys = _JCSortKeys(self.keys)
+                    self.keys = self.keys.sortedKeys()
                     self.tableView.reloadData()
                     self.collectionView.reloadData()
                 }
@@ -180,18 +179,16 @@ class JCUpdateMemberViewController: UIViewController {
                 
                 data[key] = array
             }
-            keys = _JCSortKeys(keys)
+            keys = keys.sortedKeys()
             tableView.reloadData()
             collectionView.reloadData()
         }
     }
     
     fileprivate func _removeUser(_ user: JMSGUser) {
-        if let index = selectUsers.index(where: { (u) -> Bool in
-            u.username == user.username && u.appKey == user.appKey
-        }) {
-            selectUsers.remove(at: index)
-        }
+        selectUsers = selectUsers.filter({ (u) -> Bool in
+            u.username != user.username || u.appKey != user.appKey
+        })
     }
     
     fileprivate func _reloadCollectionView() {
@@ -207,33 +204,33 @@ class JCUpdateMemberViewController: UIViewController {
         switch selectUsers.count {
         case 0:
             collectionView.frame = .zero
-            searchView.frame = CGRect(x: 15, y: 0, width: toolView.width - 30, height: 31)
-            toolView.frame = CGRect(x: 0, y: 64, width: toolView.width, height: 31)
-            tableView.frame = CGRect(x: tableView.x, y: 64 + 31, width: tableView.width, height: view.height - 64 - 31)
-            tipsView.frame = CGRect(x: 0, y: 64 + 31 + 5, width: self.view.width, height: self.view.height - 31 - 64 - 5)
+            searchBar.frame = CGRect(x: 15, y: 0, width: toolView.width - 30, height: 31)
+            toolView.frame = CGRect(x: 0, y: topOffset, width: toolView.width, height: 31)
+            tableView.frame = CGRect(x: tableView.x, y: topOffset + 31, width: tableView.width, height: view.height - topOffset - 31)
+            tipsView.frame = CGRect(x: 0, y: topOffset + 31 + 5, width: view.width, height: view.height - 31 - topOffset - 5)
         case 1:
             collectionView.frame = CGRect(x: 10, y: 0, width: 46, height: 55)
-            searchView.frame = CGRect(x: 5 + 46, y: 0, width: toolView.width - 5 - 46, height: 55)
-            toolView.frame = CGRect(x: 0, y: 64, width: toolView.width, height: 55)
-            tableView.frame = CGRect(x: tableView.x, y: 64 + 55, width: tableView.width, height: view.height - 64 - 55)
-            tipsView.frame = CGRect(x: 0, y: 64 + 31 + 5 + 24, width: self.view.width, height: self.view.height - 31 - 40 - 5)
+            searchBar.frame = CGRect(x: 5 + 46, y: 0, width: toolView.width - 5 - 46, height: 55)
+            toolView.frame = CGRect(x: 0, y: topOffset, width: toolView.width, height: 55)
+            tableView.frame = CGRect(x: tableView.x, y: topOffset + 55, width: tableView.width, height: view.height - topOffset - 55)
+            tipsView.frame = CGRect(x: 0, y: topOffset + 31 + 5 + 24, width: view.width, height: view.height - 31 - 40 - 5)
         case 2:
             collectionView.frame = CGRect(x: 10, y: 0, width: 92, height: 55)
-            searchView.frame = CGRect(x: 5 + 46 * 2, y: 0, width: toolView.width - 5 - 46 * 2, height: 55)
+            searchBar.frame = CGRect(x: 5 + 46 * 2, y: 0, width: toolView.width - 5 - 46 * 2, height: 55)
         case 3:
             collectionView.frame = CGRect(x: 10, y: 0, width: 138, height: 55)
-            searchView.frame = CGRect(x: 5 + 46 * 3, y: 0, width: toolView.width - 5 - 46 * 3, height: 55)
+            searchBar.frame = CGRect(x: 5 + 46 * 3, y: 0, width: toolView.width - 5 - 46 * 3, height: 55)
         case 4:
             collectionView.frame = CGRect(x: 10, y: 0, width: 184, height: 55)
-            searchView.frame = CGRect(x: 5 + 46 * 4, y: 0, width: toolView.width - 5 - 46 * 4, height: 55)
+            searchBar.frame = CGRect(x: 5 + 46 * 4, y: 0, width: toolView.width - 5 - 46 * 4, height: 55)
         default:
             collectionView.frame = CGRect(x: 10, y: 0, width: 230, height: 55)
-            searchView.frame = CGRect(x: 5 + 46 * 5, y: 0, width: toolView.width - 5 - 46 * 5, height: 55)
+            searchBar.frame = CGRect(x: 5 + 46 * 5, y: 0, width: toolView.width - 5 - 46 * 5, height: 55)
         }
         collectionView.reloadData()
     }
     
-    func _clickNavRightButton(_ sender: UIButton) {
+    @objc func _clickNavRightButton(_ sender: UIButton) {
         if selectUsers.count == 0 {
             return
         }
