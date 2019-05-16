@@ -51,6 +51,8 @@ NSString * const KILabelLinkKey = @"link";
 // During a touch, range of text that is displayed as selected
 @property (nonatomic, assign) NSRange selectedRange;
 
+@property (nonatomic, strong) NSRegularExpression *urlRegex;
+
 @end
 
 #pragma mark - Implementation
@@ -461,17 +463,7 @@ NSString * const KILabelLinkKey = @"link";
 - (NSArray *)getRangesForURLs:(NSAttributedString *)text
 {
     
-    NSError *error;
-    
-    NSString *regulaStr =@"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
-    
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regulaStr
-                                  
-                                                                           options:NSRegularExpressionCaseInsensitive
-                                  
-                                                                             error:&error];
-    
-    NSArray *matches = [regex matchesInString:text.string options:0 range:NSMakeRange(0, [text.string length])];
+    NSArray *matches = [self.urlRegex matchesInString:text.string options:0 range:NSMakeRange(0, [text.string length])];
     
     
     NSMutableArray *rangesForURLs = [[NSMutableArray alloc] init];;
@@ -726,6 +718,16 @@ NSString * const KILabelLinkKey = @"link";
         }
         break;
     }
+}
+
+#pragma mark - setter & getter
+- (NSRegularExpression *)urlRegex {
+    if (_urlRegex == nil) {
+        NSString *regulaStr =@"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
+
+        _urlRegex = [NSRegularExpression regularExpressionWithPattern:regulaStr options:NSRegularExpressionCaseInsensitive error:nil];
+    }
+    return _urlRegex;
 }
 
 #pragma mark - Layout manager delegate

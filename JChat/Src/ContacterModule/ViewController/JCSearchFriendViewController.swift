@@ -2,7 +2,7 @@
 //  JCSearchFriendViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/4/27.
+//  Created by JIGUANG on 2017/4/27.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -26,10 +26,11 @@ class JCSearchFriendViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+        super.viewWillDisappear(animated)
+        searchController.searchBar.isHidden = true
         if searchController.isActive {
             searchController.isActive = false
-            isActive = true
+            isActive = false
         }
     }
 
@@ -40,14 +41,15 @@ class JCSearchFriendViewController: UIViewController {
     private var isActive = false
     
     fileprivate lazy var searchController: JCSearchController = JCSearchController(searchResultsController: nil)
-    private lazy var searchView: UIView = UIView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: 31))
-    fileprivate lazy var bgView: UIView = UIView(frame: CGRect(x: 0, y: 64 + 31 + 5, width: self.view.width, height: self.view.height - 31 - 5))
+    private lazy var searchView: UIView = UIView(frame: CGRect(x: 0, y: self.topOffset, width: self.view.width, height: 31))
+    fileprivate lazy var bgView: UIView = UIView(frame: CGRect(x: 0, y: self.topOffset + 31 + 5, width: self.view.width, height: self.view.height - 31 - 5))
     fileprivate lazy var infoView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.width, height: 65.5))
     
     fileprivate lazy var avatorView: UIImageView = UIImageView(frame: CGRect(x: 15, y: 7.5, width: 50, height: 50))
     fileprivate lazy var nameLabel: UILabel =  UILabel(frame: CGRect(x: 65 + 10, y: 21, width: 200, height: 22.5))
-    private let width = UIScreen.main.applicationFrame.size.width
-    fileprivate lazy var addButton = UIButton()
+    private let width = UIScreen.main.bounds.size.width
+    open lazy var addButton = UIButton()
+    open var addChatRoomManger: Bool = false
     
     fileprivate lazy var tipsView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.width, height: 67))
@@ -63,8 +65,8 @@ class JCSearchFriendViewController: UIViewController {
     }()
     
     private lazy var networkErrorView: UIView = {
-        let tipsView = UIView(frame: CGRect(x: 0, y: 64 + 36, width: self.view.width, height: self.view.height))
-        var tipsLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 64, width: tipsView.width, height: 22.5))
+        let tipsView = UIView(frame: CGRect(x: 0, y: self.topOffset + 36, width: self.view.width, height: self.view.height))
+        var tipsLabel: UILabel = UILabel(frame: CGRect(x: 0, y: self.topOffset, width: tipsView.width, height: 22.5))
         tipsLabel.textColor = UIColor(netHex: 0x999999)
         tipsLabel.textAlignment = .center
         tipsLabel.font = UIFont.systemFont(ofSize: 16)
@@ -75,12 +77,19 @@ class JCSearchFriendViewController: UIViewController {
         return tipsView
     }()
     
-    fileprivate var user: JMSGUser?
-    
+    open var user: JMSGUser?
+
+    private var topOffset: CGFloat {
+        if isIPhoneX {
+            return 88
+        }
+        return 64
+    }
+
     private func _init() {
-        
-        self.view.backgroundColor = UIColor(netHex: 0xE8EDF3)
-        self.automaticallyAdjustsScrollViewInsets = false
+        view.backgroundColor = UIColor(netHex: 0xE8EDF3)
+        automaticallyAdjustsScrollViewInsets = false
+
         if isSearchUser {
             self.title = "发起单聊"
         } else {
@@ -92,7 +101,9 @@ class JCSearchFriendViewController: UIViewController {
             addButton.setBackgroundImage(image, for: .normal)
             addButton.layer.cornerRadius = 2
             addButton.layer.masksToBounds = true
-            addButton.addTarget(self, action: #selector(_addFriend), for: .touchUpInside)
+            if(self.addChatRoomManger == false){
+                addButton.addTarget(self, action: #selector(_addFriend), for: .touchUpInside)
+            }
             infoView.backgroundColor = .white
             infoView.addSubview(addButton)
         }
@@ -133,22 +144,21 @@ class JCSearchFriendViewController: UIViewController {
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(note:)), name: NSNotification.Name(rawValue: "kNetworkReachabilityChangedNotification"), object: nil)
-        
     }
     
-    func reachabilityChanged(note: NSNotification) {
+    @objc func reachabilityChanged(note: NSNotification) {
         if let curReach = note.object as? Reachability {
             let status = curReach.currentReachabilityStatus()
             switch status {
             case NotReachable:
-                self.networkErrorView.isHidden = false
+                networkErrorView.isHidden = false
             default :
-                self.networkErrorView.isHidden = true
+                networkErrorView.isHidden = true
             }
         }
     }
     
-    func _tapHandler(sender:UITapGestureRecognizer) {
+    @objc func _tapHandler(sender:UITapGestureRecognizer) {
         if (user?.isEqual(to: JMSGUser.myInfo()))! {
             searchController.isActive = false
             navigationController?.pushViewController(JCMyInfoViewController(), animated: true)
@@ -163,11 +173,11 @@ class JCSearchFriendViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func _addFriend() {
+    @objc func _addFriend() {
         let vc = JCAddFriendViewController()
         vc.user = self.user!
         searchController.isActive = false
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -195,7 +205,7 @@ extension JCSearchFriendViewController: JCSearchControllerDelegate, UISearchBarD
         if name.isEmpty {
             return
         }
-        MBProgressHUD_JChat.showMessage(message: "查找中", toView: self.view)
+        MBProgressHUD_JChat.showMessage(message: "查找中", toView: view)
         JMSGUser.userInfoArray(withUsernameArray: [name]) { (result, error) in
             self.bgView.isHidden = false
             MBProgressHUD_JChat.hide(forView: self.view, animated: true)
@@ -209,6 +219,12 @@ extension JCSearchFriendViewController: JCSearchControllerDelegate, UISearchBarD
                 } else {
                     self.addButton.isHidden = false
                 }
+                
+                if(self.addChatRoomManger == true){
+                    self.addButton.isHidden = false;
+                }
+                
+                
                 self.nameLabel.text = user?.displayName()
                 self.avatorView.image = UIImage.loadImage("com_icon_user_50")
                 user?.thumbAvatarData({ (data, id, error) in

@@ -2,7 +2,7 @@
 //  JCMyInfoCell.swift
 //  JChat
 //
-//  Created by deng on 2017/3/30.
+//  Created by JIGUANG on 2017/3/30.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -12,35 +12,36 @@ class JCMyInfoCell: JCTableViewCell {
     
     var icon: UIImage? {
         get {
-            return self.iconView.image
+            return iconView.image
         }
         set {
-            self.iconView.image = newValue
+            iconView.image = newValue
         }
     }
     
     var title: String? {
         get {
-            return self.titleLabel.text
+            return titleLabel.text
         }
         set {
-            self.titleLabel.text = newValue
+            titleLabel.text = newValue
         }
     }
     
     var detail: String? {
         get {
-            return self.detailLabel.text
+            return detailLabel.text
         }
         set {
-            self.detailLabel.text = newValue
+            detailLabel.text = newValue
         }
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         _init()
@@ -51,21 +52,25 @@ class JCMyInfoCell: JCTableViewCell {
         _init()
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-    }
-    
     private lazy var iconView: UIImageView = UIImageView()
-    private lazy var titleLabel: UILabel = UILabel()
-    private lazy var detailLabel: UILabel = UILabel()
-    
-    private func _init() {
+    private lazy var titleLabel: UILabel = {
+        let titleLabel = UILabel()
         titleLabel.font = UIFont.systemFont(ofSize: 16)
+        titleLabel.backgroundColor = .white
+        titleLabel.layer.masksToBounds = true
+        return titleLabel
+    }()
+    private lazy var detailLabel: UILabel = {
+        let detailLabel = UILabel()
         detailLabel.textAlignment = .right
         detailLabel.font = UIFont.systemFont(ofSize: 14)
         detailLabel.textColor = UIColor(netHex: 0x999999)
-
+        detailLabel.backgroundColor = .white
+        detailLabel.layer.masksToBounds = true
+        return detailLabel
+    }()
+    
+    private func _init() {
         addSubview(iconView)
         addSubview(titleLabel)
         addSubview(detailLabel)
@@ -79,8 +84,7 @@ class JCMyInfoCell: JCTableViewCell {
         addConstraint(_JCLayoutConstraintMake(titleLabel, .left, .equal, iconView, .right, 10))
         addConstraint(_JCLayoutConstraintMake(titleLabel, .width, .equal, nil, .notAnAttribute, 100))
         addConstraint(_JCLayoutConstraintMake(titleLabel, .height, .equal, nil, .notAnAttribute, 22.5))
-        
-        
+
         addConstraint(_JCLayoutConstraintMake(detailLabel, .centerY, .equal, contentView, .centerY))
         addConstraint(_JCLayoutConstraintMake(detailLabel, .left, .equal, titleLabel, .right))
         addConstraint(_JCLayoutConstraintMake(detailLabel, .right, .equal, contentView, .right))

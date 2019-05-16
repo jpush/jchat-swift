@@ -2,7 +2,7 @@
 //  JCSearchView.swift
 //  JChat
 //
-//  Created by deng on 2017/3/22.
+//  Created by JIGUANG on 2017/3/22.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -10,6 +10,7 @@ import UIKit
 
 @objc public protocol JCSearchControllerDelegate: NSObjectProtocol {
     @objc optional func didEndEditing(_ searchBar: UISearchBar)
+    @objc optional func didClickBarSearchButton(_ searchBar: UISearchBar)
 }
 
 class JCSearchController: UISearchController {
@@ -29,29 +30,47 @@ class JCSearchController: UISearchController {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         _init()
     }
-    
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        var frame = self.searchBar.frame
-        frame.size.height = 31
-        searchBar.frame = frame
+        let frame = searchBar.frame
+        if frame.origin.y > 0 && frame.origin.y < 20  {
+            searchBar.frame = CGRect(x: frame.origin.x, y: 20, width: frame.size.width, height: 31)
+        } else {
+            searchBar.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: 31)
+        }
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         searchBar.layer.borderColor = UIColor.white.cgColor
         searchBar.layer.borderWidth = 1
         searchBar.layer.masksToBounds = true
         
-        var frame = self.searchBar.frame
-        frame.size.height = 31
-        searchBar.frame = frame
+        let frame = searchBar.frame
+        if frame.origin.y > 0 && frame.origin.y < 20  {
+            searchBar.frame = CGRect(x: frame.origin.x, y: 20, width: frame.size.width, height: 31)
+        } else {
+            searchBar.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: 31)
+        }
     }
-    
+
     private func _init() {
+        automaticallyAdjustsScrollViewInsets = false
         dimsBackgroundDuringPresentation = false
         hidesNavigationBarDuringPresentation = true
         searchBar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 31)
+
+        if #available(iOS 11.0, *) {
+            searchBar.setPositionAdjustment(UIOffset(horizontal: 0, vertical: 3), for: .search)
+            searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 5, vertical: 3)
+        }
+
+        
         searchBar.barStyle = .default
         searchBar.backgroundColor = .white
         searchBar.barTintColor = .white
@@ -61,11 +80,16 @@ class JCSearchController: UISearchController {
         searchBar.layer.borderColor = UIColor.white.cgColor
         searchBar.layer.borderWidth = 1
         searchBar.layer.masksToBounds = true
+        searchBar.setSearchFieldBackgroundImage(UIImage.createImage(color: .white, size: CGSize(width: UIScreen.main.bounds.size.width, height: 31)), for: .normal)
     }
 
 }
 
 extension JCSearchController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print("\(String(describing: searchBar.text))")
+        searchControllerDelegate?.didClickBarSearchButton?(searchBar)
+    }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchControllerDelegate?.didEndEditing?(searchBar)
@@ -77,6 +101,9 @@ extension JCSearchController: UISearchBarDelegate {
             if view is UIButton {
                 let cancelButton = view as! UIButton
                 cancelButton.setTitleColor(UIColor(netHex: 0x2dd0cf), for: .normal)
+                if #available(iOS 11.0, *) {
+                    cancelButton.titleEdgeInsets = UIEdgeInsets.init(top: 8, left: 0, bottom: 0, right: 0)
+                }
                 break
             }
         }

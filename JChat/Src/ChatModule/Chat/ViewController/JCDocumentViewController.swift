@@ -2,14 +2,14 @@
 //  JCDocumentViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/7/24.
+//  Created by JIGUANG on 2017/7/24.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
 import UIKit
 import WebKit
 
-class JCDocumentViewController: UIViewController {
+class JCDocumentViewController: UIViewController, CustomNavigation {
     
     var filePath: String!
     var fileType: String!
@@ -33,8 +33,8 @@ class JCDocumentViewController: UIViewController {
     fileprivate lazy var leftButton = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 65 / 3))
     
     private func _init() {
-        self.view.backgroundColor = .white
-        self.automaticallyAdjustsScrollViewInsets = false
+        view.backgroundColor = .white
+        automaticallyAdjustsScrollViewInsets = false
         view.addSubview(webView)
         
         _setupNavigation()
@@ -68,23 +68,10 @@ class JCDocumentViewController: UIViewController {
         let item1 = UIBarButtonItem(customView: navButton)
         navigationItem.rightBarButtonItems =  [item1]
         
-        leftButton.setImage(UIImage.loadImage("com_icon_back"), for: .normal)
-        leftButton.setImage(UIImage.loadImage("com_icon_back"), for: .highlighted)
-        leftButton.addTarget(self, action: #selector(_back), for: .touchUpInside)
-        leftButton.setTitle("返回", for: .normal)
-        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        leftButton.contentHorizontalAlignment = .left
-        let item2 = UIBarButtonItem(customView: leftButton)
-        navigationItem.leftBarButtonItems =  [item2]
-        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        navigationController?.interactivePopGestureRecognizer?.delegate = self
+        customLeftBarButton(delegate: self)
     }
-    
-    func _back() {
-        navigationController?.popViewController(animated: true)
-    }
-    
-    func _openFile() {
+
+    @objc func _openFile() {
         guard let url = fileUrl else {
             return
         }

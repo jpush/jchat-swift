@@ -2,7 +2,7 @@
 //  JCChatViewLayout.swift
 //  JChat
 //
-//  Created by deng on 2017/2/28.
+//  Created by JIGUANG on 2017/2/28.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -89,7 +89,7 @@ import UIKit
         
         let edg0 = _inset(with: options.style, for: .all)
         var r0 = CGRect(x: 0, y: 0, width: size.width, height: .greatestFiniteMagnitude)
-        var r1 = UIEdgeInsetsInsetRect(r0, edg0)
+        var r1 = r0.inset(by: edg0)
         
         var x1 = r1.minX
         var y1 = r1.minY
@@ -101,7 +101,7 @@ import UIKit
             let size = _size(with: options.style, for: .avatar)
             
             let box = CGRect(x: x1, y: y1, width: edg.left + size.width + edg.right, height: edg.top + size.height + edg.bottom)
-            let rect = UIEdgeInsetsInsetRect(box, edg)
+            let rect = box.inset(by: edg)
             
             avatarRect = rect
             avatarBoxRect = box
@@ -114,7 +114,7 @@ import UIKit
             let size = _size(with: options.style, for: .card)
             
             let box = CGRect(x: x1, y: y1, width: x2 - x1, height: edg.top + size.height + edg.bottom)
-            let rect = UIEdgeInsetsInsetRect(box, edg)
+            let rect = box.inset(by: edg)
             
             cardRect = rect
             cardBoxRect = box
@@ -126,7 +126,7 @@ import UIKit
             let edg = _inset(with: options.style, for: .bubble)
             
             let box = CGRect(x: x1, y: y1, width: x2 - x1, height: y2 - y1)
-            let rect = UIEdgeInsetsInsetRect(box, edg)
+            let rect = box.inset(by: edg)
             
             bubbleRect = rect
             bubbleBoxRect = box
@@ -141,10 +141,10 @@ import UIKit
             let edg0 = _inset(with: options.style, for: .content)
             let edg1 = message.content.layoutMargins
             //
-            let edg = UIEdgeInsetsMake(edg0.top + edg1.top, edg0.left + edg1.left, edg0.bottom + edg1.bottom, edg0.right + edg1.right)
+            let edg = UIEdgeInsets.init(top: edg0.top + edg1.top, left: edg0.left + edg1.left, bottom: edg0.bottom + edg1.bottom, right: edg0.right + edg1.right)
             
             var box = CGRect(x: x1, y: y1, width: x2 - x1, height: y2 - y1)
-            var rect = UIEdgeInsetsInsetRect(box, edg)
+            var rect = box.inset(by: edg)
             
             // calc content size
             let size = message.content.sizeThatFits(rect.size)
@@ -177,7 +177,7 @@ import UIKit
             let size = _size(with: options.style, for: .tips)
             
             let box = CGRect(x: x1 + 3, y: y1 - size.height - edg0.bottom, width: edg.left + size.width + edg.right, height: edg.top + size.height + edg.bottom)
-            let rect = UIEdgeInsetsInsetRect(box, edg)
+            let rect = box.inset(by: edg)
             
             tipsRect = rect
             tipsBoxRect = box

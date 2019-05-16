@@ -2,7 +2,7 @@
 //  JCNetworkTipsCell.swift
 //  JChat
 //
-//  Created by deng on 2017/6/12.
+//  Created by JIGUANG on 2017/6/12.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import UIKit
 
 class JCNetworkTipsCell: UITableViewCell {
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
@@ -24,23 +24,22 @@ class JCNetworkTipsCell: UITableViewCell {
         _init()
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
-    private lazy var statueView: UIImageView = UIImageView()
-    private lazy var tipsLabel: UILabel = UILabel()
+    private lazy var statueView: UIImageView = {
+        let statueView = UIImageView()
+        statueView.image = UIImage.loadImage("com_icon_send_error")
+        return statueView
+    }()
+    private lazy var tipsLabel: UILabel = {
+        let tipsLabel = UILabel()
+        tipsLabel.text = "当前网络不可用，请检查您的网络设置"
+        tipsLabel.font = UIFont.systemFont(ofSize: 14)
+        return tipsLabel
+    }()
     
     //MARK: - private func
     private func _init() {
-        
-        self.backgroundColor = UIColor(netHex: 0xFFDFE0)
+        backgroundColor = UIColor(netHex: 0xFFDFE0)
 
-        statueView.image = UIImage.loadImage("com_icon_send_error")
-        
-        tipsLabel.text = "当前网络不可用，请检查您的网络设置"
-        tipsLabel.font = UIFont.systemFont(ofSize: 14)
-        
         contentView.addSubview(statueView)
         contentView.addSubview(tipsLabel)
         
@@ -53,7 +52,5 @@ class JCNetworkTipsCell: UITableViewCell {
         addConstraint(_JCLayoutConstraintMake(statueView, .left, .equal, contentView, .left, 15))
         addConstraint(_JCLayoutConstraintMake(statueView, .height, .equal, nil, .notAnAttribute, 21))
         addConstraint(_JCLayoutConstraintMake(statueView, .width, .equal, nil, .notAnAttribute, 21))
-    
     }
-
 }

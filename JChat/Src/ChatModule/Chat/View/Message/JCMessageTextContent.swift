@@ -2,7 +2,7 @@
 //  JCMessageTextContent.swift
 //  JChat
 //
-//  Created by deng on 2017/3/9.
+//  Created by JIGUANG on 2017/3/9.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -32,16 +32,10 @@ open class JCMessageTextContent: NSObject, JCMessageContentType {
     open var text: NSAttributedString
     
     open func sizeThatFits(_ size: CGSize) -> CGSize {
-        // +-+-------------+-+
-        // | +-------------+ |
-        // | |   Content   | |
-        // | +-------------+ |
-        // +-+-------------+-+
-        
         let mattr = NSMutableAttributedString(attributedString: text)
-        mattr.addAttribute(NSFontAttributeName, value: UIFont.systemFont(ofSize: 16), range: NSMakeRange(0, mattr.length))
+        mattr.addAttribute(NSAttributedString.Key.font, value: UIFont.systemFont(ofSize: 16), range: NSMakeRange(0, mattr.length))
 
-        let mattrSize = mattr.boundingRect(with: CGSize(width: 250.0, height: Double(MAXFLOAT)), options: [.usesLineFragmentOrigin,.usesFontLeading], context: nil)
+        let mattrSize = mattr.boundingRect(with: CGSize(width: 220.0, height: Double(MAXFLOAT)), options: [.usesLineFragmentOrigin,.usesFontLeading], context: nil)
         self.text = mattr
         return .init(width: max(mattrSize.width, 15), height: max(mattrSize.height, 15))
     }

@@ -2,7 +2,7 @@
 //  JCContacterDBManager.swift
 //  JChat
 //
-//  Created by deng on 2017/5/4.
+//  Created by JIGUANG on 2017/5/4.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -37,7 +37,7 @@ final class JCVerificationInfoDB: NSObject {
             
             let sql = "create table IF NOT EXISTS VerificationInfo(id integer primary key autoincrement,username text not null,appkey text not null,nickname text,resaon text,state integer)"
             queue?.inDatabase { (db) in
-                db?.executeUpdate(sql, withArgumentsIn: nil)
+                db.executeUpdate(sql, withArgumentsIn: [])
             }
         }
     }
@@ -49,7 +49,7 @@ final class JCVerificationInfoDB: NSObject {
         }
         let sql = "drop table if exists VerificationInfo"
         queue?.inDatabase { (db) in
-            db?.executeUpdate(sql, withArgumentsIn: nil)
+            db.executeUpdate(sql, withArgumentsIn: [])
         }
     }
     
@@ -60,7 +60,7 @@ final class JCVerificationInfoDB: NSObject {
         }
         let sql = "UPDATE VerificationInfo SET nickname='\(info.nickname)', state = \(String(describing: info.state))  WHERE username='\(info.username)' and appkey='\(info.appkey)' and state != 2"
         queue?.inDatabase { (db) in
-            db?.executeUpdate(sql, withArgumentsIn: nil)
+            db.executeUpdate(sql, withArgumentsIn: [])
         }
     }
     
@@ -71,11 +71,11 @@ final class JCVerificationInfoDB: NSObject {
         }
         let delSql = "delete from VerificationInfo where username='\(info.username)' and appkey='\(info.appkey)' and state=\(String(describing: info.state))"
         queue?.inDatabase { (db) in
-            db?.executeUpdate(delSql, withArgumentsIn: nil)
+            db.executeUpdate(delSql, withArgumentsIn: [])
         }
         let sql = "insert into VerificationInfo (username,nickname,appkey,resaon,state) values ('\(info.username)','\(info.nickname)','\(info.appkey)','\(info.resaon)',\(String(describing: info.state)))"
         queue?.inDatabase { (db) in
-            db?.executeUpdate(sql, withArgumentsIn: nil)
+            db.executeUpdate(sql, withArgumentsIn: [])
         }
     }
     
@@ -86,7 +86,7 @@ final class JCVerificationInfoDB: NSObject {
         }
         let delSql = "delete from VerificationInfo where id=\(String(describing: info.id))"
         queue?.inDatabase { (db) in
-            db?.executeUpdate(delSql, withArgumentsIn: nil)
+            db.executeUpdate(delSql, withArgumentsIn: [])
         }
     }
     
@@ -98,7 +98,7 @@ final class JCVerificationInfoDB: NSObject {
         var infos: [JCVerificationInfo] = []
         let sql = "select * from VerificationInfo ORDER BY id DESC"
         queue?.inDatabase { (db) in
-            let resultSet = db?.executeQuery(sql, withArgumentsIn: nil)
+            let resultSet = db.executeQuery(sql, withArgumentsIn: [])
             while (resultSet?.next())! {
                 let info = JCVerificationInfo()
                 info.id = Int((resultSet?.int(forColumn: "id"))!)

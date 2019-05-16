@@ -2,7 +2,7 @@
 //  JCRemoveMemberViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/5/16.
+//  Created by JIGUANG on 2017/5/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -21,7 +21,7 @@ class JCRemoveMemberViewController: UIViewController {
     fileprivate lazy var toolView: UIView = UIView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: 55))
     fileprivate var tableView: UITableView = UITableView(frame: .zero, style: .grouped)
     fileprivate var collectionView: UICollectionView!
-    fileprivate lazy var searchView: UISearchBar = UISearchBar()
+    fileprivate lazy var searchView: UISearchBar = UISearchBar.default
 
     fileprivate lazy var delButton = UIButton(frame: CGRect(x: 0, y: 0, width: 120, height: 28))
     
@@ -34,10 +34,10 @@ class JCRemoveMemberViewController: UIViewController {
     fileprivate lazy var selectUsers: [JMSGUser] = []
     
     private func _init() {
-        self.view.backgroundColor = .white
-        self.automaticallyAdjustsScrollViewInsets = false
         self.title = "删除成员"
-        
+        view.backgroundColor = .white
+        automaticallyAdjustsScrollViewInsets = false
+
         view.addSubview(toolView)
         
         tableView.delegate = self
@@ -60,19 +60,13 @@ class JCRemoveMemberViewController: UIViewController {
         collectionView.register(JCUpdateMemberCell.self, forCellWithReuseIdentifier: "JCUpdateMemberCell")
         
         searchView.frame = CGRect(x: 15, y: 0, width: toolView.width - 30, height: 31)
-        searchView.barStyle = .default
-        searchView.backgroundColor = .white
-        searchView.barTintColor = .white
         searchView.delegate = self
-        searchView.autocapitalizationType = .none
-        searchView.placeholder = "搜索"
-        searchView.layer.borderColor = UIColor.white.cgColor
-        searchView.layer.borderWidth = 1
-        searchView.layer.masksToBounds = true
-        
+
         users = group.memberArray()
         if group.owner == JMSGUser.myInfo().username  {
-            users = _removeUser(users, JMSGUser.myInfo())
+            users = users.filter({ (u) -> Bool in
+                u.username != JMSGUser.myInfo().username || u.appKey != JMSGUser.myInfo().appKey
+            })
         }
         filteredUsersArray = users
         _classify(users)
@@ -97,38 +91,27 @@ class JCRemoveMemberViewController: UIViewController {
         
         filteredUsersArray = users
         
-        self.keys.removeAll()
-        self.data.removeAll()
+        keys.removeAll()
+        data.removeAll()
         
         for item in users {
             let key = item.displayName().firstCharacter()
-            var array = self.data[key]
+            var array = data[key]
             if array == nil {
                 array = [item]
             } else {
                 array?.append(item)
             }
-            if !self.keys.contains(key) {
-                self.keys.append(key)
+            if !keys.contains(key) {
+                keys.append(key)
             }
-            
-            self.data[key] = array
+            data[key] = array
         }
-        self.keys = self.keys.sorted(by: { (str1, str2) -> Bool in
+        keys = keys.sorted(by: { (str1, str2) -> Bool in
             return str1 < str2
         })
-        self.tableView.reloadData()
-        self.collectionView.reloadData()
-    }
-    
-    fileprivate func _removeUser(_ users: [JMSGUser], _ user: JMSGUser) ->  [JMSGUser]{
-        var arr = users
-        if let index = users.index(where: { (u) -> Bool in
-            u.username == user.username && u.appKey == user.appKey
-        }) {
-             arr.remove(at: index)
-        }
-        return arr
+        tableView.reloadData()
+        collectionView.reloadData()
     }
     
     fileprivate func _reloadCollectionView() {
@@ -165,15 +148,15 @@ class JCRemoveMemberViewController: UIViewController {
             collectionView.frame = CGRect(x: 10, y: 0, width: 230, height: 55)
             searchView.frame = CGRect(x: 5 + 46 * 5, y: 0, width: toolView.width - 5 - 46 * 5, height: 55)
         }
-        self.collectionView.reloadData()
+        collectionView.reloadData()
     }
     
-    func _clickNavRightButton(_ sender: UIButton) {
+    @objc func _clickNavRightButton(_ sender: UIButton) {
         var userNames: [String] = []
         for item in selectUsers {
             userNames.append(item.username)
         }
-        MBProgressHUD_JChat.showMessage(message: "删除中...", toView: self.view)
+        MBProgressHUD_JChat.showMessage(message: "删除中...", toView: view)
         group.removeMembers(withUsernameArray: userNames) { (result, error) in
             MBProgressHUD_JChat.hide(forView: self.view, animated: true)
             if error == nil {
@@ -238,7 +221,7 @@ extension JCRemoveMemberViewController: UITableViewDelegate, UITableViewDataSour
         guard let cell = cell as? JCSelectMemberCell else {
             return
         }
-        let user = self.data[keys[indexPath.section]]?[indexPath.row]
+        let user = data[keys[indexPath.section]]?[indexPath.row]
         cell.bindDate(user!)
         if selectUsers.contains(where: { (u) -> Bool in
             return u.username == user?.username && u.appKey == user?.appKey
@@ -254,21 +237,25 @@ extension JCRemoveMemberViewController: UITableViewDelegate, UITableViewDataSour
         guard let cell = tableView.cellForRow(at: indexPath) as? JCSelectMemberCell else {
             return
         }
-        let user = self.data[keys[indexPath.section]]?[indexPath.row]
+        guard let user = data[keys[indexPath.section]]?[indexPath.row] else {
+            return
+        }
         if selectUsers.contains(where: { (u) -> Bool in
-            return u.username == user?.username && u.appKey == user?.appKey
+            return u.username == user.username && u.appKey == user.appKey
         })  {
             // remove
             cell.selectIcon = UIImage.loadImage("com_icon_unselect")
-            self.selectUsers = self._removeUser(self.selectUsers, user!)
+            selectUsers = selectUsers.filter({ (u) -> Bool in
+                u.username != user.username || u.appKey != user.appKey
+            })
             _reloadCollectionView()
         } else {
-            selectUsers.append(user!)
+            selectUsers.append(user)
             cell.selectIcon = UIImage.loadImage("com_icon_select")
             _reloadCollectionView()
         }
         if selectUsers.count > 0 {
-            self.collectionView.scrollToItem(at: IndexPath(row: selectUsers.count - 1, section: 0), at: .right, animated: false)
+            collectionView.scrollToItem(at: IndexPath(row: selectUsers.count - 1, section: 0), at: .right, animated: false)
         }
     }
 }
@@ -299,10 +286,10 @@ extension JCRemoveMemberViewController: UICollectionViewDelegate, UICollectionVi
         cell.backgroundColor = .white
         cell.bindDate(user: selectUsers[indexPath.row])
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.selectUsers.remove(at: indexPath.row)
-        self.tableView.reloadData()
+        selectUsers.remove(at: indexPath.row)
+        tableView.reloadData()
         _reloadCollectionView()
     }
 }

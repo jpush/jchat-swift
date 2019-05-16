@@ -2,14 +2,14 @@
 //  JCCEmoticonGroup.swift
 //  JChat
 //
-//  Created by deng on 2017/3/9.
+//  Created by JIGUANG on 2017/3/9.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
 import UIKit
 
 class JCCEmoticonGroup: JCEmoticonGroup {
-    init?(contentsOfFile: String) {
+     init?(contentsOfFile: String) {
         guard let dic = NSDictionary(contentsOfFile: contentsOfFile), let arr = dic["emoticons"] as? NSArray else {
             return nil
         }

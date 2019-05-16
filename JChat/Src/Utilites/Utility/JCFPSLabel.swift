@@ -2,7 +2,7 @@
 //  JCFPSLabel.swift
 //  JChat
 //
-//  Created by deng on 2017/3/8.
+//  Created by JIGUANG on 2017/3/8.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 //  Reference: ibireme/YYKit/YYFPSLabel
@@ -29,7 +29,7 @@ class JCFPSLabel: UILabel {
         if newWindow == nil {
             _link.invalidate()
         } else {
-            _link.add(to: RunLoop.main, forMode: RunLoopMode.commonModes)
+            _link.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
         }
     }
     
@@ -45,7 +45,7 @@ class JCFPSLabel: UILabel {
         layer.masksToBounds = true
     }
     
-    private dynamic func tack(_ link: CADisplayLink) {
+    @objc private dynamic func tack(_ link: CADisplayLink) {
         guard let lastTime = _lastTime else {
             _lastTime = link.timestamp
             return
@@ -60,7 +60,7 @@ class JCFPSLabel: UILabel {
         let color = UIColor(hue: 0.27 * (progress - 0.2), saturation: 1, brightness: 0.9, alpha: 1)
         
         let text = NSMutableAttributedString(string: "\(Int(fps)) FPS")
-        text.addAttribute(NSForegroundColorAttributeName, value: color, range: NSMakeRange(0, text.length - 3))
+        text.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: NSMakeRange(0, text.length - 3))
         attributedText = text
         
         _count = 0

@@ -2,7 +2,7 @@
 //  JCFileDownloadViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/7/24.
+//  Created by JIGUANG on 2017/7/24.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -94,7 +94,7 @@ class JCFileDownloadViewController: UIViewController {
         view.addConstraint(_JCLayoutConstraintMake(_tipsLabel, .centerX, .equal, view, .centerX))
         view.addConstraint(_JCLayoutConstraintMake(_tipsLabel, .width, .equal, nil, .notAnAttribute, 225))
         view.addConstraint(_JCLayoutConstraintMake(_tipsLabel, .height, .equal, nil, .notAnAttribute, 7))
-        
+
         view.addConstraint(_JCLayoutConstraintMake(_downloadButton, .top, .equal, _tipsLabel, .bottom, 30))
         view.addConstraint(_JCLayoutConstraintMake(_downloadButton, .centerX, .equal, view, .centerX))
         view.addConstraint(_JCLayoutConstraintMake(_downloadButton, .width, .equal, nil, .notAnAttribute, 225))
@@ -106,8 +106,8 @@ class JCFileDownloadViewController: UIViewController {
         view.addConstraint(_JCLayoutConstraintMake(_openButton, .height, .equal, nil, .notAnAttribute, 40))
     }
     
-    func _openFile() {
-        if let fileType = message.fileType {
+    @objc func _openFile() {
+        if let fileType = message.ex.fileType {
             let content = message.content as! JMSGFileContent
             switch fileType.fileFormat() {
             case .document:
@@ -116,25 +116,25 @@ class JCFileDownloadViewController: UIViewController {
                 vc.fileData = _fileData
                 vc.filePath = content.originMediaLocalPath
                 vc.fileType = fileType
-                self.navigationController?.pushViewController(vc, animated: true)
+                navigationController?.pushViewController(vc, animated: true)
             case .video, .voice:
-                let url = URL(fileURLWithPath: content.originMediaLocalPath)
+                let url = URL(fileURLWithPath: content.originMediaLocalPath ?? "")
                 try! JCVideoManager.playVideo(data: Data(contentsOf: url), fileType, currentViewController: self)
             case .photo:
                 let browserImageVC = JCImageBrowserViewController()
-                let image = UIImage(contentsOfFile: content.originMediaLocalPath)
+                let image = UIImage(contentsOfFile: content.originMediaLocalPath ?? "")
                 browserImageVC.imageArr = [image!]
                 browserImageVC.imgCurrentIndex = 0
-                self.present(browserImageVC, animated: true) {}
+                present(browserImageVC, animated: true) {}
             default:
-                let url = URL(fileURLWithPath: content.originMediaLocalPath)
+                let url = URL(fileURLWithPath: content.originMediaLocalPath ?? "")
                 documentInteractionController.url = url
-                documentInteractionController.presentOptionsMenu(from: .zero, in: self.view, animated: true)
+                documentInteractionController.presentOptionsMenu(from: .zero, in: view, animated: true)
             }
         }
     }
     
-    func _downloadFile() {
+    @objc func _downloadFile() {
         let content = message.content as! JMSGFileContent
         MBProgressHUD_JChat.showMessage(message: "下载中", toView: view)
         content.fileData { (data, id, error) in
@@ -157,10 +157,10 @@ extension JCFileDownloadViewController: UIDocumentInteractionControllerDelegate 
         return self
     }
     func documentInteractionControllerViewForPreview(_ controller: UIDocumentInteractionController) -> UIView? {
-        return self.view
+        return view
     }
     
     func documentInteractionControllerRectForPreview(_ controller: UIDocumentInteractionController) -> CGRect {
-        return self.view.frame
+        return view.frame
     }
 }

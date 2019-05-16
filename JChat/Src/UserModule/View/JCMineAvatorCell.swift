@@ -2,7 +2,7 @@
 //  JCMineAvatorCell.swift
 //  JChat
 //
-//  Created by deng on 2017/3/28.
+//  Created by JIGUANG on 2017/3/28.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -11,10 +11,11 @@ import JMessage
 
 class JCMineAvatorCell: UITableViewCell {
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         _init()
@@ -25,37 +26,44 @@ class JCMineAvatorCell: UITableViewCell {
         _init()
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-    }
-    
     func baindDate(user: JMSGUser) {
         nickname.text = user.displayName()
         signature.text = user.signature
-        iconView.image = UIImage.loadImage("com_icon_user_65")
         user.thumbAvatarData { (data, username, error) in
-            guard let imageData = data else {
-                return
+            if let imageData = data {
+                let image = UIImage(data: imageData)
+                self.iconView.image = image
+            } else {
+                self.iconView.image = UIImage.loadImage("com_icon_user_65")
             }
-            let image = UIImage(data: imageData)
-            self.iconView.image = image
         }
     }
     
-    private lazy var iconView: UIImageView = UIImageView()
-    private lazy var signature: UILabel = UILabel()
-    private lazy var nickname: UILabel = UILabel()
+    private lazy var iconView: UIImageView = {
+        let iconView = UIImageView()
+        iconView.contentMode = .scaleAspectFill
+        iconView.clipsToBounds = true
+        return iconView
+    }()
+    private lazy var signature: UILabel = {
+        let signature = UILabel()
+        signature.font = UIFont.systemFont(ofSize: 14)
+        signature.textColor = UIColor(netHex: 0x999999)
+        signature.backgroundColor = .white
+        signature.layer.masksToBounds = true
+        return signature
+    }()
+    private lazy var nickname: UILabel = {
+        let nickname = UILabel()
+        nickname.textColor = UIColor(netHex: 0x2c2c2c)
+        nickname.font = UIFont.systemFont(ofSize: 16)
+        nickname.backgroundColor = .white
+        nickname.layer.masksToBounds = true
+        return nickname
+    }()
     
     //MARK: - private func
     private func _init() {
-        iconView.contentMode = .scaleAspectFill
-        iconView.clipsToBounds = true
-        signature.font = UIFont.systemFont(ofSize: 14)
-        signature.textColor = UIColor(netHex: 0x999999)
-        nickname.textColor = UIColor(netHex: 0x2c2c2c)
-        nickname.font = UIFont.systemFont(ofSize: 16)
-        
         contentView.addSubview(iconView)
         contentView.addSubview(signature)
         contentView.addSubview(nickname)

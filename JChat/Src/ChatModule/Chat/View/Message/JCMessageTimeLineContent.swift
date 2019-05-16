@@ -2,18 +2,17 @@
 //  JCMessageTimeLineContent.swift
 //  JChat
 //
-//  Created by deng on 2017/3/9.
+//  Created by JIGUANG on 2017/3/9.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
 import UIKit
 
 open class JCMessageTimeLineContent: NSObject, JCMessageContentType {
-    public weak var delegate: JCMessageDelegate?
 
-    
-    open var layoutMargins: UIEdgeInsets = .zero//.init(top: 8, left: 0, bottom: -8, right: 0)
-    
+    public weak var delegate: JCMessageDelegate?
+    open var layoutMargins: UIEdgeInsets = .zero
+
     open class var viewType: JCMessageContentViewType.Type {
         return JCMessageTimeLineContentView.self
     }
@@ -22,7 +21,7 @@ open class JCMessageTimeLineContent: NSObject, JCMessageContentType {
         self.date = date
         super.init()
     }
-    
+
     internal var before: JCMessageType?
     internal var after: JCMessageType?
     
@@ -30,6 +29,9 @@ open class JCMessageTimeLineContent: NSObject, JCMessageContentType {
     open var text: String {
         return JCMessageTimeLineContent.dd(after?.date ?? date)
     }
+
+    // 这个是比较耗时的操作，所以这里设置为全局只创建一次
+    static let defaultFormat = DateFormatter.dateFormat(fromTemplate: "hh:mm", options: 0, locale: nil) ?? "hh:mm"
     
     static func dd(_ date: Date) -> String {
         
@@ -45,7 +47,8 @@ open class JCMessageTimeLineContent: NSObject, JCMessageContentType {
         let dz = TimeInterval(TimeZone.current.secondsFromGMT())
         
         let formatter = DateFormatter()
-        let format1 = DateFormatter.dateFormat(fromTemplate: "hh:mm", options: 0, locale: nil) ?? "hh:mm"
+        // 每次都创建会非常耗时
+        let format1 = JCMessageTimeLineContent.defaultFormat
         
         let days1 = Int64(s1 + dz) / (24 * 60 * 60)
         let days2 = Int64(s2 + dz) / (24 * 60 * 60)
@@ -80,11 +83,22 @@ open class JCMessageTimeLineContent: NSObject, JCMessageContentType {
     
     open func sizeThatFits(_ size: CGSize) -> CGSize {
         
-        let attr = NSMutableAttributedString(string: text, attributes: [
-            NSFontAttributeName: UIFont.systemFont(ofSize: 12),
-            NSForegroundColorAttributeName: UIColor.white,
-            ])
+        let attr = NSMutableAttributedString(string: text, attributes: convertToOptionalNSAttributedStringKeyDictionary([
+            convertFromNSAttributedStringKey(NSAttributedString.Key.font): UIFont.systemFont(ofSize: 12),
+            convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): UIColor.white,
+            ]))
         
         return CGSize(width: attr.size().width + 11, height: 18)
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

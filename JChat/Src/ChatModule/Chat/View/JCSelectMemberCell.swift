@@ -2,7 +2,7 @@
 //  JCSelectMemberCell.swift
 //  JChat
 //
-//  Created by deng on 2017/5/11.
+//  Created by JIGUANG on 2017/5/11.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -38,7 +38,7 @@ class JCSelectMemberCell: UITableViewCell {
         }
     }
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
@@ -51,11 +51,6 @@ class JCSelectMemberCell: UITableViewCell {
         super.awakeFromNib()
         _init()
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
     
     private lazy var avatorView: UIImageView = UIImageView()
     private lazy var usernameLabel: UILabel = UILabel()

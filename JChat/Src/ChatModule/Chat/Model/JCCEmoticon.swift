@@ -2,7 +2,7 @@
 //  JCCEmotiocon.swift
 //  JChat
 //
-//  Created by deng on 2017/3/9.
+//  Created by JIGUANG on 2017/3/9.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -29,7 +29,7 @@ open class JCCEmoticon: JCEmoticon {
     }
     
     public static func emoticons(with objects: NSArray, at directory: String) -> [JCCEmoticon] {
-        return objects.flatMap {
+        return objects.compactMap {
             guard let dic = $0 as? NSDictionary else {
                 return nil
             }

@@ -2,7 +2,7 @@
 //  JCMineViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/2/16.
+//  Created by JIGUANG on 2017/2/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -15,33 +15,59 @@ class JCMineViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         _init()
-        NotificationCenter.default.addObserver(self, selector: #selector(_updateUserInfo), name: NSNotification.Name(rawValue: kUpdateUserInfo), object: nil)
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+        JMessage.remove(self, with: nil)
     }
     
-    private lazy var tableview: UITableView = UITableView(frame: .zero, style: .grouped)
-    
-    //MARK: - private func 
-    private func _init() {
-        self.view.backgroundColor = .white
-        
+    fileprivate lazy var tableview: UITableView = {
+        let tableview = UITableView(frame: self.view.frame, style: .grouped)
         tableview.delegate = self
         tableview.dataSource = self
         tableview.separatorStyle = .none
         tableview.register(JCMineInfoCell.self, forCellReuseIdentifier: "JCMineInfoCell")
         tableview.register(JCMineAvatorCell.self, forCellReuseIdentifier: "JCMineAvatorCell")
         tableview.register(JCButtonCell.self, forCellReuseIdentifier: "JCButtonCell")
-        tableview.frame = view.frame
+        return tableview
+    }()
+    
+    //MARK: - private func 
+    private func _init() {
+        view.backgroundColor = .white
         view.addSubview(tableview)
+        JMessage.add(self, with: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(_updateUserInfo), name: NSNotification.Name(rawValue: kUpdateUserInfo), object: nil)
     }
     
-    func _updateUserInfo() {
-        self.tableview.reloadData()
+    @objc func _updateUserInfo() {
+        tableview.reloadData()
     }
 
+    func updateCurrentUserAvator() {
+        JMSGUser.myInfo().thumbAvatarData({ (data, id, error) in
+            if let data = data {
+                let imageData = NSKeyedArchiver.archivedData(withRootObject: data)
+                UserDefaults.standard.set(imageData, forKey: kLastUserAvator)
+            } else {
+                UserDefaults.standard.removeObject(forKey: kLastUserAvator)
+            }
+        })
+    }
+
+}
+
+extension JCMineViewController: JMessageDelegate {
+    func onReceive(_ event: JMSGUserLoginStatusChangeEvent!) {
+        switch event.eventType.rawValue {
+        case JMSGLoginStatusChangeEventType.eventNotificationCurrentUserInfoChange.rawValue:
+            updateCurrentUserAvator()
+            tableview.reloadData()
+        default:
+            break
+        }
+    }
 }
 
 extension JCMineViewController: UITableViewDelegate, UITableViewDataSource {
@@ -121,16 +147,16 @@ extension JCMineViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             let vc = JCMyInfoViewController()
-            self.navigationController?.pushViewController(vc, animated: true)
+            navigationController?.pushViewController(vc, animated: true)
             return
         }
         switch indexPath.row {
         case 0:
-            self.navigationController?.pushViewController(JCUpdatePassworkViewController(), animated: true)
+            navigationController?.pushViewController(JCUpdatePassworkViewController(), animated: true)
         case 2:
-            self.navigationController?.pushViewController(JCFeedbackViewController(), animated: true)
+            navigationController?.pushViewController(JCFeedbackViewController(), animated: true)
         case 3:
-            self.navigationController?.pushViewController(JCJChatInfoViewController(), animated: true)
+            navigationController?.pushViewController(JCJChatInfoViewController(), animated: true)
         default:
             break
         }
@@ -154,15 +180,6 @@ extension JCMineViewController: UIAlertViewDelegate {
         switch buttonIndex {
         case 1:
             JMSGUser.logout({ (result, error) in
-//                if error == nil {
-//                    JCVerificationInfoDB.shareInstance.queue = nil
-//                    UserDefaults.standard.removeObject(forKey: kCurrentUserName)
-//                    let appDelegate = UIApplication.shared.delegate
-//                    let window = appDelegate?.window!
-//                    window?.rootViewController = JCNavigationController(rootViewController: JCLoginViewController())
-//                } else {
-//                    
-//                }
                 JCVerificationInfoDB.shareInstance.queue = nil
                 UserDefaults.standard.removeObject(forKey: kCurrentUserName)
                 UserDefaults.standard.removeObject(forKey: kCurrentUserPassword)

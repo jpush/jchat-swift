@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JCChatRoomIntroduceViewController" customModule="JChat" customModuleProvider="target">
+            <connections>
+                <outlet property="introduceInfo" destination="4IY-88-30G" id="iA1-OF-Pt7"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="聊天室介绍" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0ad-Bk-tBP">
+                    <rect key="frame" x="22" y="62" width="87" height="41"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="41" id="gX8-QO-DWa"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <textView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.5" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4IY-88-30G">
+                    <rect key="frame" x="20" y="111" width="374" height="200"/>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="200" id="IPC-Nx-hHH"/>
+                    </constraints>
+                    <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="4IY-88-30G" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leadingMargin" id="Kws-oo-gAx"/>
+                <constraint firstItem="4IY-88-30G" firstAttribute="top" secondItem="0ad-Bk-tBP" secondAttribute="bottom" constant="8" id="RKo-MO-uaU"/>
+                <constraint firstItem="0ad-Bk-tBP" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="18" id="Xgh-1c-UBE"/>
+                <constraint firstItem="4IY-88-30G" firstAttribute="top" secondItem="0ad-Bk-tBP" secondAttribute="bottom" constant="8" symbolic="YES" id="lYm-i7-rvc"/>
+                <constraint firstItem="4IY-88-30G" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailingMargin" id="r6b-oL-B0N"/>
+                <constraint firstItem="0ad-Bk-tBP" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="22" id="tJZ-iR-DDO"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="79.710144927536234" y="39.508928571428569"/>
+        </view>
+    </objects>
+</document>

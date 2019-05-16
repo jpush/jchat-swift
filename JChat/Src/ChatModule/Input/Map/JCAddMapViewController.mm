@@ -150,9 +150,9 @@
     _geoCodeSearch = [[BMKGeoCodeSearch alloc]init];
     _geoCodeSearch.delegate = self;
     //初始化反地理编码类
-    BMKReverseGeoCodeOption *reverseGeoCodeOption= [[BMKReverseGeoCodeOption alloc] init];
+    BMKReverseGeoCodeSearchOption *reverseGeoCodeOption= [[BMKReverseGeoCodeSearchOption alloc] init];
     //需要反地理编码的坐标位置
-    reverseGeoCodeOption.reverseGeoPoint = CLLocationCoordinate2DMake(region.center.latitude, region.center.longitude);
+    reverseGeoCodeOption.location = CLLocationCoordinate2DMake(region.center.latitude, region.center.longitude);
     // 调用反地址编码方法，让其在代理方法中输出
     BOOL flag = [_geoCodeSearch reverseGeoCode:reverseGeoCodeOption];
     if (!flag) {
@@ -163,6 +163,7 @@
 // 定位
 //处理位置坐标更新
 - (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation {
+    NSLog(@"didUpdateBMKUserLocation:::");
     [locService stopUserLocationService];
     NSLog(@"当前的坐标是: %f,%f",userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);
 
@@ -170,9 +171,10 @@
     _geoCodeSearch = [[BMKGeoCodeSearch alloc]init];
     _geoCodeSearch.delegate = self;
     //初始化反地理编码类
-    BMKReverseGeoCodeOption *reverseGeoCodeOption= [[BMKReverseGeoCodeOption alloc] init];
+    
+    BMKReverseGeoCodeSearchOption *reverseGeoCodeOption= [[BMKReverseGeoCodeSearchOption alloc] init];
     //需要反地理编码的坐标位置
-    reverseGeoCodeOption.reverseGeoPoint = CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude);
+    reverseGeoCodeOption.location = CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude);
     // 调用反地址编码方法，让其在代理方法中输出
     BOOL flag = [_geoCodeSearch reverseGeoCode:reverseGeoCodeOption];
     if (!flag) {
@@ -181,8 +183,8 @@
     }
 }
 #pragma mark 代理方法返回反地理编码结果
-- (void)onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
-{
+- (void)onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeSearchResult *)result errorCode:(BMKSearchErrorCode)error{
+    NSLog(@"onGetReverseGeoCodeResult:::");
     if (result) {
         [addressDataArray removeAllObjects];
         screenAddress = [NSString stringWithFormat:@"%@%@", result.addressDetail.streetName, result.addressDetail.streetNumber];
@@ -203,11 +205,23 @@
     int i = 0;
     for(BMKPoiInfo *poiInfo in result.poiList)
     {
-        NSDictionary *dic = @{@"address":poiInfo.address, @"name":poiInfo.name, @"locationX":[NSString stringWithFormat:@"%f", poiInfo.pt.latitude], @"locationY":[NSString stringWithFormat:@"%f", poiInfo.pt.longitude], @"city":poiInfo.city};
-        [addressDataArray addObject:dic];
-        
+        if (poiInfo.address != nil){
+            if (poiInfo.city == nil) {
+                poiInfo.city = _city;//如果 city 没有，用 result 里的填充
+            }
+            if (poiInfo.city != nil) {
+                NSDictionary *dic = @{@"address":poiInfo.address,
+                                      @"name":poiInfo.name,
+                                      @"locationX":[NSString stringWithFormat:@"%f", poiInfo.pt.latitude],
+                                      @"locationY":[NSString stringWithFormat:@"%f", poiInfo.pt.longitude],
+                                      @"city":poiInfo.city
+                                      };
+                [addressDataArray addObject:dic];
+            }
+        }
+
         i++;
-        if (i==result.poiList.count) {
+        if (i == result.poiList.count) {
 
             if (!annotaionShow) {
                 annotaionShow = YES;

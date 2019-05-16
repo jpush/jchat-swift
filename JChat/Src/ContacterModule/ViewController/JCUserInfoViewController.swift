@@ -2,7 +2,7 @@
 //  JCUserInfoViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/3/22.
+//  Created by JIGUANG on 2017/3/22.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -41,11 +41,9 @@ class JCUserInfoViewController: UIViewController {
     //MARK: - private func
     private func _init() {
         self.title = "详细信息"
-        self.automaticallyAdjustsScrollViewInsets = false
+        automaticallyAdjustsScrollViewInsets = false
         view.addSubview(tableview)
-        if user.isFriend {
-            _setupNavigation()
-        }
+        _setupNavigation()
         NotificationCenter.default.addObserver(self, selector: #selector(_updateUserInfo), name: NSNotification.Name(rawValue: kUpdateFriendInfo), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(_updateUserInfo), name: NSNotification.Name(rawValue: kUpdateUserInfo), object: nil)
     }
@@ -54,17 +52,17 @@ class JCUserInfoViewController: UIViewController {
         moreButton.addTarget(self, action: #selector(_clickNavRightButton), for: .touchUpInside)
         moreButton.setImage(UIImage.loadImage("com_icon_more"), for: .normal)
         let item = UIBarButtonItem(customView: moreButton)
-        self.navigationItem.rightBarButtonItem =  item
+        navigationItem.rightBarButtonItem =  item
     }
     
-    func _updateUserInfo() {
-        self.tableview.reloadData()
+    @objc func _updateUserInfo() {
+        tableview.reloadData()
     }
     
-    func _clickNavRightButton() {
+    @objc func _clickNavRightButton() {
         let vc = JCFriendSettingViewController()
         vc.user = self.user
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -78,7 +76,7 @@ extension JCUserInfoViewController: UITableViewDataSource, UITableViewDelegate {
         if section == 1 {
             return 1
         }
-        return 5
+        return 6
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -90,7 +88,7 @@ extension JCUserInfoViewController: UITableViewDataSource, UITableViewDelegate {
         }
         return 45
     }
-    
+
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == 0 {
             return 15
@@ -154,10 +152,14 @@ extension JCUserInfoViewController: UITableViewDataSource, UITableViewDelegate {
             
             switch indexPath.row {
             case 1:
+                cell.title = "昵称"
+                cell.detail = user.nickname ?? ""
+                cell.icon = UIImage.loadImage("com_icon_nickname")
+            case 2:
                 cell.title = "用户名"
                 cell.detail = user.username
                 cell.icon = UIImage.loadImage("com_icon_username")
-            case 2:
+            case 3:
                 cell.title = "性别"
                 cell.icon = UIImage.loadImage("com_icon_gender")
                 switch user.gender {
@@ -168,11 +170,11 @@ extension JCUserInfoViewController: UITableViewDataSource, UITableViewDelegate {
                 case .unknown:
                     cell.detail = "保密"
                 }
-            case 3:
+            case 4:
                 cell.title = "生日"
                 cell.icon = UIImage.loadImage("com_icon_birthday")
                 cell.detail = user.birthday
-            case 4:
+            case 5:
                 cell.title = "地区"
                 cell.icon = UIImage.loadImage("com_icon_region")
                 cell.detail = user.region
@@ -189,13 +191,13 @@ extension JCUserInfoViewController: JCButtonCellDelegate {
         if isOnAddFriend {
             let vc = JCAddFriendViewController()
             vc.user = user
-            self.navigationController?.pushViewController(vc, animated: true)
+            navigationController?.pushViewController(vc, animated: true)
             return
         }
         if isOnConversation {
-            for vc in (self.navigationController?.viewControllers)! {
+            for vc in (navigationController?.viewControllers)! {
                 if vc is JCChatViewController {
-                    self.navigationController?.popToViewController(vc, animated: true)
+                    navigationController?.popToViewController(vc, animated: true)
                 }
             }
             return
@@ -215,7 +217,7 @@ extension JCUserInfoViewController: JCDoubleButtonCellDelegate {
     func doubleButtonCell(clickLeftButton button: UIButton) {
         let vc = JCAddFriendViewController()
         vc.user = user
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
     func doubleButtonCell(clickRightButton button: UIButton) {
         JMSGConversation.createSingleConversation(withUsername: (user?.username)!, appKey: (user?.appKey)!) { (result, error) in
@@ -237,7 +239,7 @@ extension JCUserInfoViewController: JCUserAvatorCellDelegate {
         let browserImageVC = JCImageBrowserViewController()
         browserImageVC.imageArr = [image]
         browserImageVC.imgCurrentIndex = 0
-        self.present(browserImageVC, animated: true) {
+        present(browserImageVC, animated: true) {
         
         }
     }

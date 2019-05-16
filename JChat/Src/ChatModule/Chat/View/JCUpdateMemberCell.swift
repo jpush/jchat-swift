@@ -2,7 +2,7 @@
 //  JCUpdateMemberCell.swift
 //  JChat
 //
-//  Created by deng on 2017/5/11.
+//  Created by JIGUANG on 2017/5/11.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -12,10 +12,10 @@ import JMessage
 class JCUpdateMemberCell: UICollectionViewCell {
     var avator: UIImage? {
         get {
-            return self.avatorView.image
+            return avatorView.image
         }
         set {
-            self.avatorView.image = newValue
+            avatorView.image = newValue
         }
     }
     

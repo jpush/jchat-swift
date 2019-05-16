@@ -2,7 +2,7 @@
 //  JCConversationCell.swift
 //  JChat
 //
-//  Created by deng on 2017/3/22.
+//  Created by JIGUANG on 2017/3/22.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -11,7 +11,7 @@ import JMessage
 
 class JCConversationCell: JCTableViewCell {
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
@@ -24,24 +24,47 @@ class JCConversationCell: JCTableViewCell {
         super.awakeFromNib()
         _init()
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
-    private lazy var avatorView: UIImageView = UIImageView()
+
+    private lazy var avatorView: UIImageView = {
+        let avatorView = UIImageView()
+        avatorView.contentMode = .scaleToFill
+        return avatorView
+    }()
     private lazy var statueView: UIImageView = UIImageView()
-    private lazy var titleLabel: UILabel = UILabel()
-    private lazy var msgLabel: UILabel = UILabel()
-    private lazy var dateLabel: UILabel = UILabel()
-    private lazy var redPoin: UILabel = UILabel(frame: CGRect(x: 65 - 17, y: 4.5, width: 20, height: 20))
+    private lazy var titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.font = UIFont.systemFont(ofSize: 16)
+        return titleLabel
+    }()
+    private lazy var msgLabel: UILabel = {
+        let msgLabel = UILabel()
+        msgLabel.textColor = UIColor(netHex: 0x808080)
+        msgLabel.font = UIFont.systemFont(ofSize: 14)
+        return msgLabel
+    }()
+    private lazy var dateLabel: UILabel = {
+        let dateLabel = UILabel()
+        dateLabel.textAlignment = .right
+        dateLabel.font = UIFont.systemFont(ofSize: 12)
+        dateLabel.textColor = UIColor(netHex: 0xB3B3B3)
+        return dateLabel
+    }()
+    private lazy var redPoin: UILabel = {
+        let redPoin = UILabel(frame: CGRect(x: 65 - 17, y: 4.5, width: 20, height: 20))
+        redPoin.textAlignment = .center
+        redPoin.font = UIFont.systemFont(ofSize: 11)
+        redPoin.textColor = .white
+        redPoin.layer.backgroundColor = UIColor(netHex: 0xEB424C).cgColor
+        redPoin.textAlignment = .center
+        return redPoin
+    }()
     
     //MARK: - public func
     open func bindConversation(_ conversation: JMSGConversation) {
-        self.statueView.isHidden = true
-        let isGroup = conversation.isGroup
+        statueView.isHidden = true
+        let isGroup = conversation.ex.isGroup
         if conversation.unreadCount != nil && (conversation.unreadCount?.intValue)! > 0 {
-            self.redPoin.isHidden = false
+            redPoin.isHidden = false
             var text = ""
             if (conversation.unreadCount?.intValue)! > 99 {
                 text = "99+"
@@ -54,7 +77,7 @@ class JCConversationCell: JCTableViewCell {
                 redPoin.frame = CGRect(x: 65 - 15, y: 4.5, width: 20, height: 20)
                 text = "\(conversation.unreadCount!)"
             }
-            self.redPoin.text = text
+            redPoin.text = text
             
             var isNoDisturb = false
             if isGroup {
@@ -74,28 +97,29 @@ class JCConversationCell: JCTableViewCell {
                 redPoin.frame = CGRect(x: 65 - 5, y: 4.5, width: 8, height: 8)
             }
         } else {
-            self.redPoin.isHidden = true
+            redPoin.isHidden = true
         }
         
         if let latestMessage = conversation.latestMessage {
             let time = latestMessage.timestamp.intValue / 1000
             let date = Date(timeIntervalSince1970: TimeInterval(time))
-            self.dateLabel.text = date.conversationDate()
+            dateLabel.text = date.conversationDate()
         } else {
-            self.dateLabel.text = ""
+            dateLabel.text = ""
         }
         
         msgLabel.text = conversation.latestMessageContentText()
         if isGroup {
-            
             if let latestMessage = conversation.latestMessage {
                 let fromUser = latestMessage.fromUser
                 if !fromUser.isEqual(to: JMSGUser.myInfo()) &&
-                    latestMessage.contentType != .eventNotification {
+                    latestMessage.contentType != .eventNotification &&
+                    latestMessage.contentType != .prompt {
                     msgLabel.text = "\(fromUser.displayName()):\(msgLabel.text!)"
                 }
-                if conversation.unreadCount != nil && conversation.unreadCount!.intValue > 0 {
-                    
+                if conversation.unreadCount != nil &&
+                    conversation.unreadCount!.intValue > 0 &&
+                    latestMessage.contentType != .prompt {
                     if latestMessage.isAtAll() {
                         msgLabel.attributedText = getAttributString(attributString: "[@所有人]", string: msgLabel.text!)
                     } else if latestMessage.isAtMe() {
@@ -110,11 +134,10 @@ class JCConversationCell: JCTableViewCell {
                 msgLabel.attributedText = getAttributString(attributString: "[草稿]", string: draft)
             }
         }
-        
-        
+
         if !isGroup {
             let user = conversation.target as? JMSGUser
-            self.titleLabel.text = user?.displayName() ?? ""
+            titleLabel.text = user?.displayName() ?? ""
             user?.thumbAvatarData { (data, username, error) in
                 guard let imageData = data else {
                     self.avatorView.image = self.userDefaultIcon
@@ -123,22 +146,33 @@ class JCConversationCell: JCTableViewCell {
                 let image = UIImage(data: imageData)
                 self.avatorView.image = image
             }
-            
         } else {
-            self.avatorView.image = groupDefaultIcon
             if let group = conversation.target as? JMSGGroup {
-                self.titleLabel.text = group.displayName()
+                titleLabel.text = group.displayName()
                 if group.isShieldMessage {
-                    self.statueView.isHidden = false
+                    statueView.isHidden = false
                 }
+                group.thumbAvatarData({ (data, _, error) in
+                    if let data = data {
+                        self.avatorView.image = UIImage(data: data)
+                    } else {
+                        self.avatorView.image = self.groupDefaultIcon
+                    }
+                })
             }
+        }
+
+        if conversation.ex.isSticky {
+            backgroundColor = UIColor(netHex: 0xF5F6F8)
+        } else {
+            backgroundColor = .white
         }
     }
     
     func getAttributString(attributString: String, string: String) -> NSMutableAttributedString {
         let attr = NSMutableAttributedString(string: "")
         var attrSearchString: NSAttributedString!
-        attrSearchString = NSAttributedString(string: attributString, attributes: [ NSForegroundColorAttributeName : UIColor(netHex: 0xEB424C), NSFontAttributeName : UIFont.boldSystemFont(ofSize: 14.0)])
+        attrSearchString = NSAttributedString(string: attributString, attributes: convertToOptionalNSAttributedStringKeyDictionary([ convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor) : UIColor(netHex: 0xEB424C), convertFromNSAttributedStringKey(NSAttributedString.Key.font) : UIFont.boldSystemFont(ofSize: 14.0)]))
         attr.append(attrSearchString)
         attr.append(NSAttributedString(string: string))
         return attr
@@ -149,25 +183,8 @@ class JCConversationCell: JCTableViewCell {
     
     //MARK: - private func
     private func _init() {
-        avatorView.contentMode = .scaleToFill
         avatorView.image = userDefaultIcon
-        
         statueView.image = UIImage.loadImage("com_icon_shield")
-        
-        titleLabel.font = UIFont.systemFont(ofSize: 16)
-        
-        msgLabel.textColor = UIColor(netHex: 0x808080)
-        msgLabel.font = UIFont.systemFont(ofSize: 14)
-        
-        dateLabel.textAlignment = .right
-        dateLabel.font = UIFont.systemFont(ofSize: 12)
-        dateLabel.textColor = UIColor(netHex: 0xB3B3B3)
-        
-        redPoin.textAlignment = .center
-        redPoin.font = UIFont.systemFont(ofSize: 11)
-        redPoin.textColor = .white
-        redPoin.layer.backgroundColor = UIColor(netHex: 0xEB424C).cgColor
-        redPoin.textAlignment = .center
         
         contentView.addSubview(avatorView)
         contentView.addSubview(statueView)
@@ -201,5 +218,15 @@ class JCConversationCell: JCTableViewCell {
         addConstraint(_JCLayoutConstraintMake(statueView, .height, .equal, nil, .notAnAttribute, 12))
         addConstraint(_JCLayoutConstraintMake(statueView, .width, .equal, nil, .notAnAttribute, 12))
     }
-    
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }
