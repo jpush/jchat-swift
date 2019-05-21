@@ -45,10 +45,20 @@ class JCChatRoomChatViewController: UIViewController {
         if #available(iOS 10.0, *) {
             navigationController?.tabBarItem.badgeColor = UIColor(netHex: 0xEB424C)
         }
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(_updateFileMessage(_:)), name: NSNotification.Name(rawValue: kUpdateFileMessage), object: nil)
+
         _init()
     }
     
+    @objc func _updateFileMessage(_ notification: Notification) {
+        let userInfo = notification.userInfo
+        let message = userInfo?[kUpdateFileMessage] as! JMSGMessage
+        let content = message.content as! JMSGFileContent
+        let url = URL(fileURLWithPath: content.originMediaLocalPath ?? "")
+        let data = try! Data(contentsOf: url)
+        updateMediaMessage(message, data: data)
+    }
+
     override func loadView() {
         super.loadView()
         let frame = CGRect(x: 0, y: 64, width: self.view.width, height: self.view.height - 64)
@@ -432,7 +442,7 @@ class JCChatRoomChatViewController: UIViewController {
 
 //MARK: - JMSGMessage Delegate
 extension JCChatRoomChatViewController: JMessageDelegate {
-    fileprivate func updateMediaMessage(_ message: JMSGMessage, data: Data) {
+    fileprivate func updateMediaMessage(_ message: JMSGMessage, data: Data?) {
         DispatchQueue.main.async {
             if let index = self.messages.index(message) {
                 let msg = self.messages[index]
@@ -453,12 +463,12 @@ extension JCChatRoomChatViewController: JMessageDelegate {
                 case .video:
                     printLog("updare video message")
                     let videoContent = msg.content as! JCMessageVideoContent
-                    videoContent.image = UIImage(data: data)
+                    videoContent.image = UIImage(data: data!)
                     videoContent.delegate = self
                     msg.content = videoContent
                 case .image:
                     let imageContent = msg.content as! JCMessageImageContent
-                    let image = UIImage(data: data)
+                    let image = UIImage(data: data!)
                     imageContent.image = image
                     msg.content = imageContent
                 default: break
@@ -501,6 +511,21 @@ extension JCChatRoomChatViewController: JMessageDelegate {
         }
     }
     
+//    func onSyncOfflineMessageConversation(_ conversation: JMSGConversation!, offlineMessages: [JMSGMessage]!) {
+//        let msgs = offlineMessages.sorted(by: { (m1, m2) -> Bool in
+//            return m1.timestamp.intValue < m2.timestamp.intValue
+//        })
+//        for item in msgs {
+//            let message = _parseMessage(item)
+//            messages.append(message)
+//            chatView.append(message)
+//            if !chatView.isRoll {
+//                chatView.scrollToLast(animated: true)
+//            }
+//        }
+//    }
+    
+
     func onSendMessageResponse(_ message: JMSGMessage!, error: Error!) {
         printLog("")
         if let error = error as NSError? {
@@ -525,6 +550,7 @@ extension JCChatRoomChatViewController: JMessageDelegate {
             chatView.update(msg, at: index)
         }
     }
+
 }
 
 // MARK: - JCMessageDelegate
@@ -564,7 +590,7 @@ extension JCChatRoomChatViewController: JCMessageDelegate {
         if data == nil {
             let vc = JCFileDownloadViewController()
             vc.title = fileName
-            let msg = conversation.message(withMessageId: message.msgId)
+            let msg = message.jmessage
             vc.fileSize = msg?.ex.fileSize
             vc.message = msg
             navigationController?.pushViewController(vc, animated: true)

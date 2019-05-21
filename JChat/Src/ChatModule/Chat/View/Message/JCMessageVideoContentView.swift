@@ -56,6 +56,7 @@ open class JCMessageVideoContentView: UIImageView, JCMessageContentViewType {
         } else {
             percentLabel.textColor = .clear
             percentLabel.backgroundColor = .clear
+            _data = content.data
         }
         
         if content.image != nil {
@@ -72,27 +73,6 @@ open class JCMessageVideoContentView: UIImageView, JCMessageContentViewType {
                 }
             })
         }
-        
-//        if content.data != nil {
-//            _data = content.data
-//            if content.image != nil {
-//                self.image = content.image
-//            } else {
-//                DispatchQueue.main.async {
-//                    self.image = JCVideoManager.getFristImage(data: self._data!)
-//                }
-//            }
-//        } else {
-//            self.image = UIImage.createImage(color: UIColor(netHex: 0xCDD0D1), size: self.size)
-//            content.fileContent?.fileData({ (data, id, error) in
-//                if data != nil {
-//                    self._data = data
-//                    DispatchQueue.main.async {
-//                        self.image = JCVideoManager.getFristImage(data: self._data!)
-//                    }
-//                }
-//            })
-//        }
         _playImageView.center = CGPoint(x: self.width / 2, y: self.height / 2)
     }
 
@@ -139,32 +119,31 @@ open class JCMessageVideoContentView: UIImageView, JCMessageContentViewType {
             guard let content = _message.content as? JCMessageVideoContent else {
                 return
             }
-            percentLabel.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+            percentLabel.backgroundColor = UIColor.black.withAlphaComponent(0.7)
             percentLabel.isHidden = false
             percentLabel.textColor = .white
-            
             weak var weakSelf = self
-            var isLocal = true
             content.videoContent?.videoData(progress: { (percent, msgid) in
+                let p = Int(percent * 100)
+                weakSelf?.percentLabel.text = "\(p)%"
+            }, completionHandler: { (data, id, error) in
+                weakSelf?._data = data;
+                weakSelf?.percentLabel.isHidden = true
+                weakSelf?.percentLabel.text = ""
+                weakSelf?._delegate?.message?(message: self._message, videoData: weakSelf?._data)
+            })
+            
+            content.videoFileContent?.fileData(progress: { (percent, msgid) in
                 DispatchQueue.main.async {
-                    isLocal = false;
                     let p = Int(percent * 100)
                     weakSelf?.percentLabel.text = "\(p)%"
-
-                    if percent == 1.0 {
-                        weakSelf?.percentLabel.isHidden = true
-                        weakSelf?.percentLabel.text = ""
-                    }
                 }
             }, completionHandler: { (data, id, error) in
                 DispatchQueue.main.async {
                     weakSelf?._data = data;
                     weakSelf?.percentLabel.isHidden = true
                     weakSelf?.percentLabel.text = ""
-
-                    if isLocal {
-                        weakSelf?._delegate?.message?(message: self._message, videoData: weakSelf?._data)
-                    }
+                    weakSelf?._delegate?.message?(message: self._message, videoData: weakSelf?._data)
                 }
             })
         }

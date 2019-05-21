@@ -34,15 +34,12 @@ open class JCMessage: NSObject, JCMessageType {
 }
 
 extension JMSGMessage {
-    typealias Callback = (JMSGMessage, Data) -> Void
-
+    typealias Callback = (JMSGMessage, Data?) -> Void
     func parseMessage(_ delegate: JCMessageDelegate, _ updateMediaMessage: Callback? = nil) -> JCMessage {
-
         var msg: JCMessage!
         let currentUser = JMSGUser.myInfo()
         let isCurrent = fromUser.isEqual(to: currentUser)
         let state = self.ex.state
-//        let isGroup = targetType == self.targetType
 
         switch(contentType) {
         case .text:
@@ -131,24 +128,10 @@ extension JMSGMessage {
             printLog("file message")
             let content = self.content as! JMSGFileContent
             if ex.isShortVideo {
-                /*
                 let videoContent = JCMessageVideoContent()
                 videoContent.delegate = delegate
+                videoContent.videoFileContent = content;
                 msg = JCMessage(content: videoContent)
-                if let path = content.originMediaLocalPath {
-                    let url = URL(fileURLWithPath: path)
-                    videoContent.data = try! Data(contentsOf: url)
-                } else {
-                    content.fileData({ (data, id, error) in
-                        if let data = data {
-                            if let updateMediaMessage = updateMediaMessage {
-                                updateMediaMessage(self, data)
-                            }
-                        }
-                    })
-                }
-                videoContent.fileContent = content
-                 */
             } else {
                 let fileContent = JCMessageFileContent()
                 fileContent.delegate = delegate

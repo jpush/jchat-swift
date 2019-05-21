@@ -13,7 +13,7 @@ import MJRefresh
 class JCChatRoomListViewController: UIViewController {
 
     fileprivate var index = 0
-    fileprivate var pageCount = 3
+    fileprivate var pageCount = 20
     fileprivate lazy var chatRoomList: [JMSGChatRoom] = []
     fileprivate lazy var listTableView: UITableView = {
         var contacterView = UITableView(frame: .zero, style: .plain)
@@ -143,6 +143,7 @@ class JCChatRoomListViewController: UIViewController {
                         }
                     }
                     if rooms.count == 0 {
+                        self.listTableView.mj_footer.isHidden = true
                         complete(false)
                     }else{
                         complete(true)
