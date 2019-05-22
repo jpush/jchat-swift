@@ -32,12 +32,10 @@ class JCChatRoomListViewController: UIViewController {
         var searchVC = UISearchController(searchResultsController:resultNav)
         searchVC.delegate = self
         searchVC.searchResultsUpdater = rootVC
-        
         // 设置开始搜索时导航条是否隐藏
         searchVC.hidesNavigationBarDuringPresentation = true
         // 设置开始搜索时背景是否显示
         searchVC.dimsBackgroundDuringPresentation = false
-        
         let searchBar = searchVC.searchBar
         searchBar.sizeToFit()
         searchBar.delegate = self
@@ -65,7 +63,6 @@ class JCChatRoomListViewController: UIViewController {
         if #available(iOS 10.0, *) {
             navigationController?.tabBarItem.badgeColor = UIColor(netHex: 0xEB424C)
         }
-        
         listTableView.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
         listTableView.backgroundColor = UIColor(netHex: 0xe8edf3)
         view.addSubview(listTableView)
@@ -231,6 +228,18 @@ extension JCChatRoomListViewController: UISearchControllerDelegate {
         nav.popToRootViewController(animated: false)
         navigationController?.tabBarController?.tabBar.isHidden = false
     }
+    
+    func didDismissSearchController(_ searchController: UISearchController){
+        let nav = searchController.searchResultsController as! JCNavigationController
+        let searchResultVC =  nav.viewControllers.first as! JCCRSearchResultViewController
+        if searchResultVC.selectChatRoom != nil {
+            let vc = JCChatRoomInfoTableViewController.init(nibName: "JCChatRoomInfoTableViewController", bundle: nil)
+            vc.chatRoom = searchResultVC.selectChatRoom
+            vc.isFromSearch = true
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+
 }
 
 // searBar delegate
@@ -247,6 +256,7 @@ extension JCChatRoomListViewController: UISearchBarDelegate {
         let nav = searchController.searchResultsController as! JCNavigationController
         let vc = nav.topViewController as! JCCRSearchResultViewController
         vc._clearHistoricalRecord()
+        vc.selectChatRoom = nil
     }
 }
 
