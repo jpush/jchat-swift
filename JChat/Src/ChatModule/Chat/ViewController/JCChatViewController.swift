@@ -197,7 +197,8 @@ class JCChatViewController: UIViewController {
     
     @objc func _updateFileMessage(_ notification: Notification) {
         let userInfo = notification.userInfo
-        let msgId = userInfo?[kUpdateFileMessage] as! String
+        let msg = userInfo?[kUpdateFileMessage] as! JMSGMessage
+        let msgId = msg.msgId
         let message = conversation.message(withMessageId: msgId)!
         let content = message.content as! JMSGFileContent
         let url = URL(fileURLWithPath: content.originMediaLocalPath ?? "")
@@ -472,7 +473,7 @@ class JCChatViewController: UIViewController {
 //MARK: - JMSGMessage Delegate
 extension JCChatViewController: JMessageDelegate {
     
-    fileprivate func updateMediaMessage(_ message: JMSGMessage, data: Data) {
+    fileprivate func updateMediaMessage(_ message: JMSGMessage, data: Data?) {
         DispatchQueue.main.async {
             if let index = self.messages.index(message) {
                 let msg = self.messages[index]
@@ -493,12 +494,12 @@ extension JCChatViewController: JMessageDelegate {
                 case .video:
                     printLog("updare video message")
                     let videoContent = msg.content as! JCMessageVideoContent
-                    videoContent.image = UIImage(data: data)
+                    videoContent.image = UIImage(data: data!)
                     videoContent.delegate = self
                     msg.content = videoContent
                 case .image:
                     let imageContent = msg.content as! JCMessageImageContent
-                    let image = UIImage(data: data)
+                    let image = UIImage(data: data!)
                     imageContent.image = image
                     msg.content = imageContent
                 default: break
@@ -568,6 +569,7 @@ extension JCChatViewController: JMessageDelegate {
             let msg = messages[index]
             msg.options.state = message.ex.state
             chatView.update(msg, at: index)
+            jMessageCount += 1
         }
     }
     

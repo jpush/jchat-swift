@@ -10,6 +10,7 @@ import UIKit
 
 class JCChatRoomInfoTableViewController: UITableViewController {
     open var chatRoom: JMSGChatRoom?
+    open var isFromSearch: Bool = false
     var isOwner: Bool?
     var chatRoomOwner: JMSGUser?
     var isManager: Bool?
@@ -88,7 +89,11 @@ class JCChatRoomInfoTableViewController: UITableViewController {
             let cell2 =  tableView.dequeueReusableCell(withIdentifier: "JCButtonCell", for: indexPath)
             if let btnCell = cell2 as? JCButtonCell {
                 btnCell.delegate = self
-                btnCell.button.setTitle("退出聊天室", for: .normal)
+                if isFromSearch{
+                    btnCell.button.setTitle("进入聊天室", for: .normal)
+                }else{
+                    btnCell.button.setTitle("退出聊天室", for: .normal)
+                }
             }
             return cell2;
         }
@@ -170,16 +175,13 @@ class JCChatRoomInfoTableViewController: UITableViewController {
         }
         return 10
     }
-}
-
-extension JCChatRoomInfoTableViewController: JCButtonCellDelegate {
     
-    func buttonCell(clickButton button: UIButton) {
+    func logoutChatRoom(){
         let alert = UIAlertController.init(title: "退出聊天室", message: "是否确认退出该聊天室？", preferredStyle: UIAlertController.Style.alert)
         let okAction = UIAlertAction.init(title: "确定", style: UIAlertAction.Style.default) { (UIAlertAction) in
             JMSGChatRoom.leaveChatRoom(withRoomId: self.chatRoom!.roomID, completionHandler: { (result, error) in
                 if error == nil {
-                  self.navigationController?.popToRootViewController(animated: true)
+                    self.navigationController?.popToRootViewController(animated: true)
                 }else{
                     let err = error! as NSError
                     MBProgressHUD_JChat.show(text: err.localizedDescription, view: self.view)
@@ -191,5 +193,46 @@ extension JCChatRoomInfoTableViewController: JCButtonCellDelegate {
         let cancelAction = UIAlertAction.init(title: "取消", style: UIAlertAction.Style.cancel, handler: nil)
         alert.addAction(cancelAction)
         self.present(alert, animated: true, completion: nil)
+    }
+    func enterChatRoom() {
+        MBProgressHUD_JChat.show(text: "loading···", view: self.view)
+        let con = JMSGConversation.chatRoomConversation(withRoomId: self.chatRoom!.roomID)
+        if con == nil {
+            //获取聊天室
+            let room = self.chatRoom!
+            JMSGChatRoom.enterChatRoom(withRoomId: self.chatRoom!.roomID) { (result, error) in
+                MBProgressHUD_JChat.hide(forView: self.view, animated: true)
+                if let con1 = result as? JMSGConversation {
+                    let vc = JCChatRoomChatViewController(conversation: con1, room: room)
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }else{
+                    printLog("\(String(describing: error))")
+                    if let error = error as NSError? {
+                        if error.code == 851003 {//member has in the chatroom
+                            JMSGConversation.createChatRoomConversation(withRoomId: room.roomID) { (result, error) in
+                                if let con = result as? JMSGConversation {
+                                    let vc = JCChatRoomChatViewController(conversation: con, room: room)
+                                    self.navigationController?.pushViewController(vc, animated: true)
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }else{
+            let vc = JCChatRoomChatViewController(conversation: con!, room: self.chatRoom!)
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+}
+
+extension JCChatRoomInfoTableViewController: JCButtonCellDelegate {
+    
+    func buttonCell(clickButton button: UIButton) {
+        if isFromSearch{
+            self.enterChatRoom()
+        }else{
+            self.logoutChatRoom()
+        }
     }
 }

@@ -135,15 +135,15 @@ class JCFileDownloadViewController: UIViewController {
     }
     
     @objc func _downloadFile() {
-        let content = message.content as! JMSGFileContent
+        let content = self.message.content as? JMSGFileContent
         MBProgressHUD_JChat.showMessage(message: "下载中", toView: view)
-        content.fileData { (data, id, error) in
+        content?.fileData { (data, id, error) in
             MBProgressHUD_JChat.hide(forView: self.view, animated: true)
             if error == nil {
                 self._openButton.isHidden = false
                 self._downloadButton.isHidden = true
                 self._fileData = data
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: kUpdateFileMessage), object: nil, userInfo: [kUpdateFileMessage : self.message.msgId])
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: kUpdateFileMessage), object: nil, userInfo: [kUpdateFileMessage : self.message!])
             } else {
                 MBProgressHUD_JChat.show(text: "下载失败", view: self.view)
             }

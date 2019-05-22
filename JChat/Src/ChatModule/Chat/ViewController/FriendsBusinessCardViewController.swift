@@ -221,7 +221,10 @@ extension FriendsBusinessCardViewController: UITableViewDelegate, UITableViewDat
         if conversation.ex.isGroup {
             let group = conversation.target as! JMSGGroup
             displayName = group.displayName()
-        } else {
+        }else if conversation.ex.isChatRoom{
+            let chatRoom = conversation.target as! JMSGChatRoom
+            displayName = chatRoom.displayName()
+        }else {
             displayName = conversation.title ?? ""
         }
         JCAlertView.bulid().setTitle("发送给：\(displayName)")

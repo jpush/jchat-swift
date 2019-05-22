@@ -26,7 +26,9 @@ open class JCMessageVideoContent: NSObject, JCMessageContentType {
     open var image: UIImage?
     //open var fileContent: JMSGFileContent?
     open var videoContent: JMSGVideoContent?
-    
+    //由于andriod暂时不支持文件视频类型，故sdk对文件视频类的做了特殊处理
+    open var videoFileContent: JMSGFileContent?
+
     open func sizeThatFits(_ size: CGSize) -> CGSize {
         printLog("viedeo")
         if image == nil {

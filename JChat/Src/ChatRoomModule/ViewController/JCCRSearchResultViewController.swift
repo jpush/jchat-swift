@@ -11,6 +11,7 @@ import UIKit
 class JCCRSearchResultViewController: UIViewController {
 
     var searchController: UISearchController!
+    var selectChatRoom: JMSGChatRoom!
     fileprivate var searchString = ""
     var searchResultList: [JMSGChatRoom] = []
     
@@ -22,7 +23,6 @@ class JCCRSearchResultViewController: UIViewController {
         tableView.tableFooterView = UIView()
         tableView.sectionIndexBackgroundColor = .clear
         tableView.backgroundColor = UIColor(netHex: 0xe8edf3)
-        tableView.frame = CGRect(x: 0, y: 0, width: self.view.width, height: self.view.height)
         return tableView
     }()
     
@@ -43,6 +43,9 @@ class JCCRSearchResultViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         _init()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -69,11 +72,15 @@ class JCCRSearchResultViewController: UIViewController {
         tipsLabel.font = UIFont.systemFont(ofSize: 16)
         tipsLabel.textColor = UIColor(netHex: 0x999999)
         tipsLabel.textAlignment = .center
-        view.addSubview(tipsLabel)
-                
         view.addSubview(tableView)
         view.addSubview(networkErrorView)
-        
+        view.addSubview(tipsLabel)
+        tableView.mas_makeConstraints({ (make) in
+            make?.top.equalTo()(self.view.mas_top)?.offset()(100)
+            make?.left.equalTo()(self.view)
+            make?.right.equalTo()(self.view)
+            make?.bottom.equalTo()(self.view)
+        })
         if JCNetworkManager.isNotReachable {
             networkErrorView.isHidden = false
         }
@@ -106,14 +113,36 @@ class JCCRSearchResultViewController: UIViewController {
                 }
             }
             if self.searchResultList.count > 0 {
+                self.tipsLabel.isHidden = true
                 self.tableView.reloadData()
+            }else{
+                self.tipsLabel.isHidden = false
+                let attr = NSMutableAttributedString(string: "没有搜到聊天室 ")
+                let attrSearchString = NSAttributedString(string: roomID, attributes: self.convertToOptionalNSAttributedStringKeyDictionary([ self.convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor) : UIColor(netHex: 0x2dd0cf), self.convertFromNSAttributedStringKey(NSAttributedString.Key.font) : UIFont.boldSystemFont(ofSize: 16.0)]))
+                attr.append(attrSearchString)
+                attr.append(NSAttributedString(string:  " 相关的信息"))
+                self.tipsLabel.attributedText = attr
+                print("没有搜索到聊天室")
             }
         };
     }
     public func _clearHistoricalRecord() {
         self.searchResultList.removeAll()
         self.tableView.reloadData()
+        self.tipsLabel.attributedText = nil;
+        self.tipsLabel.isHidden = true
     }
+    
+    fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+        guard let input = input else { return nil }
+        return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+    }
+    
+    // Helper function inserted by Swift 4.2 migrator.
+    fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+        return input.rawValue
+    }
+
 }
 
 extension JCCRSearchResultViewController: UITableViewDelegate,UITableViewDataSource {
@@ -145,25 +174,9 @@ extension JCCRSearchResultViewController: UITableViewDelegate,UITableViewDataSou
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let room = self.searchResultList[indexPath.row]
-        
-        let con = JMSGConversation.chatRoomConversation(withRoomId: room.roomID)
-        if con == nil {
-            MBProgressHUD_JChat.show(text: "loading···", view: self.view)
-            JMSGChatRoom.enterChatRoom(withRoomId: room.roomID) { (result, error) in
-                MBProgressHUD_JChat.hide(forView: self.view, animated: true)
-                
-                if let con1 = result as? JMSGConversation {
-                    let vc = JCChatRoomChatViewController(conversation: con1, room: room)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                }
-            };
-        }else{
-            let vc = JCChatRoomChatViewController(conversation: con!, room: room)
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
-        self.searchController.searchBar.isHidden = true
-        self.searchController.searchBar.resignFirstResponder()
+        selectChatRoom = self.searchResultList[indexPath.row]
+        _clearHistoricalRecord()
+        self.searchController.isActive = false
     }
 }
 
@@ -171,7 +184,13 @@ extension JCCRSearchResultViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         self.searchController = searchController
         searchString = searchController.searchBar.text!
+        if self.searchResultList.count > 0 && searchString.length == 0 {
+            self.searchResultList.removeAll()
+            self.tableView.reloadData()
+            searchController.isActive = false
+        }
         print("chatroom search result :\(searchString)")
     }
+    
 }
 

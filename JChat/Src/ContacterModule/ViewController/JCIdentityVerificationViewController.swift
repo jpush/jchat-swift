@@ -18,6 +18,7 @@ class JCIdentityVerificationViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         UserDefaults.standard.set(0, forKey: kUnreadInvitationCount)
+
     }
 
     deinit {

@@ -45,10 +45,20 @@ class JCChatRoomChatViewController: UIViewController {
         if #available(iOS 10.0, *) {
             navigationController?.tabBarItem.badgeColor = UIColor(netHex: 0xEB424C)
         }
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(_updateFileMessage(_:)), name: NSNotification.Name(rawValue: kUpdateFileMessage), object: nil)
+
         _init()
     }
     
+    @objc func _updateFileMessage(_ notification: Notification) {
+        let userInfo = notification.userInfo
+        let message = userInfo?[kUpdateFileMessage] as! JMSGMessage
+        let content = message.content as! JMSGFileContent
+        let url = URL(fileURLWithPath: content.originMediaLocalPath ?? "")
+        let data = try! Data(contentsOf: url)
+        updateMediaMessage(message, data: data)
+    }
+
     override func loadView() {
         super.loadView()
         let frame = CGRect(x: 0, y: 64, width: self.view.width, height: self.view.height - 64)
@@ -432,7 +442,7 @@ class JCChatRoomChatViewController: UIViewController {
 
 //MARK: - JMSGMessage Delegate
 extension JCChatRoomChatViewController: JMessageDelegate {
-    fileprivate func updateMediaMessage(_ message: JMSGMessage, data: Data) {
+    fileprivate func updateMediaMessage(_ message: JMSGMessage, data: Data?) {
         DispatchQueue.main.async {
             if let index = self.messages.index(message) {
                 let msg = self.messages[index]
@@ -453,12 +463,12 @@ extension JCChatRoomChatViewController: JMessageDelegate {
                 case .video:
                     printLog("updare video message")
                     let videoContent = msg.content as! JCMessageVideoContent
-                    videoContent.image = UIImage(data: data)
+                    videoContent.image = UIImage(data: data!)
                     videoContent.delegate = self
                     msg.content = videoContent
                 case .image:
                     let imageContent = msg.content as! JCMessageImageContent
-                    let image = UIImage(data: data)
+                    let image = UIImage(data: data!)
                     imageContent.image = image
                     msg.content = imageContent
                 default: break
@@ -493,7 +503,6 @@ extension JCChatRoomChatViewController: JMessageDelegate {
             self.messages.append(message)
             self.jmessages.append(msg)
             chatView.append(message)
-//        updateUnread([message])
             conversation.clearUnreadCount()
             if !chatView.isRoll {
                 chatView.scrollToLast(animated: true)
@@ -501,6 +510,7 @@ extension JCChatRoomChatViewController: JMessageDelegate {
         }
     }
     
+
     func onSendMessageResponse(_ message: JMSGMessage!, error: Error!) {
         printLog("")
         if let error = error as NSError? {
@@ -515,6 +525,11 @@ extension JCChatRoomChatViewController: JMessageDelegate {
             let msg = messages[index]
             msg.options.state = message.ex.state
             chatView.update(msg, at: index)
+        }else {
+            let jcMsg = _parseMessage(message,false)
+            jmessages.append(message)
+            messages.append(jcMsg)
+            chatView.append(jcMsg)
         }
     }
     
@@ -523,6 +538,31 @@ extension JCChatRoomChatViewController: JMessageDelegate {
             let msg = _parseMessage(retractEvent.retractMessage, false)
             messages[index] = msg
             chatView.update(msg, at: index)
+        }
+    }
+    
+    func onReceive(_ events: [JMSGChatRoomAdminChangeEvent]!) {//
+        for event in events {
+            let event: JMSGChatRoomAdminChangeEvent! = event
+            var msgStr: String! = ""
+            var nameStr: String! = ""
+            for user in event.targetList{
+                let user: JMSGUser! = user
+                if(user.uid == JMSGUser.myInfo().uid){
+                    nameStr = nameStr + "你"
+                }else{
+                    nameStr = nameStr + user.displayName()
+                }
+            }
+            if event.eventType == JMSGEventNotificationType(rawValue: 130){
+                msgStr = event.fromUser.displayName() + "- 将【 " + nameStr +  " 】设置成管理员"
+            }else{
+                msgStr = event.fromUser.displayName() + "- 解除了【" + nameStr +  "】的管理员权限"
+            }
+            let noticeContent = JCMessageNoticeContent(text: msgStr)
+            let jcMsg = JCMessage.init(content: noticeContent)
+            messages.append(jcMsg)
+            chatView.append(jcMsg)
         }
     }
 }
@@ -564,7 +604,7 @@ extension JCChatRoomChatViewController: JCMessageDelegate {
         if data == nil {
             let vc = JCFileDownloadViewController()
             vc.title = fileName
-            let msg = conversation.message(withMessageId: message.msgId)
+            let msg = message.jmessage
             vc.fileSize = msg?.ex.fileSize
             vc.message = msg
             navigationController?.pushViewController(vc, animated: true)

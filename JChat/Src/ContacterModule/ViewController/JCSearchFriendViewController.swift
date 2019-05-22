@@ -20,9 +20,8 @@ class JCSearchFriendViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if isActive {
-            searchController.isActive = true
-        }
+        searchController.isActive = true
+        searchController.searchBar.isHidden = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -30,15 +29,12 @@ class JCSearchFriendViewController: UIViewController {
         searchController.searchBar.isHidden = true
         if searchController.isActive {
             searchController.isActive = false
-            isActive = false
         }
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
-    private var isActive = false
     
     fileprivate lazy var searchController: JCSearchController = JCSearchController(searchResultsController: nil)
     private lazy var searchView: UIView = UIView(frame: CGRect(x: 0, y: self.topOffset, width: self.view.width, height: 31))
@@ -222,9 +218,8 @@ extension JCSearchFriendViewController: JCSearchControllerDelegate, UISearchBarD
                 
                 if(self.addChatRoomManger == true){
                     self.addButton.isHidden = false;
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "SearchChatRoomManagerResult"), object: nil)
                 }
-                
-                
                 self.nameLabel.text = user?.displayName()
                 self.avatorView.image = UIImage.loadImage("com_icon_user_50")
                 user?.thumbAvatarData({ (data, id, error) in
