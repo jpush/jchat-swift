@@ -31,6 +31,16 @@ class JCAddFriendViewController: UIViewController {
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         textField.leftViewMode = .always
         view.addSubview(textField)
+        var textFieldY: CGFloat! = 64
+        if #available(iOS 11.0, *) {
+            textFieldY = 88
+        }
+        textField.mas_makeConstraints { (make) in
+            make?.top.equalTo()(self.view.mas_top)?.offset()(textFieldY)
+            make?.left.equalTo()
+            make?.right.equalTo()
+            make?.height.equalTo()(45)
+        }
         _setupNavigation()
     }
     
