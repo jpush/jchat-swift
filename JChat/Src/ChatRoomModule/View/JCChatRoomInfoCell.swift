@@ -53,7 +53,7 @@ class JCChatRoomInfoCell: JCTableViewCell {
         }
         for index in 0..<end {
             let i : CGFloat = CGFloat(index + 1)
-            let user = users?[index]
+            let user = users?[end-index-1]
             let x = startX - (paddingX + width)*i
             let imageView = UIImageView.init(frame: CGRect.init(x: x, y: y, width: width, height: width))
             self.contentView.addSubview(imageView)
