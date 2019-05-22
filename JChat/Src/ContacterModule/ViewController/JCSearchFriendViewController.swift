@@ -222,9 +222,8 @@ extension JCSearchFriendViewController: JCSearchControllerDelegate, UISearchBarD
                 
                 if(self.addChatRoomManger == true){
                     self.addButton.isHidden = false;
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "SearchChatRoomManagerResult"), object: nil)
                 }
-                
-                
                 self.nameLabel.text = user?.displayName()
                 self.avatorView.image = UIImage.loadImage("com_icon_user_50")
                 user?.thumbAvatarData({ (data, id, error) in

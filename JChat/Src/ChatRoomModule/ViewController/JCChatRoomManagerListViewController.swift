@@ -58,7 +58,6 @@ class JCChatRoomManagerListViewController: UIViewController {
                 let err = error! as NSError
                 MBProgressHUD_JChat.show(text: err.localizedDescription, view: self.view)
             }
-            
         })
     }
     
