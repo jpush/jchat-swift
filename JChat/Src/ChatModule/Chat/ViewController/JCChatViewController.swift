@@ -569,6 +569,7 @@ extension JCChatViewController: JMessageDelegate {
             let msg = messages[index]
             msg.options.state = message.ex.state
             chatView.update(msg, at: index)
+            jMessageCount += 1
         }
     }
     
