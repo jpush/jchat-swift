@@ -540,7 +540,31 @@ extension JCChatRoomChatViewController: JMessageDelegate {
             chatView.update(msg, at: index)
         }
     }
-
+    
+    func onReceive(_ events: [JMSGChatRoomAdminChangeEvent]!) {//
+        for event in events {
+            let event: JMSGChatRoomAdminChangeEvent! = event
+            var msgStr: String! = ""
+            var nameStr: String! = ""
+            for user in event.targetList{
+                let user: JMSGUser! = user
+                if(user.uid == JMSGUser.myInfo().uid){
+                    nameStr = nameStr + "你"
+                }else{
+                    nameStr = nameStr + user.displayName()
+                }
+            }
+            if event.eventType == JMSGEventNotificationType(rawValue: 130){
+                msgStr = event.fromUser.displayName() + "- 将【 " + nameStr +  " 】设置成管理员"
+            }else{
+                msgStr = event.fromUser.displayName() + "- 解除了【" + nameStr +  "】的管理员权限"
+            }
+            let noticeContent = JCMessageNoticeContent(text: msgStr)
+            let jcMsg = JCMessage.init(content: noticeContent)
+            messages.append(jcMsg)
+            chatView.append(jcMsg)
+        }
+    }
 }
 
 // MARK: - JCMessageDelegate
