@@ -503,27 +503,12 @@ extension JCChatRoomChatViewController: JMessageDelegate {
             self.messages.append(message)
             self.jmessages.append(msg)
             chatView.append(message)
-//        updateUnread([message])
             conversation.clearUnreadCount()
             if !chatView.isRoll {
                 chatView.scrollToLast(animated: true)
             }
         }
     }
-    
-//    func onSyncOfflineMessageConversation(_ conversation: JMSGConversation!, offlineMessages: [JMSGMessage]!) {
-//        let msgs = offlineMessages.sorted(by: { (m1, m2) -> Bool in
-//            return m1.timestamp.intValue < m2.timestamp.intValue
-//        })
-//        for item in msgs {
-//            let message = _parseMessage(item)
-//            messages.append(message)
-//            chatView.append(message)
-//            if !chatView.isRoll {
-//                chatView.scrollToLast(animated: true)
-//            }
-//        }
-//    }
     
 
     func onSendMessageResponse(_ message: JMSGMessage!, error: Error!) {
@@ -540,6 +525,11 @@ extension JCChatRoomChatViewController: JMessageDelegate {
             let msg = messages[index]
             msg.options.state = message.ex.state
             chatView.update(msg, at: index)
+        }else {
+            let jcMsg = _parseMessage(message,false)
+            jmessages.append(message)
+            messages.append(jcMsg)
+            chatView.append(jcMsg)
         }
     }
     

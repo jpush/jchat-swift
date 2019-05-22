@@ -170,7 +170,10 @@ extension ExJMessage where Base: JMSGMessage {
         if conversation.ex.isGroup  {
             let group = conversation.target as! JMSGGroup
             message = JMSGMessage.createGroupMessage(with: content, groupId: group.gid)
-        } else {
+        } else if conversation.ex.isChatRoom{
+            let chatRoom = conversation.target as! JMSGChatRoom
+            message = JMSGMessage.createChatRoomMessage(with: content, chatRoomId: chatRoom.roomID)
+        } else{
             let user = conversation.target as! JMSGUser
             message = JMSGMessage.createSingleMessage(with: content, username: user.username)
         }
