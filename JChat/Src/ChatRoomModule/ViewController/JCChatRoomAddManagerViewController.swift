@@ -57,10 +57,28 @@ class JCChatRoomAddManagerViewController: JCSearchFriendViewController {
             }else{
                 //:hub提示错误信息
                 let erro = error! as NSError
-                MBProgressHUD_JChat.show(text: erro.localizedDescription, view: self.view)
-                printLog("添加管理员失败：\(erro.localizedDescription)")
+              let tip = self.transErrorToTips(code: erro.code)
+                MBProgressHUD_JChat.show(text: tip, view: self.view)
+                printLog("添加管理员失败：\(erro)")
             }
         })
     }
-
+    func transErrorToTips(code: Int) -> String  {
+        var tip: String! = ""
+        switch code {
+        case 7130002:
+            tip = "设置为管理员的成员已经是管理员"
+        case 7130003:
+            tip = "设置为管理员的成员是个聊天室房主"
+        case 7130004:
+            tip = "超过管理员最大数量"
+        case 7130005:
+            tip = "聊天室不存在"
+        case 7130006:
+            tip = "设置为管理员的成员不在聊天室中"
+        default:
+            break
+        }
+        return tip
+    }
 }
