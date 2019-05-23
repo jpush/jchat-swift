@@ -560,9 +560,9 @@ extension JCChatRoomChatViewController: JMessageDelegate {
                 }
             }
             if event.eventType == JMSGEventNotificationType(rawValue: 130){
-                msgStr = event.fromUser.displayName() + "- 将【 " + nameStr +  " 】设置成管理员"
+                msgStr = nameStr + "被设置成管理员"
             }else{
-                msgStr = event.fromUser.displayName() + "- 解除了【" + nameStr +  "】的管理员权限"
+                msgStr = nameStr +  "被取消管理员"
             }
             let noticeContent = JCMessageNoticeContent(text: msgStr)
             let jcMsg = JCMessage.init(content: noticeContent)
