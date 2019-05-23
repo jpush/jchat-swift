@@ -15,7 +15,6 @@ class JCChatRoomChatViewController: UIViewController {
 
     public var conversation: JMSGConversation
     public var chatRoom: JMSGChatRoom
-    
     //MARK - life cycle
     public required init(conversation: JMSGConversation,room: JMSGChatRoom) {
         self.conversation = conversation
@@ -200,8 +199,6 @@ class JCChatRoomChatViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameChanged(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
-    
-    
     /// 点击界面
     @objc func _tapView() {
         view.endEditing(true)
@@ -760,23 +757,6 @@ extension JCChatRoomChatViewController: JCChatViewDelegate {
             }
         }
     }
-//
-//    消息已读回执
-//    fileprivate func updateUnread(_ messages: [JCMessage]) {
-//        for message in messages {
-//            if message.options.alignment != .left {
-//                continue
-//            }
-//            if let msg = conversation.message(withMessageId: message.msgId) {
-//                if msg.isHaveRead {
-//                    continue
-//                }
-//                msg.setMessageHaveRead({ _,_  in
-//
-//                })
-//            }
-//        }
-//    }
 }
 
 // MARK: - SAIToolboxInputViewDataSource & SAIToolboxInputViewDelegate
@@ -939,118 +919,6 @@ extension JCChatRoomChatViewController: SAIInputBarDelegate, SAIInputBarDisplaya
         return false
     }
 
-//    @ 功能
-//    func inputBar(_ inputBar: SAIInputBar, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-//        let currentIndex = range.location
-//        if !isGroup {
-//            return true
-//        }
-//        if string == "@" {
-//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()) {
-//                let vc = JCRemindListViewController()
-//                vc.finish = { (user, isAtAll, length) in
-//                    self.handleAt(inputBar, range, user, isAtAll, length)
-//                }
-//                vc.group = self.conversation.target as! JMSGGroup
-//                let nav = JCNavigationController(rootViewController: vc)
-//                self.present(nav, animated: true, completion: {})
-//            }
-//        } else {
-//            return updateRemids(inputBar, string, range, currentIndex)
-//        }
-//        return true
-//    }
-
-//    func handleAt(_ inputBar: SAIInputBar, _ range: NSRange, _ user: JMSGUser?, _ isAtAll: Bool, _ length: Int) {
-//        let text = inputBar.text!
-//        let currentIndex = range.location
-//        var displayName = "所有成员"
-//
-//        if let user = user {
-//            displayName = user.displayName()
-//        }
-//        let remind = JCRemind(user, currentIndex, currentIndex + 2 + displayName.length, displayName.length + 2, isAtAll)
-//        if text.length == currentIndex + 1 {
-//            inputBar.text = text + displayName + " "
-//        } else {
-//            let index1 = text.index(text.endIndex, offsetBy: currentIndex - text.length + 1)
-//            let prefix = text.substring(with: (text.startIndex..<index1))
-//            let index2 = text.index(text.startIndex, offsetBy: currentIndex + 1)
-//            let suffix = text.substring(with: (index2..<text.endIndex))
-//            inputBar.text = prefix + displayName + " " + suffix
-//            let _ = self.updateRemids(inputBar, "@" + displayName + " ", range, currentIndex)
-//        }
-//        self.reminds.append(remind)
-//        self.reminds.sort(by: { (r1, r2) -> Bool in
-//            return r1.startIndex < r2.startIndex
-//        })
-//    }
-//
-//    func updateRemids(_ inputBar: SAIInputBar, _ string: String, _ range: NSRange, _ currentIndex: Int) -> Bool {
-//        for index in 0..<reminds.count {
-//            let remind = reminds[index]
-//            let length = remind.length
-//            let startIndex = remind.startIndex
-//            let endIndex = remind.endIndex
-//            // Delete
-//            if currentIndex == endIndex - 1 && string.length == 0 {
-//                for _ in 0..<length {
-//                    inputBar.deleteBackward()
-//                }
-//                // Move Other Index
-//                for subIndex in (index + 1)..<reminds.count {
-//                    let subTemp = reminds[subIndex]
-//                    subTemp.startIndex -= length
-//                    subTemp.endIndex -= length
-//                }
-//                reminds.remove(at: index)
-//                return false;
-//            } else if currentIndex > startIndex && currentIndex < endIndex {
-//                // Delete Content
-//                if string.length == 0 {
-//                    for subIndex in (index + 1)..<reminds.count {
-//                        let subTemp = reminds[subIndex]
-//                        subTemp.startIndex -= 1
-//                        subTemp.endIndex -= 1
-//                    }
-//                    reminds.remove(at: index)
-//                    return true
-//                }
-//                    // Add Content
-//                else {
-//                    for subIndex in (index + 1)..<reminds.count {
-//                        let subTemp = reminds[subIndex]
-//                        subTemp.startIndex += string.length
-//                        subTemp.endIndex += string.length
-//                    }
-//                    reminds.remove(at: index)
-//                    return true
-//                }
-//            }
-//        }
-//        for index in 0..<reminds.count {
-//            let tempDic = reminds[index]
-//            let startIndex = tempDic.startIndex
-//            if currentIndex <= startIndex {
-//                if string.count == 0 {
-//                    for subIndex in index..<reminds.count {
-//                        let subTemp = reminds[subIndex]
-//                        subTemp.startIndex -= 1
-//                        subTemp.endIndex -= 1
-//                    }
-//                    return true
-//                } else {
-//                    for subIndex in index..<reminds.count {
-//                        let subTemp = reminds[subIndex]
-//                        subTemp.startIndex += string.length
-//                        subTemp.endIndex += string.length
-//                    }
-//                    return true
-//                }
-//            }
-//        }
-//        return true
-//    }
 //
     func inputBar(touchDown recordButton: UIButton, inputBar: SAIInputBar) {
         if recordingHub != nil {

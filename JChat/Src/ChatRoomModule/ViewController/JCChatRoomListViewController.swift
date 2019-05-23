@@ -182,35 +182,38 @@ extension JCChatRoomListViewController : UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
         let room = chatRoomList[indexPath.row]
-        let con = JMSGConversation.chatRoomConversation(withRoomId: room.roomID)
-        if con == nil {
-            printLog("enter the chat room first")
-            MBProgressHUD_JChat.show(text: "loading···", view: self.view)
-            JMSGChatRoom.enterChatRoom(withRoomId: room.roomID) { (result, error) in
-                MBProgressHUD_JChat.hide(forView: self.view, animated: true)
-                if let con1 = result as? JMSGConversation {
-                    let vc = JCChatRoomChatViewController(conversation: con1, room: room)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                }else{
-                    printLog("\(String(describing: error))")
-                    if let error = error as NSError? {
-                        if error.code == 851003 {//member has in the chatroom
-                            JMSGConversation.createChatRoomConversation(withRoomId: room.roomID) { (result, error) in
-                                if let con = result as? JMSGConversation {
-                                    let vc = JCChatRoomChatViewController(conversation: con, room: room)
-                                    self.navigationController?.pushViewController(vc, animated: true)
+        MBProgressHUD_JChat.show(text: "loading···", view: self.view)
+        JMSGChatRoom.leaveChatRoom(withRoomId: room.roomID) { (result, error) in
+            printLog("leave the chat room，error:\(String(describing: error))")
+            let con = JMSGConversation.chatRoomConversation(withRoomId: room.roomID)
+            if con == nil {
+                printLog("enter the chat room first")
+                JMSGChatRoom.enterChatRoom(withRoomId: room.roomID) { (result, error) in
+                    MBProgressHUD_JChat.hide(forView: self.view, animated: true)
+                    if let con1 = result as? JMSGConversation {
+                        let vc = JCChatRoomChatViewController(conversation: con1, room: room)
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }else{
+                        printLog("\(String(describing: error))")
+                        if let error = error as NSError? {
+                            if error.code == 851003 {//member has in the chatroom
+                                JMSGConversation.createChatRoomConversation(withRoomId: room.roomID) { (result, error) in
+                                    if let con = result as? JMSGConversation {
+                                        let vc = JCChatRoomChatViewController(conversation: con, room: room)
+                                        self.navigationController?.pushViewController(vc, animated: true)
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            };
-        }else{
-            printLog("go straight to the chat room session")
-            let vc = JCChatRoomChatViewController(conversation: con!, room: room)
-            self.navigationController?.pushViewController(vc, animated: true)
+            }else{
+                printLog("go straight to the chat room session")
+                let vc = JCChatRoomChatViewController(conversation: con!, room: room)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+
         }
     }
 }
