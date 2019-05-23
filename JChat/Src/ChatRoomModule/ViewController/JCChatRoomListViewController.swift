@@ -42,12 +42,6 @@ class JCChatRoomListViewController: UIViewController {
         searchBar.searchBarStyle = .minimal
         searchBar.placeholder = "请输入 roomID"
         searchVC.searchBar.returnKeyType = .search
-//        searchBar.barTintColor = .white
-//        searchBar.backgroundColor = .white
-//        searchBar.autocapitalizationType = .none
-//        searchBar.layer.borderColor = UIColor.white.cgColor
-//        searchBar.layer.borderWidth = 1
-//        searchBar.layer.masksToBounds = true
         searchBar.setSearchFieldBackgroundImage(UIImage.createImage(color: .white, size: CGSize(width: UIScreen.main.bounds.size.width, height: 31)), for: .normal)
         
         return searchVC
@@ -228,8 +222,8 @@ extension JCChatRoomListViewController: UISearchControllerDelegate {
         listTableView.isHidden = false
         let nav = searchController.searchResultsController as! JCNavigationController
         nav.isNavigationBarHidden = true
-        nav.popToRootViewController(animated: false)
-        navigationController?.tabBarController?.tabBar.isHidden = false
+//        nav.popToRootViewController(animated: false)
+//        navigationController?.tabBarController?.tabBar.isHidden = false
     }
     
     func didDismissSearchController(_ searchController: UISearchController){
@@ -261,5 +255,17 @@ extension JCChatRoomListViewController: UISearchBarDelegate {
         vc._clearHistoricalRecord()
         vc.selectChatRoom = nil
     }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = true
+        for view in (searchBar.subviews.first?.subviews)! {
+            if view is UIButton {
+                let cancelButton = view as! UIButton
+                cancelButton.setTitleColor(UIColor(netHex: 0x2dd0cf), for: .normal)
+                break
+            }
+        }
+    }
+
 }
 

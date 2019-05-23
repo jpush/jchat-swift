@@ -261,35 +261,6 @@ class JCChatRoomChatViewController: UIViewController {
             toolbar.attributedText = nil
         }
     }
-    fileprivate func _loadMessage(_ page: Int) {
-        printLog("\(page)")
-/*
-        let messages = conversation.messageArrayFromNewest(withOffset: NSNumber(value: jMessageCount), limit: NSNumber(value: 17))
-        if messages.count == 0 {
-            return
-        }
-        var msgs: [JCMessage] = []
-        for index in 0..<messages.count {
-            let message = messages[index]
-            let msg = _parseMessage(message)
-            msgs.insert(msg, at: 0)
-            if isNeedInsertTimeLine(message.timestamp.intValue) || index == messages.count - 1 {
-                let timeContent = JCMessageTimeLineContent(date: Date(timeIntervalSince1970: TimeInterval(message.timestamp.intValue / 1000)))
-                let m = JCMessage(content: timeContent)
-                m.options.showsTips = false
-                msgs.insert(m, at: 0)
-            }
-        }
-        if page != 0 {
-            minIndex = minIndex + msgs.count
-            chatView.insert(contentsOf: msgs, at: 0)
-        } else {
-            minIndex = msgs.count - 1
-            chatView.append(contentsOf: msgs)
-        }
-        self.messages.insert(contentsOf: msgs, at: 0)
-*/
-    }
     
     private func isNeedInsertTimeLine(_ time: Int) -> Bool {
         if maxTime == 0 || minTime == 0 {
