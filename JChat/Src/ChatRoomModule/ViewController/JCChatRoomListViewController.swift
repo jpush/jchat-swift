@@ -42,12 +42,6 @@ class JCChatRoomListViewController: UIViewController {
         searchBar.searchBarStyle = .minimal
         searchBar.placeholder = "请输入 roomID"
         searchVC.searchBar.returnKeyType = .search
-//        searchBar.barTintColor = .white
-//        searchBar.backgroundColor = .white
-//        searchBar.autocapitalizationType = .none
-//        searchBar.layer.borderColor = UIColor.white.cgColor
-//        searchBar.layer.borderWidth = 1
-//        searchBar.layer.masksToBounds = true
         searchBar.setSearchFieldBackgroundImage(UIImage.createImage(color: .white, size: CGSize(width: UIScreen.main.bounds.size.width, height: 31)), for: .normal)
         
         return searchVC
@@ -182,35 +176,38 @@ extension JCChatRoomListViewController : UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
         let room = chatRoomList[indexPath.row]
-        let con = JMSGConversation.chatRoomConversation(withRoomId: room.roomID)
-        if con == nil {
-            printLog("enter the chat room first")
-            MBProgressHUD_JChat.show(text: "loading···", view: self.view)
-            JMSGChatRoom.enterChatRoom(withRoomId: room.roomID) { (result, error) in
-                MBProgressHUD_JChat.hide(forView: self.view, animated: true)
-                if let con1 = result as? JMSGConversation {
-                    let vc = JCChatRoomChatViewController(conversation: con1, room: room)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                }else{
-                    printLog("\(String(describing: error))")
-                    if let error = error as NSError? {
-                        if error.code == 851003 {//member has in the chatroom
-                            JMSGConversation.createChatRoomConversation(withRoomId: room.roomID) { (result, error) in
-                                if let con = result as? JMSGConversation {
-                                    let vc = JCChatRoomChatViewController(conversation: con, room: room)
-                                    self.navigationController?.pushViewController(vc, animated: true)
+        MBProgressHUD_JChat.show(text: "loading···", view: self.view)
+        JMSGChatRoom.leaveChatRoom(withRoomId: room.roomID) { (result, error) in
+            printLog("leave the chat room，error:\(String(describing: error))")
+            let con = JMSGConversation.chatRoomConversation(withRoomId: room.roomID)
+            if con == nil {
+                printLog("enter the chat room first")
+                JMSGChatRoom.enterChatRoom(withRoomId: room.roomID) { (result, error) in
+                    MBProgressHUD_JChat.hide(forView: self.view, animated: true)
+                    if let con1 = result as? JMSGConversation {
+                        let vc = JCChatRoomChatViewController(conversation: con1, room: room)
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }else{
+                        printLog("\(String(describing: error))")
+                        if let error = error as NSError? {
+                            if error.code == 851003 {//member has in the chatroom
+                                JMSGConversation.createChatRoomConversation(withRoomId: room.roomID) { (result, error) in
+                                    if let con = result as? JMSGConversation {
+                                        let vc = JCChatRoomChatViewController(conversation: con, room: room)
+                                        self.navigationController?.pushViewController(vc, animated: true)
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            };
-        }else{
-            printLog("go straight to the chat room session")
-            let vc = JCChatRoomChatViewController(conversation: con!, room: room)
-            self.navigationController?.pushViewController(vc, animated: true)
+            }else{
+                printLog("go straight to the chat room session")
+                let vc = JCChatRoomChatViewController(conversation: con!, room: room)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+
         }
     }
 }
@@ -225,8 +222,8 @@ extension JCChatRoomListViewController: UISearchControllerDelegate {
         listTableView.isHidden = false
         let nav = searchController.searchResultsController as! JCNavigationController
         nav.isNavigationBarHidden = true
-        nav.popToRootViewController(animated: false)
-        navigationController?.tabBarController?.tabBar.isHidden = false
+//        nav.popToRootViewController(animated: false)
+//        navigationController?.tabBarController?.tabBar.isHidden = false
     }
     
     func didDismissSearchController(_ searchController: UISearchController){
@@ -258,5 +255,17 @@ extension JCChatRoomListViewController: UISearchBarDelegate {
         vc._clearHistoricalRecord()
         vc.selectChatRoom = nil
     }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = true
+        for view in (searchBar.subviews.first?.subviews)! {
+            if view is UIButton {
+                let cancelButton = view as! UIButton
+                cancelButton.setTitleColor(UIColor(netHex: 0x2dd0cf), for: .normal)
+                break
+            }
+        }
+    }
+
 }
 
