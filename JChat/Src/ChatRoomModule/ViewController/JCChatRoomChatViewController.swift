@@ -64,7 +64,7 @@ class JCChatRoomChatViewController: UIViewController {
         chatView = JCChatView(frame: frame, chatViewLayout: chatViewLayout)
         chatView.delegate = self
         chatView.messageDelegate = self
-        
+        chatView.cancelHeaderPull()
         toolbar.translatesAutoresizingMaskIntoConstraints = false
         toolbar.delegate = self
     }
@@ -497,6 +497,14 @@ extension JCChatRoomChatViewController: JMessageDelegate {
                 return
             }
             
+            let jmessage = msg
+            if isNeedInsertTimeLine(jmessage.timestamp.intValue) {
+                let timeContent = JCMessageTimeLineContent(date: Date(timeIntervalSince1970: TimeInterval(jmessage.timestamp.intValue / 1000)))
+                let m = JCMessage(content: timeContent)
+                m.options.showsTips = false
+                self.messages.append(m)
+                chatView.append(m)
+            }
             self.messages.append(message)
             self.jmessages.append(msg)
             chatView.append(message)
@@ -647,13 +655,6 @@ extension JCChatRoomChatViewController: JCMessageDelegate {
         }
     }
 
-    //  不做重发
-//    func clickTips(message: JCMessageType) {
-//        currentMessage = message
-//        let alertView = UIAlertView(title: "重新发送", message: "是否重新发送该消息？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "发送")
-//        alertView.show()
-//    }
-
     // 点击头像
     func tapAvatarView(message: JCMessageType) {
         printLog("点击头像")
@@ -690,12 +691,6 @@ extension JCChatRoomChatViewController: JCMessageDelegate {
 
 // MARK: JCChatViewDelegate
 extension JCChatRoomChatViewController: JCChatViewDelegate {
-//    func refershChatView( chatView: JCChatView) {
-//        messagePage += 1
-////        _loadMessage(messagePage)
-//        chatView.stopRefresh()
-//    }
-
     func deleteMessage(message: JCMessageType) {
         printLog("删除")
         //conversation.deleteMessage(withMessageId: message.msgId)
@@ -711,24 +706,10 @@ extension JCChatRoomChatViewController: JCChatViewDelegate {
         }
     }
 
-    // 转发
-//    func forwardMessage(message: JCMessageType) {
-//        if let message = conversation.message(withMessageId: message.msgId) {
-//            let vc = JCForwardViewController()
-//            vc.message = message
-//            let nav = JCNavigationController(rootViewController: vc)
-//            self.present(nav, animated: true, completion: {
-//                self.toolbar.isHidden = true
-//            })
-//        }
-//    }
 
     // 撤回
     func withdrawMessage(message: JCMessageType) {
         printLog("消息撤回")
-//        guard let message = conversation.message(withMessageId: message.msgId) else {
-//            return
-//        }
         guard let message = message.jmessage else {
             return
         }
