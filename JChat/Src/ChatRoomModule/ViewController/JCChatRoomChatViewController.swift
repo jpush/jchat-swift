@@ -15,7 +15,6 @@ class JCChatRoomChatViewController: UIViewController {
 
     public var conversation: JMSGConversation
     public var chatRoom: JMSGChatRoom
-    
     //MARK - life cycle
     public required init(conversation: JMSGConversation,room: JMSGChatRoom) {
         self.conversation = conversation
@@ -65,7 +64,7 @@ class JCChatRoomChatViewController: UIViewController {
         chatView = JCChatView(frame: frame, chatViewLayout: chatViewLayout)
         chatView.delegate = self
         chatView.messageDelegate = self
-        
+        chatView.cancelHeaderPull()
         toolbar.translatesAutoresizingMaskIntoConstraints = false
         toolbar.delegate = self
     }
@@ -200,8 +199,6 @@ class JCChatRoomChatViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameChanged(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
-    
-    
     /// 点击界面
     @objc func _tapView() {
         view.endEditing(true)
@@ -263,35 +260,6 @@ class JCChatRoomChatViewController: UIViewController {
             send(forText: text!)
             toolbar.attributedText = nil
         }
-    }
-    fileprivate func _loadMessage(_ page: Int) {
-        printLog("\(page)")
-/*
-        let messages = conversation.messageArrayFromNewest(withOffset: NSNumber(value: jMessageCount), limit: NSNumber(value: 17))
-        if messages.count == 0 {
-            return
-        }
-        var msgs: [JCMessage] = []
-        for index in 0..<messages.count {
-            let message = messages[index]
-            let msg = _parseMessage(message)
-            msgs.insert(msg, at: 0)
-            if isNeedInsertTimeLine(message.timestamp.intValue) || index == messages.count - 1 {
-                let timeContent = JCMessageTimeLineContent(date: Date(timeIntervalSince1970: TimeInterval(message.timestamp.intValue / 1000)))
-                let m = JCMessage(content: timeContent)
-                m.options.showsTips = false
-                msgs.insert(m, at: 0)
-            }
-        }
-        if page != 0 {
-            minIndex = minIndex + msgs.count
-            chatView.insert(contentsOf: msgs, at: 0)
-        } else {
-            minIndex = msgs.count - 1
-            chatView.append(contentsOf: msgs)
-        }
-        self.messages.insert(contentsOf: msgs, at: 0)
-*/
     }
     
     private func isNeedInsertTimeLine(_ time: Int) -> Bool {
@@ -500,6 +468,14 @@ extension JCChatRoomChatViewController: JMessageDelegate {
                 return
             }
             
+            let jmessage = msg
+            if isNeedInsertTimeLine(jmessage.timestamp.intValue) {
+                let timeContent = JCMessageTimeLineContent(date: Date(timeIntervalSince1970: TimeInterval(jmessage.timestamp.intValue / 1000)))
+                let m = JCMessage(content: timeContent)
+                m.options.showsTips = false
+                self.messages.append(m)
+                chatView.append(m)
+            }
             self.messages.append(message)
             self.jmessages.append(msg)
             chatView.append(message)
@@ -555,9 +531,9 @@ extension JCChatRoomChatViewController: JMessageDelegate {
                 }
             }
             if event.eventType == JMSGEventNotificationType(rawValue: 130){
-                msgStr = event.fromUser.displayName() + "- 将【 " + nameStr +  " 】设置成管理员"
+                msgStr = nameStr + "被设置成管理员"
             }else{
-                msgStr = event.fromUser.displayName() + "- 解除了【" + nameStr +  "】的管理员权限"
+                msgStr = nameStr +  "被取消管理员"
             }
             let noticeContent = JCMessageNoticeContent(text: msgStr)
             let jcMsg = JCMessage.init(content: noticeContent)
@@ -650,13 +626,6 @@ extension JCChatRoomChatViewController: JCMessageDelegate {
         }
     }
 
-    //  不做重发
-//    func clickTips(message: JCMessageType) {
-//        currentMessage = message
-//        let alertView = UIAlertView(title: "重新发送", message: "是否重新发送该消息？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "发送")
-//        alertView.show()
-//    }
-
     // 点击头像
     func tapAvatarView(message: JCMessageType) {
         printLog("点击头像")
@@ -693,12 +662,6 @@ extension JCChatRoomChatViewController: JCMessageDelegate {
 
 // MARK: JCChatViewDelegate
 extension JCChatRoomChatViewController: JCChatViewDelegate {
-//    func refershChatView( chatView: JCChatView) {
-//        messagePage += 1
-////        _loadMessage(messagePage)
-//        chatView.stopRefresh()
-//    }
-
     func deleteMessage(message: JCMessageType) {
         printLog("删除")
         //conversation.deleteMessage(withMessageId: message.msgId)
@@ -714,24 +677,10 @@ extension JCChatRoomChatViewController: JCChatViewDelegate {
         }
     }
 
-    // 转发
-//    func forwardMessage(message: JCMessageType) {
-//        if let message = conversation.message(withMessageId: message.msgId) {
-//            let vc = JCForwardViewController()
-//            vc.message = message
-//            let nav = JCNavigationController(rootViewController: vc)
-//            self.present(nav, animated: true, completion: {
-//                self.toolbar.isHidden = true
-//            })
-//        }
-//    }
 
     // 撤回
     func withdrawMessage(message: JCMessageType) {
         printLog("消息撤回")
-//        guard let message = conversation.message(withMessageId: message.msgId) else {
-//            return
-//        }
         guard let message = message.jmessage else {
             return
         }
@@ -760,23 +709,6 @@ extension JCChatRoomChatViewController: JCChatViewDelegate {
             }
         }
     }
-//
-//    消息已读回执
-//    fileprivate func updateUnread(_ messages: [JCMessage]) {
-//        for message in messages {
-//            if message.options.alignment != .left {
-//                continue
-//            }
-//            if let msg = conversation.message(withMessageId: message.msgId) {
-//                if msg.isHaveRead {
-//                    continue
-//                }
-//                msg.setMessageHaveRead({ _,_  in
-//
-//                })
-//            }
-//        }
-//    }
 }
 
 // MARK: - SAIToolboxInputViewDataSource & SAIToolboxInputViewDelegate
@@ -939,118 +871,6 @@ extension JCChatRoomChatViewController: SAIInputBarDelegate, SAIInputBarDisplaya
         return false
     }
 
-//    @ 功能
-//    func inputBar(_ inputBar: SAIInputBar, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-//        let currentIndex = range.location
-//        if !isGroup {
-//            return true
-//        }
-//        if string == "@" {
-//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()) {
-//                let vc = JCRemindListViewController()
-//                vc.finish = { (user, isAtAll, length) in
-//                    self.handleAt(inputBar, range, user, isAtAll, length)
-//                }
-//                vc.group = self.conversation.target as! JMSGGroup
-//                let nav = JCNavigationController(rootViewController: vc)
-//                self.present(nav, animated: true, completion: {})
-//            }
-//        } else {
-//            return updateRemids(inputBar, string, range, currentIndex)
-//        }
-//        return true
-//    }
-
-//    func handleAt(_ inputBar: SAIInputBar, _ range: NSRange, _ user: JMSGUser?, _ isAtAll: Bool, _ length: Int) {
-//        let text = inputBar.text!
-//        let currentIndex = range.location
-//        var displayName = "所有成员"
-//
-//        if let user = user {
-//            displayName = user.displayName()
-//        }
-//        let remind = JCRemind(user, currentIndex, currentIndex + 2 + displayName.length, displayName.length + 2, isAtAll)
-//        if text.length == currentIndex + 1 {
-//            inputBar.text = text + displayName + " "
-//        } else {
-//            let index1 = text.index(text.endIndex, offsetBy: currentIndex - text.length + 1)
-//            let prefix = text.substring(with: (text.startIndex..<index1))
-//            let index2 = text.index(text.startIndex, offsetBy: currentIndex + 1)
-//            let suffix = text.substring(with: (index2..<text.endIndex))
-//            inputBar.text = prefix + displayName + " " + suffix
-//            let _ = self.updateRemids(inputBar, "@" + displayName + " ", range, currentIndex)
-//        }
-//        self.reminds.append(remind)
-//        self.reminds.sort(by: { (r1, r2) -> Bool in
-//            return r1.startIndex < r2.startIndex
-//        })
-//    }
-//
-//    func updateRemids(_ inputBar: SAIInputBar, _ string: String, _ range: NSRange, _ currentIndex: Int) -> Bool {
-//        for index in 0..<reminds.count {
-//            let remind = reminds[index]
-//            let length = remind.length
-//            let startIndex = remind.startIndex
-//            let endIndex = remind.endIndex
-//            // Delete
-//            if currentIndex == endIndex - 1 && string.length == 0 {
-//                for _ in 0..<length {
-//                    inputBar.deleteBackward()
-//                }
-//                // Move Other Index
-//                for subIndex in (index + 1)..<reminds.count {
-//                    let subTemp = reminds[subIndex]
-//                    subTemp.startIndex -= length
-//                    subTemp.endIndex -= length
-//                }
-//                reminds.remove(at: index)
-//                return false;
-//            } else if currentIndex > startIndex && currentIndex < endIndex {
-//                // Delete Content
-//                if string.length == 0 {
-//                    for subIndex in (index + 1)..<reminds.count {
-//                        let subTemp = reminds[subIndex]
-//                        subTemp.startIndex -= 1
-//                        subTemp.endIndex -= 1
-//                    }
-//                    reminds.remove(at: index)
-//                    return true
-//                }
-//                    // Add Content
-//                else {
-//                    for subIndex in (index + 1)..<reminds.count {
-//                        let subTemp = reminds[subIndex]
-//                        subTemp.startIndex += string.length
-//                        subTemp.endIndex += string.length
-//                    }
-//                    reminds.remove(at: index)
-//                    return true
-//                }
-//            }
-//        }
-//        for index in 0..<reminds.count {
-//            let tempDic = reminds[index]
-//            let startIndex = tempDic.startIndex
-//            if currentIndex <= startIndex {
-//                if string.count == 0 {
-//                    for subIndex in index..<reminds.count {
-//                        let subTemp = reminds[subIndex]
-//                        subTemp.startIndex -= 1
-//                        subTemp.endIndex -= 1
-//                    }
-//                    return true
-//                } else {
-//                    for subIndex in index..<reminds.count {
-//                        let subTemp = reminds[subIndex]
-//                        subTemp.startIndex += string.length
-//                        subTemp.endIndex += string.length
-//                    }
-//                    return true
-//                }
-//            }
-//        }
-//        return true
-//    }
 //
     func inputBar(touchDown recordButton: UIButton, inputBar: SAIInputBar) {
         if recordingHub != nil {

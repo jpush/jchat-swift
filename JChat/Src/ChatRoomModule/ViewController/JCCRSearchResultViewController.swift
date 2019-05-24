@@ -22,10 +22,9 @@ class JCCRSearchResultViewController: UIViewController {
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
         tableView.sectionIndexBackgroundColor = .clear
-        tableView.backgroundColor = UIColor(netHex: 0xe8edf3)
+        tableView.backgroundColor = UIColor.init(red: 232, green: 237, blue: 243)
         return tableView
     }()
-    
     private lazy var tipsLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 100, width: self.view.width, height: 22.5))
     private lazy var networkErrorView: UIView = {
         let tipsView = UIView(frame: CGRect(x: 0, y: 64, width: self.view.width, height: self.view.height))
@@ -65,7 +64,6 @@ class JCCRSearchResultViewController: UIViewController {
     }
     
     private func _init() {
-        view.backgroundColor = UIColor.gray //UIColor(netHex: 0xe8edf3)
         automaticallyAdjustsScrollViewInsets = false
         navigationController?.automaticallyAdjustsScrollViewInsets = false
         
@@ -75,8 +73,13 @@ class JCCRSearchResultViewController: UIViewController {
         view.addSubview(tableView)
         view.addSubview(networkErrorView)
         view.addSubview(tipsLabel)
+        
         tableView.mas_makeConstraints({ (make) in
-            make?.top.equalTo()(self.view.mas_top)?.offset()(100)
+            if UIDevice.current.isAboveiPhoneX() {
+                make?.top.equalTo()(self.view.mas_top)?.offset()(100)
+            }else{
+                make?.top.equalTo()(self.view.mas_top)?.offset()(64)
+            }
             make?.left.equalTo()(self.view)
             make?.right.equalTo()(self.view)
             make?.bottom.equalTo()(self.view)
@@ -114,6 +117,7 @@ class JCCRSearchResultViewController: UIViewController {
             }
             if self.searchResultList.count > 0 {
                 self.tipsLabel.isHidden = true
+                self.tipsLabel.attributedText = nil
                 self.tableView.reloadData()
             }else{
                 self.tipsLabel.isHidden = false
@@ -184,13 +188,12 @@ extension JCCRSearchResultViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         self.searchController = searchController
         searchString = searchController.searchBar.text!
+        self.tipsLabel.attributedText = nil
         if self.searchResultList.count > 0 && searchString.length == 0 {
             self.searchResultList.removeAll()
             self.tableView.reloadData()
-            searchController.isActive = false
         }
         print("chatroom search result :\(searchString)")
     }
-    
 }
 

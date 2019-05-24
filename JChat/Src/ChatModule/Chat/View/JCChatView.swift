@@ -119,6 +119,9 @@ var isWait = false
     func append(contentsOf newMessages: Array<JCMessageType>) {
         insert(contentsOf: newMessages, at: _chatViewData.count)
     }
+    public func cancelHeaderPull(){
+        _chatContainerView.mj_header = nil
+    }
     
     fileprivate func _batchBegin() {
         _chatContainerView.messageDelegate = self.messageDelegate
