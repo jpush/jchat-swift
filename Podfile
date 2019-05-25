@@ -9,7 +9,7 @@ target 'JChat' do
   pod 'YHPopupView'
   pod 'YHPhotoKit'
   pod 'MJRefresh'
-  pod 'JMessage'
+  pod 'JMessage','~> 3.8.1'
   pod 'FMDB'
   pod 'RxSwift','~> 4.2.0'
   pod 'RxCocoa','~> 4.4.1'

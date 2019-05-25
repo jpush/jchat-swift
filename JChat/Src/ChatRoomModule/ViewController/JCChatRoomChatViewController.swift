@@ -539,6 +539,9 @@ extension JCChatRoomChatViewController: JMessageDelegate {
             let jcMsg = JCMessage.init(content: noticeContent)
             messages.append(jcMsg)
             chatView.append(jcMsg)
+            if !chatView.isRoll {
+                chatView.scrollToLast(animated: true)
+            }
         }
     }
 }

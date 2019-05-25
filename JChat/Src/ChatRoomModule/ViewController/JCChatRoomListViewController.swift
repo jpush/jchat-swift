@@ -222,8 +222,8 @@ extension JCChatRoomListViewController: UISearchControllerDelegate {
         listTableView.isHidden = false
         let nav = searchController.searchResultsController as! JCNavigationController
         nav.isNavigationBarHidden = true
-//        nav.popToRootViewController(animated: false)
-//        navigationController?.tabBarController?.tabBar.isHidden = false
+        nav.popToRootViewController(animated: false)
+        navigationController?.tabBarController?.tabBar.isHidden = false
     }
     
     func didDismissSearchController(_ searchController: UISearchController){
