@@ -9,7 +9,7 @@
 import UIKit
 
 class JCCEmoticonGroup: JCEmoticonGroup {
-     init?(contentsOfFile: String) {
+    @objc init?(contentsOfFile: String) {
         guard let dic = NSDictionary(contentsOfFile: contentsOfFile), let arr = dic["emoticons"] as? NSArray else {
             return nil
         }

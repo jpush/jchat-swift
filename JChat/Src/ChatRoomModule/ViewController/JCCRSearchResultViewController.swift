@@ -181,6 +181,7 @@ extension JCCRSearchResultViewController: UITableViewDelegate,UITableViewDataSou
         selectChatRoom = self.searchResultList[indexPath.row]
         _clearHistoricalRecord()
         self.searchController.isActive = false
+        
     }
 }
 

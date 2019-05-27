@@ -22,8 +22,11 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UZX-pR-jzv">
-                    <rect key="frame" x="0.0" y="20" width="375" height="166"/>
+                    <rect key="frame" x="0.0" y="20" width="375" height="105"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="105" id="JML-Ay-der"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -39,11 +42,11 @@
                 </label>
                 <textView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.5" contentMode="scaleToFill" editable="NO" text="志愿者" translatesAutoresizingMaskIntoConstraints="NO" id="ScF-mX-r5U">
                     <rect key="frame" x="16" y="74" width="343" height="44"/>
-                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" red="0.90980392156862744" green="0.92941176470588238" blue="0.95294117647058818" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="oDL-Eb-SMH"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
             </subviews>
@@ -54,10 +57,9 @@
                 <constraint firstItem="97k-3G-FI0" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="8" id="WcV-se-Zbm"/>
                 <constraint firstItem="UZX-pR-jzv" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Y3X-Pi-7GN"/>
                 <constraint firstItem="97k-3G-FI0" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leadingMargin" id="Z4r-Wo-GFn"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="UZX-pR-jzv" secondAttribute="bottom" constant="481" id="cnd-aD-QXy"/>
                 <constraint firstItem="ScF-mX-r5U" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailingMargin" id="l8U-pN-xgy"/>
-                <constraint firstItem="UZX-pR-jzv" firstAttribute="centerX" secondItem="ScF-mX-r5U" secondAttribute="centerX" id="m7T-xw-kds"/>
                 <constraint firstItem="ScF-mX-r5U" firstAttribute="top" secondItem="97k-3G-FI0" secondAttribute="bottom" constant="5" id="uCw-BZ-G01"/>
+                <constraint firstItem="UZX-pR-jzv" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="wiF-44-3SP"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="34.399999999999999" y="34.632683658170919"/>
