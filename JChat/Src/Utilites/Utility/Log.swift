@@ -2,7 +2,7 @@
 //  Log.swift
 //  JChat
 //
-//  Created by 邓永豪 on 2017/10/5.
+//  Created by JIGUANG on 2017/10/5.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -21,6 +21,6 @@ func printLog<T>(_ message: T,
                     line: Int = #line)
 {
     #if DEBUG
-    print("\((file as NSString).lastPathComponent)[\(line)], \(method): \(message)")
+    print(" | JChat | D | [\((file as NSString).lastPathComponent)][\(line)] Func - \(method): \(message)")
     #endif
 }

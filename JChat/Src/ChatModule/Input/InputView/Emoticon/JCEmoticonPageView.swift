@@ -2,7 +2,7 @@
 //  JCEmoticonPageView.swift
 //  JChat
 //
-//  Created by deng on 2017/3/9.
+//  Created by JIGUANG on 2017/3/9.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -69,7 +69,7 @@ internal class JCEmoticonPageView: UICollectionViewCell, UIGestureRecognizerDele
         }
     }
     
-    func onPress(_ sender: UITapGestureRecognizer) {
+    @objc func onPress(_ sender: UITapGestureRecognizer) {
         guard let idx = _index(at: sender.location(in: self)) else {
             
             return // no index
@@ -82,7 +82,7 @@ internal class JCEmoticonPageView: UICollectionViewCell, UIGestureRecognizerDele
             delegate?.emoticon(didSelectFor: emoticon)
         }
     }
-    func onLongPress(_ sender: UITapGestureRecognizer) {
+    @objc func onLongPress(_ sender: UITapGestureRecognizer) {
         guard let page = page else {
             return
         }
@@ -142,7 +142,7 @@ internal class JCEmoticonPageView: UICollectionViewCell, UIGestureRecognizerDele
             delegate?.emoticon(didPreviewFor: emoticon)
         }
     }
-    func onBackspace(_ sender: UIButton) {
+    @objc func onBackspace(_ sender: UIButton) {
         
         if delegate?.emoticon(shouldSelectFor: JCEmoticon.backspace) ?? true {
             delegate?.emoticon(didSelectFor: JCEmoticon.backspace)

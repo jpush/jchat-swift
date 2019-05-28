@@ -2,7 +2,7 @@
 //  JCUserAvatorCell.swift
 //  JChat
 //
-//  Created by deng on 2017/5/16.
+//  Created by JIGUANG on 2017/5/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -17,7 +17,7 @@ class JCUserAvatorCell: JCTableViewCell {
     
     weak var delegate: JCUserAvatorCellDelegate?
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
@@ -89,7 +89,7 @@ class JCUserAvatorCell: JCTableViewCell {
         }
     }
     
-    func _tapHandler(sender:UITapGestureRecognizer) {
+    @objc func _tapHandler(sender:UITapGestureRecognizer) {
         delegate?.tapAvator?(self.avatorView.image)
     }
 

@@ -2,7 +2,7 @@
 //  JCNavigationController.swift
 //  JChat
 //
-//  Created by deng on 2017/2/16.
+//  Created by JIGUANG on 2017/2/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -76,11 +76,22 @@ final class JCNavigationController: UINavigationController {
         navBar.barTintColor = UIColor(netHex: 0x2dd0cf)
         navBar.tintColor = .white
         var attrs = [String : AnyObject]()
-        attrs[NSFontAttributeName] = UIFont.systemFont(ofSize: 18)
-        attrs[NSForegroundColorAttributeName] = UIColor.white
-        navBar.titleTextAttributes = attrs
+        attrs[convertFromNSAttributedStringKey(NSAttributedString.Key.font)] = UIFont.systemFont(ofSize: 18)
+        attrs[convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor)] = UIColor.white
+        navBar.titleTextAttributes = convertToOptionalNSAttributedStringKeyDictionary(attrs)
         navBar.backIndicatorTransitionMaskImage = UIImage.loadImage("com_icon_back")
         navBar.backIndicatorImage = UIImage.loadImage("com_icon_back")
     }
 
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
 }

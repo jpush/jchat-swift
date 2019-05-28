@@ -2,7 +2,7 @@
 //  JCButtonCell.swift
 //  JChat
 //
-//  Created by deng on 2017/3/28.
+//  Created by JIGUANG on 2017/3/28.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -35,7 +35,7 @@ class JCButtonCell: UITableViewCell {
         }
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
@@ -51,7 +51,7 @@ class JCButtonCell: UITableViewCell {
     }
 
     private var color = UIColor(netHex: 0x2dd0cf)
-    private lazy var button: UIButton = {
+    open lazy var button: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(_click(_:)), for: .touchUpInside)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
@@ -76,7 +76,7 @@ class JCButtonCell: UITableViewCell {
     }
     
     //MARK: - click func
-    func _click(_ sender: UIButton) {
+    @objc func _click(_ sender: UIButton) {
         delegate?.buttonCell?(clickButton: sender)
     }
 }

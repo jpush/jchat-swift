@@ -96,7 +96,7 @@ extension JCSearchController: UISearchBarDelegate {
                 let cancelButton = view as! UIButton
                 cancelButton.setTitleColor(UIColor(netHex: 0x2dd0cf), for: .normal)
                 if #available(iOS 11.0, *) {
-                    cancelButton.titleEdgeInsets = UIEdgeInsetsMake(8, 0, 0, 0)
+                    cancelButton.titleEdgeInsets = UIEdgeInsets.init(top: 8, left: 0, bottom: 0, right: 0)
                 }
                 break
             }

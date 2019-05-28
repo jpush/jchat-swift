@@ -2,7 +2,7 @@
 //  JCGroupNameViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/5/16.
+//  Created by JIGUANG on 2017/5/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -18,7 +18,7 @@ class JCGroupNameViewController: UIViewController {
         _init()
         groupName = group.displayName()
         groupNameTextField.text = groupName
-        var count = 20 - groupName.characters.count
+        var count = 20 - groupName.count
         count = count < 0 ? 0 : count
         tipLabel.text = "\(count)"
         groupNameTextField.becomeFirstResponder()
@@ -61,22 +61,23 @@ class JCGroupNameViewController: UIViewController {
         navigationItem.rightBarButtonItem =  navRightButton
     }
 
-    func textFieldDidChanged(_ textField: UITextField) {
+    @objc func textFieldDidChanged(_ textField: UITextField) {
         if textField.markedTextRange == nil {
             let text = textField.text!
-            if text.characters.count > 20 {
-                let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 20))
+            if text.count > 20 {
+                let range = (text.startIndex ..< text.index(text.startIndex, offsetBy: 20))
+                //let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 20))
                 
                 let subText = text.substring(with: range)
                 textField.text = subText
             }
-            let count = 20 - (textField.text?.characters.count)!
+            let count = 20 - (textField.text?.count)!
             tipLabel.text = "\(count)"
         }
     }
     
     //MARK: - click func
-    func _saveNickname() {
+    @objc func _saveNickname() {
         groupNameTextField.resignFirstResponder()
         let groupName = groupNameTextField.text
         MBProgressHUD_JChat.showMessage(message: "修改中...", toView: view)

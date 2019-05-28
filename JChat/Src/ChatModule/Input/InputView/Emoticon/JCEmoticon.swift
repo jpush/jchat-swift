@@ -2,7 +2,7 @@
 //  JCEmoticon.swift
 //  JChat
 //
-//  Created by deng on 2017/3/8.
+//  Created by JIGUANG on 2017/3/8.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -22,7 +22,7 @@ open class JCEmoticon: NSObject {
         return self === JCEmoticon.backspace
     }
     
-    open static let backspace: JCEmoticon = {
+    public static let backspace: JCEmoticon = {
         let em = JCEmoticon()
         em.contents = "⌫"
         return em
@@ -39,13 +39,13 @@ open class JCEmoticon: NSObject {
             image.draw(in: nrect)
             
         case let str as NSString:
-            let cfg = [NSFontAttributeName: UIFont.systemFont(ofSize: 32)]
-            let size = str.size(attributes: cfg)
+            let cfg = [convertFromNSAttributedStringKey(NSAttributedString.Key.font): UIFont.systemFont(ofSize: 32)]
+            let size = str.size(withAttributes: convertToOptionalNSAttributedStringKeyDictionary(cfg))
             let nrect = CGRect(x: rect.minX + (rect.width - size.width + 3) / 2,
                                y: rect.minY + (rect.height - size.height) / 2,
                                width: size.width,
                                height: size.height)
-            str.draw(in: nrect, withAttributes: cfg)
+            str.draw(in: nrect, withAttributes: convertToOptionalNSAttributedStringKeyDictionary(cfg))
             
         case let str as NSAttributedString:
             str.draw(in: rect)
@@ -87,4 +87,15 @@ open class JCEmoticon: NSObject {
     
     // 目前只支持UIImage/NSString/NSAttributedString
     open var contents: Any?
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
 }

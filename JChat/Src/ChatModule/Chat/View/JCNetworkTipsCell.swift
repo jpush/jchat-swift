@@ -2,7 +2,7 @@
 //  JCNetworkTipsCell.swift
 //  JChat
 //
-//  Created by deng on 2017/6/12.
+//  Created by JIGUANG on 2017/6/12.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import UIKit
 
 class JCNetworkTipsCell: UITableViewCell {
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }

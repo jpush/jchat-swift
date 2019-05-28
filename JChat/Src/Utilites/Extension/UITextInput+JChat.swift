@@ -2,7 +2,7 @@
 //  UITextInput+JChat.swift
 //  JChat
 //
-//  Created by 邓永豪 on 2017/10/18.
+//  Created by JIGUANG on 2017/10/18.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -18,9 +18,9 @@ extension UITextView: TextProtocol {
             return
         }
         let text = self.text!
-        if text.characters.count > maxSize {
-            let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: maxSize))
-
+        if text.count > maxSize {
+            let range = text.startIndex ..< text.index(text.startIndex, offsetBy: maxSize)
+            //let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: maxSize))
             let subText = text.substring(with: range)
             self.text = subText
         }

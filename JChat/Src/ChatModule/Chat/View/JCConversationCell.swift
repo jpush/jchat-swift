@@ -2,7 +2,7 @@
 //  JCConversationCell.swift
 //  JChat
 //
-//  Created by deng on 2017/3/22.
+//  Created by JIGUANG on 2017/3/22.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -11,7 +11,7 @@ import JMessage
 
 class JCConversationCell: JCTableViewCell {
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
@@ -172,7 +172,7 @@ class JCConversationCell: JCTableViewCell {
     func getAttributString(attributString: String, string: String) -> NSMutableAttributedString {
         let attr = NSMutableAttributedString(string: "")
         var attrSearchString: NSAttributedString!
-        attrSearchString = NSAttributedString(string: attributString, attributes: [ NSForegroundColorAttributeName : UIColor(netHex: 0xEB424C), NSFontAttributeName : UIFont.boldSystemFont(ofSize: 14.0)])
+        attrSearchString = NSAttributedString(string: attributString, attributes: convertToOptionalNSAttributedStringKeyDictionary([ convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor) : UIColor(netHex: 0xEB424C), convertFromNSAttributedStringKey(NSAttributedString.Key.font) : UIFont.boldSystemFont(ofSize: 14.0)]))
         attr.append(attrSearchString)
         attr.append(NSAttributedString(string: string))
         return attr
@@ -218,4 +218,15 @@ class JCConversationCell: JCTableViewCell {
         addConstraint(_JCLayoutConstraintMake(statueView, .height, .equal, nil, .notAnAttribute, 12))
         addConstraint(_JCLayoutConstraintMake(statueView, .width, .equal, nil, .notAnAttribute, 12))
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

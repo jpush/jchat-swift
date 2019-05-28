@@ -184,9 +184,9 @@ internal class SAIInputAccessoryViewLayout: UICollectionViewLayout {
 
     var contentInsets: UIEdgeInsets {
         if isIPhoneX {
-            return UIEdgeInsetsMake(8, 10, 20, 10)
+            return UIEdgeInsets.init(top: 8, left: 10, bottom: 20, right: 10)
         }
-        return UIEdgeInsetsMake(8, 10, 8, 10)
+        return UIEdgeInsets.init(top: 8, left: 10, bottom: 8, right: 10)
     }
     
     // MARK: Invalidate

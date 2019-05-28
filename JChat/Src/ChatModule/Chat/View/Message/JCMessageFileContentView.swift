@@ -2,7 +2,7 @@
 //  JCMessageFileContentView.swift
 //  JChat
 //
-//  Created by deng on 2017/7/20.
+//  Created by JIGUANG on 2017/7/20.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -121,7 +121,7 @@ class JCMessageFileContentView: UIView, JCMessageContentViewType {
         addGestureRecognizer(tap)
     }
     
-    func _clickCell() {
+    @objc func _clickCell() {
         _delegate?.message?(message: _message, fileData: _fileData, fileName: _fileName, fileType: _fileType)
     }
 }

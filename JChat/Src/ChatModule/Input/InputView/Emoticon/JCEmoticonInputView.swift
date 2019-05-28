@@ -2,7 +2,7 @@
 //  JCEmoticonInputView.swift
 //  JChat
 //
-//  Created by deng on 2017/3/9.
+//  Created by JIGUANG on 2017/3/9.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -99,7 +99,8 @@ open class JCEmoticonInputView: UIView {
     
     private func _init() {
         
-        _color = UIColor(colorLiteralRed: 0xec / 0xff, green: 0xed / 0xff, blue: 0xf1 / 0xff, alpha: 1)
+        //_color = UIColor(colorLiteralRed: 0xec / 0xff, green: 0xed / 0xff, blue: 0xf1 / 0xff, alpha: 1)
+        _color = UIColor(red: 0xec / 0xff, green: 0xed / 0xff, blue: 0xf1 / 0xff, alpha: 1)
         
         _pageControl.numberOfPages = 8
         _pageControl.hidesForSinglePage = true
@@ -131,7 +132,7 @@ open class JCEmoticonInputView: UIView {
         _tabbar.translatesAutoresizingMaskIntoConstraints = false
         _tabbar.dataSource = self
         _tabbar.backgroundColor = .white
-        _tabbar.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        _tabbar.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
         _tabbar.delegate = self
         _tabbar.scrollsToTop = false
         _tabbar.showsVerticalScrollIndicator = false
@@ -273,7 +274,7 @@ extension JCEmoticonInputView: UICollectionViewDataSource, UICollectionViewDeleg
         return dataSource?.emoticon?(self, numberOfColumnsForGroupAt: index) ?? 7
     }
     internal func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: JCEmoticonInputViewLayout, insetForGroupAt index: Int) -> UIEdgeInsets {
-        return delegate?.emoticon?(self, insetForGroupAt: index) ?? UIEdgeInsetsMake(12, 10, 12 + 30, 10)
+        return delegate?.emoticon?(self, insetForGroupAt: index) ?? UIEdgeInsets.init(top: 12, left: 10, bottom: 12 + 30, right: 10)
     }
     
     fileprivate func _updateMoreView(at indexPath: IndexPath) {
@@ -313,7 +314,7 @@ extension JCEmoticonInputView: UICollectionViewDataSource, UICollectionViewDeleg
             
             UIView.animate(withDuration: 0.25, animations: {
                 
-                self._tabbar.contentInset = UIEdgeInsetsMake(0, 0, 0, newValue?.frame.width ?? 0)
+                self._tabbar.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: newValue?.frame.width ?? 0)
                 
                 newValue?.transform = CGAffineTransform(translationX: 0, y: 0)
                 oldValue?.transform = CGAffineTransform(translationX: oldValue?.frame.width ?? 0, y: 0)
@@ -356,7 +357,7 @@ internal func _SAEmoticonLoadImage(base64Encoded base64String: String, scale: CG
 }
 
 @inline(__always)
-internal func _JCEmoticonLayoutConstraintMake(_ item: AnyObject, _ attr1: NSLayoutAttribute, _ related: NSLayoutRelation, _ toItem: AnyObject? = nil, _ attr2: NSLayoutAttribute = .notAnAttribute, _ constant: CGFloat = 0, priority: UILayoutPriority = 1000, multiplier: CGFloat = 1, output: UnsafeMutablePointer<NSLayoutConstraint?>? = nil) -> NSLayoutConstraint {
+internal func _JCEmoticonLayoutConstraintMake(_ item: AnyObject, _ attr1: NSLayoutConstraint.Attribute, _ related: NSLayoutConstraint.Relation, _ toItem: AnyObject? = nil, _ attr2: NSLayoutConstraint.Attribute = .notAnAttribute, _ constant: CGFloat = 0, priority: UILayoutPriority = UILayoutPriority(1000), multiplier: CGFloat = 1, output: UnsafeMutablePointer<NSLayoutConstraint?>? = nil) -> NSLayoutConstraint {
     
     let c = NSLayoutConstraint(item:item, attribute:attr1, relatedBy:related, toItem:toItem, attribute:attr2, multiplier:multiplier, constant:constant)
     c.priority = priority

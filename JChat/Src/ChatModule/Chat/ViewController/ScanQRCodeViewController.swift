@@ -2,7 +2,7 @@
 //  ScanQRCodeViewController.swift
 //  JChat
 //
-//  Created by 邓永豪 on 2017/8/16.
+//  Created by JIGUANG on 2017/8/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -18,7 +18,7 @@ class ScanQRCodeViewController: UIViewController {
         self.title = "扫一扫"
         view.backgroundColor = .white
         
-        let authStatus = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+        let authStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType(rawValue: convertFromAVMediaType(AVMediaType.video)))
         if(authStatus == .restricted || authStatus == .denied){
             let alertView = UIAlertView(title: "无法访问相机", message: "请在设备的设置-趣阅中允许访问相机。",delegate: self, cancelButtonTitle: "好的", otherButtonTitles: "去设置")
             alertView.show()
@@ -48,7 +48,7 @@ class ScanQRCodeViewController: UIViewController {
         tipsLabel.textColor = UIColor(netHex: 0x6EF8F8)
         view.addSubview(tipsLabel)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(startQRCAnimate), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(startQRCAnimate), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
     var qrcLine: UIImageView!
@@ -82,26 +82,26 @@ class ScanQRCodeViewController: UIViewController {
     
     fileprivate lazy var session: AVCaptureSession = {
         var session = AVCaptureSession()
-        var device = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        var device = AVCaptureDevice.default(for: AVMediaType(rawValue: convertFromAVMediaType(AVMediaType.video)))
         var input: AVCaptureDeviceInput?
         do {
-            input = try AVCaptureDeviceInput(device: device)
+            input = try AVCaptureDeviceInput(device: device!)
         } catch {
             print(error)
         }
         if input != nil {
-            session.addInput(input)
+            session.addInput(input!)
         }
         var output = AVCaptureMetadataOutput()
         session.addOutput(output)
-        output.metadataObjectTypes = [AVMetadataObjectTypeQRCode]
+        output.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
         output.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
         
         return session
     }()
     fileprivate lazy var previewLayer: AVCaptureVideoPreviewLayer = {
         var previewLayer = AVCaptureVideoPreviewLayer(session: self.session)
-        return previewLayer!
+        return previewLayer
     }()
     
     private func _getBackgroundImage() -> UIImage? {
@@ -122,7 +122,7 @@ class ScanQRCodeViewController: UIViewController {
     
     var isAnimating = false
     
-    func startQRCAnimate() {
+    @objc func startQRCAnimate() {
         if isStopAnimate || isAnimating {
             return
         }
@@ -142,7 +142,7 @@ class ScanQRCodeViewController: UIViewController {
 
 // MARK: - AVCaptureMetadataOutputObjectsDelegate
 extension ScanQRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
-    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
+    func metadataOutput(_ captureOutput: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         for metadataObject in metadataObjects {
             guard let object = metadataObject as? AVMetadataMachineReadableCodeObject else {
                 return
@@ -168,7 +168,7 @@ extension ScanQRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                 return
             }
             
-            if object.type == AVMetadataObjectTypeQRCode {
+            if object.type.rawValue == convertFromAVMetadataObjectObjectType(AVMetadataObject.ObjectType.qr) {
                 guard let url = object.stringValue else {
                     return
                 }
@@ -228,5 +228,12 @@ extension ScanQRCodeViewController: UIAlertViewDelegate {
 }
 
 
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVMediaType(_ input: AVMediaType) -> String {
+	return input.rawValue
+}
 
-
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVMetadataObjectObjectType(_ input: AVMetadataObject.ObjectType) -> String {
+	return input.rawValue
+}

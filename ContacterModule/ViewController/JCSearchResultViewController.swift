@@ -2,7 +2,7 @@
 //  JCSearchResultViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/5/5.
+//  Created by JIGUANG on 2017/5/5.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -51,8 +51,8 @@ class JCSearchResultViewController: UIViewController {
     fileprivate lazy var users: [JMSGUser] = []
     fileprivate lazy var groups: [JMSGGroup] = []
     
-    dynamic lazy var filteredUsersArray: [JMSGUser] = []
-    dynamic lazy var filteredGroupsArray: [JMSGGroup] = []
+    @objc dynamic lazy var filteredUsersArray: [JMSGUser] = []
+    @objc dynamic lazy var filteredGroupsArray: [JMSGGroup] = []
     
     fileprivate var searchString = ""
     
@@ -94,7 +94,7 @@ class JCSearchResultViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(note:)), name: NSNotification.Name(rawValue: "kNetworkReachabilityChangedNotification"), object: nil)
     }
     
-    func reachabilityChanged(note: NSNotification) {
+    @objc func reachabilityChanged(note: NSNotification) {
         if let curReach = note.object as? Reachability {
             let status = curReach.currentReachabilityStatus()
             switch status {
@@ -172,7 +172,7 @@ class JCSearchResultViewController: UIViewController {
             tableView.isHidden = true
             
             let attr = NSMutableAttributedString(string: "没有搜到 ")
-            let attrSearchString = NSAttributedString(string: searchString, attributes: [ NSForegroundColorAttributeName : UIColor(netHex: 0x2dd0cf), NSFontAttributeName : UIFont.boldSystemFont(ofSize: 16.0)])
+            let attrSearchString = NSAttributedString(string: searchString, attributes: convertToOptionalNSAttributedStringKeyDictionary([ convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor) : UIColor(netHex: 0x2dd0cf), convertFromNSAttributedStringKey(NSAttributedString.Key.font) : UIFont.boldSystemFont(ofSize: 16.0)]))
             
             attr.append(attrSearchString)
             attr.append(NSAttributedString(string:  " 相关的信息"))
@@ -448,4 +448,15 @@ internal func _JCFilterGroups(groups: [JMSGGroup], string: String) -> [JMSGGroup
         }
     })
     return filteredGroupsArray
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

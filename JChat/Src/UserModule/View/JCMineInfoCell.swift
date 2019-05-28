@@ -2,7 +2,7 @@
 //  JCMineInfoCell.swift
 //  JChat
 //
-//  Created by deng on 2017/3/28.
+//  Created by JIGUANG on 2017/3/28.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -54,7 +54,7 @@ class JCMineInfoCell: JCTableViewCell {
         }
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
@@ -114,7 +114,7 @@ class JCMineInfoCell: JCTableViewCell {
         addConstraint(_JCLayoutConstraintMake(switchButton, .centerY, .equal, contentView, .centerY))
     }
     
-    func clickSwitch(_ sender: UISwitch) {
+    @objc func clickSwitch(_ sender: UISwitch) {
         delegate?.mineInfoCell?(clickSwitchButton: sender, indexPath: indexPate)
     }
 

@@ -2,7 +2,7 @@
 //  JCString+JChat.swift
 //  JChat
 //
-//  Created by deng on 2017/2/16.
+//  Created by JIGUANG on 2017/2/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -281,7 +281,7 @@ extension String {
 extension String {
 
     var length: Int {
-        return self.characters.count
+        return self.count
     }
     
     var isContainsChinese: Bool {

@@ -48,15 +48,15 @@ public class JCMessageImageCollectionViewCell: UICollectionViewCell {
         addGestureRecognizer(longTapGesture)
     }
     
-    func singleTapImage(_ gestureRecognizer: UITapGestureRecognizer)  {
+    @objc func singleTapImage(_ gestureRecognizer: UITapGestureRecognizer)  {
         delegate?.singleTap?()
     }
     
-    func doubleTapImage(_ gestureRecognizer: UITapGestureRecognizer) {
+    @objc func doubleTapImage(_ gestureRecognizer: UITapGestureRecognizer) {
         adjustImageScale()
     }
     
-    func longTapImage(_ gestureRecognizer: UILongPressGestureRecognizer)  {
+    @objc func longTapImage(_ gestureRecognizer: UILongPressGestureRecognizer)  {
         if gestureRecognizer.state == .began {
             delegate?.longTap?(tableviewCell: self)
         }

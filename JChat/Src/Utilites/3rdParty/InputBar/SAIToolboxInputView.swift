@@ -173,7 +173,7 @@ extension SAIToolboxInputView: UICollectionViewDataSource, SAIToolboxInputViewLa
     }
     
     internal func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: SAIToolboxInputViewLayout, insetForSectionAt index: Int) -> UIEdgeInsets {
-        return delegate?.toolbox?(self, insetForSectionAt: index) ?? UIEdgeInsetsMake(12, 10, 12, 10)
+        return delegate?.toolbox?(self, insetForSectionAt: index) ?? UIEdgeInsets.init(top: 12, left: 10, bottom: 12, right: 10)
     }
     internal func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: SAIToolboxInputViewLayout, numberOfRowsForSectionAt index: Int) -> Int {
         return dataSource?.toolbox?(self, numberOfRowsForSectionAt: index) ?? 2
@@ -196,7 +196,7 @@ extension SAIToolboxInputView: UICollectionViewDataSource, SAIToolboxInputViewLa
 }
 
 @inline(__always)
-internal func _SAToolboxLayoutConstraintMake(_ item: AnyObject, _ attr1: NSLayoutAttribute, _ related: NSLayoutRelation, _ toItem: AnyObject? = nil, _ attr2: NSLayoutAttribute = .notAnAttribute, _ constant: CGFloat = 0, priority: UILayoutPriority = 1000, multiplier: CGFloat = 1, output: UnsafeMutablePointer<NSLayoutConstraint?>? = nil) -> NSLayoutConstraint {
+internal func _SAToolboxLayoutConstraintMake(_ item: AnyObject, _ attr1: NSLayoutConstraint.Attribute, _ related: NSLayoutConstraint.Relation, _ toItem: AnyObject? = nil, _ attr2: NSLayoutConstraint.Attribute = .notAnAttribute, _ constant: CGFloat = 0, priority: UILayoutPriority = UILayoutPriority(1000), multiplier: CGFloat = 1, output: UnsafeMutablePointer<NSLayoutConstraint?>? = nil) -> NSLayoutConstraint {
     
     let c = NSLayoutConstraint(item:item, attribute:attr1, relatedBy:related, toItem:toItem, attribute:attr2, multiplier:multiplier, constant:constant)
     c.priority = priority

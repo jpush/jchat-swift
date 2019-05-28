@@ -2,7 +2,7 @@
 //  FriendsBusinessCardViewController.swift
 //  JChat
 //
-//  Created by 邓永豪 on 2017/9/21.
+//  Created by JIGUANG on 2017/9/21.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -77,7 +77,7 @@ class FriendsBusinessCardViewController: UIViewController {
         navigationItem.leftBarButtonItem =  navLeftButton
     }
 
-    func _clickNavLeftButton() {
+    @objc func _clickNavLeftButton() {
         dismiss(animated: true, completion: nil)
     }
 
@@ -221,7 +221,10 @@ extension FriendsBusinessCardViewController: UITableViewDelegate, UITableViewDat
         if conversation.ex.isGroup {
             let group = conversation.target as! JMSGGroup
             displayName = group.displayName()
-        } else {
+        }else if conversation.ex.isChatRoom{
+            let chatRoom = conversation.target as! JMSGChatRoom
+            displayName = chatRoom.displayName()
+        }else {
             displayName = conversation.title ?? ""
         }
         JCAlertView.bulid().setTitle("发送给：\(displayName)")

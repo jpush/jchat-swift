@@ -2,7 +2,7 @@
 //  Array+JChat.swift
 //  JChat
 //
-//  Created by 邓永豪 on 2017/10/11.
+//  Created by JIGUANG on 2017/10/11.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 

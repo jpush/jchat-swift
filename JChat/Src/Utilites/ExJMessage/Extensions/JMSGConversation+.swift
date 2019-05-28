@@ -2,7 +2,7 @@
 //  JMSGConversation+.swift
 //  JChat
 //
-//  Created by 邓永豪 on 2017/10/1.
+//  Created by JIGUANG on 2017/10/1.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -18,6 +18,12 @@ extension ExJMessage where Base: JMSGConversation {
      */
     var isGroup: Bool {
         return base.conversationType == .group
+    }
+    var isSingle: Bool {
+        return base.conversationType == .single
+    }
+    var isChatRoom: Bool {
+        return base.conversationType == .chatRoom
     }
 
     var stickyTime: Int {

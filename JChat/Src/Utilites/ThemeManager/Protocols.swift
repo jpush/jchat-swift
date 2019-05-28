@@ -2,7 +2,7 @@
 //  Protocoles.swift
 //  ThemeDemo
 //
-//  Created by 邓永豪 on 2017/8/23.
+//  Created by JIGUANG on 2017/8/23.
 //  Copyright © 2017年 dengyonghao. All rights reserved.
 //
 
@@ -19,13 +19,13 @@ protocol ThemeProtocol {
 }
 
 extension UIView {
-    func updateTheme() {
+    @objc func updateTheme() {
         print("update view theme")
     }
 }
 
 extension UIViewController {
-    func updateTheme() {
+    @objc func updateTheme() {
         print("update view controller theme")
     }
 }

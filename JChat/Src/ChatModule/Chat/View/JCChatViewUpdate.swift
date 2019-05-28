@@ -2,7 +2,7 @@
 //  JCChatViewUpdate.swift
 //  JChat
 //
-//  Created by deng on 10/04/2017.
+//  Created by JIGUANG on 10/04/2017.
 //  Copyright © 2017 HXHG. All rights reserved.
 //
 
@@ -228,10 +228,24 @@ internal class JCChatViewUpdate: NSObject {
             // copy
             items.append(oldData[index])
         }
+        
         // convert messages and replace specify message
         let newItems = items as [JCMessageType]
         let convertedItems = _convert(messages: newItems, first: _element(at: begin), last: _element(at: end - 1))
-        let selectedRange = Range<Int>(max(begin, 0) ..< min(end, count))
+        
+        /*
+         swift 4.2 之前
+         let selectedRange = Range<Int>(max(begin, 0) ..< min(end, count))
+         swift 5.0
+         let selectedRange:CountableRange = max(begin, 0) ..< min(end, count)
+         
+         或者使用 NSRange
+         let location = max(begin, 0)
+         let lenght = min(end, count) - max(begin, 0)
+         let selectedRange = Range(NSRange(location: location, length: lenght))!
+         */
+        //
+        let selectedRange:CountableRange = max(begin, 0) ..< min(end, count)
         let selectedItems = oldData.subarray(with: selectedRange)
         
         // compute index paths
@@ -250,7 +264,7 @@ internal class JCChatViewUpdate: NSObject {
     
     private func _convert(messages elements: [JCMessageType], first: JCMessageType?, last: JCMessageType?) -> [JCMessageType] {
         // merge
-        let elements = [first].flatMap({ $0 }) + elements + [last].flatMap({ $0 })
+        let elements = [first].compactMap({ $0 }) + elements + [last].compactMap({ $0 })
         // processing
         return (0 ..< elements.count).reduce(NSMutableArray(capacity: elements.count * 2)) { result, index in
             let current = elements[index]

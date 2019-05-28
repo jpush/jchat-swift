@@ -2,7 +2,7 @@
 //  JCBusinessCardContentView.swift
 //  JChat
 //
-//  Created by 邓永豪 on 2017/8/31.
+//  Created by JIGUANG on 2017/8/31.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -118,7 +118,7 @@ class JCBusinessCardContentView: UIView, JCMessageContentViewType {
         addGestureRecognizer(tap)
     }
     
-    func _clickCell() {
+    @objc func _clickCell() {
         _delegate?.message?(message: _message, user: _user, businessCardName: _userName!, businessCardAppKey: _appKey!)
     }
 

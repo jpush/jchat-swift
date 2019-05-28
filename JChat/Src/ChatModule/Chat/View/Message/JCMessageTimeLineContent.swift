@@ -2,7 +2,7 @@
 //  JCMessageTimeLineContent.swift
 //  JChat
 //
-//  Created by deng on 2017/3/9.
+//  Created by JIGUANG on 2017/3/9.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -83,11 +83,22 @@ open class JCMessageTimeLineContent: NSObject, JCMessageContentType {
     
     open func sizeThatFits(_ size: CGSize) -> CGSize {
         
-        let attr = NSMutableAttributedString(string: text, attributes: [
-            NSFontAttributeName: UIFont.systemFont(ofSize: 12),
-            NSForegroundColorAttributeName: UIColor.white,
-            ])
+        let attr = NSMutableAttributedString(string: text, attributes: convertToOptionalNSAttributedStringKeyDictionary([
+            convertFromNSAttributedStringKey(NSAttributedString.Key.font): UIFont.systemFont(ofSize: 12),
+            convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): UIColor.white,
+            ]))
         
         return CGSize(width: attr.size().width + 11, height: 18)
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

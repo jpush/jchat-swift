@@ -2,7 +2,7 @@
 //  JCEmoticonInputViewLayout.swift
 //  JChat
 //
-//  Created by deng on 2017/3/9.
+//  Created by JIGUANG on 2017/3/9.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -137,7 +137,7 @@ internal class JCEmoticonInputViewLayout: UICollectionViewLayout {
         let columns = CGFloat(numberOfColumns(in: index))
         
         let bounds = CGRect(origin: .zero, size: collectionView?.frame.size ?? .zero)
-        let rect = UIEdgeInsetsInsetRect(bounds, inset)
+        let rect = bounds.inset(by: inset)
         
         let type = group.type
         let size = CGSize(width: min(trunc((rect.width - 8 * columns) / columns), 80),

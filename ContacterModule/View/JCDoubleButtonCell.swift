@@ -2,7 +2,7 @@
 //  JCDoubleButtonCell.swift
 //  JChat
 //
-//  Created by deng on 2017/5/16.
+//  Created by JIGUANG on 2017/5/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -55,7 +55,7 @@ class JCDoubleButtonCell: UITableViewCell {
         }
     }
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }
@@ -103,11 +103,11 @@ class JCDoubleButtonCell: UITableViewCell {
     }
     
     //MARK: - click func
-    func _clickLeftButton(_ sender: UIButton) {
+    @objc func _clickLeftButton(_ sender: UIButton) {
         delegate?.doubleButtonCell?(clickLeftButton: sender)
     }
     
-    func _clickRightButton(_ sender: UIButton) {
+    @objc func _clickRightButton(_ sender: UIButton) {
         delegate?.doubleButtonCell?(clickRightButton: sender)
     }
 

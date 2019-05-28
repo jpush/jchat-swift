@@ -2,7 +2,7 @@
 //  ImageFileViewController.swift
 //  JChat
 //
-//  Created by 邓永豪 on 2017/8/28.
+//  Created by JIGUANG on 2017/8/28.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -62,7 +62,7 @@ class ImageFileViewController: UIViewController {
         view.backgroundColor = UIColor(netHex: 0xe8edf3)
         
         view.addSubview(collectionView)
-        collectionView.register(ImageFileHeader.classForCoder(), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerIdentifier)
+        collectionView.register(ImageFileHeader.classForCoder(), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
         
         view.addConstraint(_JCLayoutConstraintMake(collectionView, .left, .equal, view, .left))
         view.addConstraint(_JCLayoutConstraintMake(collectionView, .top, .equal, view, .top))
@@ -124,7 +124,7 @@ extension ImageFileViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView{
         var v = ImageFileHeader()
-        if kind == UICollectionElementKindSectionHeader{
+        if kind == UICollectionView.elementKindSectionHeader{
             v = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as! ImageFileHeader
             
             v.titleLabel?.text = keys[indexPath.section]

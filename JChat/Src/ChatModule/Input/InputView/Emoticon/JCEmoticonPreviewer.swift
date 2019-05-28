@@ -2,7 +2,7 @@
 //  JCEmoticonPreviewer.swift
 //  JChat
 //
-//  Created by deng on 2017/3/9.
+//  Created by JIGUANG on 2017/3/9.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -60,7 +60,7 @@ internal class JCEmoticonPreviewer: UIView {
     }
     
     private var _type: JCEmoticonType = .small
-    private var _inset: UIEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 4)
+    private var _inset: UIEdgeInsets = UIEdgeInsets.init(top: 0, left: 4, bottom: 0, right: 4)
     private var _popoverFrame: CGRect = .zero
     private var _presenterFrame: CGRect = .zero
     

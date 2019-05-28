@@ -2,7 +2,7 @@
 //  JMSGMessage+.swift
 //  JChat
 //
-//  Created by 邓永豪 on 2017/10/1.
+//  Created by JIGUANG on 2017/10/1.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -132,11 +132,11 @@ extension ExJMessage where Base: JMSGMessage {
             }
             return false
         }
-        set {
-            if let content = base.content as? JMSGFileContent {
-                content.addStringExtra("mov", forKey: kShortVideo)
-            }
-        }
+//        set {
+//            if let content = base.content as? JMSGFileContent {
+//                content.addStringExtra("mov", forKey: kShortVideo)
+//            }
+//        }
     }
 
     var isLargeEmoticon: Bool {
@@ -170,7 +170,10 @@ extension ExJMessage where Base: JMSGMessage {
         if conversation.ex.isGroup  {
             let group = conversation.target as! JMSGGroup
             message = JMSGMessage.createGroupMessage(with: content, groupId: group.gid)
-        } else {
+        } else if conversation.ex.isChatRoom{
+            let chatRoom = conversation.target as! JMSGChatRoom
+            message = JMSGMessage.createChatRoomMessage(with: content, chatRoomId: chatRoom.roomID)
+        } else{
             let user = conversation.target as! JMSGUser
             message = JMSGMessage.createSingleMessage(with: content, username: user.username)
         }
@@ -192,11 +195,10 @@ extension ExJMessage where Base: JMSGMessage {
      create a @ message
      */
     static func createMessage(_ conversation: JMSGConversation, _ content: JMSGAbstractContent, _ reminds: [JCRemind]?) -> JMSGMessage {
-        let message: JMSGMessage!
-        if conversation.ex.isGroup && reminds != nil {
+        var message: JMSGMessage?
+        if conversation.ex.isGroup  {
             let group = conversation.target as! JMSGGroup
-
-            if reminds!.count > 0 {
+            if  reminds != nil && reminds!.count > 0 {
                 var users: [JMSGUser] = []
                 var isAtAll = false
                 for remind in reminds! {
@@ -214,10 +216,14 @@ extension ExJMessage where Base: JMSGMessage {
             } else {
                 message = JMSGMessage.createGroupMessage(with: content, groupId: group.gid)
             }
-        } else {
-            message = JMSGMessage.createSingleMessage(with: content, username: JMSGUser.myInfo().username)
+        } else if conversation.ex.isChatRoom {
+            let room = conversation.target as! JMSGChatRoom
+            message = JMSGMessage.createChatRoomMessage(with: content, chatRoomId: room.roomID)
+        } else {// conversation.ex.isSingle
+            let user = conversation.target as! JMSGUser
+            message = JMSGMessage.createSingleMessage(with: content, username: user.username)
         }
-        return message
+        return message!
     }
 
     // MARK: - private method

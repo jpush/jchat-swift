@@ -2,7 +2,7 @@
 //  JCRegisterInfoViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/5/12.
+//  Created by JIGUANG on 2017/5/12.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -50,7 +50,9 @@ class JCRegisterInfoViewController: UIViewController {
     private lazy var registerButton: UIButton = {
         var button = UIButton()
         button.backgroundColor = UIColor(netHex: 0x2DD0CF)
-        button.frame = CGRect(x: 38, y: 64 + 40 + 80 + 40 + 40 + 38, width: self.view.width - 76, height: 40)
+        let button_y = 64 + 40 + 80 + 40 + 40 + 38
+        let button_width = Int(self.view.width - 76)
+        button.frame = CGRect(x: 38, y: button_y, width: button_width, height: 40)
         button.setTitle("完成", for: .normal)
         button.layer.cornerRadius = 3.0
         button.layer.masksToBounds = true
@@ -104,11 +106,12 @@ class JCRegisterInfoViewController: UIViewController {
         view.addGestureRecognizer(tap)
     }
     
-    func textFieldDidChanged(_ textField: UITextField) {
+    @objc func textFieldDidChanged(_ textField: UITextField) {
         if textField.markedTextRange == nil {
             let text = textField.text!
-            if text.characters.count > 30 {
-                let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 30))
+            if text.count > 30 {
+                let range = (text.startIndex ..< text.index(text.startIndex, offsetBy: 30))
+                //let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 30))
                 
                 let subText = text.substring(with: range)
                 textField.text = subText
@@ -116,11 +119,11 @@ class JCRegisterInfoViewController: UIViewController {
         }
     }
     
-    func _tapView() {
+    @objc func _tapView() {
         view.endEditing(true)
     }
      
-    func _tapHandler() {
+    @objc func _tapHandler() {
         view.endEditing(true)
         let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "  从相册中选择", "拍照")
         actionSheet.tag = 1001
@@ -128,7 +131,7 @@ class JCRegisterInfoViewController: UIViewController {
     }
 
     //MARK: - click event
-    func _userRegister() {
+    @objc func _userRegister() {
         MBProgressHUD_JChat.showMessage(message: "保存中", toView: self.view)
         userLogin(withUsername: self.username, password: self.password)
     }
@@ -162,7 +165,7 @@ class JCRegisterInfoViewController: UIViewController {
     
     private func uploadImage() {
         if let image = image {
-            let imageData = UIImageJPEGRepresentation(image, 0.8)
+            let imageData = image.jpegData(compressionQuality: 0.8)
             JMSGUser.updateMyInfo(withParameter: imageData!, userFieldType: .fieldsAvatar, completionHandler: { (result, error) in
                 if error == nil {
                     let avatorData = NSKeyedArchiver.archivedData(withRootObject: imageData!)
@@ -206,9 +209,12 @@ extension JCRegisterInfoViewController: UINavigationControllerDelegate, UIImageP
         picker.dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+// Local variable inserted by Swift 4.2 migrator.
+let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
+
         
-        var image = info[UIImagePickerControllerOriginalImage] as! UIImage?
+        var image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as! UIImage?
         image = image?.fixOrientation()
         self.image = image
         avatorView.image = image
@@ -216,3 +222,13 @@ extension JCRegisterInfoViewController: UINavigationControllerDelegate, UIImageP
     }
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
+	return input.rawValue
+}

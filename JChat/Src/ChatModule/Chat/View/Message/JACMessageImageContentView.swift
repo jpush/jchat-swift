@@ -2,7 +2,7 @@
 //  JCMessageImageContentView.swift
 //  JChat
 //
-//  Created by deng on 2017/3/9.
+//  Created by JIGUANG on 2017/3/9.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -77,7 +77,7 @@ open class JCMessageImageContentView: UIImageView, JCMessageContentViewType {
         addSubview(percentLabel)
     }
     
-    func _tapHandler(sender:UITapGestureRecognizer) {
+    @objc func _tapHandler(sender:UITapGestureRecognizer) {
         _delegate?.message?(message: _message, image: image)
     }
 }

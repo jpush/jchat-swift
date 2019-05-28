@@ -2,7 +2,7 @@
 //  JCVideoManager.swift
 //  JChat
 //
-//  Created by deng on 2017/4/26.
+//  Created by JIGUANG on 2017/4/26.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -42,8 +42,8 @@ class JCVideoManager {
         let avAsset = AVAsset(url: videoURL)
         let generator = AVAssetImageGenerator(asset: avAsset)
         generator.appliesPreferredTrackTransform = true
-        let time = CMTimeMakeWithSeconds(0.0,600)
-        var actualTime = CMTimeMake(0,0)
+        let time = CMTimeMakeWithSeconds(0.0,preferredTimescale: 600)
+        var actualTime = CMTimeMake(value: 0,timescale: 0)
         do {
             let imageRef = try generator.copyCGImage(at: time, actualTime: &actualTime)
             let frameImg = UIImage(cgImage: imageRef)

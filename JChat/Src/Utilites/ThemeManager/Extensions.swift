@@ -2,7 +2,7 @@
 //  Extensions.swift
 //  ThemeDemo
 //
-//  Created by 邓永豪 on 2017/8/24.
+//  Created by JIGUANG on 2017/8/24.
 //  Copyright © 2017年 dengyonghao. All rights reserved.
 //
 

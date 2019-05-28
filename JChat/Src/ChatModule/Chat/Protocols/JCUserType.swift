@@ -2,7 +2,7 @@
 //  JCUserType.swift
 //  JChat
 //
-//  Created by deng on 10/04/2017.
+//  Created by JIGUANG on 10/04/2017.
 //  Copyright © 2017 HXHG. All rights reserved.
 //
 

@@ -2,7 +2,7 @@
 //  JCEmoticonPage.swift
 //  JChat
 //
-//  Created by deng on 2017/3/9.
+//  Created by JIGUANG on 2017/3/9.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -45,7 +45,7 @@ internal class JCEmoticonPage {
             visableSize.height = lastLine.vaildRect.minY - vaildRect.minY + lastLine.visableSize.height
             return true
         }
-        let rect = UIEdgeInsetsInsetRect(vaildRect, UIEdgeInsetsMake(visableSize.height + minimumLineSpacing, 0, 0, 0))
+        let rect = vaildRect.inset(by: UIEdgeInsets.init(top: visableSize.height + minimumLineSpacing, left: 0, bottom: 0, right: 0))
         let line = JCEmoticonLine(emoticon, itemSize, rect, minimumLineSpacing, minimumInteritemSpacing, itemType)
         if floor(line.vaildRect.minY + line.visableSize.height) > floor(vaildRect.maxY) {
             return false
@@ -98,7 +98,7 @@ internal class JCEmoticonPage {
         let nlsp = lineSpacing / 2
         let nisp = interitemSpacing / 2
         
-        let nrect = UIEdgeInsetsInsetRect(rect, UIEdgeInsetsMake(nlsp, nisp, nlsp, nisp))
+        let nrect = rect.inset(by: UIEdgeInsets.init(top: nlsp, left: nisp, bottom: nlsp, right: nisp))
         let line = JCEmoticonLine(first, itemSize, nrect, lineSpacing, interitemSpacing, itemType)
         
         self.bounds = bounds

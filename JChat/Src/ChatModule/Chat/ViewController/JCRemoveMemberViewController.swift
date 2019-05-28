@@ -2,7 +2,7 @@
 //  JCRemoveMemberViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/5/16.
+//  Created by JIGUANG on 2017/5/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -151,7 +151,7 @@ class JCRemoveMemberViewController: UIViewController {
         collectionView.reloadData()
     }
     
-    func _clickNavRightButton(_ sender: UIButton) {
+    @objc func _clickNavRightButton(_ sender: UIButton) {
         var userNames: [String] = []
         for item in selectUsers {
             userNames.append(item.username)

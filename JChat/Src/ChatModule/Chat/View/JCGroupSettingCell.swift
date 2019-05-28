@@ -2,7 +2,7 @@
 //  JCGroupSettingCell.swift
 //  JChat
 //
-//  Created by deng on 2017/4/27.
+//  Created by JIGUANG on 2017/4/27.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -22,7 +22,7 @@ public class JCGroupSettingCell: UITableViewCell {
     
     var group: JMSGGroup!
     
-    convenience init(style: UITableViewCellStyle, reuseIdentifier: String?, group: JMSGGroup) {
+    convenience init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, group: JMSGGroup) {
         self.init(style: style, reuseIdentifier: reuseIdentifier)
         self.group = group
         _init()
@@ -105,7 +105,7 @@ public class JCGroupSettingCell: UITableViewCell {
         }
     }
     
-    func _clickMore() {
+    @objc func _clickMore() {
         delegate?.clickMoreButton?(clickButton: moreButton)
     }
     

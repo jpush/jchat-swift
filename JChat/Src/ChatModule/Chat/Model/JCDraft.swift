@@ -2,7 +2,7 @@
 //  JCDraft.swift
 //  JChat
 //
-//  Created by deng on 2017/6/2.
+//  Created by JIGUANG on 2017/6/2.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
