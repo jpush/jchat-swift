@@ -2,7 +2,7 @@
 //  JCMessageType.swift
 //  JChat
 //
-//  Created by deng on 10/04/2017.
+//  Created by JIGUANG on 10/04/2017.
 //  Copyright © 2017 HXHG. All rights reserved.
 //
 
@@ -10,8 +10,9 @@ import Foundation
 import JMessage
 
 @objc public enum MessageTargetType: Int {
-    case single = 0
-    case group
+    case single = 1
+    case group = 2
+    case chatRoom = 3
 }
 
 @objc public protocol JCMessageType: class {
@@ -28,6 +29,8 @@ import JMessage
     var updateSizeIfNeeded: Bool { get }
     var unreadCount: Int { get }
     var targetType: MessageTargetType { get }
+    var contentType: JMSGContentType { get }
+    var jmessage: JMSGMessage? { get }
 }
 
 @objc public protocol JCMessageDelegate: NSObjectProtocol {

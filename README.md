@@ -71,3 +71,4 @@ pod install（这个可能比较慢，请耐心等待……）
 * [JMessage iOS 集成指南](https://docs.jiguang.cn/jmessage/client/jmessage_ios_guide/)
 * [JMessage iOS 开发指南](https://docs.jiguang.cn/jmessage/client/im_sdk_ios/)
 * [JMessage iOS API Docs](https://docs.jiguang.cn/jmessage/client/jmessage_ios_appledoc_html/)
+

@@ -2,7 +2,7 @@
 //  JCUpdatePassworkViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/3/16.
+//  Created by JIGUANG on 2017/3/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -153,7 +153,7 @@ class JCUpdatePassworkViewController: UIViewController {
     }
     
     //MARK: - click event
-    func _updatePasswork() {
+    @objc func _updatePasswork() {
         view.endEditing(true)
         let oldPassword = oldPasswordTextField.text!
         let newPassword = newPasswordTextField.text!

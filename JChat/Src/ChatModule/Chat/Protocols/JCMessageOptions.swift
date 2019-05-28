@@ -2,7 +2,7 @@
 //  JCMessageOptions.swift
 //  JChat
 //
-//  Created by deng on 2017/3/8.
+//  Created by JIGUANG on 2017/3/8.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 

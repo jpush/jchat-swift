@@ -2,7 +2,7 @@
 //  ExJMessage.swift
 //  JChat
 //
-//  Created by 邓永豪 on 2017/10/1.
+//  Created by JIGUANG on 2017/10/1.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 

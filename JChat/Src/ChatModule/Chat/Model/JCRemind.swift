@@ -2,7 +2,7 @@
 //  JCRemind.swift
 //  JChat
 //
-//  Created by deng on 2017/7/19.
+//  Created by JIGUANG on 2017/7/19.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 

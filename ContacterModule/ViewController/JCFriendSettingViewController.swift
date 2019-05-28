@@ -2,7 +2,7 @@
 //  JCFriendSettingViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/5/10.
+//  Created by JIGUANG on 2017/5/10.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -42,7 +42,7 @@ class JCFriendSettingViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(_updateFriendInfo), name: NSNotification.Name(rawValue: kUpdateFriendInfo), object: nil)
     }
     
-    func _updateFriendInfo() {
+    @objc func _updateFriendInfo() {
         tableview.reloadData()
     }
 }

@@ -2,7 +2,7 @@
 //  JCSearchFriendViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/4/27.
+//  Created by JIGUANG on 2017/4/27.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -20,24 +20,21 @@ class JCSearchFriendViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if isActive {
-            searchController.isActive = true
-        }
+        searchController.isActive = true
+        searchController.searchBar.isHidden = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+        super.viewWillDisappear(animated)
+        searchController.searchBar.isHidden = true
         if searchController.isActive {
             searchController.isActive = false
-            isActive = true
         }
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
-    private var isActive = false
     
     fileprivate lazy var searchController: JCSearchController = JCSearchController(searchResultsController: nil)
     private lazy var searchView: UIView = UIView(frame: CGRect(x: 0, y: self.topOffset, width: self.view.width, height: 31))
@@ -46,8 +43,9 @@ class JCSearchFriendViewController: UIViewController {
     
     fileprivate lazy var avatorView: UIImageView = UIImageView(frame: CGRect(x: 15, y: 7.5, width: 50, height: 50))
     fileprivate lazy var nameLabel: UILabel =  UILabel(frame: CGRect(x: 65 + 10, y: 21, width: 200, height: 22.5))
-    private let width = UIScreen.main.applicationFrame.size.width
-    fileprivate lazy var addButton = UIButton()
+    private let width = UIScreen.main.bounds.size.width
+    open lazy var addButton = UIButton()
+    open var addChatRoomManger: Bool = false
     
     fileprivate lazy var tipsView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.width, height: 67))
@@ -75,7 +73,7 @@ class JCSearchFriendViewController: UIViewController {
         return tipsView
     }()
     
-    fileprivate var user: JMSGUser?
+    open var user: JMSGUser?
 
     private var topOffset: CGFloat {
         if isIPhoneX {
@@ -99,7 +97,9 @@ class JCSearchFriendViewController: UIViewController {
             addButton.setBackgroundImage(image, for: .normal)
             addButton.layer.cornerRadius = 2
             addButton.layer.masksToBounds = true
-            addButton.addTarget(self, action: #selector(_addFriend), for: .touchUpInside)
+            if(self.addChatRoomManger == false){
+                addButton.addTarget(self, action: #selector(_addFriend), for: .touchUpInside)
+            }
             infoView.backgroundColor = .white
             infoView.addSubview(addButton)
         }
@@ -142,7 +142,7 @@ class JCSearchFriendViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(note:)), name: NSNotification.Name(rawValue: "kNetworkReachabilityChangedNotification"), object: nil)
     }
     
-    func reachabilityChanged(note: NSNotification) {
+    @objc func reachabilityChanged(note: NSNotification) {
         if let curReach = note.object as? Reachability {
             let status = curReach.currentReachabilityStatus()
             switch status {
@@ -154,7 +154,7 @@ class JCSearchFriendViewController: UIViewController {
         }
     }
     
-    func _tapHandler(sender:UITapGestureRecognizer) {
+    @objc func _tapHandler(sender:UITapGestureRecognizer) {
         if (user?.isEqual(to: JMSGUser.myInfo()))! {
             searchController.isActive = false
             navigationController?.pushViewController(JCMyInfoViewController(), animated: true)
@@ -169,7 +169,7 @@ class JCSearchFriendViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func _addFriend() {
+    @objc func _addFriend() {
         let vc = JCAddFriendViewController()
         vc.user = self.user!
         searchController.isActive = false
@@ -214,6 +214,11 @@ extension JCSearchFriendViewController: JCSearchControllerDelegate, UISearchBarD
                     self.addButton.isHidden = true
                 } else {
                     self.addButton.isHidden = false
+                }
+                
+                if(self.addChatRoomManger == true){
+                    self.addButton.isHidden = false;
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "SearchChatRoomManagerResult"), object: nil)
                 }
                 self.nameLabel.text = user?.displayName()
                 self.avatorView.image = UIImage.loadImage("com_icon_user_50")

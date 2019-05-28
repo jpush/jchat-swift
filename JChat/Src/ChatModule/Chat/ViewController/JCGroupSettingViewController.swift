@@ -2,7 +2,7 @@
 //  JCGroupSettingViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/4/27.
+//  Created by JIGUANG on 2017/4/27.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -69,7 +69,7 @@ class JCGroupSettingViewController: UIViewController, CustomNavigation {
         NotificationCenter.default.addObserver(self, selector: #selector(_updateGroupInfo), name: NSNotification.Name(rawValue: kUpdateGroupInfo), object: nil)
     }
     
-    func _updateGroupInfo() {
+    @objc func _updateGroupInfo() {
         if !isNeedUpdate {
             let conv = JMSGConversation.groupConversation(withGroupId: group.gid)
             group = conv?.target as! JMSGGroup

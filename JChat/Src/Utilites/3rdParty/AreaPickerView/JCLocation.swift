@@ -2,7 +2,7 @@
 //  JCLocation.swift
 //  JChat
 //
-//  Created by deng on 2017/5/3.
+//  Created by JIGUANG on 2017/5/3.
 //  Copyright © 2017年 dengyonghao. All rights reserved.
 //
 

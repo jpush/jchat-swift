@@ -2,7 +2,7 @@
 //  JCPhotoBar.swift
 //  JChat
 //
-//  Created by deng on 2017/3/31.
+//  Created by JIGUANG on 2017/3/31.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -139,7 +139,7 @@ class JCPhotoBarItem: UIView {
         addSubview(delButton)
     }
     
-    func _tapHandler() {
+    @objc func _tapHandler() {
         if isHiddenDelButton {
             delegate?.photoBarAddImage?()
             return
@@ -147,7 +147,7 @@ class JCPhotoBarItem: UIView {
         delegate?.photoBarClickImage?(index: index)
     }
     
-    func _delImage(_ sender: UIButton) {
+    @objc func _delImage(_ sender: UIButton) {
         delegate?.photoBarDeleteImage?(index: index)
     }
 }

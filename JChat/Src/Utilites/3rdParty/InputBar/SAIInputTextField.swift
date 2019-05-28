@@ -51,9 +51,9 @@ internal class SAIInputTextField: UITextView {
         let newRange = NSMakeRange(location, newTextLength)
         
         // update text
-        let att = typingAttributes
+        let att = convertFromNSAttributedStringKeyDictionary(typingAttributes)
         textStorage.replaceCharacters(in: NSMakeRange(location, length), with: attributedText)
-        textStorage.addAttributes(att, range: newRange)
+        textStorage.addAttributes(convertToNSAttributedStringKeyDictionary(att), range: newRange)
         
         // update new text range
         let newPosition = position(from: beginningOfDocument, offset: location + newTextLength) ?? UITextPosition()
@@ -65,3 +65,13 @@ internal class SAIInputTextField: UITextView {
     lazy var backgroundView: UIImageView = UIImageView()
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKeyDictionary(_ input: [NSAttributedString.Key: Any]) -> [String: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToNSAttributedStringKeyDictionary(_ input: [String: Any]) -> [NSAttributedString.Key: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+}

@@ -2,7 +2,7 @@
 //  UnreadListViewController.swift
 //  JChat
 //
-//  Created by 邓永豪 on 2017/9/14.
+//  Created by JIGUANG on 2017/9/14.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 

@@ -2,7 +2,7 @@
 //  FileCell.swift
 //  JChat
 //
-//  Created by 邓永豪 on 2017/8/28.
+//  Created by JIGUANG on 2017/8/28.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -54,7 +54,7 @@ class FileCell: JCTableViewCell {
         }
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }

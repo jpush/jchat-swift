@@ -66,7 +66,7 @@ class JCRecordVoiceHelper: NSObject {
         recordPath = nil
     }
     
-    func updateMeters() {
+    @objc func updateMeters() {
         if recorder == nil {
             return
         }
@@ -127,7 +127,11 @@ class JCRecordVoiceHelper: NSObject {
         
         let audioSession:AVAudioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            if #available(iOS 10.0, *) {
+                try audioSession.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.default, options: AVAudioSession.CategoryOptions.defaultToSpeaker)
+            } else {
+                // Fallback on earlier versions
+            }
         } catch let error as NSError {
             print("could not set session category")
             print(error.localizedDescription)
@@ -228,4 +232,9 @@ extension JCRecordVoiceHelper : AVAudioPlayerDelegate {
 
 extension JCRecordVoiceHelper : AVAudioRecorderDelegate {
     
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Category) -> String {
+	return input.rawValue
 }

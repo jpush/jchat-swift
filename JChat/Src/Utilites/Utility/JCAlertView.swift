@@ -2,7 +2,7 @@
 //  JCAlertView.swift
 //  JChat
 //
-//  Created by deng on 2017/7/18.
+//  Created by JIGUANG on 2017/7/18.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -93,6 +93,9 @@ extension JCAlertView {
                 break
             }
             self.addImage(image)
+        case .video:
+            //let content = message.content as! JMSGVideoContent
+            self.setMessage("[小视频]")
         case .file:
             let content = message.content as! JMSGFileContent
             if message.ex.isShortVideo {

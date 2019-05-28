@@ -2,7 +2,7 @@
 //  JCMineViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/2/16.
+//  Created by JIGUANG on 2017/2/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -41,7 +41,7 @@ class JCMineViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(_updateUserInfo), name: NSNotification.Name(rawValue: kUpdateUserInfo), object: nil)
     }
     
-    func _updateUserInfo() {
+    @objc func _updateUserInfo() {
         tableview.reloadData()
     }
 
@@ -59,9 +59,9 @@ class JCMineViewController: UIViewController {
 }
 
 extension JCMineViewController: JMessageDelegate {
-    func onReceive(_ event: JMSGNotificationEvent!) {
-        switch event.eventType {
-        case .currentUserInfoChange:
+    func onReceive(_ event: JMSGUserLoginStatusChangeEvent!) {
+        switch event.eventType.rawValue {
+        case JMSGLoginStatusChangeEventType.eventNotificationCurrentUserInfoChange.rawValue:
             updateCurrentUserAvator()
             tableview.reloadData()
         default:

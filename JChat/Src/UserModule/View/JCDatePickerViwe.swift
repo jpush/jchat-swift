@@ -2,7 +2,7 @@
 //  JCDatePickerViwe.swift
 //  YHRSS
 //
-//  Created by deng on 2017/3/23.
+//  Created by JIGUANG on 2017/3/23.
 //  Copyright © 2017年 dengyonghao. All rights reserved.
 //
 
@@ -78,11 +78,11 @@ class JCDatePickerViwe: UIView {
     }
     
     //MARK: - click event
-    func _cancel(_ sender: UIButton) {
+    @objc func _cancel(_ sender: UIButton) {
         delegate?.datePicker?(cancel: sender, date: datePicker.date)
     }
     
-    func _finish(_ sender: UIButton) {
+    @objc func _finish(_ sender: UIButton) {
         delegate?.datePicker?(finish: sender, date: datePicker.date)
     }
 

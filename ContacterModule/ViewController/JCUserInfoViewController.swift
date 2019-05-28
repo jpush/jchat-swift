@@ -2,7 +2,7 @@
 //  JCUserInfoViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/3/22.
+//  Created by JIGUANG on 2017/3/22.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -55,11 +55,11 @@ class JCUserInfoViewController: UIViewController {
         navigationItem.rightBarButtonItem =  item
     }
     
-    func _updateUserInfo() {
+    @objc func _updateUserInfo() {
         tableview.reloadData()
     }
     
-    func _clickNavRightButton() {
+    @objc func _clickNavRightButton() {
         let vc = JCFriendSettingViewController()
         vc.user = self.user
         navigationController?.pushViewController(vc, animated: true)

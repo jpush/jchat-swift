@@ -2,7 +2,7 @@
 //  JCChatView.swift
 //  JChat
 //
-//  Created by deng on 2017/2/28.
+//  Created by JIGUANG on 2017/2/28.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -119,6 +119,9 @@ var isWait = false
     func append(contentsOf newMessages: Array<JCMessageType>) {
         insert(contentsOf: newMessages, at: _chatViewData.count)
     }
+    public func cancelHeaderPull(){
+        _chatContainerView.mj_header = nil
+    }
     
     fileprivate func _batchBegin() {
         _chatContainerView.messageDelegate = self.messageDelegate
@@ -176,7 +179,7 @@ var isWait = false
     
     fileprivate lazy var _chatContainerRegistedTypes: Set<String> = []
     
-    func _onPullToFresh() {
+    @objc func _onPullToFresh() {
         delegate?.refershChatView?(chatView: self)
     }
     func stopRefresh() {
@@ -283,23 +286,23 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
         return _chatContainerView.isDragging || _chatContainerView.isDecelerating
     }
     
-    open dynamic var indexPathsForVisibleItems: [IndexPath] {
+    @objc open dynamic var indexPathsForVisibleItems: [IndexPath] {
         return _chatContainerView.indexPathsForVisibleItems
     }
     
-    open dynamic var contentSize: CGSize {
+    @objc open dynamic var contentSize: CGSize {
         set { return _chatContainerView.contentSize = newValue }
         get { return _chatContainerView.contentSize }
     }
-    open dynamic var contentOffset: CGPoint {
+    @objc open dynamic var contentOffset: CGPoint {
         set { return _chatContainerView.contentOffset = newValue }
         get { return _chatContainerView.contentOffset }
     }
-    open dynamic var contentInset: UIEdgeInsets {
+    @objc open dynamic var contentInset: UIEdgeInsets {
         set { return _chatContainerView.contentInset = newValue }
         get { return _chatContainerView.contentInset }
     }
-    open dynamic var scrollIndicatorInsets: UIEdgeInsets {
+    @objc open dynamic var scrollIndicatorInsets: UIEdgeInsets {
         set { return _chatContainerView.scrollIndicatorInsets = newValue }
         get { return _chatContainerView.scrollIndicatorInsets }
     }
@@ -311,8 +314,6 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         let message = _chatViewData[indexPath.item]
-        
-//        let options = (message.options.showsCard.hashValue << 0) | (message.options.showsAvatar.hashValue << 1)
         let alignment = message.options.alignment.rawValue
         let identifier = NSStringFromClass(type(of: message.content)) + ".\(alignment)"
         
@@ -444,10 +445,10 @@ extension JCChatView: UICollectionViewDataSource, JCChatViewLayoutDelegate {
         return false
     }
     
-    func copyMessage(_ sender: Any) {}
-    func deleteMessage(_ sender: Any) {}
-    func forwardMessage(_ sender: Any) {}
-    func withdrawMessage(_ sender: Any) {}
+    @objc func copyMessage(_ sender: Any) {}
+    @objc func deleteMessage(_ sender: Any) {}
+    @objc func forwardMessage(_ sender: Any) {}
+    @objc func withdrawMessage(_ sender: Any) {}
     
     open func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
         let message = _chatViewData[indexPath.item]

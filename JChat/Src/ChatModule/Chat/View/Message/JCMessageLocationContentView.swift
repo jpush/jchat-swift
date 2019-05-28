@@ -2,7 +2,7 @@
 //  JCMessageLocationContentView.swift
 //  JChat
 //
-//  Created by deng on 2017/4/19.
+//  Created by JIGUANG on 2017/4/19.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -64,7 +64,7 @@ class JCMessageLocationContentView: UIImageView, JCMessageContentViewType {
         addGestureRecognizer(tap)
     }
     
-    func _clickCell() {
+    @objc func _clickCell() {
         _delegate?.message?(message: _message, location: _address, lat: _lat ?? 0, lon: _lon ?? 0)
     }
 }

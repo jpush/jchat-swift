@@ -2,7 +2,7 @@
 //  JCSignatureViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/3/29.
+//  Created by JIGUANG on 2017/3/29.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -17,7 +17,7 @@ class JCSignatureViewController: UIViewController {
         super.viewDidLoad()
         _init()
         signatureTextView.text = signature
-        var count = 30 - signature.characters.count
+        var count = 30 - signature.count
         count = count < 0 ? 0 : count
         tipLabel.text = "\(count)"
     }
@@ -83,7 +83,7 @@ class JCSignatureViewController: UIViewController {
     }
     
     //MARK: - click func
-    func _saveSignature() {
+    @objc func _saveSignature() {
         signatureTextView.resignFirstResponder()
         JMSGUser.updateMyInfo(withParameter: signatureTextView.text!, userFieldType: .fieldsSignature) { (resultObject, error) -> Void in
             if error == nil {
@@ -100,12 +100,13 @@ extension JCSignatureViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         if textView.markedTextRange == nil {
             let text = textView.text!
-            if text.characters.count > 30 {
-                let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 30))
+            if text.count > 30 {
+                let range = text.startIndex ..< text.index(text.startIndex, offsetBy: 30)
+                //let range = Range<String.Index>(text.startIndex ..< text.index(text.startIndex, offsetBy: 30))
                 let subText = text.substring(with: range)
                 textView.text = subText
             }
-            let count = 30 - (textView.text?.characters.count)!
+            let count = 30 - (textView.text?.count)!
             tipLabel.text = "\(count)"
         }
     }

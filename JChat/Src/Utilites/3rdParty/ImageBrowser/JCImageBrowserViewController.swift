@@ -51,11 +51,16 @@ class JCImageBrowserViewController: UIViewController {
     func getImageMessages(_ messages: [JCMessageType]) -> [JMSGMessage] {
         var imageMessages: [JMSGMessage] = []
         for message in messages {
-            guard let msg = conversation.message(withMessageId: message.msgId) else {
-                continue
+            var msg: JMSGMessage?
+            if message.targetType == .chatRoom {
+                msg = message.jmessage
+            }else{
+                msg = conversation.message(withMessageId: message.msgId)
             }
-            if msg.contentType == .image {
-                imageMessages.append(msg)
+            if msg != nil {
+                if msg?.contentType == .image {
+                    imageMessages.append(msg!)
+                }
             }
         }
         return imageMessages
@@ -152,7 +157,7 @@ extension JCImageBrowserViewController: UIActionSheetDelegate {
         }
     }
     
-    func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafeRawPointer){
+    @objc func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafeRawPointer){
         if error == nil {
             MBProgressHUD_JChat.show(text: "保存成功", view: view)
         } else {

@@ -4,26 +4,28 @@
 target 'JChat' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
-  pod 'MBProgressHUD', '~> 1.0.0'
+  
+  pod 'MBProgressHUD'
   pod 'YHPopupView'
   pod 'YHPhotoKit'
-  pod 'MJRefresh', '~> 3.1.12'
-  pod 'FMDB', '~> 2.6.2'
-  pod 'BaiduMapKit', '~> 3.3.2'
-  pod 'JMessage', '~> 3.3.0’
-  pod 'RxSwift', '~> 3.6.1'
-  pod 'RxCocoa', '~> 3.6.1'
+  pod 'MJRefresh'
+  pod 'JMessage','~> 3.8.1'
+  pod 'FMDB'
+  pod 'RxSwift','~> 4.2.0'
+  pod 'RxCocoa','~> 4.4.1'
+  pod 'BaiduMapKit','~> 4.1.1'
+  pod 'Masonry'
 
   # Pods for JChat
 
-  target 'JChatTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-  target 'JChatUITests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
+#  target 'JChatTests' do
+#    inherit! :search_paths
+#    # Pods for testing
+#  end
+#
+#  target 'JChatUITests' do
+#    inherit! :search_paths
+#    # Pods for testing
+#  end
 
 end

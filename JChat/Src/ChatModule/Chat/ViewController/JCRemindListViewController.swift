@@ -2,7 +2,7 @@
 //  JCRemindListViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/6/26.
+//  Created by JIGUANG on 2017/6/26.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -67,7 +67,7 @@ class JCRemindListViewController: UIViewController {
         navigationItem.leftBarButtonItem = item
     }
     
-    func _clickNavRightButton() {
+    @objc func _clickNavRightButton() {
         dismiss(animated: true, completion: nil)
     }
     

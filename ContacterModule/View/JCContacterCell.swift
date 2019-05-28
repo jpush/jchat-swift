@@ -2,7 +2,7 @@
 //  JCContacterCell.swift
 //  JChat
 //
-//  Created by deng on 2017/3/14.
+//  Created by JIGUANG on 2017/3/14.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -37,7 +37,7 @@ class JCContacterCell: JCTableViewCell {
         }
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _init()
     }

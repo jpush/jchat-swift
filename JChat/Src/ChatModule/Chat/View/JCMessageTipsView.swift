@@ -2,7 +2,7 @@
 //  JCMessageTipsView.swift
 //  JChat
 //
-//  Created by deng on 2017/4/26.
+//  Created by JIGUANG on 2017/4/26.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -41,6 +41,9 @@ open class JCMessageTipsView: UIView, JCMessageContentViewType {
             activityView.isHidden = true
         }
 
+        guard self.message.targetType != .chatRoom else {
+            return 
+        }
         #if READ_VERSION
         if activityView.isHidden && errorInfoView.isHidden && message.options.alignment == .right {
             unreadCountTips.isHidden = false
@@ -70,7 +73,7 @@ open class JCMessageTipsView: UIView, JCMessageContentViewType {
     
     private lazy var activityView: UIActivityIndicatorView = {
         let activityView = UIActivityIndicatorView(frame: CGRect(x: 100 - 15, y: 5, width: 10, height: 10))
-        activityView.activityIndicatorViewStyle = .gray
+        activityView.style = .gray
         activityView.isUserInteractionEnabled = false
         return activityView
     }()
@@ -104,11 +107,11 @@ open class JCMessageTipsView: UIView, JCMessageContentViewType {
         #endif
     }
     
-    func _clickUnreadCount() {
+    @objc func _clickUnreadCount() {
         delegate?.tapUnreadTips?(message: message)
     }
     
-    func _tapHandler(sender: UITapGestureRecognizer) {
+    @objc func _tapHandler(sender: UITapGestureRecognizer) {
         delegate?.clickTips?(message: message)
     }
 }

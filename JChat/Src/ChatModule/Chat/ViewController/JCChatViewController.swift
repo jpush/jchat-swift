@@ -2,7 +2,7 @@
 //  JCChatViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/2/28.
+//  Created by JIGUANG on 2017/2/28.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -52,12 +52,12 @@ class JCChatViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameChanged(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameChanged(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         if let group = conversation.target as? JMSGGroup {
             self.title = group.displayName()
         }
@@ -115,7 +115,7 @@ class JCChatViewController: UIViewController {
     fileprivate lazy var _emoticonSendBtn: UIButton = {
         var button = UIButton()
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        button.contentEdgeInsets = UIEdgeInsetsMake(0, 10 + 8, 0, 8)
+        button.contentEdgeInsets = UIEdgeInsets.init(top: 0, left: 10 + 8, bottom: 0, right: 8)
         button.setTitle("发送", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.setBackgroundImage(UIImage.loadImage("chat_emoticon_btn_send_blue"), for: .normal)
@@ -188,15 +188,16 @@ class JCChatViewController: UIViewController {
         
         _updateBadge()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameChanged(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameChanged(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(_removeAllMessage), name: NSNotification.Name(rawValue: kDeleteAllMessage), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(_reloadMessage), name: NSNotification.Name(rawValue: kReloadAllMessage), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(_updateFileMessage(_:)), name: NSNotification.Name(rawValue: kUpdateFileMessage), object: nil)
     }
     
-    func _updateFileMessage(_ notification: Notification) {
+    @objc func _updateFileMessage(_ notification: Notification) {
         let userInfo = notification.userInfo
-        let msgId = userInfo?[kUpdateFileMessage] as! String
+        let msg = userInfo?[kUpdateFileMessage] as! JMSGMessage
+        let msgId = msg.msgId
         let message = conversation.message(withMessageId: msgId)!
         let content = message.content as! JMSGFileContent
         let url = URL(fileURLWithPath: content.originMediaLocalPath ?? "")
@@ -213,7 +214,7 @@ class JCChatViewController: UIViewController {
     }
 
 
-    func _reloadMessage() {
+    @objc func _reloadMessage() {
         _removeAllMessage()
         messagePage = 0
         _loadMessage(messagePage)
@@ -222,13 +223,13 @@ class JCChatViewController: UIViewController {
         }
     }
     
-    func _removeAllMessage() {
+    @objc func _removeAllMessage() {
         jMessageCount = 0
         messages.removeAll()
         chatView.removeAll()
     }
     
-    func _tapView() {
+    @objc func _tapView() {
         view.endEditing(true)
         toolbar.resignFirstResponder()
     }
@@ -251,11 +252,12 @@ class JCChatViewController: UIViewController {
         navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
-    func _back() {
+    @objc func _back() {
         navigationController?.popViewController(animated: true)
     }
     
     fileprivate func _loadMessage(_ page: Int) {
+        printLog("\(page)")
 
         let messages = conversation.messageArrayFromNewest(withOffset: NSNumber(value: jMessageCount), limit: NSNumber(value: 17))
         if messages.count == 0 {
@@ -355,7 +357,7 @@ class JCChatViewController: UIViewController {
         messageContent.delegate = self
         let message = JCMessage(content: messageContent)
         
-        let content = JMSGImageContent(imageData: UIImagePNGRepresentation(image)!)
+        let content = JMSGImageContent(imageData: image.pngData()!)
         let msg = JMSGMessage.ex.createMessage(conversation, content!, nil)
         msg.ex.isLargeEmoticon = true
         message.options.showsTips = true
@@ -363,7 +365,7 @@ class JCChatViewController: UIViewController {
     }
     
     func send(forImage image: UIImage) {
-        let data = UIImageJPEGRepresentation(image, 1.0)!
+        let data = image.jpegData(compressionQuality: 1.0)!
         let content = JMSGImageContent(imageData: data)
 
         let message = JMSGMessage.ex.createMessage(conversation, content!, nil)
@@ -388,15 +390,28 @@ class JCChatViewController: UIViewController {
         let msg = JCMessage(content: voiceContent)
         send(msg, message)
     }
-    
-    func send(fileData: Data) {
+    func send(videoData: Data, thumbData: Data, duration: Double,format: String)  {
+        let time = NSNumber(value: duration)
+        let content = JMSGVideoContent(videoData: videoData, thumbData: thumbData, duration: time)
+        content.format = format
+        let message = JMSGMessage.ex.createMessage(conversation, content, nil)
+        
+        let videoContent = JCMessageVideoContent()
+        videoContent.videoContent = content
+        videoContent.data = videoData
+        videoContent.image = UIImage(data: thumbData)
+        videoContent.delegate = self
+        
+        let msg = JCMessage(content: videoContent)
+        send(msg, message);
+    }
+    func send(fileData: Data, fileName: String) {
         let videoContent = JCMessageVideoContent()
         videoContent.data = fileData
         videoContent.delegate = self
-        
-        let content = JMSGFileContent(fileData: fileData, fileName: "小视频")
+
+        let content = JMSGFileContent(fileData: fileData, fileName: fileName)
         let message = JMSGMessage.ex.createMessage(conversation, content, nil)
-        message.ex.isShortVideo = true
         let msg = JCMessage(content: videoContent)
         send(msg, message)
     }
@@ -414,11 +429,11 @@ class JCChatViewController: UIViewController {
         send(msg, message)
     }
     
-    func keyboardFrameChanged(_ notification: Notification) {
+    @objc func keyboardFrameChanged(_ notification: Notification) {
         let dic = NSDictionary(dictionary: (notification as NSNotification).userInfo!)
-        let keyboardValue = dic.object(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardValue = dic.object(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue
         let bottomDistance = UIScreen.main.bounds.size.height - keyboardValue.cgRectValue.origin.y
-        let duration = Double(dic.object(forKey: UIKeyboardAnimationDurationUserInfoKey) as! NSNumber)
+        let duration = Double(dic.object(forKey: UIResponder.keyboardAnimationDurationUserInfoKey) as! NSNumber)
         
         UIView.animate(withDuration: duration, animations: {
         }) { (finish) in
@@ -432,7 +447,7 @@ class JCChatViewController: UIViewController {
         }
     }
     
-    func _sendHandler() {
+    @objc func _sendHandler() {
         let text = toolbar.attributedText
         if text != nil && (text?.length)! > 0 {
             send(forText: text!)
@@ -440,13 +455,13 @@ class JCChatViewController: UIViewController {
         }
     }
     
-    func _getSingleInfo() {
+    @objc func _getSingleInfo() {
         let vc = JCSingleSettingViewController()
         vc.user = conversation.target as! JMSGUser
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func _getGroupInfo() {
+    @objc func _getGroupInfo() {
         let vc = JCGroupSettingViewController()
         let group = conversation.target as! JMSGGroup
         vc.group = group
@@ -457,12 +472,13 @@ class JCChatViewController: UIViewController {
 //MARK: - JMSGMessage Delegate
 extension JCChatViewController: JMessageDelegate {
     
-    fileprivate func updateMediaMessage(_ message: JMSGMessage, data: Data) {
+    fileprivate func updateMediaMessage(_ message: JMSGMessage, data: Data?) {
         DispatchQueue.main.async {
             if let index = self.messages.index(message) {
                 let msg = self.messages[index]
                 switch(message.contentType) {
                 case .file:
+                    printLog("update file message")
                     if message.ex.isShortVideo {
                         let videoContent = msg.content as! JCMessageVideoContent
                         videoContent.data = data
@@ -474,9 +490,15 @@ extension JCChatViewController: JMessageDelegate {
                         fileContent.delegate = self
                         msg.content = fileContent
                     }
+                case .video:
+                    printLog("updare video message")
+                    let videoContent = msg.content as! JCMessageVideoContent
+                    videoContent.image = UIImage(data: data!)
+                    videoContent.delegate = self
+                    msg.content = videoContent
                 case .image:
                     let imageContent = msg.content as! JCMessageImageContent
-                    let image = UIImage(data: data)
+                    let image = UIImage(data: data!)
                     imageContent.image = image
                     msg.content = imageContent
                 default: break
@@ -507,8 +529,8 @@ extension JCChatViewController: JMessageDelegate {
         if error != nil {
             return
         }
+        
         let message = _parseMessage(message)
-        // TODO: 这个判断是sdk bug导致的，暂时只能这么改
         if messages.contains(where: { (m) -> Bool in
             return m.msgId == message.msgId
         }) {
@@ -546,6 +568,7 @@ extension JCChatViewController: JMessageDelegate {
             let msg = messages[index]
             msg.options.state = message.ex.state
             chatView.update(msg, at: index)
+            jMessageCount += 1
         }
     }
     
@@ -613,7 +636,7 @@ extension JCChatViewController: JCEmoticonInputViewDataSource, JCEmoticonInputVi
     }
 
     open func emoticon(_ emoticon: JCEmoticonInputView, insetForGroupAt index: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(12, 10, 12 + 24, 10)
+        return UIEdgeInsets.init(top: 12, left: 10, bottom: 12 + 24, right: 10)
     }
 
     open func emoticon(_ emoticon: JCEmoticonInputView, didSelectFor item: JCEmoticon) {
@@ -657,7 +680,7 @@ extension JCChatViewController: SAIToolboxInputViewDataSource, SAIToolboxInputVi
         return 4
     }
     open func toolbox(_ toolbox: SAIToolboxInputView, insetForSectionAt index: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(12, 10, 12, 10)
+        return UIEdgeInsets.init(top: 12, left: 10, bottom: 12, right: 10)
     }
     open func toolbox(_ toolbox: SAIToolboxInputView, shouldSelectFor item: SAIToolboxItem) -> Bool {
         return true
@@ -738,16 +761,89 @@ extension JCChatViewController: YHPhotoPickerViewControllerDelegate, UINavigatio
         picker.dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        // Local variable inserted by Swift 4.2 migrator.
+        let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
+
         picker.dismiss(animated: true, completion: nil)
-        let image = info[UIImagePickerControllerOriginalImage] as! UIImage?
+        let image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as! UIImage?
         if let image = image?.fixOrientation() {
             send(forImage: image)
         }
-        let videoUrl = info[UIImagePickerControllerMediaURL] as! URL?
+        let videoUrl = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.mediaURL)] as! URL?
         if videoUrl != nil {
-            let data = try! Data(contentsOf: videoUrl!)
-            send(fileData: data)
+            //let data = try! Data(contentsOf: videoUrl!)
+            //send(fileData: data)
+            
+            let format = "mov" //系统拍的是 mov 格式
+            let videoData = try! Data(contentsOf: videoUrl!)
+            let thumb = self.videoFirstFrame(videoUrl!, size: CGSize(width: JC_VIDEO_MSG_IMAGE_WIDTH, height: JC_VIDEO_MSG_IMAGE_HEIGHT));
+            let thumbData = thumb.pngData()
+            let avUrl = AVURLAsset(url: videoUrl!)
+            let time = avUrl.duration
+            let seconds = ceil(Double(time.value)/Double(time.timescale))
+            self.send(videoData: videoData, thumbData: thumbData!, duration: seconds, format: format)
+            
+            /* 可选择转为 MP4 再发
+            conversionVideoFormat(videoUrl!) { (paraUrl) in
+                if paraUrl != nil {
+                    //send  video message
+                }
+            }*/
+        }
+    }
+    // 视频转 MP4 格式
+    func conversionVideoFormat(_ inputUrl: URL,callback: @escaping (_ para: URL?) -> Void){
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd-HH:mm:ss"
+        let strDate = formatter.string(from: date) as String
+        
+        let path = "\(NSHomeDirectory())/Documents/output-\(strDate).mp4"
+        let outputUrl: URL = URL(fileURLWithPath: path)
+        
+        let avAsset = AVURLAsset(url: inputUrl)
+        let exportSeesion = AVAssetExportSession(asset: avAsset, presetName: AVAssetExportPresetMediumQuality)
+        exportSeesion?.outputURL = outputUrl
+        exportSeesion?.outputFileType = AVFileType.mp4
+        exportSeesion?.exportAsynchronously(completionHandler: {
+            switch exportSeesion?.status {
+            case AVAssetExportSession.Status.unknown?:
+                break;
+            case AVAssetExportSession.Status.cancelled?:
+                callback(nil)
+                break;
+            case AVAssetExportSession.Status.waiting?:
+                break;
+            case AVAssetExportSession.Status.exporting?:
+                break;
+            case AVAssetExportSession.Status.completed?:
+                callback(outputUrl)
+                break;
+            case AVAssetExportSession.Status.failed?:
+                callback(nil)
+                break;
+            default:
+                callback(nil)
+                break
+            }
+        })
+    }
+    // 获取视频第一帧
+    func videoFirstFrame(_ videoUrl: URL, size: CGSize) -> UIImage {
+        let opts = [AVURLAssetPreferPreciseDurationAndTimingKey:false]
+        let urlAsset = AVURLAsset(url: videoUrl, options: opts)
+        let generator = AVAssetImageGenerator(asset: urlAsset)
+        generator.appliesPreferredTrackTransform = true
+        generator.maximumSize = CGSize(width: size.width, height: size.height)
+        //let error: Error
+        do {
+            let img = try generator.copyCGImage(at: CMTimeMake(value: 0, timescale: 10), actualTime: nil) as CGImage
+            let image = UIImage(cgImage: img)
+            return image
+        } catch let error as NSError {
+            print("\(error)")
+            return UIImage.createImage(color: .gray, size: CGSize(width: JC_VIDEO_MSG_IMAGE_WIDTH, height: JC_VIDEO_MSG_IMAGE_HEIGHT))!
         }
     }
 }
@@ -935,8 +1031,7 @@ extension JCChatViewController: JCChatViewDelegate {
                 if msg.isHaveRead {
                     continue
                 }
-                msg.setMessageHaveRead({ _ in
-
+                msg.setMessageHaveRead({ _,_  in
                 })
             }
         }
@@ -1098,9 +1193,9 @@ extension JCChatViewController: SAIInputBarDelegate, SAIInputBarDisplayable {
             inputBar.text = text + displayName + " "
         } else {
             let index1 = text.index(text.endIndex, offsetBy: currentIndex - text.length + 1)
-            let prefix = text.substring(with: Range<String.Index>(text.startIndex..<index1))
+            let prefix = text.substring(with: (text.startIndex..<index1))
             let index2 = text.index(text.startIndex, offsetBy: currentIndex + 1)
-            let suffix = text.substring(with: Range<String.Index>(index2..<text.endIndex))
+            let suffix = text.substring(with: (index2..<text.endIndex))
             inputBar.text = prefix + displayName + " " + suffix
             let _ = self.updateRemids(inputBar, "@" + displayName + " ", range, currentIndex)
         }
@@ -1156,7 +1251,7 @@ extension JCChatViewController: SAIInputBarDelegate, SAIInputBarDisplayable {
             let tempDic = reminds[index]
             let startIndex = tempDic.startIndex
             if currentIndex <= startIndex {
-                if string.characters.count == 0 {
+                if string.count == 0 {
                     for subIndex in index..<reminds.count {
                         let subTemp = reminds[subIndex]
                         subTemp.startIndex -= 1
@@ -1184,7 +1279,7 @@ extension JCChatViewController: SAIInputBarDelegate, SAIInputBarDisplayable {
         recordHelper.updateMeterDelegate = recordingHub
         recordingHub.startRecordingHUDAtView(view)
         recordingHub.frame = CGRect(x: view.centerX - 70, y: view.centerY - 70, width: 136, height: 136)
-        recordHelper.startRecordingWithPath(String.getRecorderPath()) { _ in
+        recordHelper.startRecordingWithPath(String.getRecorderPath()) {
         }
     }
     
@@ -1254,4 +1349,14 @@ extension JCChatViewController: UIDocumentInteractionControllerDelegate {
     func documentInteractionControllerRectForPreview(_ controller: UIDocumentInteractionController) -> CGRect {
         return view.frame
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
+	return input.rawValue
 }

@@ -35,7 +35,12 @@ final class JCAudioPlayerHelper: NSObject {
     
     func playAudioWithData(_ voiceData:Data) {
         do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            //AVAudioSessionCategoryPlayback
+            if #available(iOS 10.0, *) {
+                try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default, options: AVAudioSession.CategoryOptions.defaultToSpeaker)
+            } else {
+                // Fallback on earlier versions
+            }
         } catch let error as NSError {
             print("set category fail \(error)")
         }

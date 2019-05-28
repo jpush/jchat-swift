@@ -2,7 +2,7 @@
 //  JCForwardViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/7/17.
+//  Created by JIGUANG on 2017/7/17.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -79,7 +79,7 @@ class JCForwardViewController: UIViewController {
         navigationItem.leftBarButtonItem = item
     }
     
-    func _clickNavleftButton() {
+    @objc func _clickNavleftButton() {
         dismiss(animated: true, completion: nil)
     }
     

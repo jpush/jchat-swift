@@ -2,7 +2,7 @@
 //  MorePopupView.swift
 //  JChat
 //
-//  Created by deng on 2017/8/15.
+//  Created by JIGUANG on 2017/8/15.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -98,19 +98,19 @@ class MorePopupView: YHPopupView {
         addSubview(scanQRCode)
     }
     
-    func _addFriend() {
+    @objc func _addFriend() {
         delegate?.popupView?(view: self, addFriend: addFriend)
     }
     
-    func _addGroup() {
+    @objc func _addGroup() {
         delegate?.popupView?(view: self, addGroup: addGroup)
     }
     
-    func _addSingle() {
+    @objc func _addSingle() {
         delegate?.popupView?(view: self, addSingle: addSingle)
     }
     
-    func _scanQRCode() {
+    @objc func _scanQRCode() {
         delegate?.popupView?(view: self, scanQRCode: scanQRCode)
     }
     

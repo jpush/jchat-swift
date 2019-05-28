@@ -2,7 +2,7 @@
 //  JMSGOptionalContent+.swift
 //  JChat
 //
-//  Created by 邓永豪 on 2017/10/8.
+//  Created by JIGUANG on 2017/10/8.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -22,5 +22,4 @@ extension ExJMessage where Base: JMSGOptionalContent {
         #endif
         return optionalContent
     }
-
 }

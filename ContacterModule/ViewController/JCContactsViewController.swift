@@ -2,7 +2,7 @@
 //  JCContactsViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/2/16.
+//  Created by JIGUANG on 2017/2/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -90,7 +90,8 @@ class JCContactsViewController: UIViewController {
         navigationItem.rightBarButtonItem =  item
     }
     
-    func _updateUserInfo() {
+
+    @objc func _updateUserInfo() {
         _classify(users)
         contacterView.reloadData()
     }
@@ -118,7 +119,7 @@ class JCContactsViewController: UIViewController {
         keys = keys.sortedKeys()
     }
     
-    func _getFriends() {
+    @objc func _getFriends() {
         JMSGFriendManager.getFriendList { (result, error) in
             if let users = result as? [JMSGUser] {
                 self._classify(users)
@@ -128,11 +129,11 @@ class JCContactsViewController: UIViewController {
     }
         
     //MARK: - click func
-    func _clickNavRightButton(_ sender: UIButton) {
+    @objc func _clickNavRightButton(_ sender: UIButton) {
         navigationController?.pushViewController(JCSearchFriendViewController(), animated: true)
     }
     
-    func _updateBadge() {
+    @objc func _updateBadge() {
         if UserDefaults.standard.object(forKey: kUnreadInvitationCount) != nil {
             badgeCount = UserDefaults.standard.object(forKey: kUnreadInvitationCount) as! Int
         } else {

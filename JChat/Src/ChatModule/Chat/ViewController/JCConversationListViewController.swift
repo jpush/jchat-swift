@@ -2,7 +2,7 @@
 //  JCConversationListViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/2/16.
+//  Created by JIGUANG on 2017/2/16.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -121,7 +121,7 @@ class JCConversationListViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(connecting), name: NSNotification.Name.jmsgNetworkIsConnecting, object: nil)
     }
     
-    func reachabilityChanged(note: NSNotification) {
+    @objc func reachabilityChanged(note: NSNotification) {
         if let curReach = note.object as? Reachability {
             let status = curReach.currentReachabilityStatus()
             switch status {
@@ -149,7 +149,7 @@ class JCConversationListViewController: UIViewController {
         }
     }
     
-    func _getConversations() {
+    @objc func _getConversations() {
         JMSGConversation.allConversations { (result, error) in
             guard let conversatios = result else {
                 return
@@ -187,7 +187,7 @@ class JCConversationListViewController: UIViewController {
     }
     
     //MARK: - click func
-    func _clickNavRightButton(_ sender: UIButton) {
+    @objc func _clickNavRightButton(_ sender: UIButton) {
         _setupPopView()
     }
     
@@ -398,17 +398,17 @@ extension JCConversationListViewController {
         }
     }
     
-    func connectClose() {
+    @objc func connectClose() {
         isConnecting = false
         titleTipsView.isHidden = true
     }
     
-    func connectSucceed() {
+    @objc func connectSucceed() {
         isConnecting = false
         titleTipsView.isHidden = true
     }
     
-    func connecting() {
+    @objc func connecting() {
         _connectingSate()
     }
     

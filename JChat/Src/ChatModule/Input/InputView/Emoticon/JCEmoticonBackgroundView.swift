@@ -2,7 +2,7 @@
 //  JCEmoticonBackgroundView.swift
 //  JChat
 //
-//  Created by deng on 2017/3/9.
+//  Created by JIGUANG on 2017/3/9.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -21,7 +21,7 @@ internal class JCEmoticonBackgroundView: UIView {
         
         switch type {
         case .small: return CGRect(x: 4, y: 4, width: rect.width - 4 * 2, height: rect.width - 4 * 2)
-        case .large: return UIEdgeInsetsInsetRect(rect, UIEdgeInsetsMake(8, 8, 8 + 12, 8))
+        case .large: return rect.inset(by: UIEdgeInsets.init(top: 8, left: 8, bottom: 8 + 12, right: 8))
         }
     }
     
@@ -81,15 +81,15 @@ internal class JCEmoticonBackgroundView: UIView {
         _middleView.translatesAutoresizingMaskIntoConstraints = false
         
         _middleView.image = _SAIEmoticonPreviewBackgroundImageForSmall
-        _middleView.setContentHuggingPriority(UILayoutPriorityRequired, for: .horizontal)
-        _middleView.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: .horizontal)
+        _middleView.setContentHuggingPriority(UILayoutPriority.required, for: .horizontal)
+        _middleView.setContentCompressionResistancePriority(UILayoutPriority.required, for: .horizontal)
         
         addSubview(_leftView)
         addSubview(_rightView)
         addSubview(_middleView)
         
         addConstraint(_JCEmoticonLayoutConstraintMake(_leftView, .top, .equal, self, .top))
-        addConstraint(_JCEmoticonLayoutConstraintMake(_leftView, .left, .equal, self, .left, priority: 751))
+        addConstraint(_JCEmoticonLayoutConstraintMake(_leftView, .left, .equal, self, .left, priority: UILayoutPriority(rawValue: 751)))
         addConstraint(_JCEmoticonLayoutConstraintMake(_leftView, .right, .equal, _middleView, .left))
         addConstraint(_JCEmoticonLayoutConstraintMake(_leftView, .bottom, .equal, self, .bottom))
         
@@ -99,7 +99,7 @@ internal class JCEmoticonBackgroundView: UIView {
         
         addConstraint(_JCEmoticonLayoutConstraintMake(_rightView, .top, .equal, self, .top))
         addConstraint(_JCEmoticonLayoutConstraintMake(_rightView, .left, .equal, _middleView, .right))
-        addConstraint(_JCEmoticonLayoutConstraintMake(_rightView, .right, .equal, self, .right, priority: 751))
+        addConstraint(_JCEmoticonLayoutConstraintMake(_rightView, .right, .equal, self, .right, priority: UILayoutPriority(rawValue: 751)))
         addConstraint(_JCEmoticonLayoutConstraintMake(_rightView, .bottom, .equal, self, .bottom))
     }
     
@@ -128,13 +128,13 @@ private var _SAIEmoticonPreviewBackgroundImageForSmall: UIImage? = {
 }()
 private var _SAIEmoticonPreviewBackgroundImageForLargeOfLeft: UIImage? = {
     let png = "iVBORw0KGgoAAAANSUhEUgAAADwAAAC0CAMAAAD/wb/1AAAAY1BMVEUAAADBwcHExMTNzc3Hx8fDw8Pj4+PGxsbIyMjCwsLLy8vIyMjJycnIyMjHx8e/v7/s7Ozf39/Y2NjJycnIyMjIyMjGxsbHx8fIyMjHx8fFxcX////Gxsb39/f6+vrx8fHr6+sc50oiAAAAG3RSTlMABycCHA38I/kW+O7YqlYS/vr468G9VUc8m5v7bzgfAAABEElEQVRo3u3aya7CMAyF4Zs6U0culNkUeP+npLtIBJXKlQxI5+w/ZZ/ff9ivj4jM272WI3SltSEUk3tJRxm607bp42VyuR2p3bd1tb7fBp5e/qyzh13lk5uPyayKNnqet8wem82VJZhM2dWeZ+/p3S7+sxCvjvVoRZhc0XiWYTK23bAUu0O8CjEZu/MsxW5fsRSbsvVSTCbUgxi7rmIxLk9rMTZ2e1+Am5sch35YgCPLcXEBBgYGBgYGBgYGBgYGBgYGBgYGBgYG/ggOcQnuB+0//VQT1DtGKijq7SZVI/1elUqZfqNLdVC/S6Yiqt9iUwXW7s95+VZq7vLan98ZnAV3BoILB+FtBYZhGIZhX7cHYMfPwx97p7cAAAAASUVORK5CYII="
-    return _SAEmoticonLoadImage(base64Encoded: png, scale: 2)?.resizableImage(withCapInsets: UIEdgeInsetsMake(16, 16, 32, 0))
+    return _SAEmoticonLoadImage(base64Encoded: png, scale: 2)?.resizableImage(withCapInsets: UIEdgeInsets.init(top: 16, left: 16, bottom: 32, right: 0))
 }()
 private var _SAIEmoticonPreviewBackgroundImageForLargeOfMiddle: UIImage? = {
     let png = "iVBORw0KGgoAAAANSUhEUgAAADwAAAC0CAMAAAD/wb/1AAAAulBMVEUAAAC/v7/ExMTBwcG/v7/ExMTJycnGxsbCwsLa2trFxcXHx8fGxsbJycnm5ubq6urh4eHZ2dnPz8/V1dXMzMzKysrJycnIyMjIyMjIyMjIyMjGxsbFxcXCwsLc3NzIyMjIyMjIyMjHx8fHx8fHx8fJycnHx8fS0tLR0dHJycnHx8fIyMjJycnIyMjHx8fGxsbIyMjIyMjFxcXBwcHHx8fGxsbGxsb////Gxsb9/f35+fn19fXy8vLu7u7Y6pwTAAAAN3RSTlMACCcCBA32GBIGFTEiEP39+/n5+Pj47+i5UjcqHhv689nRhXVqSD/4+ODJwqSclX5iWyUdrauG/KKu2AAAAZpJREFUaN7t2seuglAUhWG86rEAVgQUsfdebpHi+7/WNUICuBFOwshk7fk3+bM4IwTcx1wuwwlfGU64ZTjhL8MBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDfxy+edey+I3V8pH/h4Oot/lxWxc95f9bIRvjBq9tjAzZU4J3Bbmn1vlsXe3JBSF8+UK5yxwe67ButZAXojpXmnbsdGt3pqWcZyP6ul9ZqaFX+yu1D12Uts003NxKRc8SLa5ryba2Fqn1k5cXw3uSvQ/n5XCsaPLqiTlJoU9BaKor5kSx3sZSfs1KyNLk/Z/221V+96OhabTLePBmleMLiUV0T6vHrlILVkkv2OnQpdZlXRI6Llpp1rHjVklixUYzDy3r9fM/mF6sdC3pzZdV6qFVpkUzRo3IKkcGl/WfhoV6D61SXZQTQtOdnpkTrPJMVpmS/KjYfmjlmBaa7nS3tJ6hlzuyyvRo0ua508GGhObRolZ7hNZEHkt3Omeuy8jnz5t8xtiMOzR5jScT8s5y60qxWCGWWz9OwEXuHy5DclLKt/gsAAAAAElFTkSuQmCC"
-    return _SAEmoticonLoadImage(base64Encoded: png, scale: 2)?.resizableImage(withCapInsets: UIEdgeInsetsMake(16, 0, 32, 0))
+    return _SAEmoticonLoadImage(base64Encoded: png, scale: 2)?.resizableImage(withCapInsets: UIEdgeInsets.init(top: 16, left: 0, bottom: 32, right: 0))
 }()
 private var _SAIEmoticonPreviewBackgroundImageForLargeOfRight: UIImage? = {
     let png = "iVBORw0KGgoAAAANSUhEUgAAADwAAAC0CAMAAAD/wb/1AAAAXVBMVEUAAADBwcHExMTHx8fFxcXGxsbj4+PJycnHx8fGxsbIyMjCwsLLy8vJycnIyMjt7e3f39/Y2NjIyMjHx8fHx8fGxsbBwcHJycnKysr////Gxsb39/f6+vrx8fHr6+urOgctAAAAGXRSTlMABycDDhr87lYi+RT42b/++vitqJtHKT0+uuTYmQAAAQdJREFUaN7t2skKwjAUhWHTTE06OA/Xqu//mLq7IFrtKUSE8+8/CFnmZMH+JvMxa9/iaryUfOOMeePPo+XY9bs6efeay3jD9bZq46Z+zeWLhtD2e+/sNKyFvD04YzEsl3V3bJ61fF2IteqpWJb5oadi1fHoLIoldAdnUSzrrTcwvuS9syiW0HsDY2lrZ2EcNt7AeIgJwnpuGK92DY5vvTcwvnYJx0OcgSVXM/CZmJiYmJiYmJiYmJiYmJiYmJiYmJiY+Dc4V8Vf1vVNv/SaoDtG4QVF76v4aqSnLr+U6UaHr4Pld8llPKkttMXqClx8f9blG9/c8bV/1j8D/IcD/reCMcYYY3/THaKymm1e6hXLAAAAAElFTkSuQmCC"
-    return _SAEmoticonLoadImage(base64Encoded: png, scale: 2)?.resizableImage(withCapInsets: UIEdgeInsetsMake(16, 0, 32, 16))
+    return _SAEmoticonLoadImage(base64Encoded: png, scale: 2)?.resizableImage(withCapInsets: UIEdgeInsets.init(top: 16, left: 0, bottom: 32, right: 16))
 }()

@@ -2,7 +2,7 @@
 //  JCMessageVoiceContentView.swift
 //  JChat
 //
-//  Created by deng on 2017/3/9.
+//  Created by JIGUANG on 2017/3/9.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -54,7 +54,7 @@ open class JCMessageVoiceContentView: UIView, JCMessageContentViewType {
                 UIImage.loadImage("chat_voice_receive_icon_1"),
                 UIImage.loadImage("chat_voice_receive_icon_2"),
                 UIImage.loadImage("chat_voice_receive_icon_3"),
-            ].flatMap { $0 }
+            ].compactMap { $0 }
             
             _animationView.frame = CGRect(x: bounds.minX, y: 3, width: aw, height: 20)
             _titleLabel.frame = CGRect(x: bounds.maxX - tw, y: 3, width: tw, height: 20)
@@ -66,7 +66,7 @@ open class JCMessageVoiceContentView: UIView, JCMessageContentViewType {
                 UIImage.loadImage("chat_voice_send_icon_1"),
                 UIImage.loadImage("chat_voice_send_icon_2"),
                 UIImage.loadImage("chat_voice_send_icon_3"),
-            ].flatMap { $0 }
+            ].compactMap { $0 }
             
             _animationView.frame = CGRect(x: bounds.maxX - aw, y: 3, width: aw, height: 20)
             _titleLabel.frame = CGRect(x: bounds.minX, y: 3, width: tw, height: 20)
@@ -87,7 +87,7 @@ open class JCMessageVoiceContentView: UIView, JCMessageContentViewType {
         addGestureRecognizer(tap)
     }
     
-    func _clickCell() {
+    @objc func _clickCell() {
 //        _delegate?.message?(message: _message, voiceData: _data, duration: _duration)
 
         // TODO: 这里不就应该把 V 层代码放在这里，需要考虑下这个播放时开启动画的传递方式

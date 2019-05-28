@@ -55,43 +55,43 @@ open class SAIInputItem: NSObject {
     
     // MARK: setter
     
-    open func setTitle(_ title: String?, for state: UIControlState) {
+    open func setTitle(_ title: String?, for state: UIControl.State) {
         _titles[state.rawValue] = title
     }
-    open func setTitleColor(_ color: UIColor?, for state: UIControlState) {
+    open func setTitleColor(_ color: UIColor?, for state: UIControl.State) {
         _titleColors[state.rawValue] = color
     }
-    open func setTitleShadowColor(_ color: UIColor?, for state: UIControlState) {
+    open func setTitleShadowColor(_ color: UIColor?, for state: UIControl.State) {
         _titleShadowColors[state.rawValue] = color
     }
-    open func setAttributedTitle(_ title: NSAttributedString?, for state: UIControlState) {
+    open func setAttributedTitle(_ title: NSAttributedString?, for state: UIControl.State) {
         _attributedTitles[state.rawValue] = title
     }
-    open func setImage(_ image: UIImage?, for state: UIControlState) {
+    open func setImage(_ image: UIImage?, for state: UIControl.State) {
         _images[state.rawValue] = image
     }
-    open func setBackgroundImage(_ image: UIImage?, for state: UIControlState) {
+    open func setBackgroundImage(_ image: UIImage?, for state: UIControl.State) {
         _backgroundImages[state.rawValue] = image
     }
     
     // MARK: getter
     
-    open func title(for state: UIControlState) -> String? {
+    open func title(for state: UIControl.State) -> String? {
         return _titles[state.rawValue] ?? nil
     }
-    open func titleColor(for state: UIControlState) -> UIColor? {
+    open func titleColor(for state: UIControl.State) -> UIColor? {
         return _titleColors[state.rawValue] ?? nil
     }
-    open func titleShadowColor(for state: UIControlState) -> UIColor? {
+    open func titleShadowColor(for state: UIControl.State) -> UIColor? {
         return _titleShadowColors[state.rawValue] ?? nil
     }
-    open func attributedTitle(for state: UIControlState) -> NSAttributedString? {
+    open func attributedTitle(for state: UIControl.State) -> NSAttributedString? {
         return _attributedTitles[state.rawValue] ?? nil
     }
-    open func image(for state: UIControlState) -> UIImage? {
+    open func image(for state: UIControl.State) -> UIImage? {
         return _images[state.rawValue] ?? nil
     }
-    open func backgroundImage(for state: UIControlState) -> UIImage? {
+    open func backgroundImage(for state: UIControl.State) -> UIImage? {
         return _backgroundImages[state.rawValue] ?? nil
     }
     
@@ -99,9 +99,9 @@ open class SAIInputItem: NSObject {
     open override var hash: Int {
         return identifier.hash
     }
-    open override var hashValue: Int {
-        return identifier.hashValue
-    }
+//    open override var hashValue: Int {
+//        return identifier.hashValue
+//    }
     
     // MARK: ivar
     

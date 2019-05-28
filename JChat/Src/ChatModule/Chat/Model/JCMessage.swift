@@ -2,7 +2,7 @@
 //  JCMessage.swift
 //  JChat
 //
-//  Created by deng on 10/04/2017.
+//  Created by JIGUANG on 10/04/2017.
 //  Copyright © 2017 HXHG. All rights reserved.
 //
 
@@ -17,7 +17,7 @@ open class JCMessage: NSObject, JCMessageType {
         super.init()
     }
     
-    open let identifier: UUID = .init()
+    public let identifier: UUID = .init()
     open var msgId = ""
     open var name: String = "UserName"
     open var date: Date = .init()
@@ -25,22 +25,21 @@ open class JCMessage: NSObject, JCMessageType {
     open var senderAvator: UIImage?
     open var receiver: JMSGUser?
     open var content: JCMessageContentType
-    open let options: JCMessageOptions
+    public let options: JCMessageOptions
     open var updateSizeIfNeeded: Bool = false
     open var unreadCount: Int = 0
     open var targetType: MessageTargetType = .single
+    open var contentType: JMSGContentType = .text
+    open var jmessage: JMSGMessage?
 }
 
 extension JMSGMessage {
-    typealias Callback = (JMSGMessage, Data) -> Void
-
+    typealias Callback = (JMSGMessage, Data?) -> Void
     func parseMessage(_ delegate: JCMessageDelegate, _ updateMediaMessage: Callback? = nil) -> JCMessage {
-
         var msg: JCMessage!
         let currentUser = JMSGUser.myInfo()
         let isCurrent = fromUser.isEqual(to: currentUser)
         let state = self.ex.state
-        let isGroup = targetType == .group
 
         switch(contentType) {
         case .text:
@@ -98,25 +97,41 @@ extension JMSGMessage {
                     voiceContent.data = data
                 }
             })
+        case .video:
+            printLog("video message")
+            let content = self.content as! JMSGVideoContent
+            let videoContent = JCMessageVideoContent()
+            videoContent.delegate = delegate
+            msg = JCMessage(content: videoContent)
+            
+            if state == .sending {
+                content.uploadHandler = {  (percent:Float, msgId:(String?)) -> Void in
+                    videoContent.uploadVideo?(percent)
+                }
+            }
+            
+            if let path = content.videoThumbImageLocalPath {
+                let url = URL(fileURLWithPath: path)
+                let thumbData = try! Data(contentsOf: url)
+                videoContent.image = UIImage(data: thumbData)
+            }else{
+                content.videoThumbImageData { (data, id, error) in
+                    if let data = data {
+                        if let updateMediaMessage = updateMediaMessage {
+                            updateMediaMessage(self, data)
+                        }
+                    }
+                }
+            }
+            videoContent.videoContent = content;
         case .file:
+            printLog("file message")
             let content = self.content as! JMSGFileContent
             if ex.isShortVideo {
                 let videoContent = JCMessageVideoContent()
                 videoContent.delegate = delegate
+                videoContent.videoFileContent = content;
                 msg = JCMessage(content: videoContent)
-                if let path = content.originMediaLocalPath {
-                    let url = URL(fileURLWithPath: path)
-                    videoContent.data = try! Data(contentsOf: url)
-                } else {
-                    content.fileData({ (data, id, error) in
-                        if let data = data {
-                            if let updateMediaMessage = updateMediaMessage {
-                                updateMediaMessage(self, data)
-                            }
-                        }
-                    })
-                }
-                videoContent.fileContent = content
             } else {
                 let fileContent = JCMessageFileContent()
                 fileContent.delegate = delegate
@@ -147,15 +162,11 @@ extension JMSGMessage {
         }
         if msg.options.alignment != .center {
             msg.options.alignment = isCurrent ? .right : .left
-            if isGroup {
+            if self.targetType == .group {
                 msg.options.showsCard = !isCurrent
             }
         }
-        if isGroup {
-            msg.targetType = .group
-        } else {
-            msg.targetType = .single
-        }
+        msg.targetType = MessageTargetType(rawValue: self.targetType.rawValue)!
         msg.msgId = self.msgId
         msg.options.state = state
         if isCurrent {
@@ -164,6 +175,8 @@ extension JMSGMessage {
         msg.sender = fromUser
         msg.name = fromUser.displayName()
         msg.unreadCount = getUnreadCount()
+        msg.contentType = contentType
+        msg.jmessage = self
         return msg
     }
 }

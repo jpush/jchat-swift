@@ -2,7 +2,7 @@
 //  JCGroupMembersViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/5/10.
+//  Created by JIGUANG on 2017/5/10.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -53,7 +53,7 @@ class JCGroupMembersViewController: UIViewController {
         flowLayout.headerReferenceSize = CGSize(width: view.width, height: 36)
         collectionView = UICollectionView(frame: view.frame, collectionViewLayout: flowLayout)
         collectionView.bounces = true
-        collectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "kHeaderView")
+        collectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "kHeaderView")
         
         collectionView.backgroundColor = .white
         collectionView.delegate = self
@@ -115,7 +115,7 @@ extension JCGroupMembersViewController: UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "kHeaderView", for: indexPath)
-        if kind == UICollectionElementKindSectionHeader {
+        if kind == UICollectionView.elementKindSectionHeader {
             header.backgroundColor = UIColor(netHex: 0xe8edf3)
             header.addSubview(searchView)
         }

@@ -2,7 +2,7 @@
 //  JCUpdateMemberViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/5/11.
+//  Created by JIGUANG on 2017/5/11.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -230,7 +230,7 @@ class JCUpdateMemberViewController: UIViewController {
         collectionView.reloadData()
     }
     
-    func _clickNavRightButton(_ sender: UIButton) {
+    @objc func _clickNavRightButton(_ sender: UIButton) {
         if selectUsers.count == 0 {
             return
         }

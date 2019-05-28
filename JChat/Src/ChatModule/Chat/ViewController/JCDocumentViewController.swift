@@ -2,7 +2,7 @@
 //  JCDocumentViewController.swift
 //  JChat
 //
-//  Created by deng on 2017/7/24.
+//  Created by JIGUANG on 2017/7/24.
 //  Copyright © 2017年 HXHG. All rights reserved.
 //
 
@@ -71,7 +71,7 @@ class JCDocumentViewController: UIViewController, CustomNavigation {
         customLeftBarButton(delegate: self)
     }
 
-    func _openFile() {
+    @objc func _openFile() {
         guard let url = fileUrl else {
             return
         }
@@ -79,7 +79,6 @@ class JCDocumentViewController: UIViewController, CustomNavigation {
         documentInteractionController.delegate = self
         documentInteractionController.presentOptionsMenu(from: .zero, in: self.view, animated: true)
     }
-
 }
 
 extension JCDocumentViewController: UIDocumentInteractionControllerDelegate {
