@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0844E7FD22699D8B00E5E903 /* JCCRSearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0844E7FC22699D8B00E5E903 /* JCCRSearchResultViewController.swift */; };
+		08AA75A1229D3F0800DE39BF /* JMessage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DC44374226EEC8B00D35080 /* JMessage.framework */; };
 		08C2B77B2266C4D100FDC7E5 /* JCChatRoomListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C2B77A2266C4D100FDC7E5 /* JCChatRoomListTableViewCell.swift */; };
 		08C2B77D226713FC00FDC7E5 /* JCChatRoomChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C2B77C226713FC00FDC7E5 /* JCChatRoomChatViewController.swift */; };
 		08E52733226582D20031CA87 /* JCChatRoomListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E52732226582D20031CA87 /* JCChatRoomListViewController.swift */; };
@@ -57,7 +58,6 @@
 		9DBEB0512271B3CE00574F88 /* JCChatRoomAddManagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DBEB0502271B3CE00574F88 /* JCChatRoomAddManagerViewController.swift */; };
 		9DBEB09322757E1700574F88 /* JCChatRoomManagerListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DBEB09222757E1700574F88 /* JCChatRoomManagerListCell.swift */; };
 		9DC44372226EE5EE00D35080 /* Pods_JChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DC44371226EE5EE00D35080 /* Pods_JChat.framework */; };
-		9DC44378226EEE7600D35080 /* JMessage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9DC44374226EEC8B00D35080 /* JMessage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9DC4437C226EF77D00D35080 /* JCChatRoomInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC4437A226EF77D00D35080 /* JCChatRoomInfoTableViewController.swift */; };
 		9DC4437D226EF77D00D35080 /* JCChatRoomInfoTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9DC4437B226EF77D00D35080 /* JCChatRoomInfoTableViewController.xib */; };
 		B401970F1EF3B34C006B9F2D /* JCNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B401970E1EF3B34C006B9F2D /* JCNetworkManager.swift */; };
@@ -258,20 +258,6 @@
 			remoteInfo = JChat;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		9DC44379226EEE7600D35080 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				9DC44378226EEE7600D35080 /* JMessage.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0844E7FC22699D8B00E5E903 /* JCCRSearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JCCRSearchResultViewController.swift; sourceTree = "<group>"; };
@@ -540,6 +526,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08AA75A1229D3F0800DE39BF /* JMessage.framework in Frameworks */,
 				9DC44372226EE5EE00D35080 /* Pods_JChat.framework in Frameworks */,
 				B43BA43F1E8A30C400565DB3 /* CoreTelephony.framework in Frameworks */,
 				B43BA4391E8A30A900565DB3 /* SystemConfiguration.framework in Frameworks */,
@@ -1309,7 +1296,6 @@
 				B43BA3721E8A2F0000565DB3 /* Resources */,
 				EB281E8AA228480E9C5B9E04 /* [CP] Embed Pods Frameworks */,
 				AE3DE91E25EDE058F52A9453 /* [CP] Copy Pods Resources */,
-				9DC44379226EEE7600D35080 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

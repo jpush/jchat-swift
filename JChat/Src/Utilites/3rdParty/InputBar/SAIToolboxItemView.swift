@@ -37,18 +37,18 @@ internal class SAIToolboxItemView: UICollectionViewCell {
         
         contentView.addSubview(_iconView)
         contentView.addSubview(_titleLabel)
-        
-        addConstraints([
-            _SAInputLayoutConstraintMake(_iconView, .centerX, .equal, self, .centerX),
-            _SAInputLayoutConstraintMake(_iconView, .centerY, .equal, self, .centerY, -12),
-            
-            _SAInputLayoutConstraintMake(_iconView, .width, .equal, nil, .notAnAttribute, 43),
-            _SAInputLayoutConstraintMake(_iconView, .height, .equal, nil, .notAnAttribute, 43),
-            
-            _SAInputLayoutConstraintMake(_titleLabel, .top, .equal, _iconView, .bottom, 4),
-            _SAInputLayoutConstraintMake(_titleLabel, .height, .equal, nil, .notAnAttribute, 20),
-            _SAInputLayoutConstraintMake(_titleLabel, .centerX, .equal, self, .centerX),
-        ])
+
+        _iconView.mas_makeConstraints({ (make) in
+            make?.centerX.equalTo()(_titleLabel.mas_centerX)
+            make?.top.equalTo()(self.mas_top)?.offset()(8)
+            make?.width.equalTo()(43)
+            make?.height.equalTo()(43)
+        })
+        _titleLabel.mas_makeConstraints { (make) in
+            make?.top.equalTo()(_iconView.mas_bottom)?.offset()(5)
+            make?.left.and()?.right().equalTo()
+            make?.height.equalTo()(20)
+        }
     }
     
     private lazy var _iconView: UIImageView = UIImageView()
