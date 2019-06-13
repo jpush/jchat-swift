@@ -72,7 +72,10 @@ open class SAIToolboxInputView: UIView {
         let maxCount = _contentViewLayout.numberOfRows(in: 0) * _contentViewLayout.numberOfColumns(in: 0)
         let count = _contentView.numberOfItems(inSection: 0)
         let page = (count + (maxCount - 1)) / maxCount
-        let currentPage = min(Int(_contentView.contentOffset.x / _contentView.frame.width), page - 1)
+        var currentPage = 0
+        if _contentView.frame.width > 0 {
+            currentPage = min(Int(_contentView.contentOffset.x / _contentView.frame.width), page - 1)
+        }
         
         _pageControl.numberOfPages = page
         _pageControl.currentPage = currentPage
